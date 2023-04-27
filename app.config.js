@@ -7,7 +7,9 @@ export default ({config}) => {
     extra: {
       ...config.extra,
 
-      USE_CONFIG: process.env.USE_CONFIG,
+      ...Object.fromEntries(
+        Object.entries(process.env).filter(([key]) => key.startsWith('SVEJ_APP_')),
+      ),
     },
   };
 };

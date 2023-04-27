@@ -11,7 +11,7 @@ import {ThemedStyleSheet} from './Utils/ThemedStyleSheet';
 SplashScreen.preventAutoHideAsync();
 
 function App() {
-  if (!Env.USE_CONFIG || Env.USE_CONFIG !== 'true') {
+  if (!Env.SVEJ_APP_USE_CONFIG || Env.SVEJ_APP_USE_CONFIG !== 'true') {
     throw new Error(
       'You need to fill in the .env file for the designated build environment. You can find the sample in .env.sample file',
     );
