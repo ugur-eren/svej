@@ -1,13 +1,15 @@
 const Spacing = {
   none: 0,
-  normal: 24,
-  xxsmall: 4,
+  xxxsmall: 4,
+  xxsmall: 6,
   xsmall: 8,
-  small: 16,
-  medium: 32,
-  large: 40,
-  xlarge: 48,
-  xxlarge: 62,
+  small: 12,
+  medium: 16,
+  normal: 24,
+  large: 32,
+  xlarge: 40,
+  xxlarge: 48,
+  xxxlarge: 62,
   pagePadding: 18,
 };
 
