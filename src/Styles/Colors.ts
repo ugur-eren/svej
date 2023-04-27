@@ -6,6 +6,7 @@ export const LightThemeColors = {
     background: '#F0F0F0',
     backgroundSecondary: '#FFFFFF',
     surface: '#FAFAFA',
+    onPrimary: '#FAFAFA',
 
     text: '#242424',
     textLight: '#9F9F9F',
@@ -38,6 +39,7 @@ export const DarkThemeColors = {
     background: '#242424',
     backgroundSecondary: '#3A3A3A',
     surface: '#272727',
+    onPrimary: '#FAFAFA',
 
     text: '#FAFAFA',
     textLight: '#A0A0A0',
