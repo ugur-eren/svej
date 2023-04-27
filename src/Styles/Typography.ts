@@ -1,46 +1,26 @@
 const Typography = {
-  thin: {
-    fontFamily: '',
-    fontWeight: undefined,
-    includeFontPadding: false,
-  },
-  extraLight: {
-    fontFamily: '',
-    fontWeight: undefined,
-    includeFontPadding: false,
-  },
-  light: {
-    fontFamily: '',
-    fontWeight: undefined,
-    includeFontPadding: false,
-  },
   regular: {
-    fontFamily: '',
+    fontFamily: 'FiraSans-Regular',
     fontWeight: undefined,
     includeFontPadding: false,
   },
   medium: {
-    fontFamily: '',
+    fontFamily: 'FiraSans-Medium',
     fontWeight: undefined,
     includeFontPadding: false,
   },
   semiBold: {
-    fontFamily: '',
+    fontFamily: 'FiraSans-SemiBold',
     fontWeight: undefined,
     includeFontPadding: false,
   },
   bold: {
-    fontFamily: '',
+    fontFamily: 'FiraSans-Bold',
     fontWeight: undefined,
     includeFontPadding: false,
   },
-  extraBold: {
-    fontFamily: '',
-    fontWeight: undefined,
-    includeFontPadding: false,
-  },
-  black: {
-    fontFamily: '',
+  EarWorm: {
+    fontFamily: 'EarWorm-Demo',
     fontWeight: undefined,
     includeFontPadding: false,
   },
