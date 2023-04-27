@@ -1,0 +1,97 @@
+/**
+ * @type {import("eslint").Linter.Config}
+ */
+{
+  "parser": "@typescript-eslint/parser",
+  "extends": [
+    "airbnb",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended",
+    "plugin:eslint-comments/recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:import/typescript",
+    "plugin:react/jsx-runtime"
+  ],
+  "env": {
+    "browser": true,
+    "react-native/react-native": true
+  },
+  "plugins": [
+    "react",
+    "react-native",
+    "@typescript-eslint",
+    "jsx-a11y",
+    "import",
+    "prettier",
+    "eslint-comments"
+  ],
+  "rules": {
+    "react/function-component-definition": [
+      "error",
+      {
+        "unnamedComponents": ["function-expression", "arrow-function"],
+        "namedComponents": ["function-declaration", "arrow-function"]
+      }
+    ],
+    "import/prefer-default-export": "off",
+    "@typescript-eslint/indent": "off",
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/no-use-before-define": "off",
+    "react/jsx-props-no-spreading": "off",
+    "react/require-default-props": "off",
+    "global-require": "off",
+    "react/jsx-filename-extension": [1, {"extensions": [".js", ".jsx", ".ts", ".tsx"]}],
+    "react/prop-types": "off",
+    "react/button-has-type": "off",
+    "no-use-before-define": "off",
+    "no-shadow": "off",
+    "@typescript-eslint/no-shadow": "error",
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": [
+          "storybook/**/*.{ts,tsx,js}",
+          "config-overrides.js",
+          "src/setupTests.ts",
+          "src/Components/**/*.stories.tsx",
+          "src/Styles/**/*.stories.tsx",
+          "src/Containers/**/*.stories.tsx",
+          "src/Icons/**/*.stories.tsx",
+          "src/**/*.test.{ts,tsx,js,jsx}"
+        ]
+      }
+    ],
+    "react-native/no-unused-styles": "error",
+    "react-native/no-inline-styles": "error",
+    "react-native/no-color-literals": "error",
+    "react/jsx-one-expression-per-line": "off",
+    "@typescript-eslint/explicit-member-accessibility": "off",
+    "no-underscore-dangle": "off",
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ],
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      }
+    ],
+    "no-console": ["error", {"allow": ["warn", "error"]}]
+  },
+  "overrides": [
+    {
+      "files": ["*.style.ts"],
+      "rules": {
+        "@typescript-eslint/camelcase": "off"
+      }
+    }
+  ]
+}

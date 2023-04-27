@@ -1,0 +1,11 @@
+ios
+android
+build
+coverage
+
+# Expo
+.expo
+.expo-shared
+
+# Storybook
+storybook/storyLoader.js

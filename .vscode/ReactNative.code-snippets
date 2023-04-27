@@ -1,0 +1,135 @@
+{
+  "CreateFC": {
+    "scope": "javascript,javascriptreact,typescript,typescriptreact",
+    "prefix": "crFC",
+    "description": "Create a empty function component",
+    "body": [
+      "import {View} from 'react-native';",
+      "",
+      "const ${TM_FILENAME_BASE}$1: React.$2FC = (props) => {",
+      "  const {$3} = props;",
+      "",
+      "  return (",
+      "    <View>",
+      "      <View />",
+      "    </View>",
+      "  );",
+      "};",
+      "",
+      "export default ${TM_FILENAME_BASE}$1;"
+    ]
+  },
+  "CreateStyledFC": {
+    "scope": "javascript,javascriptreact,typescript,typescriptreact",
+    "prefix": "crStyledFC",
+    "description": "Create a function component with styles",
+    "body": [
+      "import {View} from 'react-native';",
+      "import styles from './styles';",
+      "",
+      "const ${TM_FILENAME_BASE}$1: React.$2FC = (props) => {",
+      "  const {$3} = props;",
+      "",
+      "  return (",
+      "    <View style={styles.container}>",
+      "      <View />",
+      "    </View>",
+      "  );",
+      "};",
+      "",
+      "export default ${TM_FILENAME_BASE}$1;"
+    ]
+  },
+  "CreateThemedFC": {
+    "scope": "javascript,javascriptreact,typescript,typescriptreact",
+    "prefix": "crThemedFC",
+    "description": "Create a function component with theme",
+    "body": [
+      "import {View} from 'react-native';",
+      "import {useTheme} from '../../$3Hooks';",
+      "",
+      "const ${TM_FILENAME_BASE}$1: React.$2FC = (props) => {",
+      "  const {$4} = props;",
+      "",
+      "  const theme = useTheme();",
+      "",
+      "  return (",
+      "    <View style={styles.container}>",
+      "      <View />",
+      "    </View>",
+      "  );",
+      "};",
+      "",
+      "export default ${TM_FILENAME_BASE}$1;"
+    ]
+  },
+  "CreateThemedStyledFC": {
+    "scope": "javascript,javascriptreact,typescript,typescriptreact",
+    "prefix": "crThemedStyledFC",
+    "description": "Create a function component with themed styles",
+    "body": [
+      "import {View} from 'react-native';",
+      "import {useTheme} from '../../$3Hooks';",
+      "import getStyles from './styles';",
+      "",
+      "const ${TM_FILENAME_BASE}$1: React.$2FC = (props) => {",
+      "  const {$4} = props;",
+      "",
+      "  const theme = useTheme();",
+      "",
+      "  const styles = getStyles(theme);",
+      "",
+      "  return (",
+      "    <View style={styles.container}>",
+      "      <View />",
+      "    </View>",
+      "  );",
+      "};",
+      "",
+      "export default ${TM_FILENAME_BASE}$1;"
+    ]
+  },
+
+  "StyleSheet": {
+    "scope": "javascript,javascriptreact,typescript,typescriptreact",
+    "prefix": "crStyleSheet",
+    "description": "Create StyleSheet",
+    "body": [
+      "import {StyleSheet} from 'react-native';",
+      "",
+      "export default StyleSheet.create({",
+      "  container: {",
+      "    $1",
+      "  }",
+      "})"
+    ]
+  },
+  "ThemedStyleSheet": {
+    "scope": "javascript,javascriptreact,typescript,typescriptreact",
+    "prefix": "crThemedStyleSheet",
+    "description": "Create Themed StyleSheet",
+    "body": [
+      "import {ThemedStyleSheet} from '../../$1Utils/ThemedStyleSheet';",
+      "",
+      "export default ThemedStyleSheet$2((theme) => ({",
+      "  container: {",
+      "    $3",
+      "  }",
+      "}))"
+    ]
+  },
+  "CustomStyleSheet": {
+    "scope": "javascript,javascriptreact,typescript,typescriptreact",
+    "prefix": "crCustomStyleSheet",
+    "description": "Create Custom StyleSheet",
+    "body": [
+      "import {CustomStyleSheet} from '../../$1Utils/CustomStyleSheet';",
+      "",
+      "export default CustomStyleSheet$2((theme) => ({",
+      "  container: {",
+      "    $3",
+      "  }",
+      "}))"
+    ]
+  }
+}

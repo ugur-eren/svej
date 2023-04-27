@@ -1,0 +1,18 @@
+import {View} from 'react-native';
+import {useTheme} from '../../Hooks';
+import {<%= props.name %>Props} from './<%= props.name %>.props';
+import getStyles from './<%= props.name %>.styles';
+
+const <%= props.name %>: React.FC<<%= props.name %>Props> = (props) => {
+  const theme = useTheme();
+
+  const styles = getStyles(theme);
+
+  return (
+    <View style={styles.container}>
+      <View />
+    </View>
+  );
+};
+
+export default <%= props.name %>;

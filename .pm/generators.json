@@ -1,0 +1,62 @@
+[
+  {
+    "name": "empty-fc",
+    "description": "Empty Component",
+    "files-path": "./empty-component",
+    "type": "as-folder",
+    "questions": [
+      {
+        "type": "input",
+        "name": "name",
+        "message": "Component Name",
+        "default": "EmptyComponent",
+        "convert": "pascalCase"
+      }
+    ]
+  },
+  {
+    "name": "styled-fc",
+    "description": "Styled Component",
+    "files-path": "./styled-component",
+    "type": "as-folder",
+    "questions": [
+      {
+        "type": "input",
+        "name": "name",
+        "message": "Component Name",
+        "default": "StyledComponent",
+        "convert": "pascalCase"
+      }
+    ]
+  },
+  {
+    "name": "themed-fc",
+    "description": "Themed Styled Component",
+    "files-path": "./themed-component",
+    "type": "as-folder",
+    "questions": [
+      {
+        "type": "input",
+        "name": "name",
+        "message": "Component Name",
+        "default": "ThemedComponent",
+        "convert": "pascalCase"
+      }
+    ]
+  },
+  {
+    "name": "screen",
+    "description": "Screen Component",
+    "files-path": "./screen",
+    "type": "as-folder",
+    "questions": [
+      {
+        "type": "input",
+        "name": "name",
+        "message": "Screen Component Name",
+        "default": "ScreenName",
+        "convert": "pascalCase"
+      }
+    ]
+  }
+]
