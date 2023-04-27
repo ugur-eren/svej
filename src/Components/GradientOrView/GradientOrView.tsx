@@ -1,5 +1,5 @@
 import {View, StyleSheet, ViewProps} from 'react-native';
-import LinearGradient, {LinearGradientProps} from 'react-native-linear-gradient';
+import {LinearGradient, LinearGradientProps} from 'expo-linear-gradient';
 
 type Props<T extends string | string[]> = {
   /**
