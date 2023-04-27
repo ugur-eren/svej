@@ -1,6 +1,20 @@
+export const CommonColors = {
+  // black, white and center variants may be used for gradients or other purposes
+  transparent: 'transparent',
+  blackTransparent: 'rgba(0, 0, 0, 0)',
+  whiteTransparent: 'rgba(255, 255, 255, 0)',
+  centerTransparent: 'rgba(127, 127, 127, 0)',
+
+  black: '#000000',
+  white: '#FFFFFF',
+  red: '#FF0000',
+  green: '#00FF00',
+  blue: '#0000FF',
+};
+
 export const LightThemeColors = {
   colors: {
-    transparent: 'transparent',
+    ...CommonColors,
 
     primary: '#FA8057',
     background: '#F0F0F0',
@@ -33,7 +47,7 @@ export const LightThemeColors = {
 
 export const DarkThemeColors = {
   colors: {
-    transparent: 'transparent',
+    ...CommonColors,
 
     primary: '#FA8057',
     background: '#242424',
