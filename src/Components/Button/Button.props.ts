@@ -9,6 +9,8 @@ export type ButtonProps = {
 
   /**
    * Whether the loading indicator should show when the button is pressed
+   *
+   * Default: true
    */
   showLoading?: boolean;
 
