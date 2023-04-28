@@ -4,6 +4,8 @@ export default {
     code: 'en',
   },
 
+  appName: 'SveJ',
+
   common: {},
 
   routes: {
