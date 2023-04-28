@@ -2,7 +2,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {RootStackParams, AuthStackParams} from './Typings/NavigationTypes';
 
-import Login from './Screens/Login/Login';
+import Login from './Screens/Auth/Login/Login';
 
 const RootStack = createNativeStackNavigator<RootStackParams>();
 const AuthStack = createNativeStackNavigator<AuthStackParams>();

@@ -1,0 +1,75 @@
+import {Formik} from 'formik';
+import {AuthPage} from '../../../Containers';
+import {Input, TextButton} from '../../../Components';
+import {useLanguage} from '../../../Hooks';
+import {AuthLoginScreenProps} from '../../../Typings/NavigationTypes';
+
+type Props = AuthLoginScreenProps;
+
+const initialValues = {
+  username: '',
+  password: '',
+};
+
+const Login: React.FC<Props> = () => {
+  const language = useLanguage();
+
+  const validateForm = (values: typeof initialValues) => {
+    const errors: Partial<typeof initialValues> = {};
+
+    if (values.username.trim().length < 4) errors.username = language.errors.USERNAME_SHORT;
+    if (values.password.length < 4) errors.password = language.errors.PASSWORD_SHORT;
+
+    return errors;
+  };
+
+  const onFormSubmit = (values: typeof initialValues) => {
+    // TODO: handle login
+  };
+
+  return (
+    <AuthPage.Container>
+      <AuthPage.Header title={language.common.login} />
+
+      <Formik initialValues={initialValues} validate={validateForm} onSubmit={onFormSubmit}>
+        {({handleSubmit, handleChange, handleBlur, values, errors}) => (
+          <>
+            <AuthPage.Content>
+              <Input
+                placeholder={language.routes.login.username}
+                value={values.username}
+                onChangeText={handleChange('username')}
+                onBlur={handleBlur('username')}
+                error={errors.username}
+                leftIcon="user"
+                small
+              />
+
+              <Input
+                placeholder={language.routes.login.password}
+                value={values.password}
+                onChangeText={handleChange('password')}
+                onBlur={handleBlur('password')}
+                error={errors.password}
+                leftIcon="lock"
+                type="password"
+                small
+              />
+
+              <TextButton>Have you forgot your password?</TextButton>
+            </AuthPage.Content>
+
+            <AuthPage.Footer
+              buttonTitle={language.common.login}
+              contentTitle={language.routes.login.dontHaveAnAccount}
+              contentSubtitle={language.common.register}
+              onButtonPress={handleSubmit}
+            />
+          </>
+        )}
+      </Formik>
+    </AuthPage.Container>
+  );
+};
+
+export default Login;
