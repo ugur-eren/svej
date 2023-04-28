@@ -1,25 +1,25 @@
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {RootStackParams, OnboardingStackParams} from './Typings/NavigationTypes';
+import {RootStackParams, AuthStackParams} from './Typings/NavigationTypes';
 
-import Landing from './Screens/Landing/Landing';
+import Login from './Screens/Login/Login';
 
 const RootStack = createNativeStackNavigator<RootStackParams>();
-const OnboardingStack = createNativeStackNavigator<OnboardingStackParams>();
+const AuthStack = createNativeStackNavigator<AuthStackParams>();
 
-const OnboardingStackNavigator = () => {
+const AuthStackNavigator = () => {
   return (
-    <OnboardingStack.Navigator initialRouteName="Landing" screenOptions={{headerShown: false}}>
-      <OnboardingStack.Screen name="Landing" component={Landing} />
-    </OnboardingStack.Navigator>
+    <AuthStack.Navigator initialRouteName="Login" screenOptions={{headerShown: false}}>
+      <AuthStack.Screen name="Login" component={Login} />
+    </AuthStack.Navigator>
   );
 };
 
 const Router: React.FC = () => {
   return (
     <NavigationContainer>
-      <RootStack.Navigator initialRouteName="OnboardingStack" screenOptions={{headerShown: false}}>
-        <RootStack.Screen name="OnboardingStack" component={OnboardingStackNavigator} />
+      <RootStack.Navigator initialRouteName="AuthStack" screenOptions={{headerShown: false}}>
+        <RootStack.Screen name="AuthStack" component={AuthStackNavigator} />
       </RootStack.Navigator>
     </NavigationContainer>
   );

@@ -1,18 +1,18 @@
 import {Text} from '../../Components';
 import {PageContainer} from '../../Containers';
 import {useLanguage} from '../../Hooks';
-import {OnboardingLandingScreenProps} from '../../Typings/NavigationTypes';
+import {AuthLoginScreenProps} from '../../Typings/NavigationTypes';
 
-type Props = OnboardingLandingScreenProps;
+type Props = AuthLoginScreenProps;
 
-const Landing: React.FC<Props> = () => {
+const Login: React.FC<Props> = () => {
   const language = useLanguage();
 
   return (
     <PageContainer withSafeArea withPadding>
-      <Text fontSize={18}>{language.routes.landing.hello}</Text>
+      <Text fontSize={18}>{language.routes.login.hello}</Text>
     </PageContainer>
   );
 };
 
-export default Landing;
+export default Login;

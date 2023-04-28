@@ -2,15 +2,20 @@ import {CompositeScreenProps, NavigatorScreenParams} from '@react-navigation/nat
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 export type RootStackParams = {
-  OnboardingStack: NavigatorScreenParams<OnboardingStackParams>;
+  AuthStack: NavigatorScreenParams<AuthStackParams>;
 };
 
-export type OnboardingStackParams = {
-  Landing: undefined;
+export type AuthStackParams = {
+  Login: undefined;
+  Register: undefined;
 };
 
-// Onboarding
-export type OnboardingLandingScreenProps = CompositeScreenProps<
-  NativeStackScreenProps<OnboardingStackParams, 'Landing'>,
+// Auth
+export type AuthLoginScreenProps = CompositeScreenProps<
+  NativeStackScreenProps<AuthStackParams, 'Login'>,
+  NativeStackScreenProps<RootStackParams>
+>;
+export type AuthRegisterScreenProps = CompositeScreenProps<
+  NativeStackScreenProps<AuthStackParams, 'Register'>,
   NativeStackScreenProps<RootStackParams>
 >;

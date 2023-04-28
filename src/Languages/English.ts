@@ -3,8 +3,11 @@ export default {
     name: 'English',
     code: 'en',
   },
+
+  common: {},
+
   routes: {
-    landing: {
+    login: {
       hello: 'Hello!',
     },
   },
