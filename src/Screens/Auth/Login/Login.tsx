@@ -11,7 +11,7 @@ const initialValues = {
   password: '',
 };
 
-const Login: React.FC<Props> = () => {
+const Login: React.FC<Props> = ({navigation}) => {
   const language = useLanguage();
 
   const validateForm = (values: typeof initialValues) => {
@@ -64,6 +64,7 @@ const Login: React.FC<Props> = () => {
               contentTitle={language.routes.login.dontHaveAnAccount}
               contentSubtitle={language.common.register}
               onButtonPress={handleSubmit}
+              onContentPress={() => navigation.navigate('Register')}
             />
           </>
         )}
