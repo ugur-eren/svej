@@ -7,8 +7,10 @@ import {useTheme} from './Hooks';
 import {LanguageProvider} from './Hooks/Language';
 import {ThemeProvider} from './Hooks/Theming';
 
-// RootProviders is the top-level provider for the app and should only contain
-// providers that must be at the top-level or providers that are used by other providers.
+/**
+ * RootProviders is the top-level provider for the app and should only contain
+ * providers that must be at the top-level or providers that are used by other providers.
+ */
 const RootProviders: React.FC<{children: React.ReactNode}> = ({children}) => {
   return (
     <GestureHandlerRootView style={styles.gestureHandler}>
@@ -21,8 +23,10 @@ const RootProviders: React.FC<{children: React.ReactNode}> = ({children}) => {
   );
 };
 
-// Providers is the second-level provider for the app and should contain
-// every other providers that does not fit in RootProviders.
+/**
+ * Providers is the second-level provider for the app and should contain
+ * every other providers that does not fit in RootProviders.
+ */
 const Providers: React.FC<{children: React.ReactNode}> = ({children}) => {
   const theme = useTheme();
 
