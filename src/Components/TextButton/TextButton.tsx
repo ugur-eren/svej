@@ -5,7 +5,7 @@ import styles from './TextButton.styles';
 import Text from '../Text/Text';
 
 const TextButton: React.FC<TextButtonProps> = (props) => {
-  const {title, showLoading, onPress, textProps, ...restProps} = props;
+  const {children, showLoading, onPress, containerProps, ...textProps} = props;
 
   const [loading, setLoading] = useState(false);
 
@@ -29,13 +29,13 @@ const TextButton: React.FC<TextButtonProps> = (props) => {
 
   return (
     <TouchableOpacity
-      {...restProps}
+      {...containerProps}
       onPress={onButtonPress}
-      style={StyleSheet.compose(styles.container, restProps.style)}
+      style={StyleSheet.compose(styles.container, containerProps?.style)}
     >
       <Text {...textProps} color={loading ? 'textLight' : textProps?.color}>
         {/* TODO: Get the loading text from language context */}
-        {loading ? 'Loading...' : title}
+        {loading ? 'Loading...' : children}
       </Text>
     </TouchableOpacity>
   );
