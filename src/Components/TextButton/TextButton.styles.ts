@@ -6,5 +6,6 @@ export default StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     paddingHorizontal: Spacing.small,
+    paddingVertical: Spacing.xxsmall,
   },
 });
