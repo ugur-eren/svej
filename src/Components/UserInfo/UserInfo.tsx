@@ -3,12 +3,13 @@ import {View, TouchableOpacity} from 'react-native';
 import {Image} from 'expo-image';
 import {Feather} from '@expo/vector-icons';
 import Text from '../Text/Text';
+import Timer from '../Timer/Timer';
 import {useTheme} from '../../Hooks';
 import {UserInfoProps} from './UserInfo.props';
 import getStyles from './UserInfo.styles';
 
 const UserInfo: React.FC<UserInfoProps> = (props) => {
-  const {small} = props;
+  const {small, timestamp} = props;
 
   const theme = useTheme();
 
@@ -35,6 +36,8 @@ const UserInfo: React.FC<UserInfoProps> = (props) => {
               style={styles.userTag}
             />
           </View>
+
+          {timestamp ? <Timer timestamp={timestamp} style={styles.timer} /> : null}
         </TouchableOpacity>
       </View>
     </View>

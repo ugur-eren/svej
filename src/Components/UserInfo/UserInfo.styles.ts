@@ -36,4 +36,8 @@ export default ThemedStyleSheet((theme, small: boolean) => ({
   userTag: {
     marginLeft: Spacing.xxsmall,
   },
+
+  timer: {
+    marginTop: Spacing.xxxsmall,
+  },
 }));
