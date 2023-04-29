@@ -1,20 +1,25 @@
-import {memo} from 'react';
-import {View} from 'react-native';
+import {memo, useMemo} from 'react';
+import {View, StyleSheet} from 'react-native';
 import {Feather} from '@expo/vector-icons';
 import Text from '../Text/Text';
-import {useTheme} from '../../Hooks';
+import {useLanguage, useTheme} from '../../Hooks';
 import {TimerProps} from './Timer.props';
 import styles from './Timer.styles';
+import {getTimeStringFromTimestamp} from '../../Utils/Timestamp';
 
 const Timer: React.FC<TimerProps> = (props) => {
-  const {timestamp} = props;
+  const {timestamp, style: styleProp, ...restProps} = props;
 
   const theme = useTheme();
+  const language = useLanguage();
 
-  const time = '2 hours ago';
+  const time = useMemo(
+    () => getTimeStringFromTimestamp(language, timestamp, Date.now(), 'ago'),
+    [language, timestamp],
+  );
 
   return (
-    <View style={styles.container}>
+    <View style={StyleSheet.compose(styles.container, styleProp)} {...restProps}>
       <Feather name="clock" size={13} style={styles.icon} color={theme.colors.text} />
       <Text>{time}</Text>
     </View>
