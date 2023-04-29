@@ -11,21 +11,15 @@ export default {
     register: 'Register',
   },
 
-  routes: {
-    login: {
-      dontHaveAnAccount: "You don't have an account yet?",
-      username: 'Username',
-      password: 'Password',
-      forgotPassword: 'Have you forgot your password?',
-    },
-    register: {
-      alreadyHaveAccount: 'Do you already have an account?',
-      username: 'Username',
-      password: 'Password',
-      passwordValidation: 'Password again',
-      fullname: 'Name and Surname',
-      email: 'Email',
-    },
+  auth: {
+    dontHaveAnAccount: "You don't have an account yet?",
+    alreadyHaveAccount: 'Do you already have an account?',
+    forgotPassword: 'Have you forgot your password?',
+    username: 'Username',
+    password: 'Password',
+    passwordValidation: 'Password again',
+    fullname: 'Name and Surname',
+    email: 'Email',
   },
 
   errors: {

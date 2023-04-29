@@ -36,7 +36,7 @@ const Login: React.FC<Props> = ({navigation}) => {
           <>
             <AuthPage.Content>
               <Input
-                placeholder={language.routes.login.username}
+                placeholder={language.auth.username}
                 value={values.username}
                 onChangeText={handleChange('username')}
                 onBlur={handleBlur('username')}
@@ -46,7 +46,7 @@ const Login: React.FC<Props> = ({navigation}) => {
               />
 
               <Input
-                placeholder={language.routes.login.password}
+                placeholder={language.auth.password}
                 value={values.password}
                 onChangeText={handleChange('password')}
                 onBlur={handleBlur('password')}
@@ -56,12 +56,12 @@ const Login: React.FC<Props> = ({navigation}) => {
                 small
               />
 
-              <TextButton>{language.routes.login.forgotPassword}</TextButton>
+              <TextButton>{language.auth.forgotPassword}</TextButton>
             </AuthPage.Content>
 
             <AuthPage.Footer
               buttonTitle={language.common.login}
-              contentTitle={language.routes.login.dontHaveAnAccount}
+              contentTitle={language.auth.dontHaveAnAccount}
               contentSubtitle={language.common.register}
               onButtonPress={handleSubmit}
               onContentPress={() => navigation.navigate('Register')}

@@ -45,7 +45,7 @@ const Register: React.FC<Props> = ({navigation}) => {
           <>
             <AuthPage.Content>
               <Input
-                placeholder={language.routes.register.username}
+                placeholder={language.auth.username}
                 value={values.username}
                 onChangeText={handleChange('username')}
                 onBlur={handleBlur('username')}
@@ -55,7 +55,7 @@ const Register: React.FC<Props> = ({navigation}) => {
               />
 
               <Input
-                placeholder={language.routes.register.fullname}
+                placeholder={language.auth.fullname}
                 value={values.fullname}
                 onChangeText={handleChange('fullname')}
                 onBlur={handleBlur('fullname')}
@@ -65,7 +65,7 @@ const Register: React.FC<Props> = ({navigation}) => {
               />
 
               <Input
-                placeholder={language.routes.register.email}
+                placeholder={language.auth.email}
                 value={values.email}
                 onChangeText={handleChange('email')}
                 onBlur={handleBlur('email')}
@@ -75,7 +75,7 @@ const Register: React.FC<Props> = ({navigation}) => {
               />
 
               <Input
-                placeholder={language.routes.register.password}
+                placeholder={language.auth.password}
                 value={values.password}
                 onChangeText={handleChange('password')}
                 onBlur={handleBlur('password')}
@@ -86,7 +86,7 @@ const Register: React.FC<Props> = ({navigation}) => {
               />
 
               <Input
-                placeholder={language.routes.register.passwordValidation}
+                placeholder={language.auth.passwordValidation}
                 value={values.passwordValidation}
                 onChangeText={handleChange('passwordValidation')}
                 onBlur={handleBlur('passwordValidation')}
@@ -99,7 +99,7 @@ const Register: React.FC<Props> = ({navigation}) => {
 
             <AuthPage.Footer
               buttonTitle={language.common.register}
-              contentTitle={language.routes.register.alreadyHaveAccount}
+              contentTitle={language.auth.alreadyHaveAccount}
               contentSubtitle={language.common.login}
               onButtonPress={handleSubmit}
               onContentPress={() => navigation.navigate('Login')}
