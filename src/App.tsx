@@ -2,6 +2,7 @@ import {useCallback} from 'react';
 import {View} from 'react-native';
 import {useFonts} from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
+import * as StatusBar from 'expo-status-bar';
 import {useTheme} from './Hooks';
 import Providers from './Providers';
 import Router from './Router';
@@ -9,6 +10,8 @@ import Env from './Utils/Env';
 import {ThemedStyleSheet} from './Utils/ThemedStyleSheet';
 
 SplashScreen.preventAutoHideAsync();
+
+StatusBar.setStatusBarTranslucent(false);
 
 function App() {
   if (!Env.SVEJ_APP_USE_CONFIG || Env.SVEJ_APP_USE_CONFIG !== 'true') {
