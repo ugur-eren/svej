@@ -22,6 +22,24 @@ export default {
     email: 'Email',
   },
 
+  time: {
+    just_now: 'Just now',
+    seconds_ago: '%time% seconds ago',
+    minutes_ago: '%time% minutes ago',
+    hours_ago: '%time% hours ago',
+    days_ago: '%time% days ago',
+    weeks_ago: '%time% weeks ago',
+    months_ago: '%time% months ago',
+    years_ago: '%time% years ago',
+    seconds_no_ago: '%time% seconds',
+    minutes_no_ago: '%time% minutes',
+    hours_no_ago: '%time% hours',
+    days_no_ago: '%time% days',
+    weeks_no_ago: '%time% weeks',
+    months_no_ago: '%time% months',
+    years_no_ago: '%time% years',
+  },
+
   errors: {
     USERNAME_SHORT: 'Username must be at least 4 characters',
     USERNAME_INVALID: 'Username is invalid',
