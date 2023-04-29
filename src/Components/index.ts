@@ -8,3 +8,5 @@ export {default as Input} from './Input/Input';
 export {default as Post} from './Post/Post';
 export {default as UserInfo} from './UserInfo/UserInfo';
 export {default as Timer} from './Timer/Timer';
+export {default as PostContent} from './PostContent/PostContent';
+export {default as PostMedia} from './PostMedia/PostMedia';
