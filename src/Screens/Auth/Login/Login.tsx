@@ -56,7 +56,7 @@ const Login: React.FC<Props> = ({navigation}) => {
                 small
               />
 
-              <TextButton>Have you forgot your password?</TextButton>
+              <TextButton>{language.routes.login.forgotPassword}</TextButton>
             </AuthPage.Content>
 
             <AuthPage.Footer

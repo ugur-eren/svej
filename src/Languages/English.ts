@@ -16,6 +16,7 @@ export default {
       dontHaveAnAccount: "You don't have an account yet?",
       username: 'Username',
       password: 'Password',
+      forgotPassword: 'Have you forgot your password?',
     },
     register: {
       alreadyHaveAccount: 'Do you already have an account?',

@@ -1,6 +1,6 @@
 import {Formik} from 'formik';
 import {AuthPage} from '../../../Containers';
-import {Input, TextButton} from '../../../Components';
+import {Input} from '../../../Components';
 import {useLanguage} from '../../../Hooks';
 import EmailValidator from '../../../Utils/EmailValidator';
 import {AuthRegisterScreenProps} from '../../../Typings/NavigationTypes';
@@ -95,8 +95,6 @@ const Register: React.FC<Props> = ({navigation}) => {
                 type="password"
                 small
               />
-
-              <TextButton>Have you forgot your password?</TextButton>
             </AuthPage.Content>
 
             <AuthPage.Footer
