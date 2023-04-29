@@ -6,3 +6,4 @@ export {default as Button} from './Button/Button';
 export {default as TextButton} from './TextButton/TextButton';
 export {default as Input} from './Input/Input';
 export {default as Post} from './Post/Post';
+export {default as UserInfo} from './UserInfo/UserInfo';
