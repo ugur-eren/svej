@@ -24,6 +24,8 @@ export default {
 
   time: {
     just_now: 'Just now',
+    just_now_short: 'now',
+
     seconds_ago: '%time% seconds ago',
     minutes_ago: '%time% minutes ago',
     hours_ago: '%time% hours ago',
@@ -31,6 +33,7 @@ export default {
     weeks_ago: '%time% weeks ago',
     months_ago: '%time% months ago',
     years_ago: '%time% years ago',
+
     seconds_no_ago: '%time% seconds',
     minutes_no_ago: '%time% minutes',
     hours_no_ago: '%time% hours',
@@ -38,6 +41,14 @@ export default {
     weeks_no_ago: '%time% weeks',
     months_no_ago: '%time% months',
     years_no_ago: '%time% years',
+
+    seconds_short: '%time% s',
+    minutes_short: '%time% mn',
+    hours_short: '%time% h',
+    days_short: '%time% d',
+    weeks_short: '%time% w',
+    months_short: '%time% mo',
+    years_short: '%time% yr',
   },
 
   errors: {

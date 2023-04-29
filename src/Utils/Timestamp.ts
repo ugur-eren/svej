@@ -63,11 +63,13 @@ export const getElapsedFromTimestamp = (
 export const getTimeStringFromElapsed = (
   language: LanguageType,
   elapsed: ElapsedTime,
-  variant: 'ago' | 'no_ago' = 'ago',
+  variant: 'ago' | 'no_ago' | 'short' = 'ago',
 ): string => {
   const {value, unit} = elapsed;
 
-  if (unit === 'just_now') return language.time.just_now;
+  if (unit === 'just_now') {
+    return language.time[variant === 'short' ? 'just_now_short' : 'just_now'];
+  }
 
   return parseLanguageParts(language.time[`${unit}_${variant}`], {time: value.toString()});
 };
@@ -85,7 +87,7 @@ export const getTimeStringFromTimestamp = (
   language: LanguageType,
   timestamp: number,
   currentTimestamp?: number,
-  variant: 'ago' | 'no_ago' = 'ago',
+  variant: 'ago' | 'no_ago' | 'short' = 'ago',
 ): string => {
   return getTimeStringFromElapsed(
     language,
