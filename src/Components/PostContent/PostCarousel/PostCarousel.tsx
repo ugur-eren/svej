@@ -1,4 +1,4 @@
-import {memo, useState, useCallback} from 'react';
+import {memo, useState, useCallback, useRef} from 'react';
 import {View, FlatList, useWindowDimensions} from 'react-native';
 import PostMedia from '../../PostMedia/PostMedia';
 import Pagination from '../../Pagination/Pagination';
@@ -8,6 +8,8 @@ import styles from './PostCarousel.styles';
 
 const PostCarousel: React.FC<PostCarouselProps> = (props) => {
   const {data} = props;
+
+  const flatlistRef = useRef<FlatList>(null);
 
   const {width} = useWindowDimensions();
   const [activeSlide, setActiveSlide] = useState(0);
@@ -22,9 +24,12 @@ const PostCarousel: React.FC<PostCarouselProps> = (props) => {
     [width, activeSlide],
   );
 
+  // TODO: Flatlist keyExtractor
+
   return (
     <View style={styles.container}>
       <FlatList
+        ref={flatlistRef}
         horizontal
         data={data}
         pagingEnabled
@@ -47,7 +52,11 @@ const PostCarousel: React.FC<PostCarouselProps> = (props) => {
       />
 
       <View pointerEvents="box-none" style={styles.pagination}>
-        <Pagination count={data.length} activeIndex={activeSlide} />
+        <Pagination
+          count={data.length}
+          activeIndex={activeSlide}
+          onDotPress={(index) => flatlistRef.current?.scrollToIndex({index})}
+        />
       </View>
     </View>
   );
