@@ -49,42 +49,44 @@ const PostVideo: React.FC<PostVideoProps> = (props) => {
 
   return (
     <TouchableWithoutFeedback disabled={!renderVideo} onPress={onVideoPress}>
-      {renderVideo ? (
-        <Video
-          source={{uri}}
-          style={StyleSheet.compose(style, {height: width / ratio, aspectRatio: ratio})}
-          isLooping
-          usePoster
-          isMuted={muted}
-          posterSource={{uri: poster, width, height: width / ratio}}
-          resizeMode={ResizeMode.CONTAIN}
-          onReadyForDisplay={onVideoReady}
-          onError={onVideoError}
-          {...videoProps}
-        />
-      ) : null}
+      <>
+        {renderVideo ? (
+          <Video
+            source={{uri}}
+            style={StyleSheet.compose(style, {height: width / ratio, aspectRatio: ratio})}
+            isLooping
+            usePoster
+            isMuted={muted}
+            posterSource={{uri: poster, width, height: width / ratio}}
+            resizeMode={ResizeMode.CONTAIN}
+            onReadyForDisplay={onVideoReady}
+            onError={onVideoError}
+            {...videoProps}
+          />
+        ) : null}
 
-      {error ? (
-        <View style={styles.loader}>
-          <TouchableOpacity onPress={tryAgain} style={styles.errorTouchable}>
-            <Text style={styles.errorText}>
-              Video couldn&apos;t loaded.{'\n'}Press to try again.
-            </Text>
-          </TouchableOpacity>
-        </View>
-      ) : null}
+        {error ? (
+          <View style={styles.loader}>
+            <TouchableOpacity onPress={tryAgain} style={styles.errorTouchable}>
+              <Text style={styles.errorText}>
+                Video couldn&apos;t loaded.{'\n'}Press to try again.
+              </Text>
+            </TouchableOpacity>
+          </View>
+        ) : null}
 
-      {!ready ? (
-        <View style={styles.loader}>
-          <Spinner size={36} color="primary" />
-        </View>
-      ) : null}
+        {!ready ? (
+          <View style={styles.loader}>
+            <Spinner size={36} color="primary" />
+          </View>
+        ) : null}
 
-      {muted ? (
-        <View style={styles.mutedContainer}>
-          <Feather name="volume-x" size={24} color={theme.colors.white} style={styles.muted} />
-        </View>
-      ) : null}
+        {muted ? (
+          <View style={styles.mutedContainer}>
+            <Feather name="volume-x" size={24} color={theme.colors.white} style={styles.muted} />
+          </View>
+        ) : null}
+      </>
     </TouchableWithoutFeedback>
   );
 };
