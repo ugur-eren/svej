@@ -21,6 +21,16 @@ export const LightTheme = {
       onBackground: LightThemeColors.colors.text,
       onSurface: LightThemeColors.colors.text,
       onSurfaceVariant: LightThemeColors.colors.text,
+
+      // TODO: Give proper elevation colors
+      elevation: {
+        level0: LightThemeColors.colors.surface,
+        level1: LightThemeColors.colors.backgroundSecondary,
+        level2: LightThemeColors.colors.backgroundSecondary,
+        level3: LightThemeColors.colors.backgroundSecondary,
+        level4: LightThemeColors.colors.backgroundSecondary,
+        level5: LightThemeColors.colors.backgroundSecondary,
+      },
     },
   },
 };

@@ -12,3 +12,5 @@ export {default as Pagination} from './Pagination/Pagination';
 export {default as PostContent} from './PostContent/PostContent';
 export {default as PostMedia} from './PostMedia/PostMedia';
 export {default as ActionButton} from './ActionButton/ActionButton';
+export {default as CircleProgress} from './CircleProgress/CircleProgress';
+export {default as MainHeader} from './MainHeader/MainHeader';
