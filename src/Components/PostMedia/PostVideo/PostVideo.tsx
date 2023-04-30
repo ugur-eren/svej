@@ -15,7 +15,7 @@ import {PostVideoProps} from './PostVideo.props';
 import getStyles from './PostVideo.styles';
 
 const PostVideo: React.FC<PostVideoProps> = (props) => {
-  const {uri, ratio, poster, style, ...videoProps} = props;
+  const {uri, ratio, poster, visible, style, ...videoProps} = props;
 
   const theme = useTheme();
 
@@ -56,6 +56,7 @@ const PostVideo: React.FC<PostVideoProps> = (props) => {
             style={StyleSheet.compose(style, {height: width / ratio, aspectRatio: ratio})}
             isLooping
             usePoster
+            shouldPlay={visible}
             isMuted={muted}
             posterSource={{uri: poster, width, height: width / ratio}}
             resizeMode={ResizeMode.CONTAIN}

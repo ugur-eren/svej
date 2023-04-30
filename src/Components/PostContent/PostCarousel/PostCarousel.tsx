@@ -14,12 +14,12 @@ const PostCarousel: React.FC<PostCarouselProps> = (props) => {
 
   const PostCarouselItem = useCallback(
     // eslint-disable-next-line react/no-unused-prop-types
-    ({item}: {item: PostData}) => (
+    ({item, index}: {item: PostData; index: number}) => (
       <View style={{width}}>
-        <PostMedia data={item} />
+        <PostMedia data={item} visible={activeSlide === index} />
       </View>
     ),
-    [width],
+    [width, activeSlide],
   );
 
   return (

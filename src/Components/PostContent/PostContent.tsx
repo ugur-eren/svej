@@ -10,7 +10,7 @@ const PostContent: React.FC<PostContentProps> = (props) => {
     return <PostCarousel data={data} />;
   }
 
-  return <PostMedia data={data[0]} style={styles.post} />;
+  return <PostMedia visible data={data[0]} style={styles.post} />;
 };
 
 export default PostContent;
