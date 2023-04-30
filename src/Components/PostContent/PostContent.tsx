@@ -1,15 +1,16 @@
-import {View} from 'react-native';
+import PostCarousel from './PostCarousel/PostCarousel';
+import PostMedia from '../PostMedia/PostMedia';
 import {PostContentProps} from './PostContent.props';
 import styles from './PostContent.styles';
 
 const PostContent: React.FC<PostContentProps> = (props) => {
   const {data} = props;
 
-  return (
-    <View style={styles.container}>
-      <View />
-    </View>
-  );
+  if (data.length > 1) {
+    return <PostCarousel data={data} />;
+  }
+
+  return <PostMedia data={data[0]} style={styles.post} />;
 };
 
 export default PostContent;
