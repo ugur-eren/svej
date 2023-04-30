@@ -5,6 +5,7 @@ import UserInfo from '../UserInfo/UserInfo';
 import TextButton from '../TextButton/TextButton';
 import Touchable from '../Touchable/Touchable';
 import PostContent from '../PostContent/PostContent';
+import ActionButton from '../ActionButton/ActionButton';
 import {useTheme} from '../../Hooks';
 import getStyles from './Post.styles';
 
@@ -50,8 +51,11 @@ const Post: React.FC = () => {
 
       <View style={styles.bottom}>
         <View style={styles.actionButtons}>
-          <Text>Like</Text>
-          <Text>Dislike</Text>
+          <ActionButton type="like" active count={12} />
+
+          <ActionButton type="dislike" count={4} />
+
+          <ActionButton type="repost" count={4} />
         </View>
 
         <TextButton align="right">0 Comments</TextButton>

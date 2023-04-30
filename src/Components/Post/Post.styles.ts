@@ -1,5 +1,5 @@
-import {Spacing} from '../../Styles';
 import {ThemedStyleSheet} from '../../Utils/ThemedStyleSheet';
+import {Spacing} from '../../Styles';
 
 export default ThemedStyleSheet((theme) => ({
   container: {
@@ -15,11 +15,12 @@ export default ThemedStyleSheet((theme) => ({
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: Spacing.small,
-    paddingVertical: Spacing.xsmall,
+    paddingLeft: Spacing.xxsmall,
+    paddingRight: Spacing.small,
   },
   actionButtons: {
     flexDirection: 'row',
+    gap: Spacing.medium,
   },
 
   divider: {

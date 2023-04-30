@@ -11,3 +11,4 @@ export {default as Timer} from './Timer/Timer';
 export {default as Pagination} from './Pagination/Pagination';
 export {default as PostContent} from './PostContent/PostContent';
 export {default as PostMedia} from './PostMedia/PostMedia';
+export {default as ActionButton} from './ActionButton/ActionButton';
