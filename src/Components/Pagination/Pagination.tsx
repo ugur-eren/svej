@@ -16,10 +16,13 @@ const Pagination: React.FC<PaginationProps> = (props) => {
       {Array(count)
         .fill(0)
         .map((_, index) => (
-          <TouchableOpacity style={styles.dotContainer} onPress={() => onDotPress?.(index)}>
+          <TouchableOpacity
+            // eslint-disable-next-line react/no-array-index-key
+            key={index.toString()}
+            style={styles.dotContainer}
+            onPress={() => onDotPress?.(index)}
+          >
             <View
-              // eslint-disable-next-line react/no-array-index-key
-              key={index.toString()}
               style={[styles.dot, activeIndex === index ? styles.activeDot : styles.inactiveDot]}
             />
           </TouchableOpacity>
