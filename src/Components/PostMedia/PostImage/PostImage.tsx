@@ -1,6 +1,7 @@
 import {View, StyleSheet, useWindowDimensions} from 'react-native';
 import {Image, ImageStyle} from 'expo-image';
 import {PostImageProps} from './PostImage.props';
+import styles from './PostImage.styles';
 
 const PostImage: React.FC<PostImageProps> = (props) => {
   const {uri, ratio, thumbnail, style, ...imageProps} = props;
@@ -8,12 +9,13 @@ const PostImage: React.FC<PostImageProps> = (props) => {
   const {width} = useWindowDimensions();
 
   return (
-    <View>
+    <View style={styles.container}>
       <Image
         source={{uri}}
         placeholder={thumbnail}
         transition={500}
-        style={StyleSheet.compose(style, {height: width / ratio}) as ImageStyle}
+        contentFit="contain"
+        style={StyleSheet.compose(style, {width, height: width / ratio}) as ImageStyle}
         {...imageProps}
       />
 
