@@ -47,10 +47,10 @@ function createContext<T>(defaultContext: T): ContextType<T> {
       setState((prev) => {
         if (typeof value === 'function') {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          return {...prev, ...(value as any)(prev)};
+          return (value as any)(prev);
         }
 
-        return {...prev, ...value};
+        return value;
       });
     };
   };
