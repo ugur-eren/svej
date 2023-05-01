@@ -1,5 +1,6 @@
 import {View} from 'react-native';
 import {Divider} from 'react-native-paper';
+import {useNavigation} from '@react-navigation/native';
 import Text from '../Text/Text';
 import UserInfo from '../UserInfo/UserInfo';
 import TextButton from '../TextButton/TextButton';
@@ -8,9 +9,11 @@ import PostContent from '../PostContent/PostContent';
 import ActionButton from '../ActionButton/ActionButton';
 import {useTheme} from '../../Hooks';
 import getStyles from './Post.styles';
+import {RootStackNavigationProps} from '../../Typings/NavigationTypes';
 
 const Post: React.FC = () => {
   const theme = useTheme();
+  const navigation = useNavigation<RootStackNavigationProps>();
 
   const styles = getStyles(theme);
 
@@ -58,12 +61,20 @@ const Post: React.FC = () => {
           <ActionButton type="repost" count={4} />
         </View>
 
-        <TextButton align="right">0 Comments</TextButton>
+        <TextButton
+          align="right"
+          onPress={() => navigation.navigate('MainStack', {screen: 'Comments'})}
+        >
+          0 Comments
+        </TextButton>
       </View>
 
       <Divider style={styles.divider} />
 
-      <Touchable style={styles.comments}>
+      <Touchable
+        style={styles.comments}
+        onPress={() => navigation.navigate('MainStack', {screen: 'Comments'})}
+      >
         <Text>There are no comments. Be the first one!</Text>
       </Touchable>
     </View>
