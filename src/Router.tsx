@@ -8,6 +8,7 @@ import AuthRegister from './Screens/Auth/Register/Register';
 
 // Main
 import MainExplore from './Screens/Main/Explore/Explore';
+import MainProfile from './Screens/Main/Profile/Profile';
 
 const RootStack = createNativeStackNavigator<RootStackParams>();
 const AuthStack = createNativeStackNavigator<AuthStackParams>();
@@ -24,8 +25,9 @@ const AuthStackNavigator = () => {
 
 const MainStackNavigator = () => {
   return (
-    <MainStack.Navigator initialRouteName="Explore" screenOptions={{headerShown: false}}>
+    <MainStack.Navigator initialRouteName="Profile" screenOptions={{headerShown: false}}>
       <MainStack.Screen name="Explore" component={MainExplore} />
+      <MainStack.Screen name="Profile" component={MainProfile} />
     </MainStack.Navigator>
   );
 };
