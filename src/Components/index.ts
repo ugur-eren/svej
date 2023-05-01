@@ -16,3 +16,4 @@ export {default as CircleProgress} from './CircleProgress/CircleProgress';
 export {default as Header} from './Header/Header';
 export {default as MainHeader} from './MainHeader/MainHeader';
 export {default as TransparentHeader} from './TransparentHeader/TransparentHeader';
+export {default as ListItem} from './ListItem/ListItem';
