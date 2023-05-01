@@ -4,3 +4,4 @@ import * as Colors from './Colors';
 import * as Theme from './Theme';
 
 export {Spacing, Typography, Colors, Theme};
+export {default as GlobalStyles} from './GlobalStyles';
