@@ -14,3 +14,4 @@ export {default as PostMedia} from './PostMedia/PostMedia';
 export {default as ActionButton} from './ActionButton/ActionButton';
 export {default as CircleProgress} from './CircleProgress/CircleProgress';
 export {default as MainHeader} from './MainHeader/MainHeader';
+export {default as TransparentHeader} from './TransparentHeader/TransparentHeader';
