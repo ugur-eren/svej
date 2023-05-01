@@ -51,8 +51,8 @@ export const DarkThemeColors = {
 
     primary: '#FA8057',
     background: '#242424',
-    backgroundSecondary: '#3A3A3A',
-    surface: '#272727',
+    backgroundSecondary: '#272727',
+    surface: '#3A3A3A',
     onPrimary: '#FAFAFA',
 
     text: '#FAFAFA',

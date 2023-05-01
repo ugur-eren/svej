@@ -1,5 +1,5 @@
 import Color from 'color';
-import {DefaultTheme as PaperLightTheme} from 'react-native-paper';
+import {DefaultTheme as PaperLightTheme, MD3DarkTheme as PaperDarkTheme} from 'react-native-paper';
 import {LightThemeColors, DarkThemeColors} from './Colors';
 
 export const LightTheme = {
@@ -40,9 +40,9 @@ export const DarkTheme = {
   colors: DarkThemeColors.colors,
   gradients: DarkThemeColors.gradients,
   paper: {
-    ...PaperLightTheme,
+    ...PaperDarkTheme,
     colors: {
-      ...PaperLightTheme.colors,
+      ...PaperDarkTheme.colors,
 
       primary: DarkThemeColors.colors.primary,
       surface: DarkThemeColors.colors.surface,
@@ -54,6 +54,16 @@ export const DarkTheme = {
       onBackground: DarkThemeColors.colors.text,
       onSurface: DarkThemeColors.colors.text,
       onSurfaceVariant: DarkThemeColors.colors.text,
+
+      // TODO: Give proper elevation colors
+      elevation: {
+        level0: DarkThemeColors.colors.surface,
+        level1: DarkThemeColors.colors.backgroundSecondary,
+        level2: DarkThemeColors.colors.backgroundSecondary,
+        level3: DarkThemeColors.colors.backgroundSecondary,
+        level4: DarkThemeColors.colors.backgroundSecondary,
+        level5: DarkThemeColors.colors.backgroundSecondary,
+      },
     },
   },
 };
