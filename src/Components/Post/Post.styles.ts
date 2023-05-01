@@ -19,6 +19,7 @@ export default ThemedStyleSheet((theme) => ({
     paddingRight: Spacing.small,
   },
   actionButtons: {
+    flex: 1,
     flexDirection: 'row',
     gap: Spacing.medium,
   },
