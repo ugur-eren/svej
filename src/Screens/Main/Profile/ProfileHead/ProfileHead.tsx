@@ -19,7 +19,7 @@ const ProfileHead: React.FC = () => {
           <View style={GlobalStyles.flex1}>
             <Image
               source={{uri: `https://unsplash.it/900/600/?random=${Math.random()}`}}
-              resizeMode="cover"
+              contentFit="cover"
               style={GlobalStyles.flex1}
             />
           </View>

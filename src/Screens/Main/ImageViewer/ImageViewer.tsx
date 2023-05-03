@@ -23,7 +23,7 @@ const ImageViewer: React.FC<MainImageViewerScreenProps> = (props) => {
         <Image
           source={typeof image === 'string' ? {uri: image} : image}
           style={styles.image}
-          resizeMode="contain"
+          contentFit="contain"
         />
       </View>
     </View>
