@@ -16,6 +16,7 @@ export const LightTheme = {
       surfaceVariant: Color(LightThemeColors.colors.primary).alpha(0.16).toString(),
       error: LightThemeColors.colors.error,
       background: LightThemeColors.colors.background,
+      secondaryContainer: LightThemeColors.colors.primary,
 
       onPrimary: LightThemeColors.colors.onPrimary,
       onBackground: LightThemeColors.colors.text,
