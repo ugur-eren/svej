@@ -13,6 +13,7 @@ import MainSettings from './Screens/Main/Settings/Settings';
 import MainComments from './Screens/Main/Comments/Comments';
 import MainShare from './Screens/Main/Share/Share';
 import MainImageViewer from './Screens/Main/ImageViewer/ImageViewer';
+import MainSearch from './Screens/Main/Search/Search';
 
 const RootStack = createNativeStackNavigator<RootStackParams>();
 const AuthStack = createNativeStackNavigator<AuthStackParams>();
@@ -29,13 +30,14 @@ const AuthStackNavigator = () => {
 
 const MainStackNavigator = () => {
   return (
-    <MainStack.Navigator initialRouteName="ImageViewer" screenOptions={{headerShown: false}}>
+    <MainStack.Navigator initialRouteName="Search" screenOptions={{headerShown: false}}>
       <MainStack.Screen name="Explore" component={MainExplore} />
       <MainStack.Screen name="Profile" component={MainProfile} />
       <MainStack.Screen name="Share" component={MainShare} />
       <MainStack.Screen name="Settings" component={MainSettings} />
       <MainStack.Screen name="Comments" component={MainComments} />
       <MainStack.Screen name="ImageViewer" component={MainImageViewer} />
+      <MainStack.Screen name="Search" component={MainSearch} />
     </MainStack.Navigator>
   );
 };

@@ -19,3 +19,4 @@ export {default as TransparentHeader} from './TransparentHeader/TransparentHeade
 export {default as ListItem} from './ListItem/ListItem';
 export {default as ListMenu} from './ListMenu/ListMenu';
 export {default as InputAccessoryView} from './InputAccessoryView/InputAccessoryView';
+export {default as ProfileWidget} from './ProfileWidget/ProfileWidget';
