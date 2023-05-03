@@ -14,6 +14,7 @@ import MainComments from './Screens/Main/Comments/Comments';
 import MainShare from './Screens/Main/Share/Share';
 import MainImageViewer from './Screens/Main/ImageViewer/ImageViewer';
 import MainSearch from './Screens/Main/Search/Search';
+import MainNotifications from './Screens/Main/Notifications/Notifications';
 
 const RootStack = createNativeStackNavigator<RootStackParams>();
 const AuthStack = createNativeStackNavigator<AuthStackParams>();
@@ -30,7 +31,7 @@ const AuthStackNavigator = () => {
 
 const MainStackNavigator = () => {
   return (
-    <MainStack.Navigator initialRouteName="Search" screenOptions={{headerShown: false}}>
+    <MainStack.Navigator initialRouteName="Notifications" screenOptions={{headerShown: false}}>
       <MainStack.Screen name="Explore" component={MainExplore} />
       <MainStack.Screen name="Profile" component={MainProfile} />
       <MainStack.Screen name="Share" component={MainShare} />
@@ -38,6 +39,7 @@ const MainStackNavigator = () => {
       <MainStack.Screen name="Comments" component={MainComments} />
       <MainStack.Screen name="ImageViewer" component={MainImageViewer} />
       <MainStack.Screen name="Search" component={MainSearch} />
+      <MainStack.Screen name="Notifications" component={MainNotifications} />
     </MainStack.Navigator>
   );
 };

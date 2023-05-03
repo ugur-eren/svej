@@ -23,6 +23,7 @@ export type MainStackParams = {
     image: string | ImageSourcePropType;
   };
   Search: undefined;
+  Notifications: undefined;
 };
 
 // Root Stack
@@ -66,5 +67,9 @@ export type MainImageViewerScreenProps = CompositeScreenProps<
 >;
 export type MainSearchScreenProps = CompositeScreenProps<
   NativeStackScreenProps<MainStackParams, 'Search'>,
+  NativeStackScreenProps<RootStackParams>
+>;
+export type MainNotificationsScreenProps = CompositeScreenProps<
+  NativeStackScreenProps<MainStackParams, 'Notifications'>,
   NativeStackScreenProps<RootStackParams>
 >;
