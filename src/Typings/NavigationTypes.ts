@@ -14,6 +14,7 @@ export type AuthStackParams = {
 export type MainStackParams = {
   Explore: undefined;
   Profile: undefined;
+  Share: undefined;
   Settings: undefined;
   Comments: undefined;
 };
@@ -39,6 +40,10 @@ export type MainExploreScreenProps = CompositeScreenProps<
 >;
 export type MainProfileScreenProps = CompositeScreenProps<
   NativeStackScreenProps<MainStackParams, 'Profile'>,
+  NativeStackScreenProps<RootStackParams>
+>;
+export type MainShareScreenProps = CompositeScreenProps<
+  NativeStackScreenProps<MainStackParams, 'Share'>,
   NativeStackScreenProps<RootStackParams>
 >;
 export type MainSettingsScreenProps = CompositeScreenProps<
