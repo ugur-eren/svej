@@ -1,3 +1,4 @@
+import {ImageSourcePropType} from 'react-native';
 import {CompositeScreenProps, NavigatorScreenParams} from '@react-navigation/native';
 import {NativeStackScreenProps, NativeStackNavigationProp} from '@react-navigation/native-stack';
 
@@ -17,6 +18,10 @@ export type MainStackParams = {
   Share: undefined;
   Settings: undefined;
   Comments: undefined;
+  ImageViewer: {
+    title: string;
+    image: string | ImageSourcePropType;
+  };
 };
 
 // Root Stack
@@ -52,5 +57,9 @@ export type MainSettingsScreenProps = CompositeScreenProps<
 >;
 export type MainCommentsScreenProps = CompositeScreenProps<
   NativeStackScreenProps<MainStackParams, 'Comments'>,
+  NativeStackScreenProps<RootStackParams>
+>;
+export type MainImageViewerScreenProps = CompositeScreenProps<
+  NativeStackScreenProps<MainStackParams, 'ImageViewer'>,
   NativeStackScreenProps<RootStackParams>
 >;
