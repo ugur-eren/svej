@@ -1,10 +1,11 @@
 import {Feather} from '@expo/vector-icons';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {RootStackParams, AuthStackParams, MainStackParams} from './Typings/NavigationTypes';
 import {FeatherIconNames} from './Typings';
 import {useTheme} from './Hooks';
+import {Typography} from './Styles';
 
 // Auth
 import AuthLogin from './Screens/Auth/Login/Login';
@@ -22,8 +23,8 @@ import Notifications from './Screens/Main/Notifications/Notifications';
 
 const tabBarIcon =
   (name: FeatherIconNames) =>
-  ({focused, color}: {focused: boolean; color: string}) =>
-    <Feather name={name} color={focused ? 'white' : color} size={20} />;
+  ({color}: {color: string}) =>
+    <Feather name={name} color={color} size={20} />;
 
 const CompassIcon = tabBarIcon('compass');
 const PlusSquareIcon = tabBarIcon('plus-square');
@@ -33,7 +34,7 @@ const UserIcon = tabBarIcon('user');
 // Navigators
 const RootStack = createNativeStackNavigator<RootStackParams>();
 const AuthStack = createNativeStackNavigator<AuthStackParams>();
-const BottomStack = createMaterialBottomTabNavigator<MainStackParams>();
+const BottomStack = createBottomTabNavigator<MainStackParams>();
 const MainStack = createNativeStackNavigator<MainStackParams>();
 
 const AuthStackNavigator = () => {
@@ -51,9 +52,23 @@ const BottomStackNavigator = () => {
   return (
     <BottomStack.Navigator
       initialRouteName="Explore"
-      activeColor={theme.colors.primary}
-      inactiveColor={theme.colors.text}
       backBehavior="history"
+      screenOptions={{
+        headerShown: false,
+        tabBarActiveTintColor: theme.colors.primary,
+        tabBarLabelStyle: {...Typography.medium, fontSize: 12},
+        tabBarStyle: {paddingBottom: 4},
+        tabBarBadgeStyle: {
+          backgroundColor: theme.colors.buttonBackground,
+          color: theme.colors.buttonText,
+          fontSize: 10,
+          lineHeight: 16,
+          height: 16,
+          minWidth: 16,
+          borderRadius: 8,
+          textAlign: 'center',
+        },
+      }}
     >
       <BottomStack.Screen
         name="Explore"
