@@ -11,12 +11,11 @@ const Comments: React.FC = () => {
       <Header title="Comments" />
 
       <FlatList
-        data={['', '', '', '']}
+        data={['', '', '', '', '', '']}
         ItemSeparatorComponent={Divider}
         renderItem={() => <Comment />}
         style={GlobalStyles.flex1}
         automaticallyAdjustKeyboardInsets
-        StickyHeaderComponent={() => <CommentInput />}
       />
 
       <CommentInput />

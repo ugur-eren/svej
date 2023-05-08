@@ -7,11 +7,12 @@ import {useTheme} from './Hooks';
 import Providers from './Providers';
 import Router from './Router';
 import Env from './Utils/Env';
+import {IsAndroid} from './Utils/Helpers';
 import {ThemedStyleSheet} from './Utils/ThemedStyleSheet';
 
 SplashScreen.preventAutoHideAsync();
 
-StatusBar.setStatusBarTranslucent(false);
+if (IsAndroid) StatusBar.setStatusBarTranslucent(false);
 
 function App() {
   if (!Env.SVEJ_APP_USE_CONFIG || Env.SVEJ_APP_USE_CONFIG !== 'true') {

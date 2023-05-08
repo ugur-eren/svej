@@ -42,6 +42,7 @@ const PostCarousel: React.FC<PostCarouselProps> = (props) => {
         windowSize={3}
         maxToRenderPerBatch={2}
         scrollEventThrottle={200}
+        getItemLayout={(_, index) => ({length: width, offset: width * index, index})}
         onScroll={({nativeEvent: event}) => {
           const currentIndex = Math.abs(
             Math.round(event.contentOffset.x / event.layoutMeasurement.width),

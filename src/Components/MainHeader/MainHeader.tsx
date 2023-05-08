@@ -15,7 +15,11 @@ const MainHeader: React.FC<MainHeaderProps> = (props) => {
     <Appbar.Header elevated>
       <Appbar.Action size={22} icon="search" color={theme.colors.text} />
 
-      <TouchableOpacity onPress={onLogoPress} style={GlobalStyles.flex1}>
+      <TouchableOpacity
+        disabled={typeof onLogoPress !== 'function'}
+        onPress={onLogoPress}
+        style={GlobalStyles.flex1}
+      >
         <Text weight="EarWorm" color="primary" align="center" fontSize={32}>
           {language.appName}
         </Text>

@@ -18,7 +18,7 @@ const CircleProgress: React.FC<CircleProgressProps> = (props) => {
     return {
       strokeDasharray: [
         withTiming(progress.value * circumference, {
-          duration: 500,
+          duration: 300,
         }),
         circumference,
       ],
