@@ -2,10 +2,16 @@ import {Feather} from '@expo/vector-icons';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {RootStackParams, AuthStackParams, MainStackParams} from './Typings/NavigationTypes';
+import {
+  RootStackParams,
+  AuthStackParams,
+  MainStackParams,
+  BottomStackParams,
+} from './Typings/NavigationTypes';
 import {FeatherIconNames} from './Typings';
 import {useTheme} from './Hooks';
 import {Typography} from './Styles';
+import {ThemedStyleSheet} from './Utils/ThemedStyleSheet';
 
 // Auth
 import AuthLogin from './Screens/Auth/Login/Login';
@@ -20,7 +26,7 @@ import Share from './Screens/Main/Share/Share';
 import ImageViewer from './Screens/Main/ImageViewer/ImageViewer';
 import Search from './Screens/Main/Search/Search';
 import Notifications from './Screens/Main/Notifications/Notifications';
-import {ThemedStyleSheet} from './Utils/ThemedStyleSheet';
+import Relations from './Screens/Main/Relations/Relations';
 
 const tabBarIcon =
   (name: FeatherIconNames) =>
@@ -35,7 +41,7 @@ const UserIcon = tabBarIcon('user');
 // Navigators
 const RootStack = createNativeStackNavigator<RootStackParams>();
 const AuthStack = createNativeStackNavigator<AuthStackParams>();
-const BottomStack = createBottomTabNavigator<MainStackParams>();
+const BottomStack = createBottomTabNavigator<BottomStackParams>();
 const MainStack = createNativeStackNavigator<MainStackParams>();
 
 const AuthStackNavigator = () => {
@@ -100,6 +106,7 @@ const MainStackNavigator = () => {
       <MainStack.Screen name="ImageViewer" component={ImageViewer} />
       <MainStack.Screen name="Search" component={Search} />
       <MainStack.Screen name="Notifications" component={Notifications} />
+      <MainStack.Screen name="Relations" component={Relations} />
     </MainStack.Navigator>
   );
 };

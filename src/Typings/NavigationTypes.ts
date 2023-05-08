@@ -32,6 +32,9 @@ export type MainStackParams = {
   };
   Search: undefined;
   Notifications: undefined;
+  Relations: {
+    type: 'followers' | 'follows';
+  };
 };
 
 // Root Stack
@@ -79,5 +82,9 @@ export type MainSearchScreenProps = CompositeScreenProps<
 >;
 export type MainNotificationsScreenProps = CompositeScreenProps<
   NativeStackScreenProps<MainStackParams, 'Notifications'>,
+  NativeStackScreenProps<RootStackParams>
+>;
+export type MainRelationsScreenProps = CompositeScreenProps<
+  NativeStackScreenProps<MainStackParams, 'Relations'>,
   NativeStackScreenProps<RootStackParams>
 >;
