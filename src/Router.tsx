@@ -90,7 +90,8 @@ const BottomStackNavigator = () => {
 
 const MainStackNavigator = () => {
   return (
-    <MainStack.Navigator initialRouteName="Settings" screenOptions={{headerShown: false}}>
+    <MainStack.Navigator initialRouteName="BottomStack" screenOptions={{headerShown: false}}>
+      <MainStack.Screen name="BottomStack" component={BottomStackNavigator} />
       <MainStack.Screen name="Explore" component={Explore} />
       <MainStack.Screen name="Profile" component={Profile} />
       <MainStack.Screen name="Share" component={Share} />
@@ -108,9 +109,8 @@ const Router: React.FC = () => {
 
   return (
     <NavigationContainer theme={theme.navigation}>
-      <RootStack.Navigator initialRouteName="BottomStack" screenOptions={{headerShown: false}}>
+      <RootStack.Navigator initialRouteName="MainStack" screenOptions={{headerShown: false}}>
         <RootStack.Screen name="AuthStack" component={AuthStackNavigator} />
-        <RootStack.Screen name="BottomStack" component={BottomStackNavigator} />
         <RootStack.Screen name="MainStack" component={MainStackNavigator} />
       </RootStack.Navigator>
     </NavigationContainer>

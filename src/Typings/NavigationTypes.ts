@@ -4,7 +4,6 @@ import {NativeStackScreenProps, NativeStackNavigationProp} from '@react-navigati
 
 export type RootStackParams = {
   AuthStack: NavigatorScreenParams<AuthStackParams>;
-  BottomStack: NavigatorScreenParams<BottomStackParams>;
   MainStack: NavigatorScreenParams<MainStackParams>;
 };
 
@@ -21,6 +20,7 @@ export type BottomStackParams = {
 };
 
 export type MainStackParams = {
+  BottomStack: NavigatorScreenParams<BottomStackParams>;
   Explore: undefined;
   Profile: undefined;
   Share: undefined;
