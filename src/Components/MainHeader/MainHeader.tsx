@@ -16,9 +16,7 @@ const MainHeader: React.FC<MainHeaderProps> = (props) => {
 
   const onSearchPress = () => navigation.navigate('Search');
 
-  const onChatPress = () => {
-    // TODO: Navigate to chat screen
-  };
+  const onChatPress = () => navigation.navigate('Chats');
 
   return (
     <Appbar.Header elevated>

@@ -43,7 +43,7 @@ export default {
     years_no_ago: '%time% years',
 
     seconds_short: '%time% s',
-    minutes_short: '%time% mn',
+    minutes_short: '%time% m',
     hours_short: '%time% h',
     days_short: '%time% d',
     weeks_short: '%time% w',

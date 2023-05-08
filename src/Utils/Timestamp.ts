@@ -1,6 +1,8 @@
 import {LanguageType} from '../Hooks/Language';
 import {parseLanguageParts} from './Helpers';
 
+export type TimeVariant = 'ago' | 'no_ago' | 'short';
+
 export type ElapsedTime = {
   value: number;
   unit: 'just_now' | 'seconds' | 'minutes' | 'hours' | 'days' | 'weeks' | 'months' | 'years';
@@ -57,13 +59,13 @@ export const getElapsedFromTimestamp = (
  * Gets the time string from elapsed time. Example: 2 hours ago.
  * @param {LanguageType} language Language object to get the string from.
  * @param {ElapsedTime} elapsed The elapsed time.
- * @param {'ago' | 'no_ago'} variant The variant of the string to get. Defaults to 'ago'.
+ * @param {TimeVariant} variant The variant of the string to get. Defaults to 'ago'.
  * @returns {string} The elapsed time string.
  */
 export const getTimeStringFromElapsed = (
   language: LanguageType,
   elapsed: ElapsedTime,
-  variant: 'ago' | 'no_ago' | 'short' = 'ago',
+  variant: TimeVariant = 'ago',
 ): string => {
   const {value, unit} = elapsed;
 
@@ -80,14 +82,14 @@ export const getTimeStringFromElapsed = (
  * @param {LanguageType} language Language object to get the string from.
  * @param {number} timestamp The timestamp to calculate the elapsed time from.
  * @param {number} currentTimestamp The current timestamp. Defaults to Date.now().
- * @param {'ago' | 'no_ago'} variant The variant of the string to get. Defaults to 'ago'.
+ * @param {TimeVariant} variant The variant of the string to get. Defaults to 'ago'.
  * @returns {string} The elapsed time string.
  */
 export const getTimeStringFromTimestamp = (
   language: LanguageType,
   timestamp: number,
   currentTimestamp?: number,
-  variant: 'ago' | 'no_ago' | 'short' = 'ago',
+  variant: TimeVariant = 'ago',
 ): string => {
   return getTimeStringFromElapsed(
     language,

@@ -8,14 +8,14 @@ import styles from './Timer.styles';
 import {getTimeStringFromTimestamp} from '../../Utils/Timestamp';
 
 const Timer: React.FC<TimerProps> = (props) => {
-  const {timestamp, style: styleProp, ...restProps} = props;
+  const {timestamp, variant = 'ago', style: styleProp, ...restProps} = props;
 
   const theme = useTheme();
   const language = useLanguage();
 
   const time = useMemo(
-    () => getTimeStringFromTimestamp(language, timestamp, Date.now(), 'ago'),
-    [language, timestamp],
+    () => getTimeStringFromTimestamp(language, timestamp, Date.now(), variant),
+    [language, timestamp, variant],
   );
 
   return (

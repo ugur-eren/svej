@@ -27,6 +27,7 @@ import ImageViewer from './Screens/Main/ImageViewer/ImageViewer';
 import Search from './Screens/Main/Search/Search';
 import Notifications from './Screens/Main/Notifications/Notifications';
 import Relations from './Screens/Main/Relations/Relations';
+import Chats from './Screens/Main/Chats/Chats';
 
 const tabBarIcon =
   (name: FeatherIconNames) =>
@@ -107,6 +108,7 @@ const MainStackNavigator = () => {
       <MainStack.Screen name="Search" component={Search} />
       <MainStack.Screen name="Notifications" component={Notifications} />
       <MainStack.Screen name="Relations" component={Relations} />
+      <MainStack.Screen name="Chats" component={Chats} />
     </MainStack.Navigator>
   );
 };
