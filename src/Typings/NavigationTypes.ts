@@ -52,6 +52,8 @@ export type AuthRegisterScreenProps = CompositeScreenProps<
 >;
 
 // Main
+export type MainNavigationProp = NativeStackNavigationProp<MainStackParams>;
+
 export type MainExploreScreenProps = CompositeScreenProps<
   NativeStackScreenProps<MainStackParams, 'Explore'>,
   NativeStackScreenProps<RootStackParams>

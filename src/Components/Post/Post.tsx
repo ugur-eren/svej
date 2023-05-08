@@ -8,14 +8,16 @@ import Touchable from '../Touchable/Touchable';
 import PostContent from '../PostContent/PostContent';
 import ActionButton from '../ActionButton/ActionButton';
 import {useTheme} from '../../Hooks';
+import {MainNavigationProp} from '../../Typings/NavigationTypes';
 import getStyles from './Post.styles';
-import {RootStackNavigationProps} from '../../Typings/NavigationTypes';
 
 const Post: React.FC = () => {
   const theme = useTheme();
-  const navigation = useNavigation<RootStackNavigationProps>();
+  const navigation = useNavigation<MainNavigationProp>();
 
   const styles = getStyles(theme);
+
+  const onCommentsPress = () => navigation.navigate('Comments');
 
   return (
     <View style={styles.container}>
@@ -61,20 +63,14 @@ const Post: React.FC = () => {
           <ActionButton type="repost" count={4} />
         </View>
 
-        <TextButton
-          align="right"
-          onPress={() => navigation.navigate('MainStack', {screen: 'Comments'})}
-        >
+        <TextButton align="right" onPress={onCommentsPress}>
           0 Comments
         </TextButton>
       </View>
 
       <Divider style={styles.divider} />
 
-      <Touchable
-        style={styles.comments}
-        onPress={() => navigation.navigate('MainStack', {screen: 'Comments'})}
-      >
+      <Touchable style={styles.comments} onPress={onCommentsPress}>
         <Text>There are no comments. Be the first one!</Text>
       </Touchable>
     </View>

@@ -4,25 +4,23 @@ import {Feather} from '@expo/vector-icons';
 import {Image} from 'expo-image';
 import {Text, Timer, Touchable} from '../../../../Components';
 import {useTheme} from '../../../../Hooks';
+import {MainNavigationProp} from '../../../../Typings/NavigationTypes';
 import {NotificationProps} from './Notification.props';
 import getStyles from './Notification.styles';
-import {RootStackNavigationProps} from '../../../../Typings/NavigationTypes';
 
 const Notification: React.FC<NotificationProps> = (props) => {
   const {type, content} = props;
 
   const theme = useTheme();
-  const navigation = useNavigation<RootStackNavigationProps>();
+  const navigation = useNavigation<MainNavigationProp>();
 
   const styles = getStyles(theme);
 
-  const onUserPress = () => {
-    navigation.navigate('MainStack', {screen: 'Profile'});
-  };
+  const onUserPress = () => navigation.push('Profile');
 
   return (
     <Touchable style={styles.notification}>
-      <TouchableOpacity onPress={onUserPress}>
+      <TouchableOpacity onPress={type === 'warning' ? undefined : onUserPress}>
         {type === 'warning' ? (
           <Feather name="alert-circle" size={46} color={theme.colors.primary} />
         ) : (
