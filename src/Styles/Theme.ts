@@ -1,11 +1,16 @@
 import Color from 'color';
 import {DefaultTheme as PaperLightTheme, MD3DarkTheme as PaperDarkTheme} from 'react-native-paper';
+import {
+  DefaultTheme as NavigationLightTheme,
+  DarkTheme as NavigationDarkTheme,
+} from '@react-navigation/native';
 import {LightThemeColors, DarkThemeColors} from './Colors';
 
 export const LightTheme = {
   dark: false,
   colors: LightThemeColors.colors,
   gradients: LightThemeColors.gradients,
+
   paper: {
     ...PaperLightTheme,
     colors: {
@@ -34,12 +39,27 @@ export const LightTheme = {
       },
     },
   },
+
+  navigation: {
+    dark: false,
+    colors: {
+      ...NavigationLightTheme.colors,
+
+      primary: LightThemeColors.colors.primary,
+      background: LightThemeColors.colors.background,
+      card: LightThemeColors.colors.backgroundSecondary,
+      text: LightThemeColors.colors.text,
+      border: LightThemeColors.colors.inputBorder,
+      notification: LightThemeColors.colors.primary,
+    },
+  },
 };
 
 export const DarkTheme = {
   dark: true,
   colors: DarkThemeColors.colors,
   gradients: DarkThemeColors.gradients,
+
   paper: {
     ...PaperDarkTheme,
     colors: {
@@ -65,6 +85,20 @@ export const DarkTheme = {
         level4: DarkThemeColors.colors.backgroundSecondary,
         level5: DarkThemeColors.colors.backgroundSecondary,
       },
+    },
+  },
+
+  navigation: {
+    dark: true,
+    colors: {
+      ...NavigationDarkTheme.colors,
+
+      primary: DarkThemeColors.colors.primary,
+      background: DarkThemeColors.colors.background,
+      card: DarkThemeColors.colors.backgroundSecondary,
+      text: DarkThemeColors.colors.text,
+      border: DarkThemeColors.colors.inputBorder,
+      notification: DarkThemeColors.colors.primary,
     },
   },
 };

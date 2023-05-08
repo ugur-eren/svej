@@ -20,6 +20,7 @@ import Share from './Screens/Main/Share/Share';
 import ImageViewer from './Screens/Main/ImageViewer/ImageViewer';
 import Search from './Screens/Main/Search/Search';
 import Notifications from './Screens/Main/Notifications/Notifications';
+import {ThemedStyleSheet} from './Utils/ThemedStyleSheet';
 
 const tabBarIcon =
   (name: FeatherIconNames) =>
@@ -49,6 +50,8 @@ const AuthStackNavigator = () => {
 const BottomStackNavigator = () => {
   const theme = useTheme();
 
+  const styles = getBottomBarStyles(theme);
+
   return (
     <BottomStack.Navigator
       initialRouteName="Explore"
@@ -56,18 +59,9 @@ const BottomStackNavigator = () => {
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: theme.colors.primary,
-        tabBarLabelStyle: {...Typography.medium, fontSize: 12},
-        tabBarStyle: {paddingBottom: 4},
-        tabBarBadgeStyle: {
-          backgroundColor: theme.colors.buttonBackground,
-          color: theme.colors.buttonText,
-          fontSize: 10,
-          lineHeight: 16,
-          height: 16,
-          minWidth: 16,
-          borderRadius: 8,
-          textAlign: 'center',
-        },
+        tabBarLabelStyle: styles.tabBarLabelStyle,
+        tabBarStyle: styles.tabBarStyle,
+        tabBarBadgeStyle: styles.tabBarBadgeStyle,
       }}
     >
       <BottomStack.Screen
@@ -96,7 +90,7 @@ const BottomStackNavigator = () => {
 
 const MainStackNavigator = () => {
   return (
-    <MainStack.Navigator initialRouteName="Explore" screenOptions={{headerShown: false}}>
+    <MainStack.Navigator initialRouteName="Settings" screenOptions={{headerShown: false}}>
       <MainStack.Screen name="Explore" component={Explore} />
       <MainStack.Screen name="Profile" component={Profile} />
       <MainStack.Screen name="Share" component={Share} />
@@ -110,8 +104,10 @@ const MainStackNavigator = () => {
 };
 
 const Router: React.FC = () => {
+  const theme = useTheme();
+
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={theme.navigation}>
       <RootStack.Navigator initialRouteName="BottomStack" screenOptions={{headerShown: false}}>
         <RootStack.Screen name="AuthStack" component={AuthStackNavigator} />
         <RootStack.Screen name="BottomStack" component={BottomStackNavigator} />
@@ -120,5 +116,24 @@ const Router: React.FC = () => {
     </NavigationContainer>
   );
 };
+
+const getBottomBarStyles = ThemedStyleSheet((theme) => ({
+  tabBarLabelStyle: {
+    ...Typography.medium,
+    fontSize: 12,
+  },
+  tabBarStyle: {
+    paddingBottom: 4,
+  },
+  tabBarBadgeStyle: {
+    color: theme.colors.buttonText,
+    fontSize: 10,
+    lineHeight: 16,
+    height: 16,
+    minWidth: 16,
+    borderRadius: 8,
+    textAlign: 'center',
+  },
+}));
 
 export default Router;
