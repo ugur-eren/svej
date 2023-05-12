@@ -3,7 +3,6 @@ import {Spacing} from '../../Styles';
 
 export default StyleSheet.create({
   container: {
-    padding: Spacing.xsmall,
     flexDirection: 'row',
   },
   touchable: {

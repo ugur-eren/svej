@@ -8,4 +8,7 @@ export default ThemedStyleSheet((theme) => ({
   flatList: {
     padding: Spacing.pagePadding,
   },
+  item: {
+    paddingVertical: Spacing.xsmall,
+  },
 }));

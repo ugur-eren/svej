@@ -1,4 +1,4 @@
-import {FlatList} from 'react-native';
+import {FlatList, View} from 'react-native';
 import {Header, ProfileWidget} from '../../../Components';
 import {PageContainer} from '../../../Containers';
 import {useTheme} from '../../../Hooks';
@@ -17,7 +17,11 @@ const BlockedUsers: React.FC<SettingsBlockedUsersScreenProps> = () => {
       <FlatList
         contentContainerStyle={styles.flatList}
         data={['', '', '', '', '', '', '', '']}
-        renderItem={() => <ProfileWidget />}
+        renderItem={() => (
+          <View style={styles.item}>
+            <ProfileWidget />
+          </View>
+        )}
       />
     </PageContainer>
   );

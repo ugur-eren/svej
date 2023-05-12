@@ -1,8 +1,9 @@
-import {FlatList} from 'react-native';
+import {FlatList, View} from 'react-native';
 import {Divider} from 'react-native-paper';
 import {PageContainer} from '../../../Containers';
 import {Header, ProfileWidget} from '../../../Components';
 import {MainRelationsScreenProps} from '../../../Typings/NavigationTypes';
+import styles from './Relations.styles';
 
 const Relations: React.FC<MainRelationsScreenProps> = ({route}) => {
   const {type} = route.params;
@@ -14,7 +15,11 @@ const Relations: React.FC<MainRelationsScreenProps> = ({route}) => {
       <FlatList
         data={['', '', '']}
         ItemSeparatorComponent={Divider}
-        renderItem={() => <ProfileWidget />}
+        renderItem={() => (
+          <View style={styles.item}>
+            <ProfileWidget />
+          </View>
+        )}
       />
     </PageContainer>
   );

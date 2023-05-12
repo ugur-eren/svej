@@ -14,4 +14,9 @@ export default ThemedStyleSheet((theme) => ({
     color: theme.colors.text,
     ...Typography.regular,
   },
+
+  item: {
+    paddingHorizontal: Spacing.pagePadding,
+    paddingVertical: Spacing.xsmall,
+  },
 }));

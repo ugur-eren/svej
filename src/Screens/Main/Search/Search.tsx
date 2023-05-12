@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {TextInput, FlatList} from 'react-native';
+import {TextInput, FlatList, View} from 'react-native';
 import {Appbar, Divider, IconButton, Surface} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useTheme} from '../../../Hooks';
@@ -37,7 +37,11 @@ const Search: React.FC<MainSearchScreenProps> = (props) => {
 
       <FlatList
         data={['', '', '']}
-        renderItem={() => <ProfileWidget />}
+        renderItem={() => (
+          <View style={styles.item}>
+            <ProfileWidget />
+          </View>
+        )}
         ItemSeparatorComponent={Divider}
       />
     </PageContainer>
