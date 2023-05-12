@@ -18,6 +18,8 @@ export default {
     username: 'Username',
     password: 'Password',
     passwordValidation: 'Password again',
+    currentPassword: 'Current password',
+    newPassword: 'New password',
     fullname: 'Name and Surname',
     email: 'Email',
   },
