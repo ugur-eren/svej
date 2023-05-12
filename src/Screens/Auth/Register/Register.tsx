@@ -23,7 +23,7 @@ const Register: React.FC<Props> = ({navigation}) => {
 
     if (values.username.trim().length < 4) errors.username = language.errors.USERNAME_SHORT;
 
-    if (values.password.length < 4) errors.password = language.errors.PASSWORD_SHORT;
+    if (values.password.length < 6) errors.password = language.errors.PASSWORD_SHORT;
     if (values.password !== values.passwordValidation)
       errors.passwordValidation = language.errors.PASSWORDS_NOT_MATCH;
 

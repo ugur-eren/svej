@@ -22,7 +22,7 @@ const ChangePassword: React.FC<SettingsChangePasswordScreenProps> = () => {
     const errors: Partial<typeof initialValues> = {};
 
     if (!values.currentPassword) errors.currentPassword = language.errors.PASSWORD_REQUIRED;
-    if (values.newPassword.length < 4) errors.newPassword = language.errors.PASSWORD_SHORT;
+    if (values.newPassword.length < 6) errors.newPassword = language.errors.PASSWORD_SHORT;
     if (values.newPassword !== values.newPasswordValidation)
       errors.newPasswordValidation = language.errors.PASSWORDS_NOT_MATCH;
 

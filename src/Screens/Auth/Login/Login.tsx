@@ -18,7 +18,7 @@ const Login: React.FC<Props> = ({navigation}) => {
     const errors: Partial<typeof initialValues> = {};
 
     if (values.username.trim().length < 4) errors.username = language.errors.USERNAME_SHORT;
-    if (values.password.length < 4) errors.password = language.errors.PASSWORD_SHORT;
+    if (values.password.length < 6) errors.password = language.errors.PASSWORD_SHORT;
 
     return errors;
   };
