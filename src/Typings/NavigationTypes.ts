@@ -12,6 +12,13 @@ export type AuthStackParams = {
   Register: undefined;
 };
 
+export type SettingsStackParams = {
+  Settings: undefined;
+  EditProfile: undefined;
+  ChangePassword: undefined;
+  BlockedUsers: undefined;
+};
+
 export type BottomStackParams = {
   Explore: undefined;
   Share: undefined;
@@ -21,10 +28,10 @@ export type BottomStackParams = {
 
 export type MainStackParams = {
   BottomStack: NavigatorScreenParams<BottomStackParams>;
+  SettingsStack: NavigatorScreenParams<SettingsStackParams>;
   Explore: undefined;
   Profile: undefined;
   Share: undefined;
-  Settings: undefined;
   Comments: undefined;
   ImageViewer: {
     title: string;
@@ -52,6 +59,26 @@ export type AuthRegisterScreenProps = CompositeScreenProps<
   NativeStackScreenProps<RootStackParams>
 >;
 
+// Settings
+export type SettingsNavigationProp = NativeStackNavigationProp<SettingsStackParams>;
+
+export type SettingsScreenProps = CompositeScreenProps<
+  NativeStackScreenProps<SettingsStackParams, 'Settings'>,
+  NativeStackScreenProps<RootStackParams>
+>;
+export type SettingsEditProfileScreenProps = CompositeScreenProps<
+  NativeStackScreenProps<SettingsStackParams, 'EditProfile'>,
+  NativeStackScreenProps<RootStackParams>
+>;
+export type SettingsChangePasswordScreenProps = CompositeScreenProps<
+  NativeStackScreenProps<SettingsStackParams, 'ChangePassword'>,
+  NativeStackScreenProps<RootStackParams>
+>;
+export type SettingsBlockedUsersPasswordScreenProps = CompositeScreenProps<
+  NativeStackScreenProps<SettingsStackParams, 'BlockedUsers'>,
+  NativeStackScreenProps<RootStackParams>
+>;
+
 // Main
 export type MainNavigationProp = NativeStackNavigationProp<MainStackParams>;
 
@@ -65,10 +92,6 @@ export type MainProfileScreenProps = CompositeScreenProps<
 >;
 export type MainShareScreenProps = CompositeScreenProps<
   NativeStackScreenProps<MainStackParams, 'Share'>,
-  NativeStackScreenProps<RootStackParams>
->;
-export type MainSettingsScreenProps = CompositeScreenProps<
-  NativeStackScreenProps<MainStackParams, 'Settings'>,
   NativeStackScreenProps<RootStackParams>
 >;
 export type MainCommentsScreenProps = CompositeScreenProps<

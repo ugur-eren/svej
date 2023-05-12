@@ -5,8 +5,9 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {
   RootStackParams,
   AuthStackParams,
-  MainStackParams,
+  SettingsStackParams,
   BottomStackParams,
+  MainStackParams,
 } from './Typings/NavigationTypes';
 import {FeatherIconNames} from './Typings';
 import {useTheme} from './Hooks';
@@ -17,10 +18,13 @@ import {ThemedStyleSheet} from './Utils/ThemedStyleSheet';
 import AuthLogin from './Screens/Auth/Login/Login';
 import AuthRegister from './Screens/Auth/Register/Register';
 
+// Settings
+import Settings from './Screens/Settings/Settings/Settings';
+import ChangePassword from './Screens/Settings/ChangePassword/ChangePassword';
+
 // Main
 import Explore from './Screens/Main/Explore/Explore';
 import Profile from './Screens/Main/Profile/Profile';
-import Settings from './Screens/Main/Settings/Settings';
 import Comments from './Screens/Main/Comments/Comments';
 import Share from './Screens/Main/Share/Share';
 import ImageViewer from './Screens/Main/ImageViewer/ImageViewer';
@@ -42,6 +46,7 @@ const UserIcon = tabBarIcon('user');
 // Navigators
 const RootStack = createNativeStackNavigator<RootStackParams>();
 const AuthStack = createNativeStackNavigator<AuthStackParams>();
+const SettingsStack = createNativeStackNavigator<SettingsStackParams>();
 const BottomStack = createBottomTabNavigator<BottomStackParams>();
 const MainStack = createNativeStackNavigator<MainStackParams>();
 
@@ -51,6 +56,15 @@ const AuthStackNavigator = () => {
       <AuthStack.Screen name="Login" component={AuthLogin} />
       <AuthStack.Screen name="Register" component={AuthRegister} />
     </AuthStack.Navigator>
+  );
+};
+
+const SettingsStackNavigator = () => {
+  return (
+    <SettingsStack.Navigator initialRouteName="Settings" screenOptions={{headerShown: false}}>
+      <SettingsStack.Screen name="Settings" component={Settings} />
+      <SettingsStack.Screen name="ChangePassword" component={ChangePassword} />
+    </SettingsStack.Navigator>
   );
 };
 
@@ -99,10 +113,10 @@ const MainStackNavigator = () => {
   return (
     <MainStack.Navigator initialRouteName="BottomStack" screenOptions={{headerShown: false}}>
       <MainStack.Screen name="BottomStack" component={BottomStackNavigator} />
+      <MainStack.Screen name="SettingsStack" component={SettingsStackNavigator} />
       <MainStack.Screen name="Explore" component={Explore} />
       <MainStack.Screen name="Profile" component={Profile} />
       <MainStack.Screen name="Share" component={Share} />
-      <MainStack.Screen name="Settings" component={Settings} />
       <MainStack.Screen name="Comments" component={Comments} />
       <MainStack.Screen name="ImageViewer" component={ImageViewer} />
       <MainStack.Screen name="Search" component={Search} />

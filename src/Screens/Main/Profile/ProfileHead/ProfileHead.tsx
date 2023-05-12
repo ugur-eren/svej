@@ -30,7 +30,7 @@ const ProfileHead: React.FC = () => {
   const onFollowsPress = () => navigation.navigate('Relations', {type: 'follows'});
   const onFollowersPress = () => navigation.navigate('Relations', {type: 'followers'});
 
-  const onSettingsPress = () => navigation.navigate('Settings');
+  const onSettingsPress = () => navigation.navigate('SettingsStack', {screen: 'Settings'});
 
   return (
     <View style={styles.container}>

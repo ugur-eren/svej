@@ -9,9 +9,9 @@ import {Theme} from '../../../Styles';
 import {useChangeLanguage} from '../../../Hooks/Language';
 import {useChangeTheme} from '../../../Hooks/Theming';
 import {IsIOS} from '../../../Utils/Helpers';
-import {MainSettingsScreenProps} from '../../../Typings/NavigationTypes';
+import {SettingsScreenProps} from '../../../Typings/NavigationTypes';
 
-type Props = MainSettingsScreenProps;
+type Props = SettingsScreenProps;
 
 const Settings: React.FC<Props> = ({navigation}) => {
   const theme = useTheme();
