@@ -74,7 +74,7 @@ export type SettingsChangePasswordScreenProps = CompositeScreenProps<
   NativeStackScreenProps<SettingsStackParams, 'ChangePassword'>,
   NativeStackScreenProps<RootStackParams>
 >;
-export type SettingsBlockedUsersPasswordScreenProps = CompositeScreenProps<
+export type SettingsBlockedUsersScreenProps = CompositeScreenProps<
   NativeStackScreenProps<SettingsStackParams, 'BlockedUsers'>,
   NativeStackScreenProps<RootStackParams>
 >;

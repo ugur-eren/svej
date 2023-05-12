@@ -21,6 +21,7 @@ import AuthRegister from './Screens/Auth/Register/Register';
 // Settings
 import Settings from './Screens/Settings/Settings/Settings';
 import ChangePassword from './Screens/Settings/ChangePassword/ChangePassword';
+import BlockedUsers from './Screens/Settings/BlockedUsers/BlockedUsers';
 
 // Main
 import Explore from './Screens/Main/Explore/Explore';
@@ -64,6 +65,7 @@ const SettingsStackNavigator = () => {
     <SettingsStack.Navigator initialRouteName="Settings" screenOptions={{headerShown: false}}>
       <SettingsStack.Screen name="Settings" component={Settings} />
       <SettingsStack.Screen name="ChangePassword" component={ChangePassword} />
+      <SettingsStack.Screen name="BlockedUsers" component={BlockedUsers} />
     </SettingsStack.Navigator>
   );
 };
