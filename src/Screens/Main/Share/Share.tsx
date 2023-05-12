@@ -77,18 +77,20 @@ const Share: React.FC = () => {
                 </View>
 
                 <View style={styles.images}>
-                  <Surface elevation={2} style={styles.imageContainer}>
-                    <View style={styles.imageContainerInner}>
-                      <View style={styles.imageFix} />
+                  <View style={styles.imageContainer}>
+                    <Surface elevation={1} mode="elevated" style={styles.imageSurface}>
+                      <View style={styles.imageContainerInner}>
+                        <View style={styles.imageFix} />
 
-                      <Touchable style={styles.imageInner} onPress={showTypeSelector}>
-                        <>
-                          <Feather color={theme.colors.text} name="plus" size={64} />
-                          <View style={styles.imageTouchableFix} />
-                        </>
-                      </Touchable>
-                    </View>
-                  </Surface>
+                        <Touchable style={styles.imageInner} onPress={showTypeSelector}>
+                          <>
+                            <Feather color={theme.colors.text} name="plus" size={64} />
+                            <View style={styles.imageTouchableFix} />
+                          </>
+                        </Touchable>
+                      </View>
+                    </Surface>
+                  </View>
 
                   {values.medias.map(() => null)}
                 </View>
@@ -97,7 +99,7 @@ const Share: React.FC = () => {
 
             <Surface elevation={2} style={styles.submitButton}>
               <Touchable onPress={() => handleSubmit()}>
-                <SafeAreaView style={styles.submitButtonContent}>
+                <SafeAreaView edges={['bottom']} style={styles.submitButtonContent}>
                   <Feather
                     name="upload"
                     size={24}

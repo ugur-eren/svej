@@ -13,6 +13,7 @@ import {FeatherIconNames} from './Typings';
 import {useTheme} from './Hooks';
 import {Typography} from './Styles';
 import {ThemedStyleSheet} from './Utils/ThemedStyleSheet';
+import {IsAndroid} from './Utils/Helpers';
 
 // Auth
 import AuthLogin from './Screens/Auth/Login/Login';
@@ -150,9 +151,11 @@ const getBottomBarStyles = ThemedStyleSheet((theme) => ({
     ...Typography.medium,
     fontSize: 12,
   },
-  tabBarStyle: {
-    paddingBottom: 4,
-  },
+  tabBarStyle: IsAndroid
+    ? {
+        paddingBottom: 4,
+      }
+    : {},
   tabBarBadgeStyle: {
     color: theme.colors.buttonText,
     fontSize: 10,

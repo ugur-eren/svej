@@ -29,7 +29,8 @@ export default ThemedStyleSheet((theme, multiline: boolean, error: boolean) => (
       minHeight: 100,
       maxHeight: 250,
       textAlignVertical: 'top',
-      paddingVertical: Spacing.small,
+      paddingTop: Spacing.small,
+      paddingBottom: Spacing.small,
     }),
   },
   leftIconStyle: {
