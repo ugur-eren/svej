@@ -1,15 +1,16 @@
 import {ThemedStyleSheet} from '../../Utils/ThemedStyleSheet';
+import {Spacing} from '../../Styles';
 
 export default ThemedStyleSheet((theme, multiline: boolean, error: boolean) => ({
   container: {
-    marginBottom: 21,
+    marginBottom: Spacing.normal,
   },
   inner: {
     borderWidth: 1,
     borderRadius: 4,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 12,
+    paddingHorizontal: Spacing.small,
     backgroundColor: theme.colors.inputBackground,
     borderColor: error ? theme.colors.error : theme.colors.inputBorder,
     height: 49,
@@ -26,19 +27,21 @@ export default ThemedStyleSheet((theme, multiline: boolean, error: boolean) => (
 
     ...(multiline && {
       minHeight: 100,
+      maxHeight: 250,
       textAlignVertical: 'top',
+      paddingVertical: Spacing.small,
     }),
   },
   leftIconStyle: {
-    marginRight: 10,
+    marginRight: Spacing.small,
 
-    ...(multiline && {top: 10}),
+    ...(multiline && {top: Spacing.small}),
   },
   rightIconStyle: {
-    marginLeft: 10,
+    marginLeft: Spacing.small,
     marginRight: 0,
 
-    ...(multiline && {top: 10}),
+    ...(multiline && {top: Spacing.small}),
   },
   errorText: {
     marginTop: 3,
