@@ -22,6 +22,7 @@ import AuthRegister from './Screens/Auth/Register/Register';
 import Settings from './Screens/Settings/Settings/Settings';
 import ChangePassword from './Screens/Settings/ChangePassword/ChangePassword';
 import BlockedUsers from './Screens/Settings/BlockedUsers/BlockedUsers';
+import EditProfile from './Screens/Settings/EditProfile/EditProfile';
 
 // Main
 import Explore from './Screens/Main/Explore/Explore';
@@ -66,6 +67,7 @@ const SettingsStackNavigator = () => {
       <SettingsStack.Screen name="Settings" component={Settings} />
       <SettingsStack.Screen name="ChangePassword" component={ChangePassword} />
       <SettingsStack.Screen name="BlockedUsers" component={BlockedUsers} />
+      <SettingsStack.Screen name="EditProfile" component={EditProfile} />
     </SettingsStack.Navigator>
   );
 };

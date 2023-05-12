@@ -71,6 +71,7 @@ const Register: React.FC<Props> = ({navigation}) => {
                 onBlur={handleBlur('email')}
                 error={errors.email}
                 leftIcon="at-sign"
+                type="email"
                 small
               />
 

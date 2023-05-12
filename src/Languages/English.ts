@@ -22,6 +22,7 @@ export default {
     newPassword: 'New password',
     fullname: 'Name and Surname',
     email: 'Email',
+    bio: 'Bio',
   },
 
   time: {
