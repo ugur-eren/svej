@@ -21,7 +21,7 @@ export type SettingsStackParams = {
 
 export type BottomStackParams = {
   Explore: undefined;
-  Share: undefined;
+  ShareInit: undefined;
   Notifications: undefined;
   Profile: undefined;
 };
@@ -76,6 +76,12 @@ export type SettingsChangePasswordScreenProps = CompositeScreenProps<
 >;
 export type SettingsBlockedUsersScreenProps = CompositeScreenProps<
   NativeStackScreenProps<SettingsStackParams, 'BlockedUsers'>,
+  NativeStackScreenProps<RootStackParams>
+>;
+
+// Bottom
+export type BottomShareInitScreenProps = CompositeScreenProps<
+  NativeStackScreenProps<BottomStackParams, 'ShareInit'>,
   NativeStackScreenProps<RootStackParams>
 >;
 

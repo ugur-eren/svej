@@ -29,6 +29,7 @@ import Explore from './Screens/Main/Explore/Explore';
 import Profile from './Screens/Main/Profile/Profile';
 import Comments from './Screens/Main/Comments/Comments';
 import Share from './Screens/Main/Share/Share';
+import ShareInit from './Screens/Main/Share/ShareInit';
 import ImageViewer from './Screens/Main/ImageViewer/ImageViewer';
 import Search from './Screens/Main/Search/Search';
 import Notifications from './Screens/Main/Notifications/Notifications';
@@ -95,8 +96,8 @@ const BottomStackNavigator = () => {
         options={{title: 'Explore', tabBarIcon: CompassIcon}}
       />
       <BottomStack.Screen
-        name="Share"
-        component={Share}
+        name="ShareInit"
+        component={ShareInit}
         options={{title: 'Share', tabBarIcon: PlusSquareIcon}}
       />
       <BottomStack.Screen
