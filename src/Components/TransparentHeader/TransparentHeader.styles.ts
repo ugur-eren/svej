@@ -1,12 +1,14 @@
-import {StyleSheet} from 'react-native';
+import Color from 'color';
+import {ThemedStyleSheet} from '../../Utils/ThemedStyleSheet';
 import {Spacing, Typography} from '../../Styles';
 
-export default StyleSheet.create({
+export default ThemedStyleSheet((theme) => ({
   container: {
+    backgroundColor: Color(theme.colors.backgroundSecondary).alpha(0.7).toString(),
     position: 'absolute',
     top: 0,
     left: 0,
-    opacity: 0.5,
+    opacity: 0.7,
     width: '100%',
   },
   inner: {
@@ -26,4 +28,4 @@ export default StyleSheet.create({
   leftMinus: {
     left: -Spacing.medium,
   },
-});
+}));

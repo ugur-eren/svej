@@ -5,13 +5,15 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {useTheme} from '../../Hooks';
 import {IsIOS} from '../../Utils/Helpers';
 import {TransparentHeaderProps} from './TransparentHeader.props';
-import styles from './TransparentHeader.styles';
+import getStyles from './TransparentHeader.styles';
 
 const TransparentHeader: React.FC<TransparentHeaderProps> = (props) => {
   const {title, subtitle, hideBack, onSettingsPress, onMorePress} = props;
 
   const theme = useTheme();
   const navigation = useNavigation();
+
+  const styles = getStyles(theme);
 
   const onGoBackPress = () => {
     navigation.goBack();
