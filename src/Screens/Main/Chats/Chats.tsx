@@ -6,9 +6,13 @@ import {Header} from '../../../Components';
 const Chats: React.FC = () => {
   return (
     <PageContainer>
-      <Header title="Messages" />
-
-      <FlatList data={['', '', '', '']} renderItem={() => <ChatCard />} />
+      <FlatList
+        data={['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']}
+        renderItem={() => <ChatCard />}
+        ListHeaderComponent={<Header title="Messages" />}
+        stickyHeaderIndices={[0]}
+        stickyHeaderHiddenOnScroll
+      />
     </PageContainer>
   );
 };

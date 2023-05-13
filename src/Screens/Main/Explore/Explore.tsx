@@ -6,9 +6,11 @@ import {GlobalStyles} from '../../../Styles';
 const Explore: React.FC = () => {
   return (
     <View style={GlobalStyles.flex1}>
-      <MainHeader />
-
-      <PostList />
+      <PostList
+        ListHeaderComponent={MainHeader}
+        stickyHeaderIndices={[0]}
+        stickyHeaderHiddenOnScroll
+      />
     </View>
   );
 };

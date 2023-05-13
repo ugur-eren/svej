@@ -19,22 +19,6 @@ const Search: React.FC<MainSearchScreenProps> = (props) => {
 
   return (
     <PageContainer>
-      <Surface elevation={2}>
-        <SafeAreaView style={styles.topContainer}>
-          <Appbar.BackAction color={theme.colors.text} onPress={navigation.goBack} />
-
-          <TextInput
-            value={searchText}
-            onChangeText={setSearchText}
-            placeholder="Search"
-            style={styles.searchInput}
-            placeholderTextColor={theme.colors.textLight}
-          />
-
-          <IconButton icon="search" />
-        </SafeAreaView>
-      </Surface>
-
       <FlatList
         data={['', '', '']}
         renderItem={() => (
@@ -42,6 +26,25 @@ const Search: React.FC<MainSearchScreenProps> = (props) => {
             <ProfileWidget />
           </View>
         )}
+        stickyHeaderIndices={[0]}
+        stickyHeaderHiddenOnScroll
+        ListHeaderComponent={
+          <Surface elevation={2}>
+            <SafeAreaView style={styles.topContainer}>
+              <Appbar.BackAction color={theme.colors.text} onPress={navigation.goBack} />
+
+              <TextInput
+                value={searchText}
+                onChangeText={setSearchText}
+                placeholder="Search"
+                style={styles.searchInput}
+                placeholderTextColor={theme.colors.textLight}
+              />
+
+              <IconButton icon="search" />
+            </SafeAreaView>
+          </Surface>
+        }
         ItemSeparatorComponent={Divider}
       />
     </PageContainer>
