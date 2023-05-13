@@ -2,11 +2,11 @@ import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {Host as PortalizeProvider} from 'react-native-portalize';
 import {Provider as PaperProvider} from 'react-native-paper';
-import {Feather} from '@expo/vector-icons';
 import {StyleSheet} from 'react-native';
 import {useTheme} from './Hooks';
 import {LanguageProvider} from './Hooks/Language';
 import {ThemeProvider} from './Hooks/Theming';
+import {PaperIconProp} from './Utils/CommonComponents';
 
 /**
  * RootProviders is the top-level provider for the app and should only contain
@@ -34,8 +34,7 @@ const Providers: React.FC<{children: React.ReactNode}> = ({children}) => {
   return (
     <PaperProvider
       settings={{
-        // eslint-disable-next-line react/no-unstable-nested-components, @typescript-eslint/no-explicit-any
-        icon: (props: any) => <Feather {...props} />,
+        icon: PaperIconProp,
       }}
       theme={theme.paper}
     >

@@ -1,4 +1,3 @@
-import {Feather} from '@expo/vector-icons';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -9,11 +8,16 @@ import {
   BottomStackParams,
   MainStackParams,
 } from './Typings/NavigationTypes';
-import {FeatherIconNames} from './Typings';
 import {useTheme} from './Hooks';
 import {Typography} from './Styles';
 import {ThemedStyleSheet} from './Utils/ThemedStyleSheet';
 import {IsAndroid} from './Utils/Helpers';
+import {
+  TabBarBellIcon,
+  TabBarCompassIcon,
+  TabBarPlusSquareIcon,
+  TabBarUserIcon,
+} from './Utils/CommonComponents';
 
 // Auth
 import AuthLogin from './Screens/Auth/Login/Login';
@@ -36,16 +40,6 @@ import Search from './Screens/Main/Search/Search';
 import Notifications from './Screens/Main/Notifications/Notifications';
 import Relations from './Screens/Main/Relations/Relations';
 import Chats from './Screens/Main/Chats/Chats';
-
-const tabBarIcon =
-  (name: FeatherIconNames) =>
-  ({color}: {color: string}) =>
-    <Feather name={name} color={color} size={20} />;
-
-const CompassIcon = tabBarIcon('compass');
-const PlusSquareIcon = tabBarIcon('plus-square');
-const BellIcon = tabBarIcon('bell');
-const UserIcon = tabBarIcon('user');
 
 // Navigators
 const RootStack = createNativeStackNavigator<RootStackParams>();
@@ -94,22 +88,22 @@ const BottomStackNavigator = () => {
       <BottomStack.Screen
         name="Explore"
         component={Explore}
-        options={{title: 'Explore', tabBarIcon: CompassIcon}}
+        options={{title: 'Explore', tabBarIcon: TabBarCompassIcon}}
       />
       <BottomStack.Screen
         name="ShareInit"
         component={ShareInit}
-        options={{title: 'Share', tabBarIcon: PlusSquareIcon}}
+        options={{title: 'Share', tabBarIcon: TabBarPlusSquareIcon}}
       />
       <BottomStack.Screen
         name="Notifications"
         component={Notifications}
-        options={{title: 'Notifications', tabBarIcon: BellIcon, tabBarBadge: '3'}}
+        options={{title: 'Notifications', tabBarIcon: TabBarBellIcon, tabBarBadge: '3'}}
       />
       <BottomStack.Screen
         name="Profile"
         component={Profile}
-        options={{title: 'Profile', tabBarIcon: UserIcon}}
+        options={{title: 'Profile', tabBarIcon: TabBarUserIcon}}
       />
     </BottomStack.Navigator>
   );
