@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import {useState} from 'react';
 import {StyleSheet, TouchableOpacity} from 'react-native';
 import {TextButtonProps} from './TextButton.props';
 import styles from './TextButton.styles';
