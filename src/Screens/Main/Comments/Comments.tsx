@@ -1,4 +1,4 @@
-import {FlatList, View} from 'react-native';
+import {FlatList} from 'react-native';
 import {Divider} from 'react-native-paper';
 import Comment from './Comment/Comment';
 import CommentInput from './CommentInput/CommentInput';
