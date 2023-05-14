@@ -10,6 +10,8 @@ const Relations: React.FC<MainRelationsScreenProps> = ({route}) => {
 
   return (
     <PageContainer>
+      <Header title={type === 'follows' ? 'Follows' : 'Followers'} />
+
       <FlatList
         data={['', '', '']}
         ItemSeparatorComponent={Divider}
@@ -18,9 +20,6 @@ const Relations: React.FC<MainRelationsScreenProps> = ({route}) => {
             <ProfileWidget />
           </View>
         )}
-        ListHeaderComponent={<Header title={type === 'follows' ? 'Follows' : 'Followers'} />}
-        stickyHeaderIndices={[0]}
-        stickyHeaderHiddenOnScroll
       />
     </PageContainer>
   );

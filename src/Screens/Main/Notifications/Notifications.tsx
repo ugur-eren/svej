@@ -7,6 +7,8 @@ import {PageContainer} from '../../../Containers';
 const Notifications: React.FC = () => {
   return (
     <PageContainer>
+      <MainHeader />
+
       <FlatList
         data={['comment', 'follow', 'unfollow', 'like', 'comment_tag', 'post_tag', 'warning']}
         ItemSeparatorComponent={Divider}
@@ -16,9 +18,6 @@ const Notifications: React.FC = () => {
             content="Dolor ut ad dolore consectetur Lorem labore ad nulla mollit."
           />
         )}
-        ListHeaderComponent={MainHeader}
-        stickyHeaderIndices={[0]}
-        stickyHeaderHiddenOnScroll
       />
     </PageContainer>
   );
