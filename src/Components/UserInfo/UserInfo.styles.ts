@@ -21,7 +21,7 @@ export default ThemedStyleSheet((theme, small: boolean) => ({
 
   contentContainer: {
     flex: 1,
-    marginLeft: small ? 0 : Spacing.small,
+    marginLeft: small ? 0 : Spacing.xxsmall,
     flexDirection: 'row',
   },
   content: {
