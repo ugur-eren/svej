@@ -43,6 +43,7 @@ export type MainStackParams = {
     type: 'followers' | 'follows';
   };
   Chats: undefined;
+  Chat: undefined;
 };
 
 // Root Stack
@@ -122,5 +123,9 @@ export type MainRelationsScreenProps = CompositeScreenProps<
 >;
 export type MainChatsScreenProps = CompositeScreenProps<
   NativeStackScreenProps<MainStackParams, 'Chats'>,
+  NativeStackScreenProps<RootStackParams>
+>;
+export type MainChatScreenProps = CompositeScreenProps<
+  NativeStackScreenProps<MainStackParams, 'Chat'>,
   NativeStackScreenProps<RootStackParams>
 >;

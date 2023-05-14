@@ -40,6 +40,7 @@ import Search from './Screens/Main/Search/Search';
 import Notifications from './Screens/Main/Notifications/Notifications';
 import Relations from './Screens/Main/Relations/Relations';
 import Chats from './Screens/Main/Chats/Chats';
+import Chat from './Screens/Main/Chat/Chat';
 
 // Navigators
 const RootStack = createNativeStackNavigator<RootStackParams>();
@@ -123,6 +124,7 @@ const MainStackNavigator = () => {
       <MainStack.Screen name="Notifications" component={Notifications} />
       <MainStack.Screen name="Relations" component={Relations} />
       <MainStack.Screen name="Chats" component={Chats} />
+      <MainStack.Screen name="Chat" component={Chat} />
     </MainStack.Navigator>
   );
 };
