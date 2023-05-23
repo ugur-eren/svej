@@ -30,7 +30,7 @@ const Chat: React.FC = () => {
         automaticallyAdjustKeyboardInsets
       />
 
-      <MessageInput style={styles.messageInput} />
+      <MessageInput />
     </PageContainer>
   );
 };

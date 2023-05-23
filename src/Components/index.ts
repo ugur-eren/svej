@@ -21,3 +21,4 @@ export {default as ListMenu} from './ListMenu/ListMenu';
 export {default as InputAccessoryView} from './InputAccessoryView/InputAccessoryView';
 export {default as ProfileWidget} from './ProfileWidget/ProfileWidget';
 export {default as DoubleTapLike} from './DoubleTapLike/DoubleTapLike';
+export {default as BottomFixedInput} from './BottomFixedInput/BottomFixedInput';
