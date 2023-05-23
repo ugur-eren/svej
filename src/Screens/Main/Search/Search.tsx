@@ -20,7 +20,7 @@ const Search: React.FC<MainSearchScreenProps> = (props) => {
   return (
     <PageContainer>
       <Surface elevation={2}>
-        <SafeAreaView style={styles.topContainer}>
+        <SafeAreaView edges={['top']} style={styles.topContainer}>
           <Appbar.BackAction color={theme.colors.text} onPress={navigation.goBack} />
 
           <TextInput
