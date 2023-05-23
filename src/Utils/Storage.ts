@@ -5,20 +5,16 @@ export default class Storage {
     try {
       await AsyncStorage.setItem(key, value);
       return true;
-    } catch (e) {
+    } catch (_) {
       return false;
     }
   }
 
   static async setMultiple(values: Record<string, string>): Promise<boolean> {
-    const newValues: [string, string][] = Object.keys(values).map((key) => {
-      return [key, values[key]];
-    });
-
     try {
-      await AsyncStorage.multiSet(newValues);
+      await AsyncStorage.multiSet(Object.entries(values));
       return true;
-    } catch (e) {
+    } catch (_) {
       return false;
     }
   }
@@ -26,9 +22,7 @@ export default class Storage {
   static async get(key: string, defaultValue?: string): Promise<false | string> {
     try {
       const value = await AsyncStorage.getItem(key);
-      if (value !== null) {
-        return value;
-      }
+      if (value !== null) return value;
 
       if (defaultValue) {
         const isOk = await Storage.set(key, defaultValue);
@@ -36,7 +30,7 @@ export default class Storage {
       }
 
       return false;
-    } catch (e) {
+    } catch (_) {
       return false;
     }
   }
@@ -51,15 +45,13 @@ export default class Storage {
       const returnValues: Record<string, string> = {};
       const emptyKeys: string[] = [];
 
-      values.forEach((item) => {
-        const [key, value] = item;
-
-        if (!value) emptyKeys.push(key);
+      values.forEach(([key, value]) => {
+        if (value === null) emptyKeys.push(key);
 
         returnValues[key] = value || '';
       });
 
-      if (defaultValues && Object.keys(defaultValues).length > 0) {
+      if (defaultValues && Object.keys(defaultValues).length > 0 && emptyKeys.length > 0) {
         const emptyValues: Record<string, string> = {};
 
         emptyKeys.forEach((key) => {
@@ -67,15 +59,13 @@ export default class Storage {
         });
 
         const isOk = await Storage.setMultiple(emptyValues);
-        if (isOk) {
-          return {...returnValues, ...emptyValues};
-        }
+        if (isOk) return {...returnValues, ...emptyValues};
 
         return false;
       }
 
       return returnValues;
-    } catch (e) {
+    } catch (_) {
       return false;
     }
   }
@@ -84,7 +74,7 @@ export default class Storage {
     try {
       await AsyncStorage.removeItem(key);
       return true;
-    } catch (e) {
+    } catch (_) {
       return false;
     }
   }
@@ -93,7 +83,7 @@ export default class Storage {
     try {
       await AsyncStorage.clear();
       return true;
-    } catch (e) {
+    } catch (_) {
       return false;
     }
   }
