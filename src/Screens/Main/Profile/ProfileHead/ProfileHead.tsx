@@ -5,7 +5,7 @@ import {useNavigation} from '@react-navigation/native';
 import {Feather} from '@expo/vector-icons';
 import {Text, TextButton, TransparentHeader} from '../../../../Components';
 import {useLanguage, useTheme} from '../../../../Hooks';
-import {MainProfileScreenProps} from '../../../../Typings/NavigationTypes';
+import {MainProfileScreenProps} from '../../../../Types';
 import {GlobalStyles} from '../../../../Styles';
 import getStyles from './ProfileHead.styles';
 

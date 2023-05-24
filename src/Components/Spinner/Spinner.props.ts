@@ -1,5 +1,5 @@
 import {ActivityIndicatorProps} from 'react-native';
-import {ColorNames} from '../../Typings';
+import {ColorNames} from '../../Types';
 
 export type SpinnerProps = ActivityIndicatorProps & {
   color?: ColorNames;

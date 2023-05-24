@@ -4,7 +4,7 @@ import {Appbar, Divider, IconButton, Surface} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useLanguage, useTheme} from '../../../Hooks';
 import getStyles from './Search.styles';
-import {MainSearchScreenProps} from '../../../Typings/NavigationTypes';
+import {MainSearchScreenProps} from '../../../Types';
 import {PageContainer} from '../../../Containers';
 import {ProfileWidget} from '../../../Components';
 

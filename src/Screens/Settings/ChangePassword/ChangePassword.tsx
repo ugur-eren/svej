@@ -3,7 +3,7 @@ import {Formik} from 'formik';
 import {Button, Header, Input} from '../../../Components';
 import {PageContainer} from '../../../Containers';
 import {useLanguage, useTheme} from '../../../Hooks';
-import {SettingsChangePasswordScreenProps} from '../../../Typings/NavigationTypes';
+import {SettingsChangePasswordScreenProps} from '../../../Types';
 import getStyles from './ChangePassword.styles';
 
 const initialValues = {

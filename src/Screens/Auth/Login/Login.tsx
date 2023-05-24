@@ -2,7 +2,7 @@ import {Formik} from 'formik';
 import {AuthPage} from '../../../Containers';
 import {Input, TextButton} from '../../../Components';
 import {useLanguage} from '../../../Hooks';
-import {AuthLoginScreenProps} from '../../../Typings/NavigationTypes';
+import {AuthLoginScreenProps} from '../../../Types';
 
 type Props = AuthLoginScreenProps;
 

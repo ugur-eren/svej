@@ -2,7 +2,7 @@ import {View} from 'react-native';
 import {Image} from 'expo-image';
 import {Header} from '../../../Components';
 import {useTheme} from '../../../Hooks';
-import {MainImageViewerScreenProps} from '../../../Typings/NavigationTypes';
+import {MainImageViewerScreenProps} from '../../../Types';
 import styles from './ImageViewer.styles';
 
 // TODO: Make this component a proper image viewer with zooming and panning

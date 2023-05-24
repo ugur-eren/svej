@@ -3,7 +3,7 @@ import ChatCard from './ChatCard/ChatCard';
 import {PageContainer} from '../../../Containers';
 import {Header} from '../../../Components';
 import {useLanguage} from '../../../Hooks';
-import {MainChatsScreenProps} from '../../../Typings/NavigationTypes';
+import {MainChatsScreenProps} from '../../../Types';
 
 const Chats: React.FC<MainChatsScreenProps> = ({navigation}) => {
   const language = useLanguage();

@@ -6,7 +6,7 @@ import {useNavigation} from '@react-navigation/native';
 import Text from '../Text/Text';
 import Timer from '../Timer/Timer';
 import {useTheme} from '../../Hooks';
-import {MainNavigationProp} from '../../Typings/NavigationTypes';
+import {MainNavigationProp} from '../../Types';
 import {UserInfoProps} from './UserInfo.props';
 import getStyles from './UserInfo.styles';
 

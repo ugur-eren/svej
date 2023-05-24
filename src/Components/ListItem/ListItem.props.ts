@@ -1,5 +1,5 @@
 import {ListIconProps, ListItemProps as PaperListItemProps} from 'react-native-paper';
-import {ColorNames, FeatherIconNames} from '../../Typings';
+import {ColorNames, FeatherIconNames} from '../../Types';
 
 export type ListItemProps = PaperListItemProps & {
   icon?: FeatherIconNames;

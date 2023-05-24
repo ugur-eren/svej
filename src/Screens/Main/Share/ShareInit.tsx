@@ -1,6 +1,6 @@
 import {useCallback} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
-import {BottomShareInitScreenProps} from '../../../Typings/NavigationTypes';
+import {BottomShareInitScreenProps} from '../../../Types';
 
 const ShareInit: React.FC<BottomShareInitScreenProps> = ({navigation}) => {
   useFocusEffect(

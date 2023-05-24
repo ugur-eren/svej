@@ -1,5 +1,5 @@
 import {StyleProp, ViewStyle, TextStyle, TextInputProps} from 'react-native';
-import {FeatherIconNames} from '../../Typings';
+import {FeatherIconNames} from '../../Types';
 
 export type InputProps = TextInputProps & {
   value: string;

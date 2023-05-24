@@ -9,7 +9,7 @@ import {Theme} from '../../../Styles';
 import {useChangeLanguage} from '../../../Hooks/Language';
 import {useChangeTheme} from '../../../Hooks/Theming';
 import {IsIOS} from '../../../Utils/Helpers';
-import {SettingsScreenProps} from '../../../Typings/NavigationTypes';
+import {SettingsScreenProps} from '../../../Types';
 
 type Props = SettingsScreenProps;
 

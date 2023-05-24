@@ -3,7 +3,7 @@ import {Appbar} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import Text from '../Text/Text';
 import {useLanguage, useTheme} from '../../Hooks';
-import {MainNavigationProp} from '../../Typings/NavigationTypes';
+import {MainNavigationProp} from '../../Types';
 import {MainHeaderProps} from './MainHeader.props';
 import GlobalStyles from '../../Styles/GlobalStyles';
 

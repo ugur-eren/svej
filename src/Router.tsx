@@ -7,7 +7,7 @@ import {
   SettingsStackParams,
   BottomStackParams,
   MainStackParams,
-} from './Typings/NavigationTypes';
+} from './Types';
 import {useLanguage, useTheme} from './Hooks';
 import {Typography} from './Styles';
 import {ThemedStyleSheet} from './Utils/ThemedStyleSheet';

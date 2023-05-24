@@ -4,7 +4,7 @@ import {Button, Header, Input} from '../../../Components';
 import {PageContainer} from '../../../Containers';
 import {useLanguage, useTheme} from '../../../Hooks';
 import EmailValidator from '../../../Utils/EmailValidator';
-import {SettingsEditProfileScreenProps} from '../../../Typings/NavigationTypes';
+import {SettingsEditProfileScreenProps} from '../../../Types';
 import getStyles from './EditProfile.styles';
 
 const initialValues = {

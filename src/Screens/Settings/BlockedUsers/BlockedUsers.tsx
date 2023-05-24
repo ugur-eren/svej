@@ -2,7 +2,7 @@ import {FlatList, View} from 'react-native';
 import {Header, ProfileWidget} from '../../../Components';
 import {PageContainer} from '../../../Containers';
 import {useLanguage, useTheme} from '../../../Hooks';
-import {SettingsBlockedUsersScreenProps} from '../../../Typings/NavigationTypes';
+import {SettingsBlockedUsersScreenProps} from '../../../Types';
 import getStyles from './BlockedUsers.styles';
 
 const BlockedUsers: React.FC<SettingsBlockedUsersScreenProps> = () => {

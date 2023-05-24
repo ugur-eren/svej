@@ -8,7 +8,7 @@ import Touchable from '../Touchable/Touchable';
 import PostContent from '../PostContent/PostContent';
 import ActionButton from '../ActionButton/ActionButton';
 import {useLanguage, useTheme} from '../../Hooks';
-import {MainNavigationProp} from '../../Typings/NavigationTypes';
+import {MainNavigationProp} from '../../Types';
 import getStyles from './Post.styles';
 
 const Post: React.FC = () => {

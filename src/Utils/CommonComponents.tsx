@@ -1,7 +1,7 @@
 /* eslint @typescript-eslint/no-explicit-any: "off" */
 
 import {Feather} from '@expo/vector-icons';
-import {FeatherIconNames} from '../Typings';
+import {FeatherIconNames} from '../Types';
 
 export const NullComponent = () => null;
 

@@ -4,7 +4,7 @@ import {useNavigation} from '@react-navigation/native';
 import Text from '../Text/Text';
 import TextButton from '../TextButton/TextButton';
 import {useLanguage} from '../../Hooks';
-import {MainNavigationProp} from '../../Typings/NavigationTypes';
+import {MainNavigationProp} from '../../Types';
 import styles from './ProfileWidget.styles';
 
 const ProfileWidget: React.FC = () => {

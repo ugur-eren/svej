@@ -4,7 +4,7 @@ import {Feather} from '@expo/vector-icons';
 import {Image} from 'expo-image';
 import {Text, Timer, Touchable} from '../../../../Components';
 import {useLanguage, useTheme} from '../../../../Hooks';
-import {MainNavigationProp} from '../../../../Typings/NavigationTypes';
+import {MainNavigationProp} from '../../../../Types';
 import {NotificationProps} from './Notification.props';
 import getStyles from './Notification.styles';
 

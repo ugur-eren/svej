@@ -3,7 +3,7 @@ import {AuthPage} from '../../../Containers';
 import {Input} from '../../../Components';
 import {useLanguage} from '../../../Hooks';
 import EmailValidator from '../../../Utils/EmailValidator';
-import {AuthRegisterScreenProps} from '../../../Typings/NavigationTypes';
+import {AuthRegisterScreenProps} from '../../../Types';
 
 type Props = AuthRegisterScreenProps;
 

@@ -1,6 +1,6 @@
 import {SvgProps} from 'react-native-svg';
 import {SharedValue} from 'react-native-reanimated';
-import {ColorNames} from '../../Typings';
+import {ColorNames} from '../../Types';
 
 export type CircleProgressProps = SvgProps & {
   /**
