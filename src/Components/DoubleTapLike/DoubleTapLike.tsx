@@ -16,8 +16,6 @@ import {useTheme} from '../../Hooks';
 import {DoubleTapLikeProps} from './DoubleTapLike.props';
 import getStyles from './DoubleTapLike.styles';
 
-const AnimatedFeather = Animated.createAnimatedComponent(Feather);
-
 const DoubleTapLike: React.FC<DoubleTapLikeProps> = (props) => {
   const {children, onLike} = props;
 
@@ -50,22 +48,18 @@ const DoubleTapLike: React.FC<DoubleTapLikeProps> = (props) => {
     [animation, onLike],
   );
 
-  const animatedContainer = useAnimatedStyle(() => {
-    return {
-      opacity: animation.value,
-    };
-  });
+  const animatedContainer = useAnimatedStyle(() => ({
+    opacity: animation.value,
+  }));
 
-  const animatedIcon = useAnimatedStyle(() => {
-    return {
-      transform: [
-        {
-          rotate: `${interpolate(animation.value, [0, 1], [180, 0])}deg`,
-        },
-        {scale: animation.value},
-      ],
-    };
-  });
+  const animatedIcon = useAnimatedStyle(() => ({
+    transform: [
+      {
+        rotate: `${interpolate(animation.value, [0, 1], [180, 0])}deg`,
+      },
+      {scale: animation.value},
+    ],
+  }));
 
   const styles = getStyles(theme);
 
@@ -75,12 +69,9 @@ const DoubleTapLike: React.FC<DoubleTapLikeProps> = (props) => {
         {children}
 
         <Animated.View style={[styles.container, animatedContainer]} pointerEvents="none">
-          <AnimatedFeather
-            name="thumbs-up"
-            size={64}
-            color={theme.colors.success}
-            style={animatedIcon}
-          />
+          <Animated.View style={animatedIcon}>
+            <Feather name="thumbs-up" size={64} color={theme.colors.success} />
+          </Animated.View>
         </Animated.View>
       </View>
     </GestureDetector>
