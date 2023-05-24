@@ -9,8 +9,7 @@ const ShareInit: React.FC<BottomShareInitScreenProps> = ({navigation}) => {
       navigation.navigate('MainStack', {screen: 'Share'});
 
       return () => {
-        // Navigate back to the previous screen when this screen is unfocused
-        // so the user doesn't see this screen when they press back
+        // Navigate back immediately so that the user doesn't see this screen
         navigation.goBack();
       };
 
