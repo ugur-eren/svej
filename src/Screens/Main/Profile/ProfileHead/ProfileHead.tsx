@@ -2,6 +2,7 @@ import {View, TouchableWithoutFeedback, TouchableOpacity} from 'react-native';
 import {Divider} from 'react-native-paper';
 import {Image} from 'expo-image';
 import {useNavigation} from '@react-navigation/native';
+import {Feather} from '@expo/vector-icons';
 import {Text, TextButton, TransparentHeader} from '../../../../Components';
 import {useTheme} from '../../../../Hooks';
 import {MainProfileScreenProps} from '../../../../Typings/NavigationTypes';
@@ -82,9 +83,14 @@ const ProfileHead: React.FC = () => {
         <Text>Esse labore cillum labore Lorem dolor quis voluptate proident.</Text>
       </View>
 
-      {/* TODO: user tags */}
+      <View style={styles.userTagsContainer}>
+        <View style={styles.userTag}>
+          <Feather name="code" size={16} color={theme.colors.primary} style={styles.userTagIcon} />
+          <Text>Developer</Text>
+        </View>
+      </View>
 
-      <View style={[styles.centerContainer, {}]}>
+      <View style={styles.centerContainer}>
         <View style={styles.postsCount}>
           <Text>Posts</Text>
 

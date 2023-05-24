@@ -51,6 +51,20 @@ export default ThemedStyleSheet((theme) => ({
     backgroundColor: theme.colors.surface,
   },
 
+  userTagsContainer: {
+    backgroundColor: theme.colors.surface,
+    marginTop: StyleSheet.hairlineWidth,
+    padding: Spacing.xsmall,
+  },
+  userTag: {
+    flexDirection: 'row',
+    marginBottom: Spacing.xxxsmall,
+    alignItems: 'center',
+  },
+  userTagIcon: {
+    marginRight: Spacing.xsmall,
+  },
+
   centerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -63,6 +77,7 @@ export default ThemedStyleSheet((theme) => ({
     alignItems: 'center',
   },
   centerDivider: {
+    backgroundColor: theme.colors.background,
     width: StyleSheet.hairlineWidth,
     height: '100%',
   },
