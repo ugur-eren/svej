@@ -89,43 +89,43 @@ export type BottomShareInitScreenProps = CompositeScreenProps<
 // Main
 export type MainNavigationProp = NativeStackNavigationProp<MainStackParams>;
 
-export type MainExploreScreenProps = CompositeScreenProps<
+export type ExploreScreenProps = CompositeScreenProps<
   NativeStackScreenProps<MainStackParams, 'Explore'>,
   NativeStackScreenProps<RootStackParams>
 >;
-export type MainProfileScreenProps = CompositeScreenProps<
+export type ProfileScreenProps = CompositeScreenProps<
   NativeStackScreenProps<MainStackParams, 'Profile'>,
   NativeStackScreenProps<RootStackParams>
 >;
-export type MainShareScreenProps = CompositeScreenProps<
+export type ShareScreenProps = CompositeScreenProps<
   NativeStackScreenProps<MainStackParams, 'Share'>,
   NativeStackScreenProps<RootStackParams>
 >;
-export type MainCommentsScreenProps = CompositeScreenProps<
+export type CommentsScreenProps = CompositeScreenProps<
   NativeStackScreenProps<MainStackParams, 'Comments'>,
   NativeStackScreenProps<RootStackParams>
 >;
-export type MainImageViewerScreenProps = CompositeScreenProps<
+export type ImageViewerScreenProps = CompositeScreenProps<
   NativeStackScreenProps<MainStackParams, 'ImageViewer'>,
   NativeStackScreenProps<RootStackParams>
 >;
-export type MainSearchScreenProps = CompositeScreenProps<
+export type SearchScreenProps = CompositeScreenProps<
   NativeStackScreenProps<MainStackParams, 'Search'>,
   NativeStackScreenProps<RootStackParams>
 >;
-export type MainNotificationsScreenProps = CompositeScreenProps<
+export type NotificationsScreenProps = CompositeScreenProps<
   NativeStackScreenProps<MainStackParams, 'Notifications'>,
   NativeStackScreenProps<RootStackParams>
 >;
-export type MainRelationsScreenProps = CompositeScreenProps<
+export type RelationsScreenProps = CompositeScreenProps<
   NativeStackScreenProps<MainStackParams, 'Relations'>,
   NativeStackScreenProps<RootStackParams>
 >;
-export type MainChatsScreenProps = CompositeScreenProps<
+export type ChatsScreenProps = CompositeScreenProps<
   NativeStackScreenProps<MainStackParams, 'Chats'>,
   NativeStackScreenProps<RootStackParams>
 >;
-export type MainChatScreenProps = CompositeScreenProps<
+export type ChatScreenProps = CompositeScreenProps<
   NativeStackScreenProps<MainStackParams, 'Chat'>,
   NativeStackScreenProps<RootStackParams>
 >;

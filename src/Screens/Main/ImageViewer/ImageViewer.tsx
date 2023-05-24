@@ -2,12 +2,12 @@ import {View} from 'react-native';
 import {Image} from 'expo-image';
 import {Header} from '../../../Components';
 import {useTheme} from '../../../Hooks';
-import {MainImageViewerScreenProps} from '../../../Types';
+import {ImageViewerScreenProps} from '../../../Types';
 import styles from './ImageViewer.styles';
 
 // TODO: Make this component a proper image viewer with zooming and panning
 
-const ImageViewer: React.FC<MainImageViewerScreenProps> = (props) => {
+const ImageViewer: React.FC<ImageViewerScreenProps> = (props) => {
   const {route} = props;
 
   const {title, image} = route.params;

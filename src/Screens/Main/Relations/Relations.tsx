@@ -3,10 +3,10 @@ import {Divider} from 'react-native-paper';
 import {PageContainer} from '../../../Containers';
 import {Header, ProfileWidget} from '../../../Components';
 import {useLanguage} from '../../../Hooks';
-import {MainRelationsScreenProps} from '../../../Types';
+import {RelationsScreenProps} from '../../../Types';
 import styles from './Relations.styles';
 
-const Relations: React.FC<MainRelationsScreenProps> = ({route}) => {
+const Relations: React.FC<RelationsScreenProps> = ({route}) => {
   const {type} = route.params;
 
   const language = useLanguage();
