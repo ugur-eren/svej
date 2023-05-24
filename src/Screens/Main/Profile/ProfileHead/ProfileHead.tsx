@@ -4,13 +4,14 @@ import {Image} from 'expo-image';
 import {useNavigation} from '@react-navigation/native';
 import {Feather} from '@expo/vector-icons';
 import {Text, TextButton, TransparentHeader} from '../../../../Components';
-import {useTheme} from '../../../../Hooks';
+import {useLanguage, useTheme} from '../../../../Hooks';
 import {MainProfileScreenProps} from '../../../../Typings/NavigationTypes';
 import {GlobalStyles} from '../../../../Styles';
 import getStyles from './ProfileHead.styles';
 
 const ProfileHead: React.FC = () => {
   const theme = useTheme();
+  const language = useLanguage();
   const navigation = useNavigation<MainProfileScreenProps['navigation']>();
 
   const styles = getStyles(theme);
@@ -70,11 +71,11 @@ const ProfileHead: React.FC = () => {
 
         <View style={styles.userActions}>
           <TextButton color="primary" showLoading containerProps={{style: {flex: undefined}}}>
-            Follow
+            {language.common.follow}
           </TextButton>
 
           <TextButton color="primary" containerProps={{style: {flex: undefined}}}>
-            Send Message
+            {language.common.send_message}
           </TextButton>
         </View>
       </View>
@@ -92,7 +93,7 @@ const ProfileHead: React.FC = () => {
 
       <View style={styles.centerContainer}>
         <View style={styles.postsCount}>
-          <Text>Posts</Text>
+          <Text>{language.common.posts}</Text>
 
           <Text weight="semiBold" fontSize={16}>
             4
@@ -102,7 +103,7 @@ const ProfileHead: React.FC = () => {
         <Divider style={styles.centerDivider} />
 
         <TouchableOpacity style={styles.centerTouchable} onPress={onFollowsPress}>
-          <Text>Follows</Text>
+          <Text>{language.common.follows}</Text>
 
           <Text weight="semiBold" fontSize={16}>
             39
@@ -112,7 +113,7 @@ const ProfileHead: React.FC = () => {
         <Divider style={styles.centerDivider} />
 
         <TouchableOpacity style={styles.centerTouchable} onPress={onFollowersPress}>
-          <Text>Followers</Text>
+          <Text>{language.common.followers}</Text>
 
           <Text weight="semiBold" fontSize={16}>
             126

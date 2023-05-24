@@ -7,12 +7,13 @@ import TextButton from '../TextButton/TextButton';
 import Touchable from '../Touchable/Touchable';
 import PostContent from '../PostContent/PostContent';
 import ActionButton from '../ActionButton/ActionButton';
-import {useTheme} from '../../Hooks';
+import {useLanguage, useTheme} from '../../Hooks';
 import {MainNavigationProp} from '../../Typings/NavigationTypes';
 import getStyles from './Post.styles';
 
 const Post: React.FC = () => {
   const theme = useTheme();
+  const language = useLanguage();
   const navigation = useNavigation<MainNavigationProp>();
 
   const styles = getStyles(theme);
@@ -64,14 +65,14 @@ const Post: React.FC = () => {
         </View>
 
         <TextButton align="right" onPress={onCommentsPress}>
-          0 Comments
+          0 {language.common.comments}
         </TextButton>
       </View>
 
       <Divider style={styles.divider} />
 
       <Touchable style={styles.comments} onPress={onCommentsPress}>
-        <Text>There are no comments. Be the first one!</Text>
+        <Text>{language.post.no_comments}</Text>
       </Touchable>
     </View>
   );

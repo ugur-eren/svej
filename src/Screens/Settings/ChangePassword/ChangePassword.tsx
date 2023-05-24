@@ -35,7 +35,7 @@ const ChangePassword: React.FC<SettingsChangePasswordScreenProps> = () => {
 
   return (
     <PageContainer>
-      <Header title="Change Password" />
+      <Header title={language.settings.change_password} />
 
       <ScrollView
         style={styles.container}
@@ -79,7 +79,11 @@ const ChangePassword: React.FC<SettingsChangePasswordScreenProps> = () => {
                 small
               />
 
-              <Button title="Change Password" showLoading onPress={handleSubmit} />
+              <Button
+                title={language.settings.change_password}
+                showLoading
+                onPress={handleSubmit}
+              />
             </>
           )}
         </Formik>

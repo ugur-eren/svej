@@ -8,7 +8,7 @@ import {
   BottomStackParams,
   MainStackParams,
 } from './Typings/NavigationTypes';
-import {useTheme} from './Hooks';
+import {useLanguage, useTheme} from './Hooks';
 import {Typography} from './Styles';
 import {ThemedStyleSheet} from './Utils/ThemedStyleSheet';
 import {IsAndroid} from './Utils/Helpers';
@@ -71,6 +71,7 @@ const SettingsStackNavigator = () => {
 
 const BottomStackNavigator = () => {
   const theme = useTheme();
+  const language = useLanguage();
 
   const styles = getBottomBarStyles(theme);
 
@@ -89,22 +90,26 @@ const BottomStackNavigator = () => {
       <BottomStack.Screen
         name="Explore"
         component={Explore}
-        options={{title: 'Explore', tabBarIcon: TabBarCompassIcon}}
+        options={{title: language.explore.title, tabBarIcon: TabBarCompassIcon}}
       />
       <BottomStack.Screen
         name="ShareInit"
         component={ShareInit}
-        options={{title: 'Share', tabBarIcon: TabBarPlusSquareIcon}}
+        options={{title: language.share.title, tabBarIcon: TabBarPlusSquareIcon}}
       />
       <BottomStack.Screen
         name="Notifications"
         component={Notifications}
-        options={{title: 'Notifications', tabBarIcon: TabBarBellIcon, tabBarBadge: '3'}}
+        options={{
+          title: language.notifications.title,
+          tabBarIcon: TabBarBellIcon,
+          tabBarBadge: '3',
+        }}
       />
       <BottomStack.Screen
         name="Profile"
         component={Profile}
-        options={{title: 'Profile', tabBarIcon: TabBarUserIcon}}
+        options={{title: language.profile.title, tabBarIcon: TabBarUserIcon}}
       />
     </BottomStack.Navigator>
   );

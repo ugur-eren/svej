@@ -9,6 +9,20 @@ export default {
   common: {
     login: 'Login',
     register: 'Register',
+    edit: 'Edit',
+    cancel: 'Cancel',
+    save: 'Save',
+    delete: 'Delete',
+    follow: 'Follow',
+    unfollow: 'Unfollow',
+    comments: 'Comments',
+    send_message: 'Send message',
+    posts: 'Posts',
+    follows: 'Follows',
+    followers: 'Followers',
+    theme: 'Theme',
+    language: 'Language',
+    logout: 'Logout',
   },
 
   auth: {
@@ -52,6 +66,66 @@ export default {
     weeks_short: '%time% w',
     months_short: '%time% mo',
     years_short: '%time% yr',
+  },
+
+  chat: {
+    title: 'Messages',
+    message_placeholder: 'Your message...',
+  },
+
+  comments: {
+    title: 'Comments',
+    comment_placeholder: 'Your comment...',
+  },
+
+  notifications: {
+    title: 'Notifications',
+    types: {
+      comment: 'made a comment on your post',
+      follow: 'started following you',
+      unfollow: 'unfollowed you',
+      like: 'liked your post',
+      comment_tag: 'tagged you in a comment',
+      post_tag: 'tagged you in a post',
+      warning: 'You got a warning!',
+    },
+  },
+
+  profile: {
+    title: 'Profile',
+  },
+
+  search: {
+    search_placeholder: 'Search...',
+  },
+
+  share: {
+    title: 'Share',
+    page_title: 'Share a post',
+    detail: 'Detail',
+    message_placeholder: 'Message',
+    media: 'Media',
+    share_button: 'Share',
+    picture: 'Picture',
+    video: 'Video',
+  },
+
+  settings: {
+    title: 'Settings',
+    edit_profile: 'Edit Profile',
+    change_password: 'Change Password',
+    blocked_users: 'Blocked Users',
+    notifications: 'Notifications',
+    light_theme: 'Light Theme',
+    dark_theme: 'Dark Theme',
+  },
+
+  explore: {
+    title: 'Explore',
+  },
+
+  post: {
+    no_comments: 'There are no comments. Be the first one!',
   },
 
   errors: {

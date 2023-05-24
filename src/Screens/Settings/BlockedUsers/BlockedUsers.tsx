@@ -1,18 +1,19 @@
 import {FlatList, View} from 'react-native';
 import {Header, ProfileWidget} from '../../../Components';
 import {PageContainer} from '../../../Containers';
-import {useTheme} from '../../../Hooks';
+import {useLanguage, useTheme} from '../../../Hooks';
 import {SettingsBlockedUsersScreenProps} from '../../../Typings/NavigationTypes';
 import getStyles from './BlockedUsers.styles';
 
 const BlockedUsers: React.FC<SettingsBlockedUsersScreenProps> = () => {
   const theme = useTheme();
+  const language = useLanguage();
 
   const styles = getStyles(theme);
 
   return (
     <PageContainer style={styles.container}>
-      <Header title="Blocked Users" />
+      <Header title={language.settings.blocked_users} />
 
       <FlatList
         contentContainerStyle={styles.flatList}

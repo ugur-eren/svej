@@ -3,11 +3,13 @@ import {Image} from 'expo-image';
 import {useNavigation} from '@react-navigation/native';
 import Text from '../Text/Text';
 import TextButton from '../TextButton/TextButton';
+import {useLanguage} from '../../Hooks';
 import {MainNavigationProp} from '../../Typings/NavigationTypes';
 import styles from './ProfileWidget.styles';
 
 const ProfileWidget: React.FC = () => {
   const navigation = useNavigation<MainNavigationProp>();
+  const language = useLanguage();
 
   const onUserPress = () => navigation.push('Profile');
 
@@ -31,7 +33,7 @@ const ProfileWidget: React.FC = () => {
       </TouchableOpacity>
 
       <TextButton showLoading color="primary">
-        Follow
+        {language.common.follow}
       </TextButton>
     </View>
   );

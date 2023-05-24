@@ -3,9 +3,9 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {Divider, Surface} from 'react-native-paper';
 import {Feather} from '@expo/vector-icons';
 import {Formik} from 'formik';
-import {Header, Input, Text, Touchable} from '../../../Components';
 import {PageContainer} from '../../../Containers';
-import {usePromisedState, useTheme} from '../../../Hooks';
+import {Header, Input, Text, Touchable} from '../../../Components';
+import {useLanguage, usePromisedState, useTheme} from '../../../Hooks';
 import getStyles from './Share.styles';
 
 const initialValues = {
@@ -16,6 +16,7 @@ const initialValues = {
 
 const Share: React.FC = () => {
   const theme = useTheme();
+  const language = useLanguage();
   const [typeSelectorShown, setTypeSelectorShown] = usePromisedState(false);
 
   const styles = getStyles(theme);
@@ -27,7 +28,7 @@ const Share: React.FC = () => {
 
   return (
     <PageContainer>
-      <Header title="Share Post" />
+      <Header title={language.share.page_title} />
 
       <Formik initialValues={initialValues} onSubmit={onFormSubmit}>
         {({handleChange, handleBlur, handleSubmit, values, errors}) => (
@@ -43,7 +44,7 @@ const Share: React.FC = () => {
                       style={styles.topIcon}
                     />
 
-                    <Text weight="semiBold">Detail</Text>
+                    <Text weight="semiBold">{language.share.detail}</Text>
                   </View>
 
                   <Divider style={styles.divider} />
@@ -55,7 +56,7 @@ const Share: React.FC = () => {
                     onChangeText={handleChange('message')}
                     onBlur={handleBlur('message')}
                     error={errors.message}
-                    placeholder="Message"
+                    placeholder={language.share.message_placeholder}
                     leftIcon="message-square"
                     multiline
                   />
@@ -71,7 +72,7 @@ const Share: React.FC = () => {
                       size={24}
                       style={styles.topIcon}
                     />
-                    <Text weight="semiBold">Media</Text>
+                    <Text weight="semiBold">{language.share.media}</Text>
                   </View>
                   <Divider style={styles.divider} />
                 </View>
@@ -108,7 +109,7 @@ const Share: React.FC = () => {
                   />
 
                   <Text color="primary" weight="semiBold" fontSize={16}>
-                    Share
+                    {language.share.share_button}
                   </Text>
                 </SafeAreaView>
               </Touchable>
@@ -124,7 +125,7 @@ const Share: React.FC = () => {
                       <Feather name="image" size={24} color={theme.colors.text} />
 
                       <Text weight="semiBold" style={styles.selectorOptionItem}>
-                        Picture
+                        {language.share.picture}
                       </Text>
                     </Touchable>
                   </Surface>
@@ -134,7 +135,7 @@ const Share: React.FC = () => {
                       <Feather name="video" size={24} color={theme.colors.text} />
 
                       <Text weight="semiBold" style={styles.selectorOptionItem}>
-                        Video
+                        {language.share.video}
                       </Text>
                     </Touchable>
                   </Surface>

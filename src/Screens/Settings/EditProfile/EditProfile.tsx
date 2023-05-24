@@ -36,7 +36,7 @@ const EditProfile: React.FC<SettingsEditProfileScreenProps> = () => {
 
   return (
     <PageContainer>
-      <Header title="Edit Profile" />
+      <Header title={language.settings.edit_profile} />
 
       <ScrollView
         style={styles.container}
@@ -88,7 +88,7 @@ const EditProfile: React.FC<SettingsEditProfileScreenProps> = () => {
                 multiline
               />
 
-              <Button title="Edit Profile" showLoading onPress={handleSubmit} />
+              <Button title={language.settings.edit_profile} showLoading onPress={handleSubmit} />
             </>
           )}
         </Formik>

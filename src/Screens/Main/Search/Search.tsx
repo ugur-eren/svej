@@ -2,7 +2,7 @@ import {useState} from 'react';
 import {TextInput, FlatList, View} from 'react-native';
 import {Appbar, Divider, IconButton, Surface} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {useTheme} from '../../../Hooks';
+import {useLanguage, useTheme} from '../../../Hooks';
 import getStyles from './Search.styles';
 import {MainSearchScreenProps} from '../../../Typings/NavigationTypes';
 import {PageContainer} from '../../../Containers';
@@ -12,6 +12,7 @@ const Search: React.FC<MainSearchScreenProps> = (props) => {
   const {navigation} = props;
 
   const theme = useTheme();
+  const language = useLanguage();
 
   const [searchText, setSearchText] = useState('');
 
@@ -26,7 +27,7 @@ const Search: React.FC<MainSearchScreenProps> = (props) => {
           <TextInput
             value={searchText}
             onChangeText={setSearchText}
-            placeholder="Search"
+            placeholder={language.search.search_placeholder}
             style={styles.searchInput}
             placeholderTextColor={theme.colors.textLight}
           />

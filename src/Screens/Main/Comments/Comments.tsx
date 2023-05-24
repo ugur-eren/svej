@@ -2,14 +2,17 @@ import {FlatList} from 'react-native';
 import {Divider} from 'react-native-paper';
 import Comment from './Comment/Comment';
 import CommentInput from './CommentInput/CommentInput';
-import {Header} from '../../../Components';
 import {PageContainer} from '../../../Containers';
+import {Header} from '../../../Components';
+import {useLanguage} from '../../../Hooks';
 import {GlobalStyles} from '../../../Styles';
 
 const Comments: React.FC = () => {
+  const language = useLanguage();
+
   return (
     <PageContainer>
-      <Header title="Comments" />
+      <Header title={language.comments.title} />
 
       <FlatList
         data={['', '', '', '', '', '']}

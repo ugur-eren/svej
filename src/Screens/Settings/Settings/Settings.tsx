@@ -41,32 +41,32 @@ const Settings: React.FC<Props> = ({navigation}) => {
 
   return (
     <PageContainer>
-      <Header title="Settings" />
+      <Header title={language.settings.title} />
 
       <ScrollView>
         <List.Section>
           <ListItem
-            title="Edit Profile"
+            title={language.settings.edit_profile}
             icon="edit-3"
             onPress={() => navigation.navigate('EditProfile')}
           />
 
           <ListItem
-            title="Change Password"
+            title={language.settings.change_password}
             icon="lock"
             onPress={() => navigation.navigate('ChangePassword')}
           />
 
           <ListMenu
-            title="Theme"
+            title={language.common.theme}
             iconName="moon"
             anchorTitle={theme.dark ? 'Dark' : 'Light'}
             onItemPress={onThemeSelect}
-            data={{dark: 'Dark Theme', light: 'Light Theme'}}
+            data={{dark: language.settings.dark_theme, light: language.settings.light_theme}}
           />
 
           <ListMenu
-            title="Language"
+            title={language.common.language}
             iconName="flag"
             anchorTitle={language.about_language.name}
             onItemPress={onLanguageSelect}
@@ -76,7 +76,7 @@ const Settings: React.FC<Props> = ({navigation}) => {
           />
 
           <ListItem
-            title="Notifications"
+            title={language.settings.notifications}
             icon="bell"
             onPress={() => setNotifications((curr) => !curr)}
             right={() => (
@@ -90,12 +90,12 @@ const Settings: React.FC<Props> = ({navigation}) => {
           />
 
           <ListItem
-            title="Blocked Users"
+            title={language.settings.blocked_users}
             icon="alert-octagon"
             onPress={() => navigation.navigate('BlockedUsers')}
           />
 
-          <ListItem title="Logout" icon="log-out" />
+          <ListItem title={language.common.logout} icon="log-out" />
         </List.Section>
       </ScrollView>
     </PageContainer>
