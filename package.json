@@ -12,7 +12,8 @@
     "lint": "yarn lint:check --fix",
     "format:check": "prettier -c \"src/**/*.{ts,tsx}\"",
     "lint:check": "eslint \"src/**/*.{ts,tsx}\"",
-    "check": "yarn format && yarn format:check && yarn lint:check && tsc --noEmit"
+    "ts:check": "tsc --noEmit",
+    "check": "yarn format && yarn format:check && yarn lint:check && yarn ts:check"
   },
   "dependencies": {
     "@expo/vector-icons": "^13.0.0",
