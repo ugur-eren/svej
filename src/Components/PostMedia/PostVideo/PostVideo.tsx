@@ -49,7 +49,7 @@ const PostVideo: React.FC<PostVideoProps> = (props) => {
 
   return (
     <TouchableWithoutFeedback disabled={!renderVideo} onPress={onVideoPress}>
-      <>
+      <View>
         {renderVideo ? (
           <Video
             source={{uri}}
@@ -87,7 +87,7 @@ const PostVideo: React.FC<PostVideoProps> = (props) => {
             <Feather name="volume-x" size={24} color={theme.colors.white} style={styles.muted} />
           </View>
         ) : null}
-      </>
+      </View>
     </TouchableWithoutFeedback>
   );
 };
