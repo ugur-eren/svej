@@ -37,36 +37,30 @@ export default ThemedStyleSheet((theme) => ({
     flexWrap: 'wrap',
   },
 
-  images: {
+  medias: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: Spacing.medium,
   },
-  imageContainer: {
-    width: '100%',
-    maxWidth: '50%',
+  mediaContainer: {
+    flexGrow: 1,
+    flexBasis: '40%', // not 50% to avoid wrapping, minding the gap
     borderRadius: 20,
   },
-  imageSurface: {
-    flex: 1,
-    borderRadius: 20,
-  },
-  imageContainerInner: {
+  mediaContent: {
     width: '100%',
+    aspectRatio: 1,
     borderRadius: 20,
     overflow: 'hidden',
   },
-  imageFix: {
-    paddingBottom: '100%',
+  media: {
+    flex: 1,
   },
-  imageInner: {
+
+  mediaAddButton: {
     ...StyleSheet.absoluteFillObject,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  imageTouchableFix: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'transparent',
   },
 
   submitButton: {
