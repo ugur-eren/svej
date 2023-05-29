@@ -6,99 +6,61 @@ import {
 } from '@react-navigation/native';
 import {LightThemeColors, DarkThemeColors} from './Colors';
 
-export const LightTheme = {
-  dark: false,
-  colors: LightThemeColors.colors,
-  gradients: LightThemeColors.gradients,
+const generateTheme = (dark: boolean, theme: typeof LightThemeColors) => {
+  const PaperTheme = dark ? PaperDarkTheme : PaperLightTheme;
+  const NavigationTheme = dark ? NavigationDarkTheme : NavigationLightTheme;
 
-  paper: {
-    ...PaperLightTheme,
-    colors: {
-      ...PaperLightTheme.colors,
+  return {
+    dark,
+    colors: theme.colors,
+    gradients: theme.gradients,
 
-      primary: LightThemeColors.colors.primary,
-      surface: LightThemeColors.colors.surface,
-      surfaceVariant: Color(LightThemeColors.colors.primary).alpha(0.16).toString(),
-      error: LightThemeColors.colors.error,
-      background: LightThemeColors.colors.background,
-      secondaryContainer: LightThemeColors.colors.primary,
+    paper: {
+      ...PaperTheme,
+      dark,
+      colors: {
+        ...PaperTheme.colors,
 
-      onPrimary: LightThemeColors.colors.onPrimary,
-      onBackground: LightThemeColors.colors.text,
-      onSurface: LightThemeColors.colors.text,
-      onSurfaceVariant: LightThemeColors.colors.text,
+        primary: theme.colors.primary,
+        surface: theme.colors.surface,
+        surfaceVariant: Color(theme.colors.primary).alpha(0.16).toString(),
+        error: theme.colors.error,
+        background: theme.colors.background,
+        secondaryContainer: theme.colors.primary,
 
-      // TODO: Give proper elevation colors
-      elevation: {
-        level0: LightThemeColors.colors.surface,
-        level1: LightThemeColors.colors.backgroundSecondary,
-        level2: LightThemeColors.colors.backgroundSecondary,
-        level3: LightThemeColors.colors.backgroundSecondary,
-        level4: LightThemeColors.colors.backgroundSecondary,
-        level5: LightThemeColors.colors.backgroundSecondary,
+        onPrimary: theme.colors.onPrimary,
+        onBackground: theme.colors.text,
+        onSurface: theme.colors.text,
+        onSurfaceVariant: theme.colors.text,
+
+        // TODO: Give proper elevation colors
+        elevation: {
+          level0: theme.colors.surface,
+          level1: theme.colors.elevated,
+          level2: theme.colors.elevated,
+          level3: theme.colors.elevated,
+          level4: theme.colors.elevated,
+          level5: theme.colors.elevated,
+        },
       },
     },
-  },
 
-  navigation: {
-    dark: false,
-    colors: {
-      ...NavigationLightTheme.colors,
+    navigation: {
+      dark,
+      colors: {
+        ...NavigationTheme.colors,
 
-      primary: LightThemeColors.colors.primary,
-      background: LightThemeColors.colors.background,
-      card: LightThemeColors.colors.backgroundSecondary,
-      text: LightThemeColors.colors.text,
-      border: LightThemeColors.colors.inputBorder,
-      notification: LightThemeColors.colors.primary,
-    },
-  },
-};
-
-export const DarkTheme = {
-  dark: true,
-  colors: DarkThemeColors.colors,
-  gradients: DarkThemeColors.gradients,
-
-  paper: {
-    ...PaperDarkTheme,
-    colors: {
-      ...PaperDarkTheme.colors,
-
-      primary: DarkThemeColors.colors.primary,
-      surface: DarkThemeColors.colors.surface,
-      surfaceVariant: Color(DarkThemeColors.colors.primary).alpha(0.16).toString(),
-      error: DarkThemeColors.colors.error,
-      background: DarkThemeColors.colors.background,
-
-      onPrimary: DarkThemeColors.colors.onPrimary,
-      onBackground: DarkThemeColors.colors.text,
-      onSurface: DarkThemeColors.colors.text,
-      onSurfaceVariant: DarkThemeColors.colors.text,
-
-      // TODO: Give proper elevation colors
-      elevation: {
-        level0: DarkThemeColors.colors.surface,
-        level1: DarkThemeColors.colors.backgroundSecondary,
-        level2: DarkThemeColors.colors.backgroundSecondary,
-        level3: DarkThemeColors.colors.backgroundSecondary,
-        level4: DarkThemeColors.colors.backgroundSecondary,
-        level5: DarkThemeColors.colors.backgroundSecondary,
+        primary: theme.colors.primary,
+        background: theme.colors.background,
+        card: theme.colors.elevated,
+        text: theme.colors.text,
+        border: theme.colors.inputBorder,
+        notification: theme.colors.primary,
       },
     },
-  },
-
-  navigation: {
-    dark: true,
-    colors: {
-      ...NavigationDarkTheme.colors,
-
-      primary: DarkThemeColors.colors.primary,
-      background: DarkThemeColors.colors.background,
-      card: DarkThemeColors.colors.backgroundSecondary,
-      text: DarkThemeColors.colors.text,
-      border: DarkThemeColors.colors.inputBorder,
-      notification: DarkThemeColors.colors.primary,
-    },
-  },
+  };
 };
+
+export const LightTheme = generateTheme(false, LightThemeColors);
+
+export const DarkTheme = generateTheme(true, DarkThemeColors);

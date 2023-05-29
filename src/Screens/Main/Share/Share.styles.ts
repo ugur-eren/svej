@@ -64,7 +64,7 @@ export default ThemedStyleSheet((theme) => ({
   },
 
   submitButton: {
-    backgroundColor: theme.colors.backgroundSecondary,
+    backgroundColor: theme.colors.elevated,
   },
   submitButtonContent: {
     width: '100%',
@@ -92,7 +92,7 @@ export default ThemedStyleSheet((theme) => ({
     gap: Spacing.xxsmall,
   },
   selectorOption: {
-    backgroundColor: theme.colors.backgroundSecondary,
+    backgroundColor: theme.colors.elevated,
     alignItems: 'center',
     justifyContent: 'center',
     padding: Spacing.xxlarge,

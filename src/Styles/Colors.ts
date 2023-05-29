@@ -18,13 +18,13 @@ export const LightThemeColors = {
 
     primary: '#FA8057',
     background: '#F0F0F0',
-    backgroundSecondary: '#FFFFFF',
+    elevated: '#FFFFFF',
     surface: '#FAFAFA',
-    onPrimary: '#FAFAFA',
 
     text: '#242424',
     textLight: '#9F9F9F',
     textStrong: '#212121',
+    onPrimary: '#FAFAFA',
 
     bottomBarTint: '#FA8057',
     bottomBarActive: '#FFFFFF',
@@ -51,13 +51,13 @@ export const DarkThemeColors = {
 
     primary: '#FA8057',
     background: '#242424',
-    backgroundSecondary: '#272727',
+    elevated: '#272727',
     surface: '#3A3A3A',
-    onPrimary: '#FAFAFA',
 
     text: '#FAFAFA',
     textLight: '#A0A0A0',
     textStrong: '#DEDEDE',
+    onPrimary: '#FAFAFA',
 
     bottomBarTint: '#FA8057',
     bottomBarActive: '#FFFFFF',

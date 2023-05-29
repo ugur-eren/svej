@@ -4,7 +4,7 @@ import {Spacing, Typography} from '../../Styles';
 
 export default ThemedStyleSheet((theme) => ({
   container: {
-    backgroundColor: Color(theme.colors.backgroundSecondary).alpha(0.7).toString(),
+    backgroundColor: Color(theme.colors.elevated).alpha(0.7).toString(),
     position: 'absolute',
     top: 0,
     left: 0,

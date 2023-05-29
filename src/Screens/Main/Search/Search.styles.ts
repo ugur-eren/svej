@@ -3,7 +3,7 @@ import {ThemedStyleSheet} from '../../../Utils/ThemedStyleSheet';
 
 export default ThemedStyleSheet((theme) => ({
   topContainer: {
-    backgroundColor: theme.colors.backgroundSecondary,
+    backgroundColor: theme.colors.elevated,
     flexDirection: 'row',
     padding: Spacing.xxsmall,
   },
