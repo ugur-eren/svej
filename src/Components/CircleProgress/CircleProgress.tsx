@@ -1,5 +1,5 @@
 import Svg, {Circle} from 'react-native-svg';
-import Animated, {useAnimatedProps, withTiming} from 'react-native-reanimated';
+import Animated, {useAnimatedProps, useDerivedValue, withTiming} from 'react-native-reanimated';
 import {useTheme} from '../../Hooks';
 import {CircleProgressProps} from './CircleProgress.props';
 
@@ -14,16 +14,16 @@ const CircleProgress: React.FC<CircleProgressProps> = (props) => {
   const innerRadius = radius - strokeWidth / 2;
   const circumference = 2 * Math.PI * innerRadius;
 
+  const progressWithTiming = useDerivedValue(
+    () => withTiming(progress.value * circumference, {duration: 300}),
+    [progress],
+  );
+
   const animatedProps = useAnimatedProps(() => {
     return {
-      strokeDasharray: [
-        withTiming(progress.value * circumference, {
-          duration: 300,
-        }),
-        circumference,
-      ],
+      strokeDasharray: [progressWithTiming.value, circumference],
     };
-  });
+  }, [progressWithTiming]);
 
   return (
     <Svg viewBox={`0 0 ${diameter} ${diameter}`} {...svgProps}>
