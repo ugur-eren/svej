@@ -26,4 +26,14 @@ export default StyleSheet.create({
   pagePaddingVertical: {
     paddingVertical: Spacing.pagePadding,
   },
+
+  paddingNone: {
+    padding: Spacing.none,
+  },
+  paddingVerticalNone: {
+    paddingVertical: Spacing.none,
+  },
+  paddingHorizontalNone: {
+    paddingHorizontal: Spacing.none,
+  },
 });

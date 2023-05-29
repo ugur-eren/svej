@@ -36,7 +36,9 @@ const Share: React.FC = () => {
     setMedias([...medias, ...result.assets]);
   };
 
-  const onSubmit = () => {};
+  const onSubmit = () => {
+    // TODO: Implement share
+  };
 
   return (
     <PageContainer>

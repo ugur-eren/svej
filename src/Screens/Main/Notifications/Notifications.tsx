@@ -10,11 +10,13 @@ const Notifications: React.FC = () => {
       <MainHeader />
 
       <FlatList
-        data={['comment', 'follow', 'unfollow', 'like', 'comment_tag', 'post_tag', 'warning']}
+        data={
+          ['comment', 'follow', 'unfollow', 'like', 'comment_tag', 'post_tag', 'warning'] as const
+        }
         ItemSeparatorComponent={Divider}
         renderItem={({item}) => (
           <Notification
-            type={item as any}
+            type={item}
             content="Dolor ut ad dolore consectetur Lorem labore ad nulla mollit."
           />
         )}

@@ -19,7 +19,7 @@ const MessageInput = () => {
       placeholder={language.chat.message_placeholder}
       onSubmitEditing={sendMessage}
       blurOnSubmit={false}
-      left={false && message.length < 1 ? <IconButton icon="image" /> : null}
+      left={message.length < 1 ? <IconButton icon="image" /> : null}
       right={<IconButton icon="send" onPress={sendMessage} />}
     />
   );

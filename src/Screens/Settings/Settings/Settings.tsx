@@ -5,10 +5,9 @@ import {Header, ListItem, ListMenu} from '../../../Components';
 import {PageContainer} from '../../../Containers';
 import {useLanguage, useTheme} from '../../../Hooks';
 import * as Languages from '../../../Languages';
-import {Theme} from '../../../Styles';
+import {GlobalStyles, Theme} from '../../../Styles';
 import {useChangeLanguage} from '../../../Hooks/Language';
 import {useChangeTheme} from '../../../Hooks/Theming';
-import {IsIOS} from '../../../Utils/Helpers';
 import {SettingsScreenProps} from '../../../Types';
 
 type Props = SettingsScreenProps;
@@ -37,6 +36,17 @@ const Settings: React.FC<Props> = ({navigation}) => {
       changeTheme(key === 'dark' ? Theme.DarkTheme : Theme.LightTheme);
     },
     [changeTheme],
+  );
+
+  const NotificationsSwitch = useCallback(
+    () => (
+      <Switch
+        value={notifications}
+        onValueChange={() => setNotifications((curr) => !curr)}
+        color={theme.colors.primary}
+      />
+    ),
+    [notifications, theme.colors.primary],
   );
 
   return (
@@ -79,14 +89,8 @@ const Settings: React.FC<Props> = ({navigation}) => {
             title={language.settings.notifications}
             icon="bell"
             onPress={() => setNotifications((curr) => !curr)}
-            right={() => (
-              <Switch
-                value={notifications}
-                style={IsIOS && {marginRight: 20}}
-                onValueChange={() => setNotifications((curr) => !curr)}
-                color={theme.colors.primary}
-              />
-            )}
+            right={NotificationsSwitch}
+            style={GlobalStyles.paddingVerticalNone}
           />
 
           <ListItem
