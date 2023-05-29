@@ -24,7 +24,7 @@ const Login: React.FC<Props> = ({navigation}) => {
   };
 
   const onFormSubmit = (values: typeof initialValues) => {
-    // TODO: handle login
+    navigation.navigate('MainStack', {screen: 'BottomStack', params: {screen: 'Explore'}});
   };
 
   return (

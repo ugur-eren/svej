@@ -33,7 +33,7 @@ const Register: React.FC<Props> = ({navigation}) => {
   };
 
   const onFormSubmit = (values: typeof initialValues) => {
-    // TODO: handle register
+    navigation.navigate('MainStack', {screen: 'BottomStack', params: {screen: 'Explore'}});
   };
 
   return (

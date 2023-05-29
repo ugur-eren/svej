@@ -34,6 +34,10 @@ const Footer: React.FC<AuthPageFooterProps> = (props) => {
   return (
     <View style={styles.footerContainer}>
       <SafeAreaView edges={['bottom']}>
+        <Text color="textLight">
+          You will be navigated to the app when you press the button below
+        </Text>
+
         <Button
           title={buttonTitle}
           showLoading
