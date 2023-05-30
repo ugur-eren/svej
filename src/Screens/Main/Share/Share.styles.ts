@@ -2,6 +2,7 @@ import Color from 'color';
 import {StyleSheet} from 'react-native';
 import {ThemedStyleSheet} from '../../../Utils/ThemedStyleSheet';
 import {Spacing} from '../../../Styles';
+import {CalculateElevation} from '../../../Utils/Elevation';
 
 export default ThemedStyleSheet((theme) => ({
   content: {
@@ -46,6 +47,11 @@ export default ThemedStyleSheet((theme) => ({
     flexGrow: 1,
     flexBasis: '40%', // not 50% to avoid wrapping, minding the gap
     borderRadius: 20,
+  },
+  mediaContainerElevated: {
+    backgroundColor: theme.colors.elevated,
+
+    ...CalculateElevation(2),
   },
   mediaContent: {
     width: '100%',

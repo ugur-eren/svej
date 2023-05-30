@@ -78,23 +78,23 @@ const Share: React.FC = () => {
 
           <View style={styles.medias}>
             {medias.map((media) => (
-              <Surface elevation={1} mode="elevated" style={styles.mediaContainer}>
+              <View style={[styles.mediaContainer, styles.mediaContainerElevated]}>
                 <View style={styles.mediaContent}>
                   <Image source={{uri: media.uri}} style={styles.media} />
                 </View>
-              </Surface>
+              </View>
             ))}
 
-            <Surface elevation={1} mode="elevated" style={styles.mediaContainer}>
+            <View style={[styles.mediaContainer, styles.mediaContainerElevated]}>
               <View style={styles.mediaContent}>
                 <Touchable style={styles.mediaAddButton} onPress={onAddMediaPress}>
                   <Feather color={theme.colors.text} name="plus" size={64} />
                 </Touchable>
               </View>
-            </Surface>
+            </View>
 
             {/* To avoid the last element from growing to full width when it's single in the row */}
-            <View style={styles.mediaContainer} />
+            {medias.length % 2 === 0 ? <View style={styles.mediaContainer} /> : null}
           </View>
         </View>
       </ScrollView>
