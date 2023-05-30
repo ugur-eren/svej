@@ -18,6 +18,7 @@ const generateTheme = (dark: boolean, theme: typeof LightThemeColors) => {
     paper: {
       ...PaperTheme,
       dark,
+
       colors: {
         ...PaperTheme.colors,
 
@@ -43,7 +44,7 @@ const generateTheme = (dark: boolean, theme: typeof LightThemeColors) => {
           level5: theme.colors.elevated,
         },
       },
-    },
+    } satisfies typeof PaperTheme,
 
     navigation: {
       dark,
@@ -57,7 +58,7 @@ const generateTheme = (dark: boolean, theme: typeof LightThemeColors) => {
         border: theme.colors.inputBorder,
         notification: theme.colors.primary,
       },
-    },
+    } satisfies typeof NavigationTheme,
   };
 };
 
