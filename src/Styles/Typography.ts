@@ -19,6 +19,7 @@ const Typography = {
     fontWeight: undefined,
     includeFontPadding: false,
   },
+
   EarWorm: {
     fontFamily: 'EarWorm-Demo',
     fontWeight: undefined,

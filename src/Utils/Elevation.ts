@@ -12,15 +12,11 @@ import {ViewStyle} from 'react-native';
 const CalculateElevation = (elevation: number, color = '#000'): ViewStyle => {
   const depth = elevation - 1;
 
-  const penumbra = Penumbras[depth];
-  const penumbraDetail = {
-    height: penumbra[0],
-    blur: penumbra[1],
-  };
+  const [penumbraHeight, penumbraBlur] = Penumbras[depth];
 
-  const height = penumbraDetail.height === 1 ? 1 : Math.floor(penumbraDetail.height * 0.5);
+  const height = penumbraHeight === 1 ? 1 : Math.floor(penumbraHeight * 0.5);
   const opacity = interpolate(depth, 1, 24, 0.2, 0.6).toFixed(2);
-  const radius = interpolate(penumbraDetail.blur, 1, 38, 1, 16).toFixed(2);
+  const radius = interpolate(penumbraBlur, 1, 38, 1, 16).toFixed(2);
 
   return {
     shadowColor: color,

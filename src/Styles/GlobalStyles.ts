@@ -20,6 +20,7 @@ export default StyleSheet.create({
   flexGrow3: {
     flexGrow: 3,
   },
+
   pagePadding: {
     paddingHorizontal: Spacing.pagePadding,
   },
