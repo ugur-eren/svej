@@ -15,15 +15,18 @@ const ActionButton: React.FC<ActionButtonProps> = (props) => {
 
   let buttonColor = theme.colors.text;
   if (active) {
-    if (type === 'like') buttonColor = theme.colors.success;
-    if (type === 'dislike') buttonColor = theme.colors.error;
-    if (type === 'repost') buttonColor = theme.colors.primary;
+    buttonColor = {
+      like: theme.colors.success,
+      dislike: theme.colors.error,
+      repost: theme.colors.primary,
+    }[type];
   }
 
-  let buttonIcon = 'thumbs-up';
-  if (type === 'like') buttonIcon = 'thumbs-up';
-  if (type === 'dislike') buttonIcon = 'thumbs-down';
-  if (type === 'repost') buttonIcon = 'repeat';
+  const buttonIcon = {
+    like: 'thumbs-up',
+    dislike: 'thumbs-down',
+    repost: 'repeat',
+  }[type];
 
   const onButtonPress = async () => {
     if (!onPress) return;

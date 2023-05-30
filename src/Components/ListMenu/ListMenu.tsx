@@ -9,7 +9,7 @@ const ListMenu: React.FC<ListMenuProps> = (props) => {
 
   const menuRef = useRef<ListMenuContent>(null);
 
-  const showMenu = useCallback(() => menuRef.current?.showMenu(), []);
+  const showMenu = useCallback(() => menuRef.current?.showMenu(), [menuRef]);
 
   const ListRight = useCallback<Exclude<ListItemProps['right'], undefined>>(
     () => (

@@ -28,9 +28,9 @@ const ListMenuContent = memo(
     return (
       <Menu
         visible={menuActive}
-        onDismiss={() => setMenuActive(false)}
+        onDismiss={hideMenu}
         anchor={
-          <TouchableOpacity onPress={() => setMenuActive(true)} style={styles.anchorTouchable}>
+          <TouchableOpacity onPress={showMenu} style={styles.anchorTouchable}>
             <>
               <Text weight="semiBold" fontSize={16} style={styles.anchorTitle}>
                 {anchorTitle}

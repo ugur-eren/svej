@@ -5,7 +5,7 @@ import {HeaderProps} from './Header.props';
 import styles from './Header.styles';
 
 const Header: React.FC<HeaderProps> = (props) => {
-  const {title, subtitle, avatar, hideBack, ...appbarProps} = props;
+  const {title, subtitle, left, hideBack, ...appbarProps} = props;
 
   const theme = useTheme();
   const navigation = useNavigation();
@@ -18,7 +18,7 @@ const Header: React.FC<HeaderProps> = (props) => {
     <Appbar.Header elevated {...appbarProps}>
       {!hideBack && <Appbar.BackAction color={theme.colors.text} onPress={onGoBackPress} />}
 
-      {avatar || null}
+      {left || null}
 
       <Appbar.Content
         style={hideBack ? styles.leftPlus : undefined}

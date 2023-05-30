@@ -1,5 +1,12 @@
 export type TransparentHeaderProps = {
+  /**
+   * Text for the title.
+   */
   title: string;
+
+  /**
+   * Text for the subtitle.
+   */
   subtitle?: string;
 
   /**

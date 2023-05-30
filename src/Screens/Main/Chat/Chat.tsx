@@ -12,7 +12,7 @@ const Chat: React.FC = () => {
       <Header
         mode="small"
         title="ugur-eren"
-        avatar={
+        left={
           <Image
             source={{uri: `https://unsplash.it/600/600/?random=${Math.random()}`}}
             style={styles.headerAvatar}
