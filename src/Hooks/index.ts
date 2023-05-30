@@ -6,3 +6,4 @@ export {useForceRender} from './useForceRender';
 export {useForwardedRef} from './useForwardedRef';
 export {useOnMount} from './useOnMount';
 export {useBackHandler} from './useBackHandler';
+export {useVisibility, VisibilityContext} from './useVisibility';

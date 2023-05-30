@@ -1,3 +1,4 @@
+import {memo} from 'react';
 import {View} from 'react-native';
 import {Divider} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
@@ -78,4 +79,4 @@ const Post: React.FC = () => {
   );
 };
 
-export default Post;
+export default memo(Post);
