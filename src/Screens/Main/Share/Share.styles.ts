@@ -62,6 +62,14 @@ export default ThemedStyleSheet((theme) => ({
   media: {
     flex: 1,
   },
+  mediaRemoveButton: {
+    position: 'absolute',
+    backgroundColor: theme.colors.elevated,
+    right: -6,
+    top: -6,
+    borderRadius: 0,
+    borderBottomLeftRadius: 20,
+  },
 
   mediaAddButton: {
     ...StyleSheet.absoluteFillObject,

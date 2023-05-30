@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import {View, ScrollView} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {Divider, Surface} from 'react-native-paper';
+import {Divider, IconButton, Surface} from 'react-native-paper';
 import {Image} from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
 import {Feather} from '@expo/vector-icons';
@@ -81,6 +81,12 @@ const Share: React.FC = () => {
               <View style={[styles.mediaContainer, styles.mediaContainerElevated]}>
                 <View style={styles.mediaContent}>
                   <Image source={{uri: media.uri}} style={styles.media} />
+
+                  <IconButton
+                    onPress={() => setMedias((prev) => prev.filter((m) => m.uri !== media.uri))}
+                    icon="x"
+                    style={styles.mediaRemoveButton}
+                  />
                 </View>
               </View>
             ))}
