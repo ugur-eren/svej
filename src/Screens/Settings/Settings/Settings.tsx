@@ -5,37 +5,31 @@ import {Header, ListItem, ListMenu} from '../../../Components';
 import {PageContainer} from '../../../Containers';
 import {useLanguage, useTheme} from '../../../Hooks';
 import * as Languages from '../../../Languages';
-import {GlobalStyles, Theme} from '../../../Styles';
-import {useChangeLanguage} from '../../../Hooks/Language';
-import {useChangeTheme} from '../../../Hooks/Theming';
+import {GlobalStyles} from '../../../Styles';
 import {SettingsScreenProps} from '../../../Types';
+import {SettingsActions, type SettingsState, useAppDispatch} from '../../../Redux';
 
 type Props = SettingsScreenProps;
 
 const Settings: React.FC<Props> = ({navigation}) => {
   const theme = useTheme();
   const language = useLanguage();
-
-  const changeTheme = useChangeTheme();
-  const changeLanguage = useChangeLanguage();
+  const dispatch = useAppDispatch();
 
   const [notifications, setNotifications] = useState(false);
 
   const onLanguageSelect = useCallback(
     (key: string) => {
-      // ESLint can't compute the type of the Languages object
-      // And since there's no issue with the code, we can disable the rule
-      // eslint-disable-next-line import/namespace
-      changeLanguage(Languages[key as keyof typeof Languages]);
+      dispatch(SettingsActions.setLanguage(key as SettingsState['language']));
     },
-    [changeLanguage],
+    [dispatch],
   );
 
   const onThemeSelect = useCallback(
     (key: string) => {
-      changeTheme(key === 'dark' ? Theme.DarkTheme : Theme.LightTheme);
+      dispatch(SettingsActions.setTheme(key as SettingsState['theme']));
     },
-    [changeTheme],
+    [dispatch],
   );
 
   const NotificationsSwitch = useCallback(
@@ -72,7 +66,11 @@ const Settings: React.FC<Props> = ({navigation}) => {
             iconName="moon"
             anchorTitle={theme.dark ? 'Dark' : 'Light'}
             onItemPress={onThemeSelect}
-            data={{dark: language.settings.dark_theme, light: language.settings.light_theme}}
+            data={{
+              default: language.settings.system_default,
+              dark: language.settings.dark_theme,
+              light: language.settings.light_theme,
+            }}
           />
 
           <ListMenu

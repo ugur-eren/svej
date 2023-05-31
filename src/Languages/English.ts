@@ -118,6 +118,7 @@ export default {
     notifications: 'Notifications',
     light_theme: 'Light Theme',
     dark_theme: 'Dark Theme',
+    system_default: 'System Default',
   },
 
   explore: {
