@@ -1,4 +1,4 @@
-import {useCallback, useState} from 'react';
+import {useCallback, useMemo, useState} from 'react';
 import {ScrollView} from 'react-native';
 import {List, Switch} from 'react-native-paper';
 import {Header, ListItem, ListMenu} from '../../../Components';
@@ -7,13 +7,20 @@ import {useLanguage, useTheme} from '../../../Hooks';
 import * as Languages from '../../../Languages';
 import {GlobalStyles} from '../../../Styles';
 import {SettingsScreenProps} from '../../../Types';
-import {SettingsActions, type SettingsState, useAppDispatch} from '../../../Redux';
+import {
+  SettingsActions,
+  type SettingsState,
+  useAppDispatch,
+  useAppSelector,
+  SettingsSelectors,
+} from '../../../Redux';
 
 type Props = SettingsScreenProps;
 
 const Settings: React.FC<Props> = ({navigation}) => {
   const theme = useTheme();
   const language = useLanguage();
+  const settings = useAppSelector(SettingsSelectors.selectSettings);
   const dispatch = useAppDispatch();
 
   const [notifications, setNotifications] = useState(false);
@@ -43,6 +50,25 @@ const Settings: React.FC<Props> = ({navigation}) => {
     [notifications, theme.colors.primary],
   );
 
+  const themeData = useMemo(
+    () => ({
+      default: language.settings.system_default,
+      dark: language.settings.dark_theme,
+      light: language.settings.light_theme,
+    }),
+    [language.settings],
+  );
+
+  const languageData = useMemo(
+    () => ({
+      default: language.settings.system_default,
+      ...Object.fromEntries(
+        Object.entries(Languages).map(([key, lang]) => [key, lang.about_language.name]),
+      ),
+    }),
+    [language.settings],
+  );
+
   return (
     <PageContainer>
       <Header title={language.settings.title} />
@@ -64,23 +90,21 @@ const Settings: React.FC<Props> = ({navigation}) => {
           <ListMenu
             title={language.common.theme}
             iconName="moon"
-            anchorTitle={theme.dark ? 'Dark' : 'Light'}
+            anchorTitle={themeData[settings.theme]}
             onItemPress={onThemeSelect}
-            data={{
-              default: language.settings.system_default,
-              dark: language.settings.dark_theme,
-              light: language.settings.light_theme,
-            }}
+            data={themeData}
           />
 
           <ListMenu
             title={language.common.language}
             iconName="flag"
-            anchorTitle={language.about_language.name}
+            anchorTitle={
+              settings.language === 'default'
+                ? language.settings.system_default
+                : language.about_language.name
+            }
             onItemPress={onLanguageSelect}
-            data={Object.fromEntries(
-              Object.entries(Languages).map(([key, lang]) => [key, lang.about_language.name]),
-            )}
+            data={languageData}
           />
 
           <ListItem
