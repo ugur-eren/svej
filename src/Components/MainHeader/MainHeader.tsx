@@ -1,3 +1,4 @@
+import {memo} from 'react';
 import {TouchableOpacity} from 'react-native';
 import {Appbar} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
@@ -37,4 +38,4 @@ const MainHeader: React.FC<MainHeaderProps> = (props) => {
   );
 };
 
-export default MainHeader;
+export default memo(MainHeader);
