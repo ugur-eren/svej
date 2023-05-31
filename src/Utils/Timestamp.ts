@@ -18,7 +18,7 @@ export const getElapsedFromTimestamp = (
   timestamp: number,
   currentTimestamp = Date.now(),
 ): ElapsedTime => {
-  const elapsed = Math.floor(currentTimestamp - timestamp) / 1000;
+  const elapsed = Math.floor((currentTimestamp - timestamp) / 1000);
 
   if (elapsed < 10) {
     return {value: 0, unit: 'just_now'};

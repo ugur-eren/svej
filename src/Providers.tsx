@@ -3,7 +3,7 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {Host as PortalizeProvider} from 'react-native-portalize';
 import {Provider as PaperProvider} from 'react-native-paper';
 import {StyleSheet} from 'react-native';
-import {useTheme} from './Hooks';
+import {CurrentTimeProvider, useTheme} from './Hooks';
 import {LanguageProvider} from './Hooks/Language';
 import {ThemeProvider} from './Hooks/Theming';
 import {PaperIconProp} from './Utils/CommonComponents';
@@ -39,7 +39,9 @@ const Providers: React.FC<{children: React.ReactNode}> = ({children}) => {
       theme={theme.paper}
     >
       <SafeAreaProvider>
-        <PortalizeProvider>{children}</PortalizeProvider>
+        <PortalizeProvider>
+          <CurrentTimeProvider>{children}</CurrentTimeProvider>
+        </PortalizeProvider>
       </SafeAreaProvider>
     </PaperProvider>
   );

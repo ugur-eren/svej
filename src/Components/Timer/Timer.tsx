@@ -2,7 +2,7 @@ import {memo, useMemo} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {Feather} from '@expo/vector-icons';
 import Text from '../Text/Text';
-import {useLanguage, useTheme} from '../../Hooks';
+import {useCurrentTime, useLanguage, useTheme} from '../../Hooks';
 import {TimerProps} from './Timer.props';
 import styles from './Timer.styles';
 import {getTimeStringFromTimestamp} from '../../Utils/Timestamp';
@@ -12,10 +12,11 @@ const Timer: React.FC<TimerProps> = (props) => {
 
   const theme = useTheme();
   const language = useLanguage();
+  const currentTime = useCurrentTime();
 
   const time = useMemo(
-    () => getTimeStringFromTimestamp(language, timestamp, Date.now(), variant),
-    [language, timestamp, variant],
+    () => getTimeStringFromTimestamp(language, timestamp, currentTime || Date.now(), variant),
+    [language, timestamp, currentTime, variant],
   );
 
   return (

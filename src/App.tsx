@@ -1,4 +1,4 @@
-import {useCallback} from 'react';
+import {memo, useCallback} from 'react';
 import {View} from 'react-native';
 import {useFonts} from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
@@ -28,7 +28,7 @@ function App() {
   );
 }
 
-const AppContent: React.FC = () => {
+const AppContent = memo(() => {
   const theme = useTheme();
 
   const styles = getStyles(theme);
@@ -53,7 +53,7 @@ const AppContent: React.FC = () => {
       <Router />
     </View>
   );
-};
+});
 
 const getStyles = ThemedStyleSheet((theme) => ({
   container: {

@@ -7,3 +7,4 @@ export {useForwardedRef} from './useForwardedRef';
 export {useOnMount} from './useOnMount';
 export {useBackHandler} from './useBackHandler';
 export {useVisibility, VisibilityContext} from './useVisibility';
+export {useCurrentTime, CurrentTimeProvider} from './useCurrentTime';
