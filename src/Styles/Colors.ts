@@ -18,8 +18,8 @@ export const LightThemeColors = {
 
     primary: '#FA8057',
     background: '#F0F0F0',
-    elevated: '#FFFFFF',
     surface: '#FAFAFA',
+    elevated: '#FFFFFF',
 
     text: '#242424',
     textLight: '#9F9F9F',
@@ -50,9 +50,9 @@ export const DarkThemeColors = {
     ...CommonColors,
 
     primary: '#FA8057',
-    background: '#242424',
+    background: '#202020',
+    surface: '#242424',
     elevated: '#272727',
-    surface: '#3A3A3A',
 
     text: '#FAFAFA',
     textLight: '#A0A0A0',
