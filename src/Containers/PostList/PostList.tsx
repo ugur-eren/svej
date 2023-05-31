@@ -1,8 +1,8 @@
 import {forwardRef, useCallback, useRef, useState} from 'react';
 import {FlatList, FlatListProps, View} from 'react-native';
-import {useFocusEffect} from '@react-navigation/native';
+import {useFocusEffect, useScrollToTop} from '@react-navigation/native';
 import {Post} from '../../Components';
-import {VisibilityContext} from '../../Hooks';
+import {VisibilityContext, useForwardedRef} from '../../Hooks';
 import {IsAndroid} from '../../Utils/Helpers';
 import {PostListProps} from './PostList.props';
 import styles from './PostList.styles';
@@ -11,6 +11,10 @@ const ItemSeparatorComponent = () => <View style={styles.separator} />;
 
 const PostList = forwardRef<FlatList, PostListProps>((props, ref) => {
   const {...flatlistProps} = props;
+
+  const forwardedRef = useForwardedRef(ref);
+
+  useScrollToTop(forwardedRef);
 
   const lastViewedItem = useRef<number | null>(null);
   const [visibleItem, setVisibleItem] = useState<number | null>(null);
@@ -44,7 +48,7 @@ const PostList = forwardRef<FlatList, PostListProps>((props, ref) => {
 
   return (
     <FlatList
-      ref={ref}
+      ref={forwardedRef}
       ItemSeparatorComponent={ItemSeparatorComponent}
       removeClippedSubviews={IsAndroid}
       viewabilityConfigCallbackPairs={viewabilityConfigPairs.current}
