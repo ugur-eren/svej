@@ -15,6 +15,9 @@ I'll be working on it in my free time. If you want to contribute, feel free to o
 - [React Native Paper](https://callstack.github.io/react-native-paper/)
 - [React Native Gesture Handler](https://software-mansion.github.io/react-native-gesture-handler/)
 - [React Native Reanimated](https://docs.swmansion.com/react-native-reanimated/)
+- [Redux](https://redux.js.org/)
+- [Redux Toolkit](https://redux-toolkit.js.org/)
+- [Redux Persist](https://github.com/rt2zz/redux-persist)
 
 ## How to run
 
