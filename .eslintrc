@@ -93,9 +93,15 @@
   },
   "overrides": [
     {
-      "files": ["*.style.ts"],
+      "files": ["*.style.ts", "*.styles.ts"],
       "rules": {
         "@typescript-eslint/camelcase": "off"
+      }
+    },
+    {
+      "files": ["src/Redux/**/*.ts"],
+      "rules": {
+        "no-param-reassign": "off"
       }
     }
   ]

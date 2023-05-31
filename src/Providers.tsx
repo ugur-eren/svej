@@ -2,7 +2,10 @@ import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {Host as PortalizeProvider} from 'react-native-portalize';
 import {Provider as PaperProvider} from 'react-native-paper';
+import {Provider as ReduxProvider} from 'react-redux';
+import {PersistGate} from 'redux-persist/integration/react';
 import {StyleSheet} from 'react-native';
+import {store, persistor} from './Redux';
 import {CurrentTimeProvider, useTheme} from './Hooks';
 import {LanguageProvider} from './Hooks/Language';
 import {ThemeProvider} from './Hooks/Theming';
@@ -15,11 +18,17 @@ import {PaperIconProp} from './Utils/CommonComponents';
 const RootProviders: React.FC<{children: React.ReactNode}> = ({children}) => {
   return (
     <GestureHandlerRootView style={styles.gestureHandler}>
-      <ThemeProvider>
-        <LanguageProvider>
-          <Providers>{children}</Providers>
-        </LanguageProvider>
-      </ThemeProvider>
+      <SafeAreaProvider>
+        <ReduxProvider store={store}>
+          <PersistGate loading={null} persistor={persistor}>
+            <ThemeProvider>
+              <LanguageProvider>
+                <Providers>{children}</Providers>
+              </LanguageProvider>
+            </ThemeProvider>
+          </PersistGate>
+        </ReduxProvider>
+      </SafeAreaProvider>
     </GestureHandlerRootView>
   );
 };
@@ -38,11 +47,9 @@ const Providers: React.FC<{children: React.ReactNode}> = ({children}) => {
       }}
       theme={theme.paper}
     >
-      <SafeAreaProvider>
-        <PortalizeProvider>
-          <CurrentTimeProvider>{children}</CurrentTimeProvider>
-        </PortalizeProvider>
-      </SafeAreaProvider>
+      <PortalizeProvider>
+        <CurrentTimeProvider>{children}</CurrentTimeProvider>
+      </PortalizeProvider>
     </PaperProvider>
   );
 };
