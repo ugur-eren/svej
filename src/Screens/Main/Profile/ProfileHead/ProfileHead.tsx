@@ -1,8 +1,9 @@
+import {memo} from 'react';
 import {View, TouchableWithoutFeedback, TouchableOpacity} from 'react-native';
 import {Image} from 'expo-image';
 import {useNavigation} from '@react-navigation/native';
 import {Feather} from '@expo/vector-icons';
-import {Divider, Text, TextButton, TransparentHeader} from '../../../../Components';
+import {Divider, Text, TextButton} from '../../../../Components';
 import {useLanguage, useTheme} from '../../../../Hooks';
 import {ProfileScreenProps} from '../../../../Types';
 import {GlobalStyles} from '../../../../Styles';
@@ -21,6 +22,7 @@ const ProfileHead: React.FC = () => {
       image: `https://unsplash.it/600/600/?random=${Math.random()}`,
     });
   };
+
   const onBGPress = () => {
     navigation.navigate('ImageViewer', {
       title: 'ugur-eren',
@@ -30,8 +32,6 @@ const ProfileHead: React.FC = () => {
 
   const onFollowsPress = () => navigation.navigate('Relations', {type: 'follows'});
   const onFollowersPress = () => navigation.navigate('Relations', {type: 'followers'});
-
-  const onSettingsPress = () => navigation.navigate('SettingsStack', {screen: 'Settings'});
 
   return (
     <View style={styles.container}>
@@ -45,8 +45,6 @@ const ProfileHead: React.FC = () => {
             />
           </View>
         </TouchableWithoutFeedback>
-
-        <TransparentHeader title="ugur-eren" onSettingsPress={onSettingsPress} />
       </View>
 
       <View style={styles.topInfoContainer}>
@@ -123,4 +121,4 @@ const ProfileHead: React.FC = () => {
   );
 };
 
-export default ProfileHead;
+export default memo(ProfileHead);

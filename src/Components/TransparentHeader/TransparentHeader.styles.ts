@@ -1,14 +1,19 @@
 import Color from 'color';
 import {ThemedStyleSheet} from '../../Utils/ThemedStyleSheet';
 import {Spacing, Typography} from '../../Styles';
+import {IsAndroid} from '../../Utils/Helpers';
 
 export default ThemedStyleSheet((theme) => ({
   container: {
-    backgroundColor: Color(theme.colors.elevated).alpha(0.7).toString(),
     position: 'absolute',
     top: 0,
     left: 0,
-    opacity: 0.7,
+    width: '100%',
+    backgroundColor: IsAndroid
+      ? Color(theme.colors.elevated).alpha(0.8).toString()
+      : theme.colors.transparent,
+  },
+  blurContainer: {
     width: '100%',
   },
   inner: {
