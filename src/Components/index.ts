@@ -22,3 +22,4 @@ export {default as InputAccessoryView} from './InputAccessoryView/InputAccessory
 export {default as ProfileWidget} from './ProfileWidget/ProfileWidget';
 export {default as DoubleTapLike} from './DoubleTapLike/DoubleTapLike';
 export {default as BottomFixedInput} from './BottomFixedInput/BottomFixedInput';
+export {default as Divider} from './Divider/Divider';

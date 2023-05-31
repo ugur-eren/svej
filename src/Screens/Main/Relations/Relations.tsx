@@ -1,15 +1,17 @@
 import {FlatList, View} from 'react-native';
-import {Divider} from 'react-native-paper';
 import {PageContainer} from '../../../Containers';
-import {Header, ProfileWidget} from '../../../Components';
-import {useLanguage} from '../../../Hooks';
+import {Divider, Header, ProfileWidget} from '../../../Components';
+import {useLanguage, useTheme} from '../../../Hooks';
 import {RelationsScreenProps} from '../../../Types';
-import styles from './Relations.styles';
+import getStyles from './Relations.styles';
 
 const Relations: React.FC<RelationsScreenProps> = ({route}) => {
   const {type} = route.params;
 
+  const theme = useTheme();
   const language = useLanguage();
+
+  const styles = getStyles(theme);
 
   return (
     <PageContainer>

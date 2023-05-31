@@ -15,10 +15,6 @@ export default ThemedStyleSheet((theme) => ({
     marginBottom: 0,
   },
 
-  divider: {
-    width: '100%',
-  },
-
   topContainer: {
     width: '100%',
     paddingVertical: Spacing.xsmall,

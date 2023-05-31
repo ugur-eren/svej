@@ -16,6 +16,7 @@ export default ThemedStyleSheet((theme) => ({
   },
 
   item: {
+    backgroundColor: theme.colors.surface,
     paddingHorizontal: Spacing.pagePadding,
     paddingVertical: Spacing.xsmall,
   },

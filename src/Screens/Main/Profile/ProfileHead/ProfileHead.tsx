@@ -1,9 +1,8 @@
 import {View, TouchableWithoutFeedback, TouchableOpacity} from 'react-native';
-import {Divider} from 'react-native-paper';
 import {Image} from 'expo-image';
 import {useNavigation} from '@react-navigation/native';
 import {Feather} from '@expo/vector-icons';
-import {Text, TextButton, TransparentHeader} from '../../../../Components';
+import {Divider, Text, TextButton, TransparentHeader} from '../../../../Components';
 import {useLanguage, useTheme} from '../../../../Hooks';
 import {ProfileScreenProps} from '../../../../Types';
 import {GlobalStyles} from '../../../../Styles';
@@ -100,7 +99,7 @@ const ProfileHead: React.FC = () => {
           </Text>
         </View>
 
-        <Divider style={styles.centerDivider} />
+        <Divider direction="vertical" />
 
         <TouchableOpacity style={styles.centerTouchable} onPress={onFollowsPress}>
           <Text>{language.common.follows}</Text>
@@ -110,7 +109,7 @@ const ProfileHead: React.FC = () => {
           </Text>
         </TouchableOpacity>
 
-        <Divider style={styles.centerDivider} />
+        <Divider direction="vertical" />
 
         <TouchableOpacity style={styles.centerTouchable} onPress={onFollowersPress}>
           <Text>{language.common.followers}</Text>

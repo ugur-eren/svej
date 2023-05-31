@@ -1,7 +1,6 @@
 import {FlatList} from 'react-native';
-import {Divider} from 'react-native-paper';
 import Notification from './Notification/Notification';
-import {MainHeader} from '../../../Components';
+import {MainHeader, Divider} from '../../../Components';
 import {PageContainer} from '../../../Containers';
 
 const Notifications: React.FC = () => {

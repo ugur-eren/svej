@@ -1,12 +1,12 @@
 import {useState} from 'react';
 import {View, ScrollView} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {Divider, IconButton, Surface} from 'react-native-paper';
+import {IconButton, Surface} from 'react-native-paper';
 import {Image} from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
 import {Feather} from '@expo/vector-icons';
 import {PageContainer} from '../../../Containers';
-import {Header, Input, Text, Touchable} from '../../../Components';
+import {Divider, Header, Input, Text, Touchable} from '../../../Components';
 import {useLanguage, useTheme} from '../../../Hooks';
 import getStyles from './Share.styles';
 
@@ -53,7 +53,7 @@ const Share: React.FC = () => {
               <Text weight="semiBold">{language.share.detail}</Text>
             </View>
 
-            <Divider style={styles.divider} />
+            <Divider />
           </View>
 
           <View>
@@ -73,7 +73,7 @@ const Share: React.FC = () => {
               <Feather color={theme.colors.text} name="image" size={24} style={styles.topIcon} />
               <Text weight="semiBold">{language.share.media}</Text>
             </View>
-            <Divider style={styles.divider} />
+            <Divider />
           </View>
 
           <View style={styles.medias}>

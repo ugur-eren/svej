@@ -1,12 +1,12 @@
 import {useState} from 'react';
 import {TextInput, FlatList, View} from 'react-native';
-import {Appbar, Divider, IconButton, Surface} from 'react-native-paper';
+import {Appbar, IconButton, Surface} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {useLanguage, useTheme} from '../../../Hooks';
-import getStyles from './Search.styles';
-import {SearchScreenProps} from '../../../Types';
 import {PageContainer} from '../../../Containers';
-import {ProfileWidget} from '../../../Components';
+import {Divider, ProfileWidget} from '../../../Components';
+import {useLanguage, useTheme} from '../../../Hooks';
+import {SearchScreenProps} from '../../../Types';
+import getStyles from './Search.styles';
 
 const Search: React.FC<SearchScreenProps> = (props) => {
   const {navigation} = props;

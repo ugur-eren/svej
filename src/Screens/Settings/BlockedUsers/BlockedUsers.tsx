@@ -1,5 +1,5 @@
 import {FlatList, View} from 'react-native';
-import {Header, ProfileWidget} from '../../../Components';
+import {Divider, Header, ProfileWidget} from '../../../Components';
 import {PageContainer} from '../../../Containers';
 import {useLanguage, useTheme} from '../../../Hooks';
 import {SettingsBlockedUsersScreenProps} from '../../../Types';
@@ -18,6 +18,7 @@ const BlockedUsers: React.FC<SettingsBlockedUsersScreenProps> = () => {
       <FlatList
         contentContainerStyle={styles.flatList}
         data={['', '', '', '', '', '', '', '']}
+        ItemSeparatorComponent={Divider}
         renderItem={() => (
           <View style={styles.item}>
             <ProfileWidget />

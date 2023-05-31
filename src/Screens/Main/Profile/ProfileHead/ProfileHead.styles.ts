@@ -76,11 +76,6 @@ export default ThemedStyleSheet((theme) => ({
     flex: 1,
     alignItems: 'center',
   },
-  centerDivider: {
-    backgroundColor: theme.colors.background,
-    width: StyleSheet.hairlineWidth,
-    height: '100%',
-  },
   centerTouchable: {
     alignItems: 'center',
     flex: 1,

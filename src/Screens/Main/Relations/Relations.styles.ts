@@ -1,9 +1,10 @@
-import {StyleSheet} from 'react-native';
+import {ThemedStyleSheet} from '../../../Utils/ThemedStyleSheet';
 import {Spacing} from '../../../Styles';
 
-export default StyleSheet.create({
+export default ThemedStyleSheet((theme) => ({
   item: {
+    backgroundColor: theme.colors.surface,
     paddingHorizontal: Spacing.pagePadding,
     paddingVertical: Spacing.xsmall,
   },
-});
+}));

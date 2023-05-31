@@ -1,9 +1,8 @@
 import {FlatList} from 'react-native';
-import {Divider} from 'react-native-paper';
 import Comment from './Comment/Comment';
 import CommentInput from './CommentInput/CommentInput';
 import {PageContainer} from '../../../Containers';
-import {Header} from '../../../Components';
+import {Header, Divider} from '../../../Components';
 import {useLanguage} from '../../../Hooks';
 import {GlobalStyles} from '../../../Styles';
 
