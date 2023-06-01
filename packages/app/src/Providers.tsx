@@ -1,7 +1,7 @@
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {Host as PortalizeProvider} from 'react-native-portalize';
-import {Provider as PaperProvider} from 'react-native-paper';
+import {PaperProvider} from 'react-native-paper';
 import {Provider as ReduxProvider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 import {StyleSheet} from 'react-native';
