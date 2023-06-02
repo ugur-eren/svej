@@ -78,7 +78,7 @@ const Share: React.FC = () => {
 
           <View style={styles.medias}>
             {medias.map((media) => (
-              <View style={[styles.mediaContainer, styles.mediaContainerElevated]}>
+              <View key={media.uri} style={[styles.mediaContainer, styles.mediaContainerElevated]}>
                 <View style={styles.mediaContent}>
                   <Image source={{uri: media.uri}} style={styles.media} />
 
