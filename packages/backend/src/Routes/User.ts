@@ -1,4 +1,5 @@
 import express from 'express';
+import {Config} from 'common';
 import {z} from 'zod';
 import bcrypt from 'bcrypt';
 import {Prisma, PrismaTypes} from '../Services';
@@ -39,10 +40,10 @@ Router.get('/username/:username', async (req, res) => {
 
 Router.put('/', async (req, res) => {
   const User = z.object({
-    username: z.string().min(4).max(20),
+    username: z.string().min(Config.usernameMinLength).max(Config.usernameMaxLength),
     fullname: z.string().optional(),
     email: z.string().email(),
-    password: z.string().min(6),
+    password: z.string().min(Config.passwordMinLength).max(Config.passwordMaxLength),
   });
 
   const user = User.safeParse(req.body);

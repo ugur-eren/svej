@@ -7,6 +7,7 @@ const ErrorCodesArray = [
   'NoAuthToken',
   'InvalidAuthToken',
   'NoTokenInput',
+  'WrongPassword',
 
   // User
   'UsernameAlreadyExists',
@@ -16,6 +17,7 @@ const ErrorCodesArray = [
   'EmailInvalid',
   'PasswordShort',
   'PasswordLong',
+  'UserNotFound',
 ] as const;
 
 type ErrorCodesKeys = (typeof ErrorCodesArray)[number];
