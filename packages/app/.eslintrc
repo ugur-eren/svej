@@ -1,0 +1,45 @@
+{
+  "root": true,
+  "extends": ["airbnb", "custom", "plugin:react/jsx-runtime"],
+  "env": {
+    "browser": true,
+    "react-native/react-native": true
+  },
+  "plugins": ["react", "react-native", "react-hooks", "jsx-a11y"],
+  "rules": {
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    "react/function-component-definition": [
+      "error",
+      {
+        "unnamedComponents": ["function-expression", "arrow-function"],
+        "namedComponents": ["function-declaration", "arrow-function"]
+      }
+    ],
+    "react/jsx-props-no-spreading": "off",
+    "react/require-default-props": "off",
+    "react/jsx-filename-extension": [1, {"extensions": [".js", ".jsx", ".ts", ".tsx"]}],
+    "react/prop-types": "off",
+    "react/button-has-type": "off",
+    "react-native/no-unused-styles": "error",
+    "react-native/no-inline-styles": "error",
+    "react-native/no-color-literals": "error",
+    "react-native/no-raw-text": ["error", {"skip": ["TextButton"]}],
+    "react-native/no-single-element-style-arrays": "error",
+    "react/jsx-one-expression-per-line": "off"
+  },
+  "overrides": [
+    {
+      "files": ["*.style.ts", "*.styles.ts"],
+      "rules": {
+        "@typescript-eslint/camelcase": "off"
+      }
+    },
+    {
+      "files": ["src/Redux/**/*.ts"],
+      "rules": {
+        "no-param-reassign": "off"
+      }
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+module.exports = {
+  parser: '@typescript-eslint/parser',
+  extends: [
+    'airbnb-base',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:prettier/recommended',
+    'plugin:eslint-comments/recommended',
+    'plugin:import/errors',
+    'plugin:import/warnings',
+    'plugin:import/typescript',
+  ],
+  plugins: ['@typescript-eslint', 'import', 'prettier', 'eslint-comments'],
+  rules: {
+    'import/prefer-default-export': 'off',
+    '@typescript-eslint/indent': 'off',
+    '@typescript-eslint/explicit-function-return-type': 'off',
+    '@typescript-eslint/no-use-before-define': 'off',
+    'global-require': 'off',
+    'no-use-before-define': 'off',
+    'no-shadow': 'off',
+    '@typescript-eslint/no-shadow': 'error',
+    'import/no-extraneous-dependencies': [
+      'error',
+      {
+        devDependencies: [
+          'storybook/**/*.{ts,tsx,js}',
+          'config-overrides.js',
+          'src/setupTests.ts',
+          'src/Components/**/*.stories.tsx',
+          'src/Styles/**/*.stories.tsx',
+          'src/Containers/**/*.stories.tsx',
+          'src/Icons/**/*.stories.tsx',
+          'src/**/*.test.{ts,tsx,js,jsx}',
+        ],
+      },
+    ],
+    '@typescript-eslint/explicit-member-accessibility': 'off',
+    'lines-between-class-members': 'off',
+    'no-underscore-dangle': 'off',
+    'prettier/prettier': [
+      'error',
+      {
+        endOfLine: 'auto',
+      },
+    ],
+    'import/extensions': [
+      'error',
+      'ignorePackages',
+      {
+        js: 'never',
+        jsx: 'never',
+        ts: 'never',
+        tsx: 'never',
+      },
+    ],
+    'no-console': ['error', {allow: ['info', 'warn', 'error']}],
+  },
+};
