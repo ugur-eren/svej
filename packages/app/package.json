@@ -69,6 +69,6 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-native": "^4.0.0",
     "tsconfig": "*",
-    "typescript": "~4.9.4"
+    "typescript": "~5.1.0"
   }
 }
