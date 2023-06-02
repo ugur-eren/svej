@@ -9,3 +9,35 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id        String   @id @default(uuid())
+  username  String   @unique
+  email     String   @unique
+  fullname  String?
+  password  String
+  bio       String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  followers      User[]  @relation("UserFollows")
+  follows        User[]  @relation("UserFollows")
+  profilePhoto   Media?  @relation("ProfilePhoto", fields: [profilePhotoId], references: [id])
+  profilePhotoId String?
+  coverPhoto     Media?  @relation("CoverPhoto", fields: [coverPhotoId], references: [id])
+  coverPhotoId   String?
+}
+
+model Media {
+  id        String   @id @default(uuid())
+  url       String
+  width     Int
+  height    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  profilePhoto User[] @relation("ProfilePhoto")
+  coverPhoto   User[] @relation("CoverPhoto")
+}
