@@ -1,8 +1,10 @@
 import {Formik} from 'formik';
+import {Config} from 'common';
 import {AuthPage} from '../../../Containers';
 import {Input} from '../../../Components';
 import {useLanguage} from '../../../Hooks';
 import EmailValidator from '../../../Utils/EmailValidator';
+import {parseLanguageParts} from '../../../Utils/Helpers';
 import {AuthRegisterScreenProps} from '../../../Types';
 
 type Props = AuthRegisterScreenProps;
@@ -21,11 +23,20 @@ const Register: React.FC<Props> = ({navigation}) => {
   const validateForm = (values: typeof initialValues) => {
     const errors: Partial<typeof initialValues> = {};
 
-    if (values.username.trim().length < 4) errors.username = language.errors.USERNAME_SHORT;
+    if (values.username.trim().length < Config.usernameMinLength) {
+      errors.username = parseLanguageParts(language.errors.USERNAME_SHORT, {
+        min: Config.usernameMinLength,
+      });
+    }
 
-    if (values.password.length < 6) errors.password = language.errors.PASSWORD_SHORT;
-    if (values.password !== values.passwordValidation)
+    if (values.password.length < Config.passwordMinLength) {
+      errors.password = parseLanguageParts(language.errors.PASSWORD_SHORT, {
+        min: Config.passwordMinLength,
+      });
+    }
+    if (values.password !== values.passwordValidation) {
       errors.passwordValidation = language.errors.PASSWORDS_NOT_MATCH;
+    }
 
     if (!EmailValidator(values.email.trim())) errors.email = language.errors.EMAIL_INVALID;
 

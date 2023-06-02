@@ -3,4 +3,4 @@ export default {
   usernameMaxLength: 20,
   passwordMinLength: 6,
   passwordMaxLength: 512,
-};
+} as const;

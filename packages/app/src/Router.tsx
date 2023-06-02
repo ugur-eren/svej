@@ -139,7 +139,7 @@ const Router: React.FC = () => {
 
   return (
     <NavigationContainer theme={theme.navigation}>
-      <RootStack.Navigator initialRouteName="MainStack" screenOptions={{headerShown: false}}>
+      <RootStack.Navigator initialRouteName="AuthStack" screenOptions={{headerShown: false}}>
         <RootStack.Screen name="AuthStack" component={AuthStackNavigator} />
         <RootStack.Screen name="MainStack" component={MainStackNavigator} />
       </RootStack.Navigator>

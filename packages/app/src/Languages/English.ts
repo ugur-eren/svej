@@ -130,10 +130,10 @@ export default {
   },
 
   errors: {
-    USERNAME_SHORT: 'Username must be at least 4 characters',
+    USERNAME_SHORT: 'Username must be at least %min% characters',
     USERNAME_INVALID: 'Username is invalid',
     USERNAME_REQUIRED: 'Username is required',
-    PASSWORD_SHORT: 'Password must be at least 6 characters',
+    PASSWORD_SHORT: 'Password must be at least %min% characters',
     PASSWORD_REQUIRED: 'Password is required',
     PASSWORDS_NOT_MATCH: 'Passwords do not match',
     EMAIL_INVALID: 'Email is invalid',

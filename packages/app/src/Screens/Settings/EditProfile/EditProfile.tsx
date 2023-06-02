@@ -1,9 +1,11 @@
 import {ScrollView} from 'react-native';
 import {Formik} from 'formik';
+import {Config} from 'common';
 import {Button, Header, Input} from '../../../Components';
 import {PageContainer} from '../../../Containers';
 import {useLanguage, useTheme} from '../../../Hooks';
 import EmailValidator from '../../../Utils/EmailValidator';
+import {parseLanguageParts} from '../../../Utils/Helpers';
 import {SettingsEditProfileScreenProps} from '../../../Types';
 import getStyles from './EditProfile.styles';
 
@@ -23,7 +25,11 @@ const EditProfile: React.FC<SettingsEditProfileScreenProps> = () => {
   const validateForm = (values: typeof initialValues) => {
     const errors: Partial<typeof initialValues> = {};
 
-    if (values.username.trim().length < 4) errors.username = language.errors.USERNAME_SHORT;
+    if (values.username.trim().length < Config.usernameMinLength) {
+      errors.username = parseLanguageParts(language.errors.USERNAME_SHORT, {
+        min: Config.usernameMinLength,
+      });
+    }
 
     if (!EmailValidator(values.email.trim())) errors.email = language.errors.EMAIL_INVALID;
 
