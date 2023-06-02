@@ -27,6 +27,24 @@ model User {
   profilePhotoId String?
   coverPhoto     Media?  @relation("CoverPhoto", fields: [coverPhotoId], references: [id])
   coverPhotoId   String?
+  Posts          Post[]  @relation("UserPosts")
+  Likes          Post[]  @relation("PostLikes")
+  Dislikes       Post[]  @relation("PostDislikes")
+}
+
+model Post {
+  id          String   @id @default(uuid())
+  description String
+  medias      Media[]
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  author   User   @relation("UserPosts", fields: [authorId], references: [id])
+  authorId String
+  likes    User[] @relation("PostLikes")
+  dislikes User[] @relation("PostDislikes")
 }
 
 model Media {
@@ -39,8 +57,10 @@ model Media {
   updatedAt DateTime  @updatedAt
 
   // Relations
-  profilePhoto User[] @relation("ProfilePhoto")
-  coverPhoto   User[] @relation("CoverPhoto")
+  profilePhoto User[]  @relation("ProfilePhoto")
+  coverPhoto   User[]  @relation("CoverPhoto")
+  Post         Post?   @relation(fields: [postId], references: [id])
+  postId       String?
 }
 
 enum MediaType {
