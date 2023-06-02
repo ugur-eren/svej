@@ -6,7 +6,10 @@
     "start": "turbo run start",
     "lint": "turbo run lint",
     "check": "turbo run check",
-    "format": "turbo run format"
+    "format": "turbo run format",
+    "db:generate": "turbo run db:generate",
+    "db:push": "turbo run db:push",
+    "db:studio": "turbo run db:studio"
   },
   "devDependencies": {
     "@turbo/gen": "^1.9.7",
