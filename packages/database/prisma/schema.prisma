@@ -30,14 +30,20 @@ model User {
 }
 
 model Media {
-  id        String   @id @default(uuid())
+  id        String    @id @default(uuid())
+  type      MediaType
   url       String
   width     Int
   height    Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 
   // Relations
   profilePhoto User[] @relation("ProfilePhoto")
   coverPhoto   User[] @relation("CoverPhoto")
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
 }
