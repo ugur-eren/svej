@@ -32,19 +32,24 @@ export const onlyAuthorized = async (
     return;
   }
 
+  const {decoded} = result;
+
+  // `Making database calls while validating JWT tokens undermines their primary advantage of being stateless.`
+  // But this is a simple example backend, not going to be a production-ready one. So we can ignore this for now.
   const user = await Prisma.user.findUnique({
     where: {
-      id: result.decoded.sub,
+      id: decoded.sub,
     },
   });
 
-  if (!user || !user.id || !user.active) {
+  // Using jti whitelist instead of blacklist
+  if (!user || !user.id || !user.active || !decoded.jti || !user.jtis.includes(decoded.jti)) {
     res.status(HTTPStatus.Unauthorized).send({code: ErrorCodes.Unauthorized});
     return;
   }
 
   res.locals.authenticated = true;
-  res.locals.decoded = result.decoded;
+  res.locals.decoded = decoded;
   res.locals.token = token;
   res.locals.user = user;
 

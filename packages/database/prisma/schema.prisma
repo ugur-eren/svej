@@ -14,6 +14,7 @@ model User {
   fullname  String?
   password  String
   bio       String?
+  jtis      String[]
   active    Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

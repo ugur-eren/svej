@@ -1,8 +1,10 @@
 import express from 'express';
 import bcrypt from 'bcrypt';
 import {Config, ErrorCodes} from 'common';
+import {v4 as uuid} from 'uuid';
 import {z} from 'zod';
 import {Prisma} from '../Services';
+import {onlyAuthorized} from '../Middlewares';
 import HTTPStatus from '../Utils/HTTPStatus';
 import {sign, verify} from '../Utils/JWT';
 import type {ReqBody} from '../types';
@@ -37,8 +39,13 @@ Router.post('/login', async (req, res) => {
     return;
   }
 
+  const jti = uuid();
+
+  // Using jti whitelist instead of blacklist
+  await Prisma.user.update({where: {id: user.id}, data: {jtis: {push: jti}}});
+
   // TODO: Include jti claim
-  const result = await sign({sub: user.id});
+  const result = await sign({sub: user.id, jti});
 
   if (result.ok) {
     res.status(HTTPStatus.OK).send({token: result.token, user});
@@ -47,7 +54,17 @@ Router.post('/login', async (req, res) => {
   }
 });
 
-// TODO: Add safe logout with jti claim
+Router.post('/logout', onlyAuthorized, async (req, res) => {
+  const {decoded, user} = res.locals;
+
+  // Using jti whitelist instead of blacklist
+  await Prisma.user.update({
+    where: {id: decoded.sub},
+    data: {jtis: {set: user.jtis.filter((jti: string) => jti !== decoded.jti)}},
+  });
+
+  res.status(HTTPStatus.OK).send({ok: true});
+});
 
 Router.post('/verify', async (req: ReqBody<{token: string}>, res) => {
   const {token} = req.body;
