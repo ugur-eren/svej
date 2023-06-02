@@ -17,19 +17,23 @@ model User {
   fullname  String?
   password  String
   bio       String?
+  active    Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   // Relations
-  followers      User[]  @relation("UserFollows")
-  follows        User[]  @relation("UserFollows")
-  profilePhoto   Media?  @relation("ProfilePhoto", fields: [profilePhotoId], references: [id])
-  profilePhotoId String?
-  coverPhoto     Media?  @relation("CoverPhoto", fields: [coverPhotoId], references: [id])
-  coverPhotoId   String?
-  Posts          Post[]  @relation("UserPosts")
-  Likes          Post[]  @relation("PostLikes")
-  Dislikes       Post[]  @relation("PostDislikes")
+  followers       User[]    @relation("UserFollows")
+  follows         User[]    @relation("UserFollows")
+  profilePhoto    Media?    @relation("ProfilePhoto", fields: [profilePhotoId], references: [id])
+  profilePhotoId  String?
+  coverPhoto      Media?    @relation("CoverPhoto", fields: [coverPhotoId], references: [id])
+  coverPhotoId    String?
+  Posts           Post[]    @relation("UserPosts")
+  PostLikes       Post[]    @relation("PostLikes")
+  PostDislikes    Post[]    @relation("PostDislikes")
+  Comments        Comment[] @relation("UserComments")
+  CommentLikes    Comment[] @relation("CommentLikes")
+  CommentDislikes Comment[] @relation("CommentDislikes")
 }
 
 model Post {
@@ -41,10 +45,27 @@ model Post {
   updatedAt   DateTime @updatedAt
 
   // Relations
-  author   User   @relation("UserPosts", fields: [authorId], references: [id])
+  author   User      @relation("UserPosts", fields: [authorId], references: [id])
   authorId String
-  likes    User[] @relation("PostLikes")
-  dislikes User[] @relation("PostDislikes")
+  likes    User[]    @relation("PostLikes")
+  dislikes User[]    @relation("PostDislikes")
+  Comment  Comment[] @relation("PostComments")
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  text      String
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  author   User   @relation("UserComments", fields: [authorId], references: [id])
+  authorId String
+  post     Post   @relation("PostComments", fields: [postId], references: [id])
+  postId   String
+  likes    User[] @relation("CommentLikes")
+  dislikes User[] @relation("CommentDislikes")
 }
 
 model Media {
