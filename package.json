@@ -9,7 +9,8 @@
     "format": "turbo run format",
     "db:generate": "turbo run db:generate",
     "db:push": "turbo run db:push",
-    "db:studio": "turbo run db:studio"
+    "db:studio": "turbo run db:studio",
+    "db:seed": "turbo run db:seed"
   },
   "devDependencies": {
     "@turbo/gen": "^1.9.7",
