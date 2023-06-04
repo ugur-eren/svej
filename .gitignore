@@ -63,3 +63,7 @@ yarn-error.log
 
 # vercel
 .vercel
+
+# Uploads
+uploads/**/*
+!uploads/.gitkeep

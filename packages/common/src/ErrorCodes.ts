@@ -18,6 +18,10 @@ const ErrorCodesArray = [
   'PasswordShort',
   'PasswordLong',
   'UserNotFound',
+
+  // Post
+  'PostNotFound',
+  'PostDoesntHaveMediaOrDescription',
 ] as const;
 
 type ErrorCodesKeys = (typeof ErrorCodesArray)[number];

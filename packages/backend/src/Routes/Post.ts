@@ -1,8 +1,10 @@
 import express from 'express';
-import {ErrorCodes} from 'common';
-import {Prisma, PrismaTypes} from '../Services';
+import {Config, ErrorCodes} from 'common';
+import {z} from 'zod';
+import {Prisma, PrismaTypes, Upload} from '../Services';
 import {onlyAuthorized} from '../Middlewares';
 import HTTPStatus from '../Utils/HTTPStatus';
+import {ImageHandler} from '../Utils/ImageHandler';
 
 const Router = express.Router();
 
@@ -55,5 +57,68 @@ Router.get('/user/:id', onlyAuthorized, async (req, res) => {
 
   res.status(HTTPStatus.OK).send(posts);
 });
+
+Router.put(
+  '/',
+  onlyAuthorized,
+  Upload.array('medias', Config.maxMediasPerPost),
+  async (req, res) => {
+    const Post = z.object({
+      description: z
+        .string()
+        .trim()
+        .max(Config.postDescriptionMaxLength)
+        .refine((desc) => desc.split(/\r\n|\r|\n/).length <= Config.postDescriptionMaxLines, {
+          message: `Description must have less than ${Config.postDescriptionMaxLines} lines`,
+        })
+        .optional(),
+    });
+
+    const post = Post.safeParse(req.body);
+
+    if (!post.success) {
+      res.status(HTTPStatus.BadRequest).send(post.error);
+      return;
+    }
+
+    const hasFiles = Array.isArray(req.files) && req.files.length > 0;
+
+    if (!post.data.description && !hasFiles) {
+      res.status(HTTPStatus.BadRequest).send(ErrorCodes.PostDoesntHaveMediaOrDescription);
+      return;
+    }
+
+    let files: PrismaTypes.MediaCreateManyPostInput[] = [];
+    if (Array.isArray(req.files)) {
+      files = (
+        await Promise.all(
+          req.files.map(async (file) => {
+            if (file.size > Config.maxFileSize) return null;
+
+            if (file.mimetype.startsWith('image/')) {
+              return ImageHandler(file);
+            }
+
+            // TODO: Handle video uploads
+
+            return null;
+          }),
+        )
+      ).filter(<T>(file: T | null): file is T => file !== null);
+    }
+
+    const createdPost = await Prisma.post.create({
+      data: {
+        description: post.data.description,
+        author: {connect: {id: res.locals.user.id}},
+        medias: {
+          createMany: {data: files},
+        },
+      },
+    });
+
+    res.status(HTTPStatus.OK).send(createdPost);
+  },
+);
 
 export default Router;
