@@ -13,7 +13,7 @@ const Router = express.Router();
 
 Router.post('/login', async (req, res) => {
   const bodySchema = z.object({
-    username: z.string().min(Config.usernameMinLength).max(Config.usernameMaxLength),
+    username: z.string().trim().min(Config.usernameMinLength).max(Config.usernameMaxLength),
     password: z.string().min(Config.passwordMinLength).max(Config.passwordMaxLength),
   });
 

@@ -40,9 +40,9 @@ Router.get('/username/:username', async (req, res) => {
 
 Router.put('/', async (req, res) => {
   const User = z.object({
-    username: z.string().min(Config.usernameMinLength).max(Config.usernameMaxLength),
-    fullname: z.string().optional(),
-    email: z.string().email(),
+    username: z.string().trim().min(Config.usernameMinLength).max(Config.usernameMaxLength),
+    fullname: z.string().trim().optional(),
+    email: z.string().trim().email(),
     password: z.string().min(Config.passwordMinLength).max(Config.passwordMaxLength),
   });
 

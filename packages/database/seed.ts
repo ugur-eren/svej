@@ -12,7 +12,7 @@ async function main() {
       username: 'test',
       email: 'test@example.com',
       fullname: 'Test User',
-      password: 'test',
+      password: '$2b$10$pCxKpd5xpVKuKntVmBEsg.uzywEuYtZFTCP6.yI2iO6l1fbYV9xg2', // testtest
       bio: 'This is a test user.',
       profilePhoto: {
         create: {
@@ -70,6 +70,20 @@ async function main() {
           },
         ],
       },
+    },
+  });
+
+  await prisma.user.upsert({
+    where: {
+      username: 'test2',
+    },
+    update: {},
+    create: {
+      username: 'test2',
+      email: 'test2@example.com',
+      fullname: 'Second Test User',
+      password: '$2b$10$pCxKpd5xpVKuKntVmBEsg.uzywEuYtZFTCP6.yI2iO6l1fbYV9xg2', // testtest
+      bio: 'This is the second test user.',
     },
   });
 }
