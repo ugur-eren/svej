@@ -5,6 +5,7 @@ import {Prisma, PrismaTypes, Upload} from '../Services';
 import {onlyAuthorized} from '../Middlewares';
 import HTTPStatus from '../Utils/HTTPStatus';
 import {ImageHandler} from '../Utils/ImageHandler';
+import {VideoHandler} from '../Utils/VideoHandler';
 
 const Router = express.Router();
 
@@ -90,21 +91,28 @@ Router.put(
 
     let files: PrismaTypes.MediaCreateManyPostInput[] = [];
     if (Array.isArray(req.files)) {
-      files = (
-        await Promise.all(
-          req.files.map(async (file) => {
-            if (file.size > Config.maxFileSize) return null;
+      try {
+        files = (
+          await Promise.all(
+            req.files.map(async (file) => {
+              if (file.size > Config.maxFileSize) return null;
 
-            if (file.mimetype.startsWith('image/')) {
-              return ImageHandler(file);
-            }
+              if (file.mimetype.startsWith('image/')) {
+                return ImageHandler(file);
+              }
 
-            // TODO: Handle video uploads
+              if (file.mimetype.startsWith('video/')) {
+                return VideoHandler(file);
+              }
 
-            return null;
-          }),
-        )
-      ).filter(<T>(file: T | null): file is T => file !== null);
+              return null;
+            }),
+          )
+        ).filter(<T>(file: T | null): file is T => file !== null);
+      } catch (err) {
+        res.status(HTTPStatus.BadRequest).send({code: ErrorCodes.FileProcessingError});
+        return;
+      }
     }
 
     const createdPost = await Prisma.post.create({

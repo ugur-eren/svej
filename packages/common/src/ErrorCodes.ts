@@ -22,6 +22,9 @@ const ErrorCodesArray = [
   // Post
   'PostNotFound',
   'PostDoesntHaveMediaOrDescription',
+
+  // File
+  'FileProcessingError',
 ] as const;
 
 type ErrorCodesKeys = (typeof ErrorCodesArray)[number];

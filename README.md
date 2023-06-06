@@ -15,9 +15,17 @@ I'll be working on it in my free time. If you want to contribute, feel free to o
 - [React Native Paper](https://callstack.github.io/react-native-paper/)
 - [React Native Gesture Handler](https://software-mansion.github.io/react-native-gesture-handler/)
 - [React Native Reanimated](https://docs.swmansion.com/react-native-reanimated/)
-- [Redux](https://redux.js.org/)
-- [Redux Toolkit](https://redux-toolkit.js.org/)
-- [Redux Persist](https://github.com/rt2zz/redux-persist)
+- [Redux](https://redux.js.org/) & [Redux Toolkit](https://redux-toolkit.js.org/) & [Redux Persist](https://github.com/rt2zz/redux-persist)
+- [FFmpeg](https://ffmpeg.org/) & [FFprobe](https://ffmpeg.org/ffprobe.html)
+
+## Prerequisites
+
+- [Node.js](https://nodejs.org/en/)
+- [PostgreSQL](https://www.postgresql.org/) for database
+- [FFmpeg](https://ffmpeg.org/) and [FFprobe](https://ffmpeg.org/ffprobe.html) for backend video processing
+
+> Note: I chose not to include pre-built binaries so you should have `ffmpeg` and `ffprobe` installed on your machine to run the backend.
+> Probably will include the pre-built binaries or completely move the video processing to Rust in the future.
 
 ## How to run
 
