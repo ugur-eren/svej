@@ -1,0 +1,24 @@
+{
+  "folders": [
+    {
+      "name": "Root",
+      "path": "."
+    },
+    {
+      "name": "App",
+      "path": "packages/app"
+    },
+    {
+      "name": "Backend",
+      "path": "packages/backend"
+    },
+    {
+      "name": "Common",
+      "path": "packages/common"
+    },
+    {
+      "name": "Database",
+      "path": "packages/database"
+    }
+  ]
+}
