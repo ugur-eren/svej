@@ -4,6 +4,6 @@
     "esbenp.prettier-vscode",
     "mikestead.dotenv",
     "msjsdiag.vscode-react-native",
-    "byCedric.vscode-expo"
+    "expo.vscode-expo-tools"
   ]
 }
