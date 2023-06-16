@@ -20,5 +20,18 @@
       "name": "Database",
       "path": "packages/database"
     }
-  ]
+  ],
+  "settings": {
+    "editor.formatOnSave": true,
+    "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"]
+  },
+  "extensions": {
+    "recommendations": [
+      "dbaeumer.vscode-eslint",
+      "esbenp.prettier-vscode",
+      "mikestead.dotenv",
+      "msjsdiag.vscode-react-native",
+      "expo.vscode-expo-tools"
+    ]
+  }
 }
