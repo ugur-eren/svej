@@ -2,11 +2,14 @@ import {Config} from 'common';
 import {MediaType, PrismaTypes} from 'database';
 import fs from 'fs/promises';
 import {v4 as uuid} from 'uuid';
+import {encode} from 'blurhash';
+import sharp from 'sharp';
 import {Spawn} from './Spawn';
 import {TEMP_DIR, UPLOADS_DIR} from './Constants';
 
 export const VideoHandler = async (file: Express.Multer.File) => {
   const tempFilePath = `${TEMP_DIR}/${uuid()}.tmp`;
+  const tempThumbnailPath = `${TEMP_DIR}/${uuid()}-thumb.tmp`;
   const fileId = uuid();
 
   await fs.writeFile(tempFilePath, file.buffer);
@@ -50,6 +53,27 @@ export const VideoHandler = async (file: Express.Multer.File) => {
     throw new Error(ffmpegProcess.stderr.join('\n'));
   }
 
+  const thumbnailProcess = await Spawn('ffmpeg', [
+    ...'-vf "select=eq(n,34)" -vframes 1'.split(' '),
+    tempThumbnailPath,
+  ]);
+
+  let thumbnail: string | null = null;
+
+  if (thumbnailProcess.status) {
+    try {
+      const thumbnailBuffer = await sharp(tempThumbnailPath)
+        .raw()
+        .ensureAlpha()
+        .resize(32, 32, {fit: 'inside'})
+        .toBuffer();
+
+      thumbnail = encode(new Uint8ClampedArray(thumbnailBuffer), 32, 32, 4, 4);
+    } catch (_) {
+      //
+    }
+  }
+
   // TODO: Thumbnail generation
 
   return {
@@ -57,5 +81,6 @@ export const VideoHandler = async (file: Express.Multer.File) => {
     url: fileId,
     width: 300,
     height: 300,
+    thumbnail,
   } satisfies PrismaTypes.MediaCreateInput;
 };

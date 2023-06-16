@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "bcrypt": "^5.1.0",
+    "blurhash": "^2.0.5",
     "common": "*",
     "cors": "^2.8.5",
     "cross-spawn": "^7.0.3",
