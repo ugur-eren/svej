@@ -2,20 +2,22 @@ import express from 'express';
 import {Config} from 'common';
 import {z} from 'zod';
 import bcrypt from 'bcrypt';
-import {Prisma, PrismaTypes} from '../Services';
+import {Prisma} from '../Services';
 import HTTPStatus from '../Utils/HTTPStatus';
 import {BCRYPT_ROUNDS} from '../Utils/Env';
 
 const Router = express.Router();
 
-const findUser = async (where: PrismaTypes.UserWhereUniqueInput) => {
-  return Prisma.user.findUnique({where, include: {profilePhoto: true, coverPhoto: true}});
+const userInclude = {
+  profilePhoto: true,
+  coverPhoto: true,
+  tags: true,
 };
 
 Router.get('/:id', async (req, res) => {
   const {id} = req.params;
 
-  const user = await findUser({id});
+  const user = await Prisma.user.findUnique({where: {id}, include: userInclude});
 
   if (!user) {
     res.status(HTTPStatus.NotFound).send('User not found');
@@ -28,7 +30,7 @@ Router.get('/:id', async (req, res) => {
 Router.get('/username/:username', async (req, res) => {
   const {username} = req.params;
 
-  const user = await findUser({username});
+  const user = await Prisma.user.findUnique({where: {username}, include: userInclude});
 
   if (!user) {
     res.status(HTTPStatus.NotFound).send('User not found');
