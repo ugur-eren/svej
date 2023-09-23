@@ -2,16 +2,23 @@ import express from 'express';
 import {Config} from 'common';
 import {z} from 'zod';
 import bcrypt from 'bcrypt';
-import {Prisma} from '../Services';
+import {Prisma, PrismaTypes} from '../Services';
 import HTTPStatus from '../Utils/HTTPStatus';
 import {BCRYPT_ROUNDS} from '../Utils/Env';
 
 const Router = express.Router();
 
-const userInclude = {
+const userInclude: PrismaTypes.UserInclude = {
   profilePhoto: true,
   coverPhoto: true,
   tags: true,
+  _count: {
+    select: {
+      posts: true,
+      follows: true,
+      followers: true,
+    },
+  },
 };
 
 Router.get('/:id', async (req, res) => {
