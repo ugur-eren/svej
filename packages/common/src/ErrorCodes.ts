@@ -25,6 +25,9 @@ const ErrorCodesArray = [
 
   // File
   'FileProcessingError',
+
+  // Comment
+  'CommentNotFound',
 ] as const;
 
 type ErrorCodesKeys = (typeof ErrorCodesArray)[number];

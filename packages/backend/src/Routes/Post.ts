@@ -1,7 +1,7 @@
 import express from 'express';
 import {Config, ErrorCodes} from 'common';
 import {z} from 'zod';
-import {Prisma, PrismaTypes, Upload} from '../Services';
+import {Prisma, PrismaTypes, PrismaIncludes, Upload} from '../Services';
 import {onlyAuthorized} from '../Middlewares';
 import HTTPStatus from '../Utils/HTTPStatus';
 import {ImageHandler} from '../Utils/ImageHandler';
@@ -9,28 +9,8 @@ import {VideoHandler} from '../Utils/VideoHandler';
 
 const Router = express.Router();
 
-const authorInclude: PrismaTypes.UserInclude = {
-  profilePhoto: true,
-  tags: true,
-};
-
-const postInclude: PrismaTypes.PostInclude = {
-  _count: true,
-  medias: true,
-  author: {include: authorInclude},
-};
-
-const postWithCommentsInclude: PrismaTypes.PostInclude = {
-  ...postInclude,
-  comments: {
-    include: {
-      author: {include: authorInclude},
-    },
-  },
-};
-
 Router.get('/', onlyAuthorized, async (req, res) => {
-  const posts = await Prisma.post.findMany({include: postInclude});
+  const posts = await Prisma.post.findMany({include: PrismaIncludes.Post});
 
   res.status(HTTPStatus.OK).send(posts);
 });
@@ -40,7 +20,7 @@ Router.get('/:id', onlyAuthorized, async (req, res) => {
 
   const post = await Prisma.post.findUnique({
     where: {id},
-    include: postWithCommentsInclude,
+    include: PrismaIncludes.PostWithComments,
   });
 
   if (!post) {
@@ -54,7 +34,7 @@ Router.get('/:id', onlyAuthorized, async (req, res) => {
 Router.get('/user/:id', onlyAuthorized, async (req, res) => {
   const {id} = req.params;
 
-  const posts = await Prisma.post.findMany({where: {authorId: id}, include: postInclude});
+  const posts = await Prisma.post.findMany({where: {authorId: id}, include: PrismaIncludes.Post});
 
   res.status(HTTPStatus.OK).send(posts);
 });

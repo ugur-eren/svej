@@ -8,6 +8,10 @@ export default {
   usernameMaxLength: 20,
   passwordMinLength: 6,
   passwordMaxLength: 512,
+
   postDescriptionMaxLength: 1024,
   postDescriptionMaxLines: 10,
+
+  commentMaxLength: 512,
+  commentMaxLines: 5,
 } as const;
