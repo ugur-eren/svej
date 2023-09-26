@@ -1,12 +1,21 @@
 import express from 'express';
 import {ErrorCodes} from 'common';
+import {User} from 'database';
+import type {JwtPayload} from 'jsonwebtoken';
 import {Prisma} from '../Services';
 import HTTPStatus from '../Utils/HTTPStatus';
 import {verify} from '../Utils/JWT';
 
+type Locals = {
+  authenticated?: boolean;
+  decoded: JwtPayload;
+  token: string;
+  user: User;
+};
+
 export const onlyAuthorized = async (
   req: express.Request,
-  res: express.Response,
+  res: express.Response<unknown, Locals>,
   next: express.NextFunction,
 ): Promise<void> => {
   const {authorization} = req.headers;
