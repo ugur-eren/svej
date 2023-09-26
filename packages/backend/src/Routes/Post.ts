@@ -15,6 +15,19 @@ Router.get('/', onlyAuthorized, async (req, res) => {
   res.status(HTTPStatus.OK).send(posts);
 });
 
+Router.use('/:id', async (req, res, next) => {
+  const {id} = req.params;
+
+  const post = await Prisma.post.findUnique({where: {id}, select: {id: true}});
+
+  if (!post) {
+    res.status(HTTPStatus.NotFound).send(ErrorCodes.PostNotFound);
+    return;
+  }
+
+  next();
+});
+
 Router.get('/:id', onlyAuthorized, async (req, res) => {
   const {id} = req.params;
 
@@ -23,10 +36,47 @@ Router.get('/:id', onlyAuthorized, async (req, res) => {
     include: PrismaIncludes.PostWithComments,
   });
 
-  if (!post) {
-    res.status(HTTPStatus.NotFound).send(ErrorCodes.PostNotFound);
-    return;
-  }
+  res.status(HTTPStatus.OK).send(post);
+});
+
+Router.get('/:id/reactions', onlyAuthorized, async (req, res) => {
+  const {id} = req.params;
+
+  const post = await Prisma.post.findUnique({
+    where: {id},
+    select: {
+      _count: {
+        select: {
+          likes: true,
+          dislikes: true,
+          comments: true,
+        },
+      },
+    },
+  });
+
+  res.status(HTTPStatus.OK).send(post?._count);
+});
+
+Router.post('/:id/reactions/:type(like|dislike)', onlyAuthorized, async (req, res) => {
+  const {id, type} = req.params as {id: string; type: 'like' | 'dislike'};
+
+  const post = await Prisma.post.update({
+    where: {
+      id,
+    },
+    data: {
+      likes:
+        type === 'like'
+          ? {connect: {id: res.locals.user.id}}
+          : {disconnect: {id: res.locals.user.id}},
+
+      dislikes:
+        type === 'dislike'
+          ? {connect: {id: res.locals.user.id}}
+          : {disconnect: {id: res.locals.user.id}},
+    },
+  });
 
   res.status(HTTPStatus.OK).send(post);
 });
