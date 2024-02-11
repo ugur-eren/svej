@@ -1,9 +1,8 @@
 import express from 'express';
-import {Config, ErrorCodes} from 'common';
+import {Config, ErrorCodes, HTTPStatus} from 'common';
 import {z} from 'zod';
 import {Prisma, PrismaIncludes} from '../Services';
 import {onlyAuthorized} from '../Middlewares';
-import HTTPStatus from '../Utils/HTTPStatus';
 
 const Router = express.Router();
 

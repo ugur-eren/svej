@@ -12,7 +12,11 @@
     "ts:check": "tsc --noEmit",
     "check": "yarn format && yarn format:check && yarn lint:check && yarn ts:check"
   },
-  "dependencies": {},
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "database": "*",
+    "jsonwebtoken": "^9.0.2"
+  },
   "devDependencies": {
     "@types/node": "^20.2.5",
     "ts-node": "^10.9.1",

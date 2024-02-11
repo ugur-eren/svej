@@ -1,9 +1,8 @@
 import express from 'express';
-import {Config, ErrorCodes} from 'common';
+import {Config, ErrorCodes, HTTPStatus} from 'common';
 import {z} from 'zod';
 import {Prisma, PrismaTypes, PrismaIncludes, Upload} from '../Services';
 import {onlyAuthorized} from '../Middlewares';
-import HTTPStatus from '../Utils/HTTPStatus';
 import {ImageHandler} from '../Utils/ImageHandler';
 import {VideoHandler} from '../Utils/VideoHandler';
 

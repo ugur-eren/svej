@@ -1,12 +1,10 @@
 import express from 'express';
-import bcrypt from 'bcrypt';
-import {Config, ErrorCodes} from 'common';
+import {JWT, Password} from 'server-side';
+import {Config, ErrorCodes, HTTPStatus} from 'common';
 import {v4 as uuid} from 'uuid';
 import {z} from 'zod';
 import {Prisma} from '../Services';
 import {onlyAuthorized} from '../Middlewares';
-import HTTPStatus from '../Utils/HTTPStatus';
-import {sign, verify} from '../Utils/JWT';
 import type {ReqBody} from '../types';
 
 const Router = express.Router();
@@ -33,7 +31,7 @@ Router.post('/login', async (req, res) => {
     return;
   }
 
-  const passwordMatched = await bcrypt.compare(password, user.password);
+  const passwordMatched = await Password.verify(password, user.password);
   if (!passwordMatched) {
     res.status(HTTPStatus.Unauthorized).send({code: ErrorCodes.WrongPassword});
     return;
@@ -45,7 +43,7 @@ Router.post('/login', async (req, res) => {
   await Prisma.user.update({where: {id: user.id}, data: {jtis: {push: jti}}});
 
   // TODO: Include jti claim
-  const result = await sign({sub: user.id, jti});
+  const result = await JWT.sign({sub: user.id, jti});
 
   if (result.ok) {
     res.status(HTTPStatus.OK).send({token: result.token, user});
@@ -74,7 +72,7 @@ Router.post('/verify', async (req: ReqBody<{token: string}>, res) => {
     return;
   }
 
-  const result = await verify(token);
+  const result = await JWT.verify(token);
 
   if (result.ok) {
     res.status(HTTPStatus.OK).send({ok: true});

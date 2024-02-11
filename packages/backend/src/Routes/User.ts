@@ -1,10 +1,8 @@
-import {Env} from 'server-side';
+import {Password} from 'server-side';
 import express from 'express';
-import {Config} from 'common';
+import {Config, HTTPStatus} from 'common';
 import {z} from 'zod';
-import bcrypt from 'bcrypt';
 import {Prisma, PrismaIncludes} from '../Services';
-import HTTPStatus from '../Utils/HTTPStatus';
 
 const Router = express.Router();
 
@@ -52,7 +50,7 @@ Router.put('/', async (req, res) => {
   const createdUser = await Prisma.user.create({
     data: {
       ...user.data,
-      password: await bcrypt.hash(user.data.password, Env.BCRYPT_ROUNDS),
+      password: await Password.hash(user.data.password),
     },
   });
 

@@ -1,7 +1,10 @@
-import {Env} from 'server-side';
 import JWT from 'jsonwebtoken';
+import {JWT_EXPIRE_TIME, JWT_PRIV_KEY} from './Env';
 
-type SignReturnType =
+export type JwtPayload = JWT.JwtPayload;
+export type VerifyErrors = JWT.VerifyErrors;
+
+export type SignReturnType =
   | {
       ok: true;
       token: string;
@@ -11,7 +14,7 @@ type SignReturnType =
       error: Error;
     };
 
-type VerifyReturnType =
+export type VerifyReturnType =
   | {
       ok: true;
       decoded: JWT.JwtPayload | string;
@@ -29,9 +32,9 @@ export const sign = async (payload: JWT.JwtPayload): Promise<SignReturnType> => 
         iss: payload.iss || 'svej',
         exp:
           payload.exp ||
-          (Env.JWT_EXPIRE_TIME ? Math.floor(Date.now() / 1000) + Env.JWT_EXPIRE_TIME : undefined),
+          (JWT_EXPIRE_TIME ? Math.floor(Date.now() / 1000) + JWT_EXPIRE_TIME : undefined),
       },
-      Env.JWT_PRIV_KEY,
+      JWT_PRIV_KEY,
       {algorithm: 'HS512'},
       (err, token) => {
         if (err || !token) {
@@ -47,7 +50,7 @@ export const sign = async (payload: JWT.JwtPayload): Promise<SignReturnType> => 
 
 export const verify = async (token: string): Promise<VerifyReturnType> => {
   return new Promise((resolve) => {
-    JWT.verify(token, Env.JWT_PRIV_KEY, (err, decoded) => {
+    JWT.verify(token, JWT_PRIV_KEY, (err, decoded) => {
       if (err || !decoded) {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         resolve({ok: false, error: err!});

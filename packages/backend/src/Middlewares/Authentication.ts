@@ -1,14 +1,12 @@
 import express from 'express';
-import {ErrorCodes} from 'common';
+import {JWT} from 'server-side';
+import {HTTPStatus, ErrorCodes} from 'common';
 import {User} from 'database';
-import type {JwtPayload} from 'jsonwebtoken';
 import {Prisma} from '../Services';
-import HTTPStatus from '../Utils/HTTPStatus';
-import {verify} from '../Utils/JWT';
 
 type Locals = {
   authenticated?: boolean;
-  decoded: JwtPayload;
+  decoded: JWT.JwtPayload;
   token: string;
   user: User;
 };
@@ -27,7 +25,7 @@ export const onlyAuthorized = async (
 
   const token = authorization.split(' ')[1];
 
-  const result = await verify(token);
+  const result = await JWT.verify(token);
 
   if (!result.ok) {
     res

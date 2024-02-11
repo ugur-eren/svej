@@ -1,9 +1,7 @@
-import {PrismaClient} from 'database';
+import {PrismaClient} from 'server-side';
 
 export * as PrismaIncludes from '../Utils/PrismaIncludes';
 
-const prisma = new PrismaClient({log: ['query', 'info', 'warn', 'error']});
-
-export default prisma;
+export default PrismaClient;
 
 export type {PrismaTypes} from 'database';
