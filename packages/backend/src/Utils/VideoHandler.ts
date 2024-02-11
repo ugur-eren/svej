@@ -5,10 +5,12 @@ import {v4 as uuid} from 'uuid';
 import {encode} from 'blurhash';
 import sharp from 'sharp';
 import {Spawn} from './Spawn';
-import {TEMP_DIR, UPLOADS_DIR} from './Constants';
+import {TEMP_DIR} from './Constants';
+import {fileSystem} from '../Services';
 
 export const VideoHandler = async (file: Express.Multer.File) => {
   const tempFilePath = `${TEMP_DIR}/${uuid()}.tmp`;
+  const tempProcessedFilePath = `${TEMP_DIR}/${uuid()}-processed.tmp`;
   const tempThumbnailPath = `${TEMP_DIR}/${uuid()}-thumb.tmp`;
   const fileId = uuid();
 
@@ -54,12 +56,15 @@ export const VideoHandler = async (file: Express.Multer.File) => {
     ['-crf', '28'],
     ['-c:a', 'aac'],
     ['-b:a', '64K'],
-    `${UPLOADS_DIR}/${fileId}.mp4`,
+    tempProcessedFilePath,
   ]);
 
   if (!ffmpegProcess.status) {
     throw new Error(ffmpegProcess.stderr.join('\n'));
   }
+
+  const processedFile = await fs.readFile(tempProcessedFilePath);
+  fileSystem.write(`${fileId}.mp4`, processedFile, 'video/mp4');
 
   const thumbnailProcess = await Spawn('ffmpeg', [
     ['-vf', 'select=eq(n,34)'],

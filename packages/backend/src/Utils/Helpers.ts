@@ -1,4 +1,4 @@
-const GetPostgresTimestamp = (date: Date = new Date()): string => {
+export const GetPostgresTimestamp = (date: Date = new Date()): string => {
   /**
    * Date.prototype.toISOString returns: 2022-01-22T13:59:11.983Z
    * Postgres wants: 2022-01-22 13:59:11
@@ -9,4 +9,6 @@ const GetPostgresTimestamp = (date: Date = new Date()): string => {
   return date.toISOString().replace('T', ' ').split('.')[0];
 };
 
-export {GetPostgresTimestamp};
+export const throwError = (message: string, options?: ErrorOptions): never => {
+  throw new Error(message, options);
+};

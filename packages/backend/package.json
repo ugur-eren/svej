@@ -16,6 +16,7 @@
     "check": "yarn format && yarn format:check && yarn lint:check && yarn ts:check"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.511.0",
     "bcrypt": "^5.1.0",
     "blurhash": "^2.0.5",
     "common": "*",

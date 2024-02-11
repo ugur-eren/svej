@@ -3,7 +3,7 @@ import {MediaType, PrismaTypes} from 'database';
 import sharp from 'sharp';
 import {v4 as uuid} from 'uuid';
 import {encode} from 'blurhash';
-import {UPLOADS_DIR} from './Constants';
+import {fileSystem} from '../Services';
 
 export const ImageHandler = async (file: Express.Multer.File) => {
   const fileId = uuid();
@@ -31,10 +31,10 @@ export const ImageHandler = async (file: Express.Multer.File) => {
   });
   image.toFormat('webp');
 
-  await image.toFile(`${UPLOADS_DIR}/${fileId}.webp`);
+  const buffer = await image.toBuffer();
+  await fileSystem.write(`${fileId}.webp`, buffer, 'image/webp');
 
   let thumbnail: string | null = null;
-
   try {
     const thumbnailBuffer = await image
       .clone()
