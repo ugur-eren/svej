@@ -6,7 +6,7 @@ import {
   PutObjectCommand,
   DeleteObjectCommand,
 } from '@aws-sdk/client-s3';
-import {BaseFileSystem, FileSystemResponse} from '../Utils/BaseFileSystem';
+import {BaseFileSystem, FileSystemResponse} from '../../Utils/BaseFileSystem';
 
 export class S3FileSystem implements BaseFileSystem {
   private bucket: string;

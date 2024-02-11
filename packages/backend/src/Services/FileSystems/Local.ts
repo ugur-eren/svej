@@ -1,7 +1,7 @@
 import {join} from 'node:path';
 import fs from 'node:fs/promises';
 import {createReadStream} from 'node:fs';
-import {BaseFileSystem, FileSystemResponse} from '../Utils/BaseFileSystem';
+import {BaseFileSystem, FileSystemResponse} from '../../Utils/BaseFileSystem';
 
 export class LocalFileSystem implements BaseFileSystem {
   private rootPath: string;
