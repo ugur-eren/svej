@@ -15,7 +15,10 @@ export const VideoHandler = async (file: Express.Multer.File) => {
   await fs.writeFile(tempFilePath, file.buffer);
 
   const ffprobeProcess = await Spawn('ffprobe', [
-    ...'-v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0'.split(' '),
+    ['-v', 'error'],
+    ['-select_streams', 'v:0'],
+    ['-show_entries', 'stream=width,height'],
+    ['-of', 'csv=s=x:p=0'],
     tempFilePath,
   ]);
 
@@ -40,12 +43,17 @@ export const VideoHandler = async (file: Express.Multer.File) => {
   }
 
   const ffmpegProcess = await Spawn('ffmpeg', [
-    ...'-hide_banner -loglevel error -y'.split(' '),
-    '-i',
-    tempFilePath,
-    '-s',
-    `${newWidth}x${newHeight}`,
-    ...'-c:v libx264 -maxrate 600K -preset fast -crf 28 -c:a aac -b:a 64K'.split(' '),
+    ['-hide_banner'],
+    ['-loglevel', 'error'],
+    '-y',
+    ['-i', tempFilePath],
+    ['-s', `${newWidth}x${newHeight}`],
+    ['-c:v', 'libx264'],
+    ['-maxrate', '600K'],
+    ['-preset', 'fast'],
+    ['-crf', '28'],
+    ['-c:a', 'aac'],
+    ['-b:a', '64K'],
     `${UPLOADS_DIR}/${fileId}.mp4`,
   ]);
 
@@ -54,7 +62,8 @@ export const VideoHandler = async (file: Express.Multer.File) => {
   }
 
   const thumbnailProcess = await Spawn('ffmpeg', [
-    ...'-vf "select=eq(n,34)" -vframes 1'.split(' '),
+    ['-vf', 'select=eq(n,34)'],
+    ['-vframes', '1'],
     tempThumbnailPath,
   ]);
 
@@ -73,8 +82,6 @@ export const VideoHandler = async (file: Express.Multer.File) => {
       //
     }
   }
-
-  // TODO: Thumbnail generation
 
   return {
     type: MediaType.VIDEO,

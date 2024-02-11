@@ -3,14 +3,12 @@ import {spawn} from 'cross-spawn';
 
 export const Spawn = (
   command: string,
-  args: string | string[],
+  args: (string | string[])[],
   options?: SpawnOptionsWithoutStdio,
 ) => {
   return new Promise<{status: boolean} & Record<'stdout' | 'stderr' | 'output', string[]>>(
     (resolve) => {
-      const argsArray = typeof args === 'string' ? args.split(' ') : args;
-
-      const process = spawn(command, argsArray, options);
+      const process = spawn(command, args.flat(), options);
 
       const stdout: string[] = [];
       const stderr: string[] = [];
