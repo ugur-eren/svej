@@ -1,6 +1,6 @@
 {
-  "root": true,
-  "extends": ["airbnb", "custom", "plugin:react/jsx-runtime"],
+  "extends": ["airbnb", "../../.eslintrc", "plugin:react/jsx-runtime"],
+
   "env": {
     "browser": true,
     "react-native/react-native": true

@@ -1,6 +1,5 @@
 {
-  "root": true,
-  "extends": ["custom", "plugin:react/jsx-runtime"],
+  "extends": ["../../.eslintrc", "plugin:react/jsx-runtime"],
   "env": {
     "node": true,
     "jest": true
