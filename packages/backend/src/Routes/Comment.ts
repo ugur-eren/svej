@@ -59,8 +59,23 @@ Router.get('/:id/reactions', onlyAuthorized, async (req, res) => {
   res.status(HTTPStatus.OK).send(comment?._count);
 });
 
-Router.post('/:id/reactions/:type(like|dislike)', onlyAuthorized, async (req, res) => {
-  const {id, type} = req.params as {id: string; type: 'like' | 'dislike'};
+Router.post('/:id/reactions/:type(like|dislike|remove)', onlyAuthorized, async (req, res) => {
+  const {id, type} = req.params as {id: string; type: 'like' | 'dislike' | 'remove'};
+
+  if (type === 'remove') {
+    const post = await Prisma.comment.update({
+      where: {
+        id,
+      },
+      data: {
+        likes: {disconnect: {id: res.locals.user.id}},
+        dislikes: {disconnect: {id: res.locals.user.id}},
+      },
+    });
+
+    res.status(HTTPStatus.OK).send(post);
+    return;
+  }
 
   const comment = await Prisma.comment.update({
     where: {
