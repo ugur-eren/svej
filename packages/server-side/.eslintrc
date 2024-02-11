@@ -1,0 +1,10 @@
+{
+  "extends": ["../../.eslintrc", "plugin:react/jsx-runtime"],
+  "env": {
+    "node": true,
+    "jest": true
+  },
+  "rules": {
+    "@typescript-eslint/explicit-member-accessibility": "warn"
+  }
+}

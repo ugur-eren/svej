@@ -8,7 +8,7 @@ export default ({config}) => {
       ...config.extra,
 
       ...Object.fromEntries(
-        Object.entries(process.env).filter(([key]) => key.startsWith('SVEJ_APP_')),
+        Object.entries(process.env).filter(([key]) => key.startsWith('SVEJ_PUBLIC_')),
       ),
     },
   };

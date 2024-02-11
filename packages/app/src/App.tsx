@@ -15,7 +15,7 @@ SplashScreen.preventAutoHideAsync();
 if (IsAndroid) StatusBar.setStatusBarTranslucent(false);
 
 function App() {
-  if (!Env.SVEJ_APP_USE_CONFIG || Env.SVEJ_APP_USE_CONFIG !== 'true') {
+  if (!Env.SVEJ_PUBLIC_USE_CONFIG || Env.SVEJ_PUBLIC_USE_CONFIG !== 'true') {
     throw new Error(
       'You need to fill in the .env file for the designated build environment. You can find the sample in .env.sample file',
     );

@@ -23,6 +23,7 @@
     "cors": "^2.8.5",
     "cross-spawn": "^7.0.3",
     "database": "*",
+    "server-side": "*",
     "debug": "^4.3.4",
     "dedent": "^0.7.0",
     "dotenv": "^16.1.3",

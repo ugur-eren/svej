@@ -1,7 +1,7 @@
 import 'dotenv/config';
-import {USE_CONFIG} from './src/Utils/Env';
+import {Env} from 'server-side';
 
-if (USE_CONFIG !== 'true') {
+if (Env.USE_CONFIG !== 'true') {
   throw new Error(`
     Please fill in the .env file with your config.
     You can find the example in .env.sample file in the root of the project.
