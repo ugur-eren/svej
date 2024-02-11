@@ -17,6 +17,10 @@
       "path": "packages/common"
     },
     {
+      "name": "Server Side",
+      "path": "packages/server-side"
+    },
+    {
       "name": "Database",
       "path": "packages/database"
     }
