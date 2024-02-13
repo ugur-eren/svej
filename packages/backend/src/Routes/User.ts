@@ -1,6 +1,6 @@
 import {Password} from 'server-side';
 import express from 'express';
-import {Config, HTTPStatus} from 'common';
+import {Config, ErrorCodes, HTTPStatus} from 'common';
 import {z} from 'zod';
 import {Prisma, PrismaIncludes} from '../Services';
 
@@ -12,7 +12,7 @@ Router.get('/:id', async (req, res) => {
   const user = await Prisma.user.findUnique({where: {id}, include: PrismaIncludes.User});
 
   if (!user) {
-    res.status(HTTPStatus.NotFound).send('User not found');
+    res.status(HTTPStatus.NotFound).send({code: ErrorCodes.UserNotFound});
     return;
   }
 
@@ -25,7 +25,7 @@ Router.get('/username/:username', async (req, res) => {
   const user = await Prisma.user.findUnique({where: {username}, include: PrismaIncludes.User});
 
   if (!user) {
-    res.status(HTTPStatus.NotFound).send('User not found');
+    res.status(HTTPStatus.NotFound).send({code: ErrorCodes.UserNotFound});
     return;
   }
 
@@ -43,7 +43,7 @@ Router.put('/', async (req, res) => {
   const user = User.safeParse(req.body);
 
   if (!user.success) {
-    res.status(HTTPStatus.BadRequest).send(user.error);
+    res.status(HTTPStatus.BadRequest).send({code: ErrorCodes.FillAllFields, error: user.error});
     return;
   }
 

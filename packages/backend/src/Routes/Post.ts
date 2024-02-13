@@ -20,7 +20,7 @@ Router.use('/:id', async (req, res, next) => {
   const post = await Prisma.post.findUnique({where: {id}, select: {id: true}});
 
   if (!post) {
-    res.status(HTTPStatus.NotFound).send(ErrorCodes.PostNotFound);
+    res.status(HTTPStatus.NotFound).send({code: ErrorCodes.PostNotFound});
     return;
   }
 
@@ -129,7 +129,7 @@ Router.put(
     const hasFiles = Array.isArray(req.files) && req.files.length > 0;
 
     if (!post.data.description && !hasFiles) {
-      res.status(HTTPStatus.BadRequest).send(ErrorCodes.PostDoesntHaveMediaOrDescription);
+      res.status(HTTPStatus.BadRequest).send({code: ErrorCodes.PostDoesntHaveMediaOrDescription});
       return;
     }
 

@@ -23,7 +23,7 @@ Router.use('/:id', async (req, res, next) => {
   const comment = await Prisma.comment.findUnique({where: {id}, select: {id: true}});
 
   if (!comment) {
-    res.status(HTTPStatus.NotFound).send(ErrorCodes.CommentNotFound);
+    res.status(HTTPStatus.NotFound).send({code: ErrorCodes.CommentNotFound});
     return;
   }
 
@@ -112,7 +112,7 @@ Router.put('/', onlyAuthorized, async (req, res) => {
   const comment = Comment.safeParse(req.body);
 
   if (!comment.success) {
-    res.status(HTTPStatus.BadRequest).send(comment.error);
+    res.status(HTTPStatus.BadRequest).send({code: ErrorCodes.FillAllFields, error: comment.error});
     return;
   }
 
