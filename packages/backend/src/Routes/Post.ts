@@ -13,6 +13,14 @@ Router.get('/', onlyAuthorized, async (req, res) => {
   res.status(HTTPStatus.OK).send(posts);
 });
 
+Router.get('/user/:id', onlyAuthorized, async (req, res) => {
+  const {id} = req.params;
+
+  const posts = await Prisma.post.findMany({where: {authorId: id}, include: PrismaIncludes.Post});
+
+  res.status(HTTPStatus.OK).send(posts);
+});
+
 Router.use('/:id', async (req, res, next) => {
   const {id} = req.params;
 
@@ -60,7 +68,7 @@ Router.post('/:id/reactions/:type(like|dislike|remove)', onlyAuthorized, async (
   const {id, type} = req.params as {id: string; type: 'like' | 'dislike' | 'remove'};
 
   if (type === 'remove') {
-    const post = await Prisma.post.update({
+    await Prisma.post.update({
       where: {
         id,
       },
@@ -70,11 +78,11 @@ Router.post('/:id/reactions/:type(like|dislike|remove)', onlyAuthorized, async (
       },
     });
 
-    res.status(HTTPStatus.OK).send(post);
+    res.status(HTTPStatus.OK).send({ok: true});
     return;
   }
 
-  const post = await Prisma.post.update({
+  await Prisma.post.update({
     where: {
       id,
     },
@@ -91,15 +99,7 @@ Router.post('/:id/reactions/:type(like|dislike|remove)', onlyAuthorized, async (
     },
   });
 
-  res.status(HTTPStatus.OK).send(post);
-});
-
-Router.get('/user/:id', onlyAuthorized, async (req, res) => {
-  const {id} = req.params;
-
-  const posts = await Prisma.post.findMany({where: {authorId: id}, include: PrismaIncludes.Post});
-
-  res.status(HTTPStatus.OK).send(posts);
+  res.status(HTTPStatus.OK).send({ok: true});
 });
 
 Router.put(
@@ -110,7 +110,7 @@ Router.put(
     const body = Zod.Post.Create.safeParse(req.body);
 
     if (!body.success) {
-      res.status(HTTPStatus.BadRequest).send(body.error);
+      res.status(HTTPStatus.BadRequest).send({code: ErrorCodes.FillAllFields, error: body.error});
       return;
     }
 

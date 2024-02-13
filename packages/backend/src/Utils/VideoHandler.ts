@@ -56,6 +56,7 @@ export const VideoHandler = async (file: Express.Multer.File) => {
     ['-crf', '28'],
     ['-c:a', 'aac'],
     ['-b:a', '64K'],
+    ['-f', 'mp4'],
     tempProcessedFilePath,
   ]);
 

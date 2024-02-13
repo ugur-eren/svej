@@ -1,6 +1,6 @@
 export default {
   // Max File Size in bytes (30MB)
-  maxFileSize: 1024 * 1024 * 30,
+  maxFileSize: 1024 * 1024 * 200,
   maxMediasPerPost: 9,
   maxImageDimension: 1080,
 
