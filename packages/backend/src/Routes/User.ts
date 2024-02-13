@@ -39,6 +39,18 @@ Router.put('/', async (req, res) => {
     return;
   }
 
+  const usernameExists = await Prisma.user.findUnique({where: {username: body.data.username}});
+  if (usernameExists) {
+    res.status(HTTPStatus.BadRequest).send({code: ErrorCodes.UsernameAlreadyExists});
+    return;
+  }
+
+  const emailExists = await Prisma.user.findUnique({where: {email: body.data.email}});
+  if (emailExists) {
+    res.status(HTTPStatus.BadRequest).send({code: ErrorCodes.EmailAlreadyExists});
+    return;
+  }
+
   const user = await Prisma.user.create({
     data: {
       ...body.data,
