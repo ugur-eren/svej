@@ -1,6 +1,5 @@
 import express from 'express';
-import {Config, ErrorCodes, HTTPStatus} from 'common';
-import {z} from 'zod';
+import {ErrorCodes, HTTPStatus, Zod} from 'common';
 import {Prisma, PrismaIncludes} from '../Services';
 import {onlyAuthorized} from '../Middlewares';
 
@@ -98,33 +97,22 @@ Router.post('/:id/reactions/:type(like|dislike|remove)', onlyAuthorized, async (
 });
 
 Router.put('/', onlyAuthorized, async (req, res) => {
-  const Comment = z.object({
-    postId: z.string().uuid(),
-    text: z
-      .string()
-      .trim()
-      .max(Config.commentMaxLength)
-      .refine((comment) => comment.split(/\r\n|\r|\n/).length <= Config.commentMaxLines, {
-        message: `Comment must have less than ${Config.commentMaxLines} lines`,
-      }),
-  });
+  const body = Zod.Comment.Create.safeParse(req.body);
 
-  const comment = Comment.safeParse(req.body);
-
-  if (!comment.success) {
-    res.status(HTTPStatus.BadRequest).send({code: ErrorCodes.FillAllFields, error: comment.error});
+  if (!body.success) {
+    res.status(HTTPStatus.BadRequest).send({code: ErrorCodes.FillAllFields, error: body.error});
     return;
   }
 
-  const createdComment = await Prisma.comment.create({
+  const comment = await Prisma.comment.create({
     data: {
-      post: {connect: {id: comment.data.postId}},
+      post: {connect: {id: body.data.postId}},
       author: {connect: {id: res.locals.user.id}},
-      text: comment.data.text,
+      text: body.data.text,
     },
   });
 
-  res.status(HTTPStatus.OK).send(createdComment);
+  res.status(HTTPStatus.OK).send(comment);
 });
 
 export default Router;

@@ -13,7 +13,9 @@
     "ts:check": "tsc --noEmit",
     "check": "yarn format && yarn format:check && yarn lint:check && yarn ts:check"
   },
-  "dependencies": {},
+  "dependencies": {
+    "zod": "^3.22.4"
+  },
   "devDependencies": {
     "@types/node": "^20.2.5",
     "ts-node": "^10.9.1",

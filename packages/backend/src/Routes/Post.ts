@@ -1,6 +1,5 @@
 import express from 'express';
-import {Config, ErrorCodes, HTTPStatus} from 'common';
-import {z} from 'zod';
+import {Config, ErrorCodes, HTTPStatus, Zod} from 'common';
 import {Prisma, PrismaTypes, PrismaIncludes, Upload} from '../Services';
 import {onlyAuthorized} from '../Middlewares';
 import {ImageHandler} from '../Utils/ImageHandler';
@@ -108,27 +107,16 @@ Router.put(
   onlyAuthorized,
   Upload.array('medias', Config.maxMediasPerPost),
   async (req, res) => {
-    const Post = z.object({
-      description: z
-        .string()
-        .trim()
-        .max(Config.postDescriptionMaxLength)
-        .refine((desc) => desc.split(/\r\n|\r|\n/).length <= Config.postDescriptionMaxLines, {
-          message: `Description must have less than ${Config.postDescriptionMaxLines} lines`,
-        })
-        .optional(),
-    });
+    const body = Zod.Post.Create.safeParse(req.body);
 
-    const post = Post.safeParse(req.body);
-
-    if (!post.success) {
-      res.status(HTTPStatus.BadRequest).send(post.error);
+    if (!body.success) {
+      res.status(HTTPStatus.BadRequest).send(body.error);
       return;
     }
 
     const hasFiles = Array.isArray(req.files) && req.files.length > 0;
 
-    if (!post.data.description && !hasFiles) {
+    if (!body.data.description && !hasFiles) {
       res.status(HTTPStatus.BadRequest).send({code: ErrorCodes.PostDoesntHaveMediaOrDescription});
       return;
     }
@@ -159,9 +147,9 @@ Router.put(
       }
     }
 
-    const createdPost = await Prisma.post.create({
+    const post = await Prisma.post.create({
       data: {
-        description: post.data.description,
+        description: body.data.description,
         author: {connect: {id: res.locals.user.id}},
         medias: {
           createMany: {data: files},
@@ -169,7 +157,7 @@ Router.put(
       },
     });
 
-    res.status(HTTPStatus.OK).send(createdPost);
+    res.status(HTTPStatus.OK).send(post);
   },
 );
 

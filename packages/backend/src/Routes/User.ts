@@ -1,7 +1,6 @@
 import {Password} from 'server-side';
 import express from 'express';
-import {Config, ErrorCodes, HTTPStatus} from 'common';
-import {z} from 'zod';
+import {ErrorCodes, HTTPStatus, Zod} from 'common';
 import {Prisma, PrismaIncludes} from '../Services';
 
 const Router = express.Router();
@@ -33,28 +32,21 @@ Router.get('/username/:username', async (req, res) => {
 });
 
 Router.put('/', async (req, res) => {
-  const User = z.object({
-    username: z.string().trim().min(Config.usernameMinLength).max(Config.usernameMaxLength),
-    fullname: z.string().trim().optional(),
-    email: z.string().trim().email(),
-    password: z.string().min(Config.passwordMinLength).max(Config.passwordMaxLength),
-  });
+  const body = Zod.User.Create.safeParse(req.body);
 
-  const user = User.safeParse(req.body);
-
-  if (!user.success) {
-    res.status(HTTPStatus.BadRequest).send({code: ErrorCodes.FillAllFields, error: user.error});
+  if (!body.success) {
+    res.status(HTTPStatus.BadRequest).send({code: ErrorCodes.FillAllFields, error: body.error});
     return;
   }
 
-  const createdUser = await Prisma.user.create({
+  const user = await Prisma.user.create({
     data: {
-      ...user.data,
-      password: await Password.hash(user.data.password),
+      ...body.data,
+      password: await Password.hash(body.data.password),
     },
   });
 
-  res.status(HTTPStatus.OK).send(createdUser);
+  res.status(HTTPStatus.OK).send(user);
 });
 
 export default Router;

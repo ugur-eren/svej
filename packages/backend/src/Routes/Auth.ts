@@ -1,8 +1,7 @@
 import express from 'express';
 import {JWT, Password} from 'server-side';
-import {Config, ErrorCodes, HTTPStatus} from 'common';
+import {ErrorCodes, HTTPStatus, Zod} from 'common';
 import {v4 as uuid} from 'uuid';
-import {z} from 'zod';
 import {Prisma} from '../Services';
 import {onlyAuthorized} from '../Middlewares';
 import type {ReqBody} from '../types';
@@ -10,12 +9,7 @@ import type {ReqBody} from '../types';
 const Router = express.Router();
 
 Router.post('/login', async (req, res) => {
-  const bodySchema = z.object({
-    username: z.string().trim().min(Config.usernameMinLength).max(Config.usernameMaxLength),
-    password: z.string().min(Config.passwordMinLength).max(Config.passwordMaxLength),
-  });
-
-  const body = bodySchema.safeParse(req.body);
+  const body = Zod.Auth.Login.safeParse(req.body);
 
   if (!body.success) {
     res.status(HTTPStatus.BadRequest).send({code: ErrorCodes.FillAllFields, error: body.error});
