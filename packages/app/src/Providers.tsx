@@ -4,12 +4,15 @@ import {Host as PortalizeProvider} from 'react-native-portalize';
 import {PaperProvider} from 'react-native-paper';
 import {Provider as ReduxProvider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {StyleSheet} from 'react-native';
 import {store, persistor} from './Redux';
 import {CurrentTimeProvider, useTheme} from './Hooks';
 import {LanguageProvider} from './Hooks/Language';
 import {ThemeProvider} from './Hooks/Theming';
 import {PaperIconProp} from './Utils/CommonComponents';
+
+const queryClient = new QueryClient();
 
 /**
  * RootProviders is the top-level provider for the app and should only contain
@@ -23,7 +26,9 @@ const RootProviders: React.FC<{children: React.ReactNode}> = ({children}) => {
           <PersistGate loading={null} persistor={persistor}>
             <ThemeProvider>
               <LanguageProvider>
-                <Providers>{children}</Providers>
+                <QueryClientProvider client={queryClient}>
+                  <Providers>{children}</Providers>
+                </QueryClientProvider>
               </LanguageProvider>
             </ThemeProvider>
           </PersistGate>

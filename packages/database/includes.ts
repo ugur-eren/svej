@@ -1,11 +1,11 @@
-import {PrismaTypes} from 'database';
+import type {Prisma} from '@prisma/client';
 
-export const Author: PrismaTypes.UserInclude = {
+export const Author: Prisma.UserInclude = {
   profilePhoto: true,
   tags: true,
 };
 
-export const User: PrismaTypes.UserInclude = {
+export const User: Prisma.UserInclude = {
   _count: {
     select: {
       posts: true,
@@ -19,14 +19,14 @@ export const User: PrismaTypes.UserInclude = {
   tags: true,
 };
 
-export const Post: PrismaTypes.PostInclude = {
+export const Post: Prisma.PostInclude = {
   _count: true,
 
   medias: true,
   author: {include: Author},
 };
 
-export const Comment: PrismaTypes.CommentInclude = {
+export const Comment: Prisma.CommentInclude = {
   _count: {
     select: {
       likes: true,
@@ -37,7 +37,7 @@ export const Comment: PrismaTypes.CommentInclude = {
   author: {include: Author},
 };
 
-export const PostWithComments: PrismaTypes.PostInclude = {
+export const PostWithComments: Prisma.PostInclude = {
   ...Post,
 
   comments: {include: Comment},

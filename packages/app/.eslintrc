@@ -1,5 +1,10 @@
 {
-  "extends": ["airbnb", "../../.eslintrc", "plugin:react/jsx-runtime"],
+  "extends": [
+    "airbnb",
+    "../../.eslintrc",
+    "plugin:react/jsx-runtime",
+    "plugin:@tanstack/eslint-plugin-query/recommended"
+  ],
 
   "env": {
     "browser": true,
@@ -26,7 +31,10 @@
     "react-native/no-color-literals": "error",
     "react-native/no-raw-text": ["error", {"skip": ["TextButton"]}],
     "react-native/no-single-element-style-arrays": "error",
-    "react/jsx-one-expression-per-line": "off"
+    "react/jsx-one-expression-per-line": "off",
+    "@tanstack/query/exhaustive-deps": "error",
+    "@tanstack/query/no-rest-destructuring": "warn",
+    "@tanstack/query/stable-query-client": "error"
   },
   "overrides": [
     {

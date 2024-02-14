@@ -1,8 +1,8 @@
 import {ApisauceConfig, create} from 'apisauce';
+import Env from '../Utils/Env';
 
 const ApiOptions: ApisauceConfig = {
-  // TODO: Add your own base URL here
-  baseURL: 'api-url',
+  baseURL: Env.SVEJ_PUBLIC_API_URL,
   timeout: 15000,
   headers: {
     Accept: 'application/json',

@@ -1,6 +1,6 @@
 import {PrismaClient} from 'server-side';
 
-export * as PrismaIncludes from '../Utils/PrismaIncludes';
+export {PrismaIncludes} from 'database';
 
 export default PrismaClient;
 
