@@ -11,12 +11,7 @@ const ErrorCodesArray = [
 
   // User
   'UsernameAlreadyExists',
-  'UsernameShort',
-  'UsernameLong',
   'EmailAlreadyExists',
-  'EmailInvalid',
-  'PasswordShort',
-  'PasswordLong',
   'UserNotFound',
 
   // Post
@@ -30,7 +25,7 @@ const ErrorCodesArray = [
   'CommentNotFound',
 ] as const;
 
-type ErrorCodesKeys = (typeof ErrorCodesArray)[number];
+export type ErrorCodesKeys = (typeof ErrorCodesArray)[number];
 
 type ErrorCodes<T extends ErrorCodesKeys = ErrorCodesKeys> = {
   [K in T]: K;

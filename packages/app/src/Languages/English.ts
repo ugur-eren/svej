@@ -1,3 +1,6 @@
+import {ErrorCodesKeys} from 'common';
+import {PROBLEM_CODE} from 'apisauce';
+
 export default {
   about_language: {
     name: 'English',
@@ -138,4 +141,59 @@ export default {
     PASSWORDS_NOT_MATCH: 'Passwords do not match',
     EMAIL_INVALID: 'Email is invalid',
   },
+
+  api_errors: {
+    UnknownError: 'An unknown error has occurred. Please try again later.',
+    FillAllFields: 'Please fill all fields.',
+    Unauthorized: 'You are not authorized to do this action.',
+    NoAuthToken: 'You are not authorized to do this action.',
+    InvalidAuthToken: 'You are not authorized to do this action.',
+    NoTokenInput: 'You are not authorized to do this action.',
+    WrongPassword: 'Wrong password.',
+
+    UsernameAlreadyExists: 'Username is already in use.',
+    EmailAlreadyExists: 'Email is already in use.',
+    UserNotFound: 'User not found.',
+
+    PostNotFound: 'Post not found.',
+    PostDoesntHaveMediaOrDescription: 'Post must have a media or description.',
+
+    FileProcessingError: 'There has been an error while processing the file.',
+
+    CommentNotFound: 'Comment not found.',
+  } satisfies Partial<Record<ErrorCodesKeys, string>>,
+
+  api_problems: {
+    SERVER_ERROR: {
+      title: 'Server Error',
+      message: 'There has been a error while making your request. Please try again later.',
+    },
+    NETWORK_ERROR: {
+      title: 'Network Error',
+      message:
+        'There has been a network error while connecting to servers. Please check your connection and try again.',
+    },
+    TIMEOUT_ERROR: {
+      title: 'Timeout',
+      message: 'Your request took too long. Please check your connection and try again.',
+    },
+    CONNECTION_ERROR: {
+      title: 'Connection Error',
+      message:
+        'There has been a connection error while connecting to servers. Please check your connection and try again.',
+    },
+    UNKNOWN_ERROR: {
+      title: 'Unknown Error',
+      message:
+        'There has been an unknown error. We will investigate this problem. Please try again later.',
+    },
+  } satisfies Partial<
+    Record<
+      PROBLEM_CODE,
+      {
+        title: string;
+        message: string;
+      }
+    >
+  >,
 };
