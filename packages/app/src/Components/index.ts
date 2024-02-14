@@ -23,3 +23,4 @@ export {default as ProfileWidget} from './ProfileWidget/ProfileWidget';
 export {default as DoubleTapLike} from './DoubleTapLike/DoubleTapLike';
 export {default as BottomFixedInput} from './BottomFixedInput/BottomFixedInput';
 export {default as Divider} from './Divider/Divider';
+export {default as Toast} from './Toast/Toast';

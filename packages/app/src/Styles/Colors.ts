@@ -39,6 +39,8 @@ export const LightThemeColors = {
 
     success: '#44D775',
     error: '#ff4747',
+    info: '#1979ff',
+    warning: '#fcbd00',
   },
   gradients: {
     primary: ['#FA8057', '#F94D1D', '#F94D1D', '#F94D1D', '#FA8057'],
@@ -72,6 +74,8 @@ export const DarkThemeColors = {
 
     success: '#44D775',
     error: '#ff4747',
+    info: '#1979ff',
+    warning: '#fcbd00',
   },
   gradients: {
     primary: ['#FA8057', '#F94D1D', '#F94D1D', '#F94D1D', '#FA8057'],

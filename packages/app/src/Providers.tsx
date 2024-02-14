@@ -10,7 +10,9 @@ import {store, persistor} from './Redux';
 import {CurrentTimeProvider, useTheme} from './Hooks';
 import {LanguageProvider} from './Hooks/Language';
 import {ThemeProvider} from './Hooks/Theming';
+import {ToastProvider} from './Hooks/useToast';
 import {PaperIconProp} from './Utils/CommonComponents';
+import {ToastContainer} from './Containers';
 
 const queryClient = new QueryClient();
 
@@ -53,7 +55,11 @@ const Providers: React.FC<{children: React.ReactNode}> = ({children}) => {
       theme={theme.paper}
     >
       <PortalizeProvider>
-        <CurrentTimeProvider>{children}</CurrentTimeProvider>
+        <ToastProvider>
+          <ToastContainer>
+            <CurrentTimeProvider>{children}</CurrentTimeProvider>
+          </ToastContainer>
+        </ToastProvider>
       </PortalizeProvider>
     </PaperProvider>
   );
