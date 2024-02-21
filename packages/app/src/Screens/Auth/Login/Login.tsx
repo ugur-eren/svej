@@ -5,6 +5,8 @@ import {Input, TextButton} from '../../../Components';
 import {useLanguage} from '../../../Hooks';
 import {parseLanguageParts} from '../../../Utils/Helpers';
 import {AuthLoginScreenProps} from '../../../Types';
+import {AuthActions, useAppDispatch} from '../../../Redux';
+import Storage from '../../../Utils/Storage';
 
 type Props = AuthLoginScreenProps;
 
@@ -14,6 +16,7 @@ const initialValues = {
 };
 
 const Login: React.FC<Props> = ({navigation}) => {
+  const dispatch = useAppDispatch();
   const language = useLanguage();
 
   const validateForm = (values: typeof initialValues) => {
@@ -34,8 +37,14 @@ const Login: React.FC<Props> = ({navigation}) => {
     return errors;
   };
 
-  const onFormSubmit = (values: typeof initialValues) => {
-    navigation.navigate('MainStack', {screen: 'BottomStack', params: {screen: 'Explore'}});
+  const onFormSubmit = async (values: typeof initialValues) => {
+    // TODO: validate and do the login
+
+    dispatch(AuthActions.setAuthenticated(true));
+    dispatch(AuthActions.setUser());
+    await Storage.set('token', 'JWT Auth Token');
+
+    navigation.replace('MainStack', {screen: 'BottomStack', params: {screen: 'Explore'}});
   };
 
   return (

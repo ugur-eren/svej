@@ -12,6 +12,7 @@ export type AuthState = {
 
 const initialState: AuthState = {
   authenticated: false,
+  user: undefined,
 };
 
 export const AuthSlice = createSlice({

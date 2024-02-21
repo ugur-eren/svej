@@ -18,6 +18,7 @@ import {
   TabBarPlusSquareIcon,
   TabBarUserIcon,
 } from './Utils/CommonComponents';
+import {Selectors, useAppSelector} from './Redux';
 
 // Auth
 import AuthLogin from './Screens/Auth/Login/Login';
@@ -136,12 +137,16 @@ const MainStackNavigator = () => {
 
 const Router: React.FC = () => {
   const theme = useTheme();
+  const authenticated = useAppSelector(Selectors.Auth.Authenticated);
 
   return (
     <NavigationContainer theme={theme.navigation}>
       <RootStack.Navigator initialRouteName="AuthStack" screenOptions={{headerShown: false}}>
-        <RootStack.Screen name="AuthStack" component={AuthStackNavigator} />
-        <RootStack.Screen name="MainStack" component={MainStackNavigator} />
+        {authenticated ? (
+          <RootStack.Screen name="MainStack" component={MainStackNavigator} />
+        ) : (
+          <RootStack.Screen name="AuthStack" component={AuthStackNavigator} />
+        )}
       </RootStack.Navigator>
     </NavigationContainer>
   );
