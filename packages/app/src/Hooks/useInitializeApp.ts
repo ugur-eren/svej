@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import {AuthActions, useAppDispatch} from '../Redux';
 import {AuthApi, UserApi} from '../Api';
-import {PrismaUser} from '../Api/User/User.types';
+import {User} from '../Api/User/User.types';
 import Storage from '../Utils/Storage';
 
 export const useInitializeApp = () => {
@@ -13,7 +13,7 @@ export const useInitializeApp = () => {
       const token = await Storage.get('token');
 
       if (token) {
-        let user: PrismaUser | undefined;
+        let user: User | undefined;
 
         try {
           const verifyResult = await AuthApi.verify({token});

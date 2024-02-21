@@ -2,7 +2,7 @@ import express from 'express';
 import {JWT, Password} from 'server-side';
 import {ErrorCodes, HTTPStatus, Zod} from 'common';
 import {v4 as uuid} from 'uuid';
-import {Prisma} from '../Services';
+import {Prisma, PrismaIncludes} from '../Services';
 import {onlyAuthorized} from '../Middlewares';
 import type {ReqBody} from '../types';
 
@@ -18,7 +18,7 @@ Router.post('/login', async (req, res) => {
 
   const {username, password} = body.data;
 
-  const user = await Prisma.user.findUnique({where: {username}});
+  const user = await Prisma.user.findUnique({where: {username}, include: PrismaIncludes.User});
 
   if (!user || !user.active) {
     res.status(HTTPStatus.NotFound).send({code: ErrorCodes.UserNotFound});

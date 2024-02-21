@@ -7,7 +7,12 @@ import {onlyAuthorized} from '../Middlewares';
 const Router = express.Router();
 
 Router.get('/me', onlyAuthorized, async (req, res) => {
-  res.status(HTTPStatus.OK).send(res.locals.user);
+  const user = await Prisma.user.findUnique({
+    where: {id: res.locals.user.id},
+    include: PrismaIncludes.User,
+  });
+
+  res.status(HTTPStatus.OK).send(user);
 });
 
 Router.get('/username/:username', async (req, res) => {

@@ -1,6 +1,6 @@
-import type {User} from 'database';
 import {createSlice} from '@reduxjs/toolkit';
 import type {PayloadAction} from '@reduxjs/toolkit';
+import type {User} from '../../Api/User/User.types';
 
 export type AuthState = {
   authenticated: boolean;
