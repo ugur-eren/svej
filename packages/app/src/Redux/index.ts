@@ -7,4 +7,4 @@ export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 export {store, persistor, type RootState, type AppDispatch};
 
 export * from './Reducers';
-export * from './Selectors';
+export * as Selectors from './Selectors';

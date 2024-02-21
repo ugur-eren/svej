@@ -1,2 +1,2 @@
-export * as SettingsSelectors from './Settings';
-export * as AuthSelectors from './Auth';
+export * as Settings from './Settings';
+export * as Auth from './Auth';

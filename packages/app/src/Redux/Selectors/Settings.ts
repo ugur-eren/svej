@@ -1,7 +1,7 @@
 import {createSelector} from '@reduxjs/toolkit';
 import {RootState} from '../store';
 
-export const selectSettings = (state: RootState) => state.settings;
+export const Settings = (state: RootState) => state.settings;
 
-export const selectTheme = createSelector(selectSettings, (settings) => settings.theme);
-export const selectLanguage = createSelector(selectSettings, (settings) => settings.language);
+export const Theme = createSelector(Settings, (settings) => settings.theme);
+export const Language = createSelector(Settings, (settings) => settings.language);

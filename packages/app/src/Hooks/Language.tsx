@@ -1,11 +1,11 @@
 import * as Languages from '../Languages';
 import createContext from '../Utils/ContextCreator';
-import {SettingsSelectors, useAppSelector} from '../Redux';
+import {Selectors, useAppSelector} from '../Redux';
 
 const {ContextProvider, useContext: useLanguage} = createContext(Languages.English);
 
 export const LanguageProvider: typeof ContextProvider = ({children}) => {
-  const settingsLanguage = useAppSelector(SettingsSelectors.selectLanguage);
+  const settingsLanguage = useAppSelector(Selectors.Settings.Language);
 
   const languageName = settingsLanguage === 'default' ? 'English' : settingsLanguage;
 
