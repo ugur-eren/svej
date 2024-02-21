@@ -11,9 +11,10 @@ import {
 } from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import {SettingsReducer} from './Reducers';
+import {AuthReducer, SettingsReducer} from './Reducers';
 
 const rootReducer = combineReducers({
+  auth: AuthReducer,
   settings: SettingsReducer,
 });
 
@@ -21,7 +22,7 @@ const persistedReducer = persistReducer(
   {
     key: 'root',
     storage: AsyncStorage,
-    whitelist: ['settings'],
+    whitelist: ['auth', 'settings'],
   },
   rootReducer,
 );
