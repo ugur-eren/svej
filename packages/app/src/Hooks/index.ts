@@ -10,3 +10,4 @@ export {useVisibility, VisibilityContext} from './useVisibility';
 export {useCurrentTime, CurrentTimeProvider} from './useCurrentTime';
 export {useShowToast, useHideToast, type ToastConfig} from './useToast';
 export {useQuery} from './useQuery';
+export {useMutation} from './useMutation';

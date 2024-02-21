@@ -13,7 +13,7 @@ import {useLanguage} from './Language';
 
 export const useQuery = <
   TQueryFnData = unknown,
-  TData = TQueryFnData,
+  TData = TQueryFnData extends {ok: true; data?: infer U} ? U : never,
   TQueryKey extends QueryKey = QueryKey,
 >(
   options: UseQueryOptions<TQueryFnData, ApiError, TData, TQueryKey>,
