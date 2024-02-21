@@ -2,6 +2,10 @@ import ApiInstance from '../ApiInstance';
 import {Response} from '../Types';
 import * as ApiTypes from './User.types';
 
+export const getMe = (): Response<ApiTypes.PrismaUser> => {
+  return ApiInstance.get(`/user/me`);
+};
+
 export const getById = (id: string): Response<ApiTypes.User> => {
   return ApiInstance.get(`/user/${id}`);
 };

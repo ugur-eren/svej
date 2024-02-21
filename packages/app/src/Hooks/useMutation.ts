@@ -58,5 +58,23 @@ export const useMutation = <
     };
   }, [language, showToast, showErrorPortal, mutation.error]);
 
-  return mutation as any;
+  return {
+    ...mutation,
+    data: (mutation.data as any)?.data,
+    mutate: (variables: any, mutateOptions: any) => {
+      return mutation.mutate(variables, {
+        onSuccess: mutateOptions.onSuccess
+          ? (data, vars, ctx) => {
+              mutateOptions.onSuccess((data as any).data, vars, ctx);
+            }
+          : undefined,
+
+        onSettled: mutateOptions.onSettled
+          ? (data, error, vars, ctx) => {
+              mutateOptions.onSettled((data as any).data, error, vars, ctx);
+            }
+          : undefined,
+      });
+    },
+  } as any;
 };

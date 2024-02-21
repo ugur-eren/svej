@@ -2,13 +2,18 @@ import {Password} from 'server-side';
 import express from 'express';
 import {ErrorCodes, HTTPStatus, Zod} from 'common';
 import {Prisma, PrismaIncludes} from '../Services';
+import {onlyAuthorized} from '../Middlewares';
 
 const Router = express.Router();
 
-Router.get('/:id', async (req, res) => {
-  const {id} = req.params;
+Router.get('/me', onlyAuthorized, async (req, res) => {
+  res.status(HTTPStatus.OK).send(res.locals.user);
+});
 
-  const user = await Prisma.user.findUnique({where: {id}, include: PrismaIncludes.User});
+Router.get('/username/:username', async (req, res) => {
+  const {username} = req.params;
+
+  const user = await Prisma.user.findUnique({where: {username}, include: PrismaIncludes.User});
 
   if (!user) {
     res.status(HTTPStatus.NotFound).send({code: ErrorCodes.UserNotFound});
@@ -18,10 +23,10 @@ Router.get('/:id', async (req, res) => {
   res.status(HTTPStatus.OK).send(user);
 });
 
-Router.get('/username/:username', async (req, res) => {
-  const {username} = req.params;
+Router.get('/:id', async (req, res) => {
+  const {id} = req.params;
 
-  const user = await Prisma.user.findUnique({where: {username}, include: PrismaIncludes.User});
+  const user = await Prisma.user.findUnique({where: {id}, include: PrismaIncludes.User});
 
   if (!user) {
     res.status(HTTPStatus.NotFound).send({code: ErrorCodes.UserNotFound});

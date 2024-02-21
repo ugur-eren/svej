@@ -1,11 +1,8 @@
+import type {User} from 'database';
 import {createSlice} from '@reduxjs/toolkit';
 import type {PayloadAction} from '@reduxjs/toolkit';
-import {User} from '../../Api/User/User.types';
 
 export type AuthState = {
-  // token should be read from AsyncStorage
-  // token: string;
-
   authenticated: boolean;
   user?: User;
 };

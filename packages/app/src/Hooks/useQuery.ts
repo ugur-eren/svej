@@ -58,5 +58,5 @@ export const useQuery = <
     };
   }, [language, showToast, showErrorPortal, query.error]);
 
-  return query;
+  return {...query, data: (query.data as any)?.data};
 };

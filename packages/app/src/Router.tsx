@@ -141,7 +141,7 @@ const Router: React.FC = () => {
 
   return (
     <NavigationContainer theme={theme.navigation}>
-      <RootStack.Navigator initialRouteName="AuthStack" screenOptions={{headerShown: false}}>
+      <RootStack.Navigator screenOptions={{headerShown: false}}>
         {authenticated ? (
           <RootStack.Screen name="MainStack" component={MainStackNavigator} />
         ) : (

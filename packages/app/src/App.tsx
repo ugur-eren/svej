@@ -3,7 +3,7 @@ import {View} from 'react-native';
 import {useFonts} from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import * as StatusBar from 'expo-status-bar';
-import {useTheme} from './Hooks';
+import {useInitializeApp, useTheme} from './Hooks';
 import Providers from './Providers';
 import Router from './Router';
 import Env from './Utils/Env';
@@ -33,6 +33,8 @@ const AppContent = memo(() => {
 
   const styles = getStyles(theme);
 
+  const initialized = useInitializeApp();
+
   const [fontsLoaded] = useFonts({
     'FiraSans-Regular': require('./Assets/Fonts/FiraSans/FiraSans-Regular.ttf'),
     'FiraSans-Medium': require('./Assets/Fonts/FiraSans/FiraSans-Medium.ttf'),
@@ -46,7 +48,7 @@ const AppContent = memo(() => {
     if (fontsLoaded) await SplashScreen.hideAsync();
   }, [fontsLoaded]);
 
-  if (!fontsLoaded) return null;
+  if (!fontsLoaded || !initialized) return null;
 
   return (
     <View style={styles.container} onLayout={onLayoutRootView}>

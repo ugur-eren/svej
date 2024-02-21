@@ -1,5 +1,6 @@
 import {ApisauceConfig, PROBLEM_CODE, create} from 'apisauce';
 import Env from '../Utils/Env';
+import Storage from '../Utils/Storage';
 
 const ApiOptions: ApisauceConfig = {
   baseURL: Env.SVEJ_PUBLIC_API_URL,
@@ -27,6 +28,15 @@ export class ApiError extends Error {
     this.error = error;
   }
 }
+
+ApiInstance.addAsyncRequestTransform(async (request) => {
+  const token = await Storage.get('token');
+
+  request.headers = {
+    ...request.headers,
+    Authorization: `Bearer ${token}`,
+  };
+});
 
 ApiInstance.addResponseTransform((response) => {
   if (!response.ok) {

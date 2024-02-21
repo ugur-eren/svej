@@ -1,11 +1,12 @@
-import {Formik} from 'formik';
 import {Config} from 'common';
+import {Formik} from 'formik';
 import {AuthPage} from '../../../Containers';
 import {Input, TextButton} from '../../../Components';
-import {useLanguage} from '../../../Hooks';
-import {parseLanguageParts} from '../../../Utils/Helpers';
+import {useLanguage, useMutation} from '../../../Hooks';
+import {AuthApi} from '../../../Api';
 import {AuthLoginScreenProps} from '../../../Types';
 import {AuthActions, useAppDispatch} from '../../../Redux';
+import {parseLanguageParts} from '../../../Utils/Helpers';
 import Storage from '../../../Utils/Storage';
 
 type Props = AuthLoginScreenProps;
@@ -18,6 +19,13 @@ const initialValues = {
 const Login: React.FC<Props> = ({navigation}) => {
   const dispatch = useAppDispatch();
   const language = useLanguage();
+
+  const mutation = useMutation(
+    {
+      mutationFn: AuthApi.login,
+    },
+    true,
+  );
 
   const validateForm = (values: typeof initialValues) => {
     const errors: Partial<typeof initialValues> = {};
@@ -38,13 +46,14 @@ const Login: React.FC<Props> = ({navigation}) => {
   };
 
   const onFormSubmit = async (values: typeof initialValues) => {
-    // TODO: validate and do the login
+    mutation.mutate(values, {
+      onSuccess: async (data) => {
+        dispatch(AuthActions.setAuthenticated(true));
+        dispatch(AuthActions.setUser(data.user));
 
-    dispatch(AuthActions.setAuthenticated(true));
-    dispatch(AuthActions.setUser());
-    await Storage.set('token', 'JWT Auth Token');
-
-    navigation.replace('MainStack', {screen: 'BottomStack', params: {screen: 'Explore'}});
+        await Storage.set('token', data.token);
+      },
+    });
   };
 
   return (
