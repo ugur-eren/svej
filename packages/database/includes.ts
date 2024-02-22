@@ -24,6 +24,18 @@ export const Post: Prisma.PostInclude = {
 
   medias: true,
   author: {include: Author},
+
+  comments: {
+    include: {
+      author: {include: Author},
+    },
+    take: 2,
+    orderBy: {
+      likes: {
+        _count: 'desc',
+      },
+    },
+  },
 };
 
 export const Comment: Prisma.CommentInclude = {

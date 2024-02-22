@@ -64,8 +64,17 @@ const Post: React.FC<PostProps> = ({post}) => {
       <Divider style={styles.divider} />
 
       <Touchable style={styles.comments} onPress={onCommentsPress}>
-        {/* TODO: featured comments */}
-        <Text>{language.post.no_comments}</Text>
+        {post.comments.length > 0 ? (
+          post.comments.map((comment) => (
+            <View key={comment.id} style={styles.comment}>
+              <Text weight="bold">{comment.author.username}</Text>
+
+              <Text>{comment.text}</Text>
+            </View>
+          ))
+        ) : (
+          <Text>{language.post.no_comments}</Text>
+        )}
       </Touchable>
     </View>
   );

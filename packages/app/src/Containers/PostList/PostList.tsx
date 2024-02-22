@@ -72,7 +72,7 @@ const PostList = forwardRef<FlatList, PostListProps>((props, ref) => {
       removeClippedSubviews={IsAndroid}
       viewabilityConfigCallbackPairs={viewabilityConfigPairs.current}
       data={posts.data}
-      keyExtractor={(item, index) => index.toString()}
+      keyExtractor={(item) => item.id}
       renderItem={({item, index}) => (
         <VisibilityContext.Provider value={visibleItem === index}>
           <Post post={item} />

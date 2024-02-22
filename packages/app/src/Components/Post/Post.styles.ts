@@ -25,10 +25,17 @@ export default ThemedStyleSheet((theme) => ({
   },
 
   divider: {
-    marginBottom: Spacing.small,
+    marginBottom: Spacing.xxsmall,
   },
   comments: {
     paddingHorizontal: Spacing.small,
     paddingVertical: Spacing.xsmall,
   },
+  comment: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.xxsmall,
+  },
+  commentAuthor: {},
+  commentText: {},
 }));
