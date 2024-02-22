@@ -25,7 +25,7 @@ const Post: React.FC<PostProps> = ({post}) => {
 
   const styles = getStyles(theme);
 
-  const onCommentsPress = () => navigation.navigate('Comments');
+  const onCommentsPress = () => navigation.navigate('Comments', {postId: post.id});
 
   return (
     <View style={styles.container}>

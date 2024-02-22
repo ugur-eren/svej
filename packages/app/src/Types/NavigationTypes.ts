@@ -38,7 +38,9 @@ export type MainStackParams = {
     username: string;
   };
   Share: undefined;
-  Comments: undefined;
+  Comments: {
+    postId: string;
+  };
   ImageViewer: {
     title: string;
     image: string | ImageSourcePropType;
