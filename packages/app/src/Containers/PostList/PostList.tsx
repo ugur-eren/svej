@@ -2,7 +2,8 @@ import {forwardRef, useCallback, useRef, useState} from 'react';
 import {FlatList, FlatListProps, View} from 'react-native';
 import {useFocusEffect, useScrollToTop} from '@react-navigation/native';
 import {Post} from '../../Components';
-import {VisibilityContext, useForwardedRef} from '../../Hooks';
+import {VisibilityContext, useForwardedRef, useQuery} from '../../Hooks';
+import {PostApi} from '../../Api';
 import {IsAndroid} from '../../Utils/Helpers';
 import {PostListProps} from './PostList.props';
 import styles from './PostList.styles';
@@ -10,11 +11,26 @@ import styles from './PostList.styles';
 const ItemSeparatorComponent = () => <View style={styles.separator} />;
 
 const PostList = forwardRef<FlatList, PostListProps>((props, ref) => {
-  const {...flatlistProps} = props;
+  const {type, userId, ...flatlistProps} = props;
 
   const forwardedRef = useForwardedRef(ref);
 
   useScrollToTop(forwardedRef);
+
+  const posts = useQuery({
+    queryKey: ['posts', type, userId],
+    queryFn: () => {
+      if (type === 'explore') {
+        return PostApi.getExplore();
+      }
+
+      if (type === 'profile' && userId) {
+        return PostApi.getByUserId(userId);
+      }
+
+      return PostApi.getAll();
+    },
+  });
 
   const lastViewedItem = useRef<number | null>(null);
   const [visibleItem, setVisibleItem] = useState<number | null>(null);
@@ -46,17 +62,20 @@ const PostList = forwardRef<FlatList, PostListProps>((props, ref) => {
     },
   ]);
 
+  // TODO: add loading indicator
+  if (!posts.data) return null;
+
   return (
     <FlatList
       ref={forwardedRef}
       ItemSeparatorComponent={ItemSeparatorComponent}
       removeClippedSubviews={IsAndroid}
       viewabilityConfigCallbackPairs={viewabilityConfigPairs.current}
-      data={['1', '2', '3', '4']}
+      data={posts.data}
       keyExtractor={(item, index) => index.toString()}
-      renderItem={({index}) => (
+      renderItem={({item, index}) => (
         <VisibilityContext.Provider value={visibleItem === index}>
-          <Post />
+          <Post post={item} />
         </VisibilityContext.Provider>
       )}
       {...flatlistProps}

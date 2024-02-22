@@ -28,7 +28,7 @@ export default ThemedStyleSheet((theme) => ({
     marginRight: Spacing.normal,
   },
   leftPlus: {
-    left: Spacing.xxsmall,
+    left: Spacing.pagePadding,
   },
   leftMinus: {
     left: -Spacing.medium,

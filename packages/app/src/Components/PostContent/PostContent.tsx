@@ -7,6 +7,8 @@ import styles from './PostContent.styles';
 const PostContent: React.FC<PostContentProps> = (props) => {
   const {data} = props;
 
+  if (!data.length) return null;
+
   return (
     <DoubleTapLike>
       {data.length > 1 ? (

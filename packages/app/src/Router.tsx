@@ -73,6 +73,7 @@ const SettingsStackNavigator = () => {
 const BottomStackNavigator = () => {
   const theme = useTheme();
   const language = useLanguage();
+  const user = useAppSelector(Selectors.Auth.User);
 
   const styles = getBottomBarStyles(theme);
 
@@ -110,6 +111,7 @@ const BottomStackNavigator = () => {
       <BottomStack.Screen
         name="Profile"
         component={Profile}
+        initialParams={{username: user.username, userId: user.id}}
         options={{title: language.profile.title, tabBarIcon: TabBarUserIcon}}
       />
     </BottomStack.Navigator>

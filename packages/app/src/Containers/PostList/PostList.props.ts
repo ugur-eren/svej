@@ -1,4 +1,7 @@
 import {FlatListProps} from 'react-native';
+import {Post} from '../../Api/Post/Post.types';
 
-// TODO: FlatList type
-export type PostListProps = Partial<FlatListProps<unknown>>;
+export type PostListProps = Partial<FlatListProps<Post>> & {
+  type: 'explore' | 'profile';
+  userId?: string;
+};

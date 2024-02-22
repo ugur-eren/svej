@@ -9,10 +9,16 @@ import Touchable from '../Touchable/Touchable';
 import PostContent from '../PostContent/PostContent';
 import ActionButton from '../ActionButton/ActionButton';
 import {useLanguage, useTheme} from '../../Hooks';
+import type {Post as PostType} from '../../Api/Post/Post.types';
+import type {Author} from '../../Api/User/User.types';
 import {MainNavigationProp} from '../../Types';
 import getStyles from './Post.styles';
 
-const Post: React.FC = () => {
+export type PostProps = {
+  post: PostType;
+};
+
+const Post: React.FC<PostProps> = ({post}) => {
   const theme = useTheme();
   const language = useLanguage();
   const navigation = useNavigation<MainNavigationProp>();
@@ -23,56 +29,42 @@ const Post: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <UserInfo timestamp={1682794718492} />
+      <UserInfo user={post.author as Author} timestamp={new Date(post.createdAt).getTime()} />
 
-      <Text style={styles.description}>
-        Eiusmod laborum adipisicing do mollit voluptate exercitation esse. Pariatur amet anim ex
-        velit. Tempor elit velit sit fugiat ad duis commodo veniam eu. Proident consectetur
-        voluptate sint irure id et ipsum officia ea est ex sint in.
-      </Text>
+      {post.description ? <Text style={styles.description}>{post.description}</Text> : null}
 
       <PostContent
-        data={[
-          {
-            type: 'image',
-            ratio: 1,
-            uri: `https://unsplash.it/600/600/?random=${Math.random()}`,
-          },
-          {
-            type: 'video',
-            ratio: 1,
-            uri: 'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-          },
-          {
-            type: 'image',
-            ratio: 1.5,
-            uri: `https://unsplash.it/900/600/?random=${Math.random()}`,
-          },
-          {
-            type: 'image',
-            ratio: 1,
-            uri: `https://unsplash.it/600/600/?random=${Math.random()}`,
-          },
-        ]}
+        data={post.medias.map((media) => ({
+          type: (
+            {
+              VIDEO: 'video',
+              IMAGE: 'image',
+            } as const
+          )[media.type],
+          ratio: media.width / media.height,
+          uri: media.url,
+        }))}
       />
 
       <View style={styles.bottom}>
         <View style={styles.actionButtons}>
-          <ActionButton type="like" active count={12} />
+          <ActionButton type="like" active count={post._count.likes} />
 
-          <ActionButton type="dislike" count={4} />
+          <ActionButton type="dislike" count={post._count.dislikes} />
 
-          <ActionButton type="repost" count={4} />
+          {/* TODO: repost feature currently doesnt exists */}
+          {/* <ActionButton type="repost" count={0} /> */}
         </View>
 
         <TextButton align="right" onPress={onCommentsPress}>
-          0 {language.common.comments}
+          {post._count.comments} {language.common.comments}
         </TextButton>
       </View>
 
       <Divider style={styles.divider} />
 
       <Touchable style={styles.comments} onPress={onCommentsPress}>
+        {/* TODO: featured comments */}
         <Text>{language.post.no_comments}</Text>
       </Touchable>
     </View>

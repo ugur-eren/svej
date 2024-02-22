@@ -12,7 +12,7 @@ import {
   type SettingsState,
   useAppDispatch,
   useAppSelector,
-  SettingsSelectors,
+  Selectors,
 } from '../../../Redux';
 
 type Props = SettingsScreenProps;
@@ -20,7 +20,7 @@ type Props = SettingsScreenProps;
 const Settings: React.FC<Props> = ({navigation}) => {
   const theme = useTheme();
   const language = useLanguage();
-  const settings = useAppSelector(SettingsSelectors.selectSettings);
+  const settings = useAppSelector(Selectors.Settings.Settings);
   const dispatch = useAppDispatch();
 
   const [notifications, setNotifications] = useState(false);

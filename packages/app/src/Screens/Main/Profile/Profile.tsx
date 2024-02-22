@@ -1,18 +1,36 @@
 import ProfileHead from './ProfileHead/ProfileHead';
 import {PageContainer, PostList} from '../../../Containers';
-import {GlobalStyles} from '../../../Styles';
 import {TransparentHeader} from '../../../Components';
+import {Selectors, useAppSelector} from '../../../Redux';
+import {GlobalStyles} from '../../../Styles';
 import {ProfileScreenProps} from '../../../Types';
 
-const Profile: React.FC<ProfileScreenProps> = ({navigation}) => {
+const Profile: React.FC<ProfileScreenProps> = ({navigation, route}) => {
+  const {userId, username} = route.params;
+
+  const isSelf = useAppSelector((state) => Selectors.Auth.UserIsSelf(state, username));
+
   const onSettingsPress = () => navigation.navigate('SettingsStack', {screen: 'Settings'});
+
+  const onMorePress = () => {
+    // TODO: more press
+  };
 
   return (
     <PageContainer>
-      {/* eslint-disable-next-line react/no-unstable-nested-components */}
-      <PostList style={GlobalStyles.flex1} ListHeaderComponent={ProfileHead} />
+      <PostList
+        type="profile"
+        userId={userId}
+        style={GlobalStyles.flex1}
+        ListHeaderComponent={<ProfileHead username={username} />}
+      />
 
-      <TransparentHeader title="ugur-eren" onSettingsPress={onSettingsPress} />
+      <TransparentHeader
+        title={username}
+        onSettingsPress={isSelf ? onSettingsPress : undefined}
+        onMorePress={isSelf ? undefined : onMorePress}
+        hideBack={isSelf}
+      />
     </PageContainer>
   );
 };

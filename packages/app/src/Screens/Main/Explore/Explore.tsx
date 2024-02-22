@@ -16,7 +16,7 @@ const Explore: React.FC = () => {
     <View style={GlobalStyles.flex1}>
       <MainHeader onLogoPress={onLogoPress} />
 
-      <PostList ref={flatlistRef} />
+      <PostList type="explore" ref={flatlistRef} />
     </View>
   );
 };

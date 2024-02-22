@@ -23,14 +23,20 @@ export type BottomStackParams = {
   Explore: undefined;
   ShareInit: undefined;
   Notifications: undefined;
-  Profile: undefined;
+  Profile: {
+    userId: string;
+    username: string;
+  };
 };
 
 export type MainStackParams = {
   BottomStack: NavigatorScreenParams<BottomStackParams>;
   SettingsStack: NavigatorScreenParams<SettingsStackParams>;
   Explore: undefined;
-  Profile: undefined;
+  Profile: {
+    userId: string;
+    username: string;
+  };
   Share: undefined;
   Comments: undefined;
   ImageViewer: {

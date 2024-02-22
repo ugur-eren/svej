@@ -10,3 +10,5 @@ export type RegisterRequest = {
 };
 
 export type RegisterResponse = PrismaUser;
+
+export type Author = PrismaTypes.UserGetPayload<{include: typeof PrismaIncludes.Author}>;
