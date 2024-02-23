@@ -6,8 +6,8 @@ export const getAll = (): Response<ApiTypes.Post[]> => {
   return ApiInstance.get('/post');
 };
 
-export const getExplore = (): Response<ApiTypes.Post[]> => {
-  return ApiInstance.get('/post/explore');
+export const getExplore = (beforeDate?: string): Response<ApiTypes.Post[]> => {
+  return ApiInstance.get('/post/explore', {beforeDate});
 };
 
 export const getById = (id: string): Response<ApiTypes.Post> => {

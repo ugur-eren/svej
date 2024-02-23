@@ -11,6 +11,7 @@ export default {
 
   postDescriptionMaxLength: 1024,
   postDescriptionMaxLines: 10,
+  postsPerPage: 10,
 
   commentMaxLength: 512,
   commentMaxLines: 5,

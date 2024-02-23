@@ -43,8 +43,8 @@ ApiInstance.addResponseTransform((response) => {
     throw new ApiError(
       response.originalError.message,
       response.problem,
-      response.data.code,
-      response.data.error,
+      response.data?.code,
+      response.data?.error,
     );
   }
 });

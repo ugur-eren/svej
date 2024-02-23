@@ -14,7 +14,20 @@ Router.get('/', onlyAuthorized, async (req, res) => {
 });
 
 Router.get('/explore', onlyAuthorized, async (req, res) => {
-  const posts = await Prisma.post.findMany({include: PrismaIncludes.Post(res.locals.user.id)});
+  let beforeDate = new Date();
+  if (req.query.beforeDate && typeof req.query.beforeDate === 'string') {
+    const date = new Date(req.query.beforeDate);
+    if (!Number.isNaN(date.getTime())) beforeDate = date;
+  }
+
+  const posts = await Prisma.post.findMany({
+    include: PrismaIncludes.Post(res.locals.user.id),
+    take: Config.postsPerPage,
+    where: {createdAt: {lt: beforeDate}},
+    orderBy: {createdAt: 'desc'},
+  });
+
+  console.log(beforeDate, posts.length);
 
   res.status(HTTPStatus.OK).send(posts);
 });

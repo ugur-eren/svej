@@ -2,7 +2,7 @@ import {forwardRef, useCallback, useEffect, useRef, useState} from 'react';
 import {FlatList, FlatListProps, View} from 'react-native';
 import {useFocusEffect, useScrollToTop} from '@react-navigation/native';
 import {Post} from '../../Components';
-import {VisibilityContext, useForwardedRef, useQuery} from '../../Hooks';
+import {VisibilityContext, useForwardedRef, useInfiniteQuery} from '../../Hooks';
 import {PostApi} from '../../Api';
 import {PostsActions, useAppDispatch} from '../../Redux';
 import {IsAndroid} from '../../Utils/Helpers';
@@ -20,11 +20,16 @@ const PostList = forwardRef<FlatList, PostListProps>((props, ref) => {
 
   const dispatch = useAppDispatch();
 
-  const posts = useQuery({
+  const posts = useInfiniteQuery({
+    initialPageParam: Date.now().toString(),
     queryKey: ['posts', type, userId],
-    queryFn: () => {
+    getNextPageParam: (lastPage: any) => {
+      if (!lastPage?.length) return undefined;
+      return lastPage[lastPage.length - 1].createdAt;
+    },
+    queryFn: async ({pageParam}) => {
       if (type === 'explore') {
-        return PostApi.getExplore();
+        return PostApi.getExplore(pageParam);
       }
 
       if (type === 'profile' && userId) {
@@ -82,7 +87,9 @@ const PostList = forwardRef<FlatList, PostListProps>((props, ref) => {
       ItemSeparatorComponent={ItemSeparatorComponent}
       removeClippedSubviews={IsAndroid}
       viewabilityConfigCallbackPairs={viewabilityConfigPairs.current}
-      data={posts.data}
+      onEndReachedThreshold={0.2}
+      onEndReached={() => posts.fetchNextPage()}
+      data={posts.data.pages.flat() as any[]}
       keyExtractor={(item) => item.id}
       renderItem={({item, index}) => (
         <VisibilityContext.Provider value={visibleItem === index}>

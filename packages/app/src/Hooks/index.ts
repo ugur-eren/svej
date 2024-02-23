@@ -10,6 +10,7 @@ export {useVisibility, VisibilityContext} from './useVisibility';
 export {useCurrentTime, CurrentTimeProvider} from './useCurrentTime';
 export {useShowToast, useHideToast, type ToastConfig} from './useToast';
 export {useQuery} from './useQuery';
+export {useInfiniteQuery} from './useInfiniteQuery';
 export {useMutation} from './useMutation';
 export {useInitializeApp} from './useInitializeApp';
 export {usePost} from './usePost';
