@@ -10,7 +10,7 @@ Router.get('/post/:id', onlyAuthorized, async (req, res) => {
 
   const comments = await Prisma.comment.findMany({
     where: {post: {id}},
-    include: PrismaIncludes.Comment,
+    include: PrismaIncludes.Comment(res.locals.user.id),
   });
 
   res.status(HTTPStatus.OK).send(comments);
@@ -34,7 +34,7 @@ Router.get('/:id', onlyAuthorized, async (req, res) => {
 
   const comment = await Prisma.comment.findUnique({
     where: {id},
-    include: PrismaIncludes.Comment,
+    include: PrismaIncludes.Comment(res.locals.user.id),
   });
 
   res.status(HTTPStatus.OK).send(comment);

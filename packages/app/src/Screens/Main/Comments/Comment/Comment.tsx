@@ -1,14 +1,32 @@
 import {View} from 'react-native';
+import {useQueryClient} from '@tanstack/react-query';
 import {ActionButton, Text, UserInfo} from '../../../../Components';
-import {useTheme} from '../../../../Hooks';
+import {useMutation, useTheme} from '../../../../Hooks';
 import {Author} from '../../../../Api/User/User.types';
 import {CommentProps} from './Comment.props';
 import getStyles from './Comment.styles';
+import {CommentApi} from '../../../../Api';
+import {ReactionType} from '../../../../Api/Comment/Comment.types';
 
 const Comment: React.FC<CommentProps> = ({comment}) => {
   const theme = useTheme();
 
+  const queryClient = useQueryClient();
+
+  const doReaction = useMutation({
+    mutationKey: ['reaction', comment.id],
+    mutationFn: (reaction: ReactionType) => CommentApi.doReaction(comment.id, reaction),
+  });
+
   const styles = getStyles(theme);
+
+  const onReaction = async (reaction: ReactionType) => {
+    await doReaction.mutateAsync(reaction, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({queryKey: ['comments', comment.postId]});
+      },
+    });
+  };
 
   return (
     <View style={styles.container}>
@@ -23,6 +41,8 @@ const Comment: React.FC<CommentProps> = ({comment}) => {
       <View style={styles.actionButtons}>
         <ActionButton
           type="like"
+          active={comment.likes.length > 0}
+          onPress={() => onReaction(comment.likes.length > 0 ? 'remove' : 'like')}
           count={comment._count.likes}
           containerStyle={styles.actionButton}
           small
@@ -30,7 +50,8 @@ const Comment: React.FC<CommentProps> = ({comment}) => {
 
         <ActionButton
           type="dislike"
-          active
+          active={comment.dislikes.length > 0}
+          onPress={() => onReaction(comment.dislikes.length > 0 ? 'remove' : 'dislike')}
           count={comment._count.dislikes}
           containerStyle={styles.actionButton}
           small

@@ -1,6 +1,8 @@
 import type {PrismaTypes, PrismaIncludes, Comment as PrismaComment} from 'database';
 
-export type Comment = PrismaTypes.CommentGetPayload<{include: typeof PrismaIncludes.Comment}>;
+export type Comment = PrismaTypes.CommentGetPayload<{
+  include: ReturnType<typeof PrismaIncludes.Comment>;
+}>;
 
 export type ReactionCounts = {
   likes: number;

@@ -56,13 +56,31 @@ export const Post = (userId: string) =>
     },
   } satisfies Prisma.PostInclude);
 
-export const Comment: Prisma.CommentInclude = {
-  _count: {
-    select: {
-      likes: true,
-      dislikes: true,
+export const Comment = (userId: string) =>
+  ({
+    _count: {
+      select: {
+        likes: true,
+        dislikes: true,
+      },
     },
-  },
 
-  author: {include: Author},
-};
+    likes: {
+      select: {
+        id: true,
+      },
+      where: {
+        id: userId,
+      },
+    },
+    dislikes: {
+      select: {
+        id: true,
+      },
+      where: {
+        id: userId,
+      },
+    },
+
+    author: {include: Author},
+  } satisfies Prisma.CommentInclude);
