@@ -13,6 +13,12 @@ Router.get('/', onlyAuthorized, async (req, res) => {
   res.status(HTTPStatus.OK).send(posts);
 });
 
+Router.get('/explore', onlyAuthorized, async (req, res) => {
+  const posts = await Prisma.post.findMany({include: PrismaIncludes.Post(res.locals.user.id)});
+
+  res.status(HTTPStatus.OK).send(posts);
+});
+
 Router.get('/user/:id', onlyAuthorized, async (req, res) => {
   const {id} = req.params;
 

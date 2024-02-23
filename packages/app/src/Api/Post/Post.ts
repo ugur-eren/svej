@@ -6,9 +6,8 @@ export const getAll = (): Response<ApiTypes.Post[]> => {
   return ApiInstance.get('/post');
 };
 
-// TODO: Add backend endpoint for explore
 export const getExplore = (): Response<ApiTypes.Post[]> => {
-  return ApiInstance.get('/post');
+  return ApiInstance.get('/post/explore');
 };
 
 export const getById = (id: string): Response<ApiTypes.Post> => {
