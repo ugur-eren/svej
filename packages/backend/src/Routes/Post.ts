@@ -8,7 +8,7 @@ import {VideoHandler} from '../Utils/VideoHandler';
 const Router = express.Router();
 
 Router.get('/', onlyAuthorized, async (req, res) => {
-  const posts = await Prisma.post.findMany({include: PrismaIncludes.Post});
+  const posts = await Prisma.post.findMany({include: PrismaIncludes.Post(res.locals.user.id)});
 
   res.status(HTTPStatus.OK).send(posts);
 });
@@ -16,7 +16,10 @@ Router.get('/', onlyAuthorized, async (req, res) => {
 Router.get('/user/:id', onlyAuthorized, async (req, res) => {
   const {id} = req.params;
 
-  const posts = await Prisma.post.findMany({where: {authorId: id}, include: PrismaIncludes.Post});
+  const posts = await Prisma.post.findMany({
+    where: {authorId: id},
+    include: PrismaIncludes.Post(res.locals.user.id),
+  });
 
   res.status(HTTPStatus.OK).send(posts);
 });
@@ -39,7 +42,7 @@ Router.get('/:id', onlyAuthorized, async (req, res) => {
 
   const post = await Prisma.post.findUnique({
     where: {id},
-    include: PrismaIncludes.PostWithComments,
+    include: PrismaIncludes.Post(res.locals.user.id),
   });
 
   res.status(HTTPStatus.OK).send(post);

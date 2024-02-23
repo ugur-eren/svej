@@ -19,24 +19,42 @@ export const User: Prisma.UserInclude = {
   tags: true,
 };
 
-export const Post: Prisma.PostInclude = {
-  _count: true,
+export const Post = (userId: string) =>
+  ({
+    _count: true,
 
-  medias: true,
-  author: {include: Author},
+    medias: true,
+    author: {include: Author},
 
-  comments: {
-    include: {
-      author: {include: Author},
-    },
-    take: 2,
-    orderBy: {
-      likes: {
-        _count: 'desc',
+    likes: {
+      select: {
+        id: true,
+      },
+      where: {
+        id: userId,
       },
     },
-  },
-};
+    dislikes: {
+      select: {
+        id: true,
+      },
+      where: {
+        id: userId,
+      },
+    },
+
+    comments: {
+      include: {
+        author: {include: Author},
+      },
+      take: 2,
+      orderBy: {
+        likes: {
+          _count: 'desc',
+        },
+      },
+    },
+  } satisfies Prisma.PostInclude);
 
 export const Comment: Prisma.CommentInclude = {
   _count: {
@@ -47,10 +65,4 @@ export const Comment: Prisma.CommentInclude = {
   },
 
   author: {include: Author},
-};
-
-export const PostWithComments: Prisma.PostInclude = {
-  ...Post,
-
-  comments: {include: Comment},
 };

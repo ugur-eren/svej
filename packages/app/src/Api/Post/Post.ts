@@ -11,7 +11,7 @@ export const getExplore = (): Response<ApiTypes.Post[]> => {
   return ApiInstance.get('/post');
 };
 
-export const getById = (id: string): Response<ApiTypes.PostWithComments> => {
+export const getById = (id: string): Response<ApiTypes.Post> => {
   return ApiInstance.get(`/post/${id}`);
 };
 

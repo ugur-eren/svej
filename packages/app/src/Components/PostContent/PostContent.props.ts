@@ -14,4 +14,5 @@ export type PostData = {
 
 export type PostContentProps = {
   data: PostData[];
+  onLike?: () => void;
 };

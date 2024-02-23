@@ -5,12 +5,12 @@ import {PostContentProps} from './PostContent.props';
 import styles from './PostContent.styles';
 
 const PostContent: React.FC<PostContentProps> = (props) => {
-  const {data} = props;
+  const {data, onLike} = props;
 
   if (!data.length) return null;
 
   return (
-    <DoubleTapLike>
+    <DoubleTapLike onLike={onLike}>
       {data.length > 1 ? (
         <PostCarousel data={data} />
       ) : (

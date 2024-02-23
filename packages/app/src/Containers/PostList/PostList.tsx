@@ -1,9 +1,10 @@
-import {forwardRef, useCallback, useRef, useState} from 'react';
+import {forwardRef, useCallback, useEffect, useRef, useState} from 'react';
 import {FlatList, FlatListProps, View} from 'react-native';
 import {useFocusEffect, useScrollToTop} from '@react-navigation/native';
 import {Post} from '../../Components';
 import {VisibilityContext, useForwardedRef, useQuery} from '../../Hooks';
 import {PostApi} from '../../Api';
+import {PostsActions, useAppDispatch} from '../../Redux';
 import {IsAndroid} from '../../Utils/Helpers';
 import {PostListProps} from './PostList.props';
 import styles from './PostList.styles';
@@ -16,6 +17,8 @@ const PostList = forwardRef<FlatList, PostListProps>((props, ref) => {
   const forwardedRef = useForwardedRef(ref);
 
   useScrollToTop(forwardedRef);
+
+  const dispatch = useAppDispatch();
 
   const posts = useQuery({
     queryKey: ['posts', type, userId],
@@ -34,6 +37,14 @@ const PostList = forwardRef<FlatList, PostListProps>((props, ref) => {
 
   const lastViewedItem = useRef<number | null>(null);
   const [visibleItem, setVisibleItem] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (posts.status === 'success' && posts.data && Array.isArray(posts.data)) {
+      dispatch(PostsActions.addPosts(posts.data));
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [posts.status === 'success']);
 
   useFocusEffect(
     useCallback(() => {
@@ -75,7 +86,7 @@ const PostList = forwardRef<FlatList, PostListProps>((props, ref) => {
       keyExtractor={(item) => item.id}
       renderItem={({item, index}) => (
         <VisibilityContext.Provider value={visibleItem === index}>
-          <Post post={item} />
+          <Post postId={item.id} />
         </VisibilityContext.Provider>
       )}
       {...flatlistProps}
