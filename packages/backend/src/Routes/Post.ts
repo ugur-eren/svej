@@ -33,9 +33,17 @@ Router.get('/explore', onlyAuthorized, async (req, res) => {
 Router.get('/user/:id', onlyAuthorized, async (req, res) => {
   const {id} = req.params;
 
+  let beforeDate = new Date();
+  if (req.query.beforeDate && typeof req.query.beforeDate === 'string') {
+    const date = new Date(req.query.beforeDate);
+    if (!Number.isNaN(date.getTime())) beforeDate = date;
+  }
+
   const posts = await Prisma.post.findMany({
-    where: {authorId: id},
+    where: {authorId: id, createdAt: {lt: beforeDate}},
     include: PrismaIncludes.Post(res.locals.user.id),
+    take: Config.postsPerPage,
+    orderBy: {createdAt: 'desc'},
   });
 
   res.status(HTTPStatus.OK).send(posts);
