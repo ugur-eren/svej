@@ -14,3 +14,4 @@ export {useInfiniteQuery} from './useInfiniteQuery';
 export {useMutation} from './useMutation';
 export {useInitializeApp} from './useInitializeApp';
 export {usePost} from './usePost';
+export {useShowApiError} from './useShowApiError';
