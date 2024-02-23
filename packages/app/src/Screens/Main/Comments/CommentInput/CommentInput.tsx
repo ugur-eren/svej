@@ -2,8 +2,9 @@ import {useState} from 'react';
 import {BottomFixedInput, TextButton} from '../../../../Components';
 import {useLanguage} from '../../../../Hooks';
 import styles from './CommentInput.styles';
+import {CommentInputProps} from './CommentInput.props';
 
-const CommentInput: React.FC = () => {
+const CommentInput: React.FC<CommentInputProps> = ({onCommentSend}) => {
   const language = useLanguage();
 
   const [comment, setComment] = useState('');
@@ -15,7 +16,14 @@ const CommentInput: React.FC = () => {
       placeholder={language.comments.comment_placeholder}
       style={styles.input}
       right={
-        <TextButton color="primary" showLoading>
+        <TextButton
+          color="primary"
+          showLoading
+          onPress={() => {
+            setComment('');
+            return onCommentSend(comment);
+          }}
+        >
           Send
         </TextButton>
       }

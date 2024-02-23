@@ -31,7 +31,7 @@ export const useShowApiError = () => {
 
     return showToast({
       type: 'error',
-      title: 'Error',
+      title: language.errors.ERROR,
       message: error.message,
     });
   };

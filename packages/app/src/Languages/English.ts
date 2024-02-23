@@ -133,6 +133,7 @@ export default {
   },
 
   errors: {
+    ERROR: 'Error',
     USERNAME_SHORT: 'Username must be at least %min% characters',
     USERNAME_INVALID: 'Username is invalid',
     USERNAME_REQUIRED: 'Username is required',
@@ -140,6 +141,7 @@ export default {
     PASSWORD_REQUIRED: 'Password is required',
     PASSWORDS_NOT_MATCH: 'Passwords do not match',
     EMAIL_INVALID: 'Email is invalid',
+    COMMENT_INVALID: 'Your comment is invalid and cannot be posted',
   },
 
   api_errors: {
