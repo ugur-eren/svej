@@ -27,8 +27,6 @@ Router.get('/explore', onlyAuthorized, async (req, res) => {
     orderBy: {createdAt: 'desc'},
   });
 
-  console.log(beforeDate, posts.length);
-
   res.status(HTTPStatus.OK).send(posts);
 });
 
