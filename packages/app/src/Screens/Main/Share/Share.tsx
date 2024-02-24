@@ -6,9 +6,10 @@ import {Image} from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
 import {Feather} from '@expo/vector-icons';
 import {PageContainer} from '../../../Containers';
-import {Divider, Header, Input, Text, Touchable} from '../../../Components';
+import {AutoGrid, Divider, Header, Input, Text, Touchable} from '../../../Components';
 import {useLanguage, useTheme} from '../../../Hooks';
 import getStyles from './Share.styles';
+import {Spacing} from '../../../Styles';
 
 const Share: React.FC = () => {
   const theme = useTheme();
@@ -76,32 +77,33 @@ const Share: React.FC = () => {
             <Divider />
           </View>
 
-          <View style={styles.medias}>
+          <AutoGrid itemSize={200} gap={Spacing.medium}>
             {medias.map((media) => (
-              <View key={media.uri} style={[styles.mediaContainer, styles.mediaContainerElevated]}>
-                <View style={styles.mediaContent}>
-                  <Image source={{uri: media.uri}} style={styles.media} />
+              <AutoGrid.Element key={media.uri}>
+                <View style={styles.mediaContainer}>
+                  <View style={styles.mediaContent}>
+                    <Image source={{uri: media.uri}} style={styles.media} />
 
-                  <IconButton
-                    onPress={() => setMedias((prev) => prev.filter((m) => m.uri !== media.uri))}
-                    icon="x"
-                    style={styles.mediaRemoveButton}
-                  />
+                    <IconButton
+                      onPress={() => setMedias((prev) => prev.filter((m) => m.uri !== media.uri))}
+                      icon="x"
+                      style={styles.mediaRemoveButton}
+                    />
+                  </View>
                 </View>
-              </View>
+              </AutoGrid.Element>
             ))}
 
-            <View style={[styles.mediaContainer, styles.mediaContainerElevated]}>
-              <View style={styles.mediaContent}>
-                <Touchable style={styles.mediaAddButton} onPress={onAddMediaPress}>
-                  <Feather color={theme.colors.text} name="plus" size={64} />
-                </Touchable>
+            <AutoGrid.Element>
+              <View style={styles.mediaContainer}>
+                <View style={styles.mediaContent}>
+                  <Touchable style={styles.mediaAddButton} onPress={onAddMediaPress}>
+                    <Feather color={theme.colors.text} name="plus" size={64} />
+                  </Touchable>
+                </View>
               </View>
-            </View>
-
-            {/* To avoid the last element from growing to full width when it's single in the row */}
-            {medias.length % 2 === 0 ? <View style={styles.mediaContainer} /> : null}
-          </View>
+            </AutoGrid.Element>
+          </AutoGrid>
         </View>
       </ScrollView>
 

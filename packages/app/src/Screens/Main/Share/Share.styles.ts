@@ -34,19 +34,10 @@ export default ThemedStyleSheet((theme) => ({
     flexWrap: 'wrap',
   },
 
-  medias: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: Spacing.medium,
-  },
   mediaContainer: {
-    flexGrow: 1,
-    flexBasis: '40%', // not 50% to avoid wrapping, minding the gap
+    flex: 1,
     borderRadius: 20,
-  },
-  mediaContainerElevated: {
     backgroundColor: theme.colors.elevated,
-
     ...CalculateElevation(2),
   },
   mediaContent: {
