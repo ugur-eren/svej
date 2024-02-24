@@ -1,10 +1,9 @@
 import type {PrismaTypes, PrismaIncludes} from 'database';
 
-export type Post = Omit<
-  PrismaTypes.PostGetPayload<{include: ReturnType<typeof PrismaIncludes.Post>}>,
-  'comments'
-> & {
-  comments: PrismaTypes.CommentGetPayload<{include: typeof PrismaIncludes.Comment}>[];
+export type Post = PrismaTypes.PostGetPayload<{include: ReturnType<typeof PrismaIncludes.Post>}> & {
+  liked: boolean;
+  disliked: boolean;
+  mine: boolean;
 };
 
 export type ReactionCounts = {

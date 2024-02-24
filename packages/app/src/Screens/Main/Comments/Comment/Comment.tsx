@@ -41,8 +41,8 @@ const Comment: React.FC<CommentProps> = ({comment}) => {
       <View style={styles.actionButtons}>
         <ActionButton
           type="like"
-          active={comment.likes.length > 0}
-          onPress={() => onReaction(comment.likes.length > 0 ? 'remove' : 'like')}
+          active={comment.liked}
+          onPress={() => onReaction(comment.liked ? 'remove' : 'like')}
           count={comment._count.likes}
           containerStyle={styles.actionButton}
           small
@@ -50,8 +50,8 @@ const Comment: React.FC<CommentProps> = ({comment}) => {
 
         <ActionButton
           type="dislike"
-          active={comment.dislikes.length > 0}
-          onPress={() => onReaction(comment.dislikes.length > 0 ? 'remove' : 'dislike')}
+          active={comment.disliked}
+          onPress={() => onReaction(comment.disliked ? 'remove' : 'dislike')}
           count={comment._count.dislikes}
           containerStyle={styles.actionButton}
           small

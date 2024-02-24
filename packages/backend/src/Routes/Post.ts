@@ -7,6 +7,18 @@ import {VideoHandler} from '../Utils/VideoHandler';
 
 const Router = express.Router();
 
+const extendPost = (
+  post: PrismaTypes.PostGetPayload<{include: ReturnType<typeof PrismaIncludes.Post>}>,
+  userId: string,
+) => {
+  return {
+    ...post,
+    liked: post.likes.some((like) => like.id === userId),
+    disliked: post.dislikes.some((dislike) => dislike.id === userId),
+    mine: post.authorId === userId,
+  };
+};
+
 Router.get('/', onlyAuthorized, async (req, res) => {
   const posts = await Prisma.post.findMany({include: PrismaIncludes.Post(res.locals.user.id)});
 
@@ -27,7 +39,9 @@ Router.get('/explore', onlyAuthorized, async (req, res) => {
     orderBy: {createdAt: 'desc'},
   });
 
-  res.status(HTTPStatus.OK).send(posts);
+  const extendedPosts = posts.map((post) => extendPost(post, res.locals.user.id));
+
+  res.status(HTTPStatus.OK).send(extendedPosts);
 });
 
 Router.get('/user/:id', onlyAuthorized, async (req, res) => {
@@ -46,7 +60,9 @@ Router.get('/user/:id', onlyAuthorized, async (req, res) => {
     orderBy: {createdAt: 'desc'},
   });
 
-  res.status(HTTPStatus.OK).send(posts);
+  const extendedPosts = posts.map((post) => extendPost(post, res.locals.user.id));
+
+  res.status(HTTPStatus.OK).send(extendedPosts);
 });
 
 Router.use('/:id', async (req, res, next) => {
@@ -70,7 +86,10 @@ Router.get('/:id', onlyAuthorized, async (req, res) => {
     include: PrismaIncludes.Post(res.locals.user.id),
   });
 
-  res.status(HTTPStatus.OK).send(post);
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const extendedPost = extendPost(post!, res.locals.user.id);
+
+  res.status(HTTPStatus.OK).send(extendedPost);
 });
 
 Router.get('/:id/reactions', onlyAuthorized, async (req, res) => {

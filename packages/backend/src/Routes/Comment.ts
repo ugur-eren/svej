@@ -1,9 +1,21 @@
 import express from 'express';
 import {ErrorCodes, HTTPStatus, Zod} from 'common';
-import {Prisma, PrismaIncludes} from '../Services';
+import {Prisma, PrismaIncludes, PrismaTypes} from '../Services';
 import {onlyAuthorized} from '../Middlewares';
 
 const Router = express.Router();
+
+const extendComment = (
+  comment: PrismaTypes.CommentGetPayload<{include: ReturnType<typeof PrismaIncludes.Comment>}>,
+  userId: string,
+) => {
+  return {
+    ...comment,
+    liked: comment.likes.some((like) => like.id === userId),
+    disliked: comment.dislikes.some((dislike) => dislike.id === userId),
+    mine: comment.authorId === userId,
+  };
+};
 
 Router.get('/post/:id', onlyAuthorized, async (req, res) => {
   const {id} = req.params;
@@ -13,7 +25,9 @@ Router.get('/post/:id', onlyAuthorized, async (req, res) => {
     include: PrismaIncludes.Comment(res.locals.user.id),
   });
 
-  res.status(HTTPStatus.OK).send(comments);
+  const extendedComments = comments.map((comment) => extendComment(comment, res.locals.user.id));
+
+  res.status(HTTPStatus.OK).send(extendedComments);
 });
 
 Router.use('/:id', async (req, res, next) => {
@@ -37,7 +51,10 @@ Router.get('/:id', onlyAuthorized, async (req, res) => {
     include: PrismaIncludes.Comment(res.locals.user.id),
   });
 
-  res.status(HTTPStatus.OK).send(comment);
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const extendedComment = extendComment(comment!, res.locals.user.id);
+
+  res.status(HTTPStatus.OK).send(extendedComment);
 });
 
 Router.get('/:id/reactions', onlyAuthorized, async (req, res) => {

@@ -2,7 +2,11 @@ import type {PrismaTypes, PrismaIncludes, Comment as PrismaComment} from 'databa
 
 export type Comment = PrismaTypes.CommentGetPayload<{
   include: ReturnType<typeof PrismaIncludes.Comment>;
-}>;
+}> & {
+  liked: boolean;
+  disliked: boolean;
+  mine: boolean;
+};
 
 export type ReactionCounts = {
   likes: number;

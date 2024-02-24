@@ -73,16 +73,16 @@ const Post: React.FC<PostProps> = ({postId}) => {
         <View style={styles.actionButtons}>
           <ActionButton
             type="like"
-            active={post.likes.length > 0}
+            active={post.liked}
             count={post._count.likes}
-            onPress={() => onReaction(post.likes.length > 0 ? 'remove' : 'like')}
+            onPress={() => onReaction(post.liked ? 'remove' : 'like')}
           />
 
           <ActionButton
             type="dislike"
-            active={post.dislikes.length > 0}
+            active={post.disliked}
             count={post._count.dislikes}
-            onPress={() => onReaction(post.dislikes.length > 0 ? 'remove' : 'dislike')}
+            onPress={() => onReaction(post.disliked ? 'remove' : 'dislike')}
           />
 
           {/* TODO: repost feature currently doesnt exists */}
