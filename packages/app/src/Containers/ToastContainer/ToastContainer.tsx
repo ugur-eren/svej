@@ -1,5 +1,5 @@
 import {useContext} from 'react';
-import {View} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import {ToastContext} from '../../Hooks/useToast';
 import {AnimatedToast} from './AnimatedToast';
 import styles from './ToastContainer.styles';
@@ -11,11 +11,11 @@ const ToastContainer: React.FC<{children: React.ReactNode}> = ({children}) => {
     <>
       {children}
 
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         {toasts.map((toast) => (
           <AnimatedToast key={toast.key} toast={toast} />
         ))}
-      </View>
+      </SafeAreaView>
     </>
   );
 };

@@ -1,7 +1,7 @@
 import {Text as NativeText, TextStyle} from 'react-native';
 import {TextProps} from './Text.props';
 import {Typography} from '../../Styles';
-import {useTheme} from '../../Hooks';
+import {useTheme} from '../../Hooks/Theming';
 
 const Text: React.FC<TextProps> = (props) => {
   const {

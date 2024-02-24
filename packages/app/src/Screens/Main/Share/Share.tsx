@@ -8,10 +8,9 @@ import * as ImagePicker from 'expo-image-picker';
 import {Feather} from '@expo/vector-icons';
 import {PageContainer} from '../../../Containers';
 import {AutoGrid, Divider, Header, Input, Text, Touchable} from '../../../Components';
-import {useLanguage, useShowApiError, useTheme} from '../../../Hooks';
+import {useLanguage, useShowToast, useTheme, useUploadPost} from '../../../Hooks';
 import getStyles from './Share.styles';
 import {Spacing} from '../../../Styles';
-import {PostApi} from '../../../Api';
 import {ShareScreenProps} from '../../../Types';
 
 const Share: React.FC<ShareScreenProps> = ({navigation}) => {
@@ -20,7 +19,8 @@ const Share: React.FC<ShareScreenProps> = ({navigation}) => {
 
   const [message, setMessage] = useState('');
   const [medias, setMedias] = useState<ImagePicker.ImagePickerAsset[]>([]);
-  const showApiError = useShowApiError();
+  const {uploadPost, isUploadActive} = useUploadPost();
+  const showToast = useShowToast();
 
   const styles = getStyles(theme);
 
@@ -42,14 +42,17 @@ const Share: React.FC<ShareScreenProps> = ({navigation}) => {
   };
 
   const onSubmit = async () => {
-    try {
-      const result = await PostApi.createPost({description: message, medias});
-      if (!result.ok) throw result.data;
-
-      navigation.goBack();
-    } catch (error) {
-      showApiError(error as Error);
+    if (isUploadActive()) {
+      showToast({
+        title: 'Share in progress',
+        message: 'There is already an active share process. Please wait until it is finished.',
+        type: 'warning',
+      });
+      return;
     }
+
+    uploadPost(message, medias);
+    navigation.goBack();
   };
 
   return (

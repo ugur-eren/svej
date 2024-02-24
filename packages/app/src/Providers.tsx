@@ -13,6 +13,7 @@ import {ThemeProvider} from './Hooks/Theming';
 import {ToastProvider} from './Hooks/useToast';
 import {PaperIconProp} from './Utils/CommonComponents';
 import {ToastContainer} from './Containers';
+import {PostUploaderProvider} from './Hooks/useUploadPost';
 
 const queryClient = new QueryClient();
 
@@ -63,6 +64,15 @@ const Providers: React.FC<{children: React.ReactNode}> = ({children}) => {
       </PortalizeProvider>
     </PaperProvider>
   );
+};
+
+/**
+ * AfterLoadProviders is the third-level provider for the app and should contain
+ * providers that are supposed to be loaded after the app has been initialized
+ * and everything is ready to go.
+ */
+export const AfterLoadProviders: React.FC<{children: React.ReactNode}> = ({children}) => {
+  return <PostUploaderProvider>{children}</PostUploaderProvider>;
 };
 
 const styles = StyleSheet.create({

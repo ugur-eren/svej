@@ -4,7 +4,7 @@ import {useFonts} from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import * as StatusBar from 'expo-status-bar';
 import {useInitializeApp, useTheme} from './Hooks';
-import Providers from './Providers';
+import Providers, {AfterLoadProviders} from './Providers';
 import Router from './Router';
 import Env from './Utils/Env';
 import {IsAndroid} from './Utils/Helpers';
@@ -52,7 +52,9 @@ const AppContent = memo(() => {
 
   return (
     <View style={styles.container} onLayout={onLayoutRootView}>
-      <Router />
+      <AfterLoadProviders>
+        <Router />
+      </AfterLoadProviders>
     </View>
   );
 });
