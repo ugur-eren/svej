@@ -3,20 +3,24 @@ import {View, ScrollView} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {IconButton, Surface} from 'react-native-paper';
 import {Image} from 'expo-image';
+import {ResizeMode, Video} from 'expo-av';
 import * as ImagePicker from 'expo-image-picker';
 import {Feather} from '@expo/vector-icons';
 import {PageContainer} from '../../../Containers';
 import {AutoGrid, Divider, Header, Input, Text, Touchable} from '../../../Components';
-import {useLanguage, useTheme} from '../../../Hooks';
+import {useLanguage, useShowApiError, useTheme} from '../../../Hooks';
 import getStyles from './Share.styles';
 import {Spacing} from '../../../Styles';
+import {PostApi} from '../../../Api';
+import {ShareScreenProps} from '../../../Types';
 
-const Share: React.FC = () => {
+const Share: React.FC<ShareScreenProps> = ({navigation}) => {
   const theme = useTheme();
   const language = useLanguage();
 
   const [message, setMessage] = useState('');
   const [medias, setMedias] = useState<ImagePicker.ImagePickerAsset[]>([]);
+  const showApiError = useShowApiError();
 
   const styles = getStyles(theme);
 
@@ -37,8 +41,15 @@ const Share: React.FC = () => {
     setMedias([...medias, ...result.assets]);
   };
 
-  const onSubmit = () => {
-    // TODO: Implement share
+  const onSubmit = async () => {
+    try {
+      const result = await PostApi.createPost({description: message, medias});
+      if (!result.ok) throw result.data;
+
+      navigation.goBack();
+    } catch (error) {
+      showApiError(error as Error);
+    }
   };
 
   return (
@@ -82,7 +93,17 @@ const Share: React.FC = () => {
               <AutoGrid.Element key={media.uri}>
                 <View style={styles.mediaContainer}>
                   <View style={styles.mediaContent}>
-                    <Image source={{uri: media.uri}} style={styles.media} />
+                    {media.type === 'video' ? (
+                      <Video
+                        source={{uri: media.uri}}
+                        isMuted
+                        usePoster
+                        resizeMode={ResizeMode.COVER}
+                        style={styles.media}
+                      />
+                    ) : (
+                      <Image source={{uri: media.uri}} style={styles.media} />
+                    )}
 
                     <IconButton
                       onPress={() => setMedias((prev) => prev.filter((m) => m.uri !== media.uri))}

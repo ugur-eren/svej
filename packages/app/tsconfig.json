@@ -4,6 +4,7 @@
     "target": "es5",
     "module": "commonjs",
     "jsx": "react-native",
+    "lib": ["ESNext"],
     "isolatedModules": false,
     "strict": true,
     "noImplicitAny": true,
