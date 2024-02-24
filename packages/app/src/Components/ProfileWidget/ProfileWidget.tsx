@@ -1,6 +1,6 @@
 import {View, TouchableOpacity} from 'react-native';
-import {Image} from 'expo-image';
 import {useNavigation} from '@react-navigation/native';
+import Avatar from '../Avatar/Avatar';
 import Text from '../Text/Text';
 import TextButton from '../TextButton/TextButton';
 import {useLanguage} from '../../Hooks';
@@ -17,8 +17,8 @@ const ProfileWidget: React.FC = () => {
     <View style={styles.container}>
       <TouchableOpacity style={styles.touchable} onPress={onUserPress}>
         <View style={styles.imageContainer}>
-          <Image
-            source={{uri: `https://unsplash.it/600/600/?random=${Math.random()}`}}
+          <Avatar
+            avatar={`https://unsplash.it/600/600/?random=${Math.random()}`}
             style={styles.image}
           />
         </View>

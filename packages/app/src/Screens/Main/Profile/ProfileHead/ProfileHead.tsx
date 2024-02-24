@@ -3,7 +3,7 @@ import {View, TouchableWithoutFeedback, TouchableOpacity} from 'react-native';
 import {Image} from 'expo-image';
 import {useNavigation} from '@react-navigation/native';
 import {Feather} from '@expo/vector-icons';
-import {Divider, Text, TextButton} from '../../../../Components';
+import {Avatar, Divider, Text, TextButton} from '../../../../Components';
 import {useLanguage, useQuery, useTheme} from '../../../../Hooks';
 import {UserApi} from '../../../../Api';
 import {Selectors, useAppSelector} from '../../../../Redux';
@@ -52,7 +52,10 @@ const ProfileHead: React.FC<ProfileHeadProps> = ({username}) => {
   return (
     <View style={styles.container}>
       <View style={styles.backgroundContainer}>
-        <TouchableWithoutFeedback style={GlobalStyles.flex1} onPress={onBGPress}>
+        <TouchableWithoutFeedback
+          style={GlobalStyles.flex1}
+          onPress={user.data.coverPhoto?.url ? onBGPress : undefined}
+        >
           <View style={GlobalStyles.flex1}>
             <Image
               source={{uri: user.data.coverPhoto?.url}}
@@ -65,8 +68,11 @@ const ProfileHead: React.FC<ProfileHeadProps> = ({username}) => {
 
       <View style={styles.topInfoContainer}>
         <View style={styles.profilePhotoContainer}>
-          <TouchableWithoutFeedback style={styles.profilePhotoContainer} onPress={onPPPress}>
-            <Image source={{uri: user.data.profilePhoto?.url}} style={styles.profilePhoto} />
+          <TouchableWithoutFeedback
+            style={styles.profilePhotoContainer}
+            onPress={user.data.profilePhoto?.url ? onPPPress : undefined}
+          >
+            <Avatar avatar={user.data.profilePhoto?.url} style={styles.profilePhoto} />
           </TouchableWithoutFeedback>
         </View>
 

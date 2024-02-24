@@ -1,8 +1,8 @@
 import {memo} from 'react';
 import {View, TouchableOpacity} from 'react-native';
-import {Image} from 'expo-image';
 import {Feather} from '@expo/vector-icons';
 import {useNavigation} from '@react-navigation/native';
+import Avatar from '../Avatar/Avatar';
 import Text from '../Text/Text';
 import Timer from '../Timer/Timer';
 import {useTheme} from '../../Hooks';
@@ -25,7 +25,7 @@ const UserInfo: React.FC<UserInfoProps> = (props) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.imageContainer} onPress={isSelf ? undefined : onUserPress}>
-        <Image style={styles.image} source={{uri: user.profilePhoto?.url}} />
+        <Avatar style={styles.image} avatar={user.profilePhoto?.url} />
       </TouchableOpacity>
 
       <View style={styles.contentContainer}>
