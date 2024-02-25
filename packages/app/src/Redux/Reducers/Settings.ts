@@ -5,11 +5,13 @@ import * as Languages from '../../Languages';
 export type SettingsState = {
   theme: 'default' | 'light' | 'dark';
   language: 'default' | keyof typeof Languages;
+  muted: boolean;
 };
 
 const initialState: SettingsState = {
   theme: 'default',
   language: 'default',
+  muted: false,
 };
 
 export const SettingsSlice = createSlice({
@@ -22,6 +24,13 @@ export const SettingsSlice = createSlice({
 
     setLanguage: (state, action: PayloadAction<SettingsState['language']>) => {
       state.language = action.payload;
+    },
+
+    setMuted: (state, action: PayloadAction<SettingsState['muted']>) => {
+      state.muted = action.payload;
+    },
+    toggleMuted: (state) => {
+      state.muted = !state.muted;
     },
   },
 });

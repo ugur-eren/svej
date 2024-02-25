@@ -11,6 +11,7 @@ import {Feather} from '@expo/vector-icons';
 import Text from '../../Text/Text';
 import Spinner from '../../Spinner/Spinner';
 import {usePromisedState, useTheme} from '../../../Hooks';
+import {Selectors, SettingsActions, useAppDispatch, useAppSelector} from '../../../Redux';
 import {PostVideoProps} from './PostVideo.props';
 import getStyles from './PostVideo.styles';
 
@@ -19,6 +20,9 @@ const PostVideo: React.FC<PostVideoProps> = (props) => {
 
   const theme = useTheme();
 
+  const dispatch = useAppDispatch();
+  const muted = useAppSelector(Selectors.Settings.Muted);
+
   const styles = getStyles(theme);
 
   const {width} = useWindowDimensions();
@@ -26,10 +30,7 @@ const PostVideo: React.FC<PostVideoProps> = (props) => {
   const [ready, setReady] = useState(false);
   const [error, setError] = useState(false);
 
-  // TODO: Muted should be global state
-  const [muted, setMuted] = useState(false);
-
-  const onVideoPress = () => setMuted((curr) => !curr);
+  const onVideoPress = () => dispatch(SettingsActions.toggleMuted());
 
   const onVideoReady = () => setReady(true);
 
