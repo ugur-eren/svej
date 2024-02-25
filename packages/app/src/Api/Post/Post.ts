@@ -11,12 +11,12 @@ export const getExplore = (beforeDate?: string): Response<ApiTypes.Post[]> => {
   return ApiInstance.get('/post/explore', {beforeDate});
 };
 
-export const getById = (id: string): Response<ApiTypes.Post> => {
-  return ApiInstance.get(`/post/${id}`);
+export const getByUserId = (userId: string, beforeDate?: string): Response<ApiTypes.Post[]> => {
+  return ApiInstance.get(`/post/user/${userId}`, {beforeDate});
 };
 
-export const getByUserId = (userId: string): Response<ApiTypes.Post[]> => {
-  return ApiInstance.get(`/post/user/${userId}`);
+export const getById = (id: string): Response<ApiTypes.Post> => {
+  return ApiInstance.get(`/post/${id}`);
 };
 
 export const getReactionCounts = (id: string): Response<ApiTypes.ReactionCounts> => {

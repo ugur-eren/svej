@@ -23,20 +23,26 @@ const PostList = forwardRef<FlatList, PostListProps>((props, ref) => {
   const posts = useInfiniteQuery({
     initialPageParam: Date.now().toString(),
     queryKey: ['posts', type, userId],
-    getNextPageParam: (lastPage: any) => {
+    getNextPageParam: (lastPage: any, allPages, lastPageParam) => {
       if (!lastPage?.length) return undefined;
-      return lastPage[lastPage.length - 1].createdAt;
+
+      const pageParam = lastPage[lastPage.length - 1].createdAt;
+
+      if (!pageParam || pageParam === lastPageParam) return undefined;
+      return pageParam;
     },
     queryFn: async ({pageParam}) => {
       if (type === 'explore') {
         return PostApi.getExplore(pageParam);
       }
 
-      if (type === 'profile' && userId) {
-        return PostApi.getByUserId(userId);
+      if (type === 'profile') {
+        if (!userId) return [];
+
+        return PostApi.getByUserId(userId, pageParam);
       }
 
-      return PostApi.getAll();
+      return [];
     },
   });
 
