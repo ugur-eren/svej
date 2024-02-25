@@ -1,6 +1,7 @@
 import {forwardRef, useCallback, useEffect, useRef, useState} from 'react';
-import {FlatList, FlatListProps, View} from 'react-native';
+import {FlatList, FlatListProps, RefreshControl, View} from 'react-native';
 import {useFocusEffect, useScrollToTop} from '@react-navigation/native';
+import {useQueryClient} from '@tanstack/react-query';
 import {Post} from '../../Components';
 import {VisibilityContext, useForwardedRef, useInfiniteQuery} from '../../Hooks';
 import {PostApi} from '../../Api';
@@ -19,6 +20,8 @@ const PostList = forwardRef<FlatList, PostListProps>((props, ref) => {
   useScrollToTop(forwardedRef);
 
   const dispatch = useAppDispatch();
+
+  const queryClient = useQueryClient();
 
   const posts = useInfiniteQuery({
     initialPageParam: Date.now().toString(),
@@ -48,6 +51,7 @@ const PostList = forwardRef<FlatList, PostListProps>((props, ref) => {
 
   const lastViewedItem = useRef<number | null>(null);
   const [visibleItem, setVisibleItem] = useState<number | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     if (posts.status === 'success' && posts.data && Array.isArray(posts.data)) {
@@ -68,6 +72,19 @@ const PostList = forwardRef<FlatList, PostListProps>((props, ref) => {
       };
     }, [lastViewedItem]),
   );
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+
+    try {
+      queryClient.invalidateQueries({queryKey: ['post']});
+      await posts.refetch();
+    } catch (error) {
+      //
+    } finally {
+      setRefreshing(false);
+    }
+  }, [posts, queryClient]);
 
   const viewabilityConfigPairs = useRef<FlatListProps<never>['viewabilityConfigCallbackPairs']>([
     {
@@ -95,6 +112,7 @@ const PostList = forwardRef<FlatList, PostListProps>((props, ref) => {
       viewabilityConfigCallbackPairs={viewabilityConfigPairs.current}
       onEndReachedThreshold={0.2}
       onEndReached={() => posts.fetchNextPage()}
+      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       data={posts.data.pages.flat() as any[]}
       keyExtractor={(item) => item.id}
       renderItem={({item, index}) => (
