@@ -1,15 +1,14 @@
 import {Password} from 'server-side';
 import express from 'express';
-import {ErrorCodes, HTTPStatus, Zod} from 'common';
+import {Config, ErrorCodes, HTTPStatus, Zod} from 'common';
 import {Prisma, PrismaIncludes, PrismaTypes} from '../Services';
 import {onlyAuthorized} from '../Middlewares';
 
 const Router = express.Router();
 
-const extendUser = (
-  user: PrismaTypes.UserGetPayload<{include: ReturnType<typeof PrismaIncludes.Author>}>,
-  userId: string,
-) => {
+type Author = PrismaTypes.UserGetPayload<{include: ReturnType<typeof PrismaIncludes.Author>}>;
+
+const extendUser = (user: Author, userId: string) => {
   return {
     ...user,
     isFollowing: user.followers.some((follower) => follower.id === userId),
@@ -89,6 +88,38 @@ Router.get('/:id', onlyAuthorized, async (req, res) => {
   const extendedUser = extendUser(user, res.locals.user.id);
 
   res.status(HTTPStatus.OK).send(extendedUser);
+});
+
+Router.get('/:id/relations/:type(follows|followers)', onlyAuthorized, async (req, res) => {
+  const {id, type} = req.params;
+
+  if (type !== 'follows' && type !== 'followers') {
+    res.status(HTTPStatus.BadRequest).send({code: ErrorCodes.FillAllFields});
+    return;
+  }
+
+  const page = parseInt(req.query.page as string, 10) || 1;
+
+  const user = await Prisma.user.findUnique({
+    where: {id},
+    select: {
+      [type]: {
+        include: PrismaIncludes.Author(res.locals.user.id),
+        take: Config.relationsPerPage,
+        skip: (page - 1) * Config.relationsPerPage,
+        orderBy: {followers: {_count: 'desc'}},
+      },
+    },
+  });
+
+  if (!user) {
+    res.status(HTTPStatus.NotFound).send({code: ErrorCodes.UserNotFound});
+    return;
+  }
+
+  const relations = user[type].map((rel) => extendUser(rel as Author, res.locals.user.id));
+
+  res.status(HTTPStatus.OK).send(relations);
 });
 
 Router.put('/', async (req, res) => {

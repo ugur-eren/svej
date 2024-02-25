@@ -111,7 +111,7 @@ const BottomStackNavigator = () => {
       <BottomStack.Screen
         name="Profile"
         component={Profile}
-        initialParams={{username: user?.username, userId: user?.id}}
+        initialParams={{hideBack: true, username: user?.username, userId: user?.id}}
         options={{title: language.profile.title, tabBarIcon: TabBarUserIcon}}
       />
     </BottomStack.Navigator>

@@ -3,10 +3,10 @@ import {PageContainer, PostList} from '../../../Containers';
 import {TransparentHeader} from '../../../Components';
 import {Selectors, useAppSelector} from '../../../Redux';
 import {GlobalStyles} from '../../../Styles';
-import {ProfileScreenProps} from '../../../Types';
+import {BottomProfileScreenProps, ProfileScreenProps} from '../../../Types';
 
-const Profile: React.FC<ProfileScreenProps> = ({navigation, route}) => {
-  const {userId, username} = route.params;
+const Profile: React.FC<ProfileScreenProps & BottomProfileScreenProps> = ({navigation, route}) => {
+  const {userId, username, hideBack} = route.params;
 
   const isSelf = useAppSelector((state) => Selectors.Auth.UserIsSelf(state, username));
 
@@ -22,13 +22,14 @@ const Profile: React.FC<ProfileScreenProps> = ({navigation, route}) => {
         type="profile"
         userId={userId}
         style={GlobalStyles.flex1}
-        ListHeaderComponent={<ProfileHead username={username} />}
+        ListHeaderComponent={<ProfileHead userId={userId} username={username} />}
       />
 
       <TransparentHeader
         title={username}
         onSettingsPress={isSelf ? onSettingsPress : undefined}
         onMorePress={isSelf ? undefined : onMorePress}
+        hideBack={hideBack}
       />
     </PageContainer>
   );

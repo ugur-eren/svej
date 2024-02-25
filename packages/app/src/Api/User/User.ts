@@ -18,6 +18,14 @@ export const getByUsername = (username: string): Response<ApiTypes.User> => {
   return ApiInstance.get(`/user/username/${username}`);
 };
 
+export const getRelations = (
+  id: string,
+  type: 'follows' | 'followers',
+  page: number,
+): Response<ApiTypes.Relations> => {
+  return ApiInstance.get(`/user/${id}/relations/${type}?page=${page}`);
+};
+
 export const register = (data: ApiTypes.RegisterRequest): Response<ApiTypes.RegisterResponse> => {
   return ApiInstance.put('/user', data);
 };

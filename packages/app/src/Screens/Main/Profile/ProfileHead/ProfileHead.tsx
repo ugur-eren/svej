@@ -12,10 +12,11 @@ import {GlobalStyles} from '../../../../Styles';
 import getStyles from './ProfileHead.styles';
 
 export type ProfileHeadProps = {
+  userId: string;
   username: string;
 };
 
-const ProfileHead: React.FC<ProfileHeadProps> = ({username}) => {
+const ProfileHead: React.FC<ProfileHeadProps> = ({userId, username}) => {
   const theme = useTheme();
   const language = useLanguage();
   const navigation = useNavigation<ProfileScreenProps['navigation']>();
@@ -43,8 +44,11 @@ const ProfileHead: React.FC<ProfileHeadProps> = ({username}) => {
     });
   };
 
-  const onFollowsPress = () => navigation.navigate('Relations', {type: 'follows'});
-  const onFollowersPress = () => navigation.navigate('Relations', {type: 'followers'});
+  const onFollowsPress = () =>
+    navigation.navigate('Relations', {type: 'follows', userId, username});
+
+  const onFollowersPress = () =>
+    navigation.navigate('Relations', {type: 'followers', userId, username});
 
   // TODO: Add loading indicator
   if (!user.data) return null;

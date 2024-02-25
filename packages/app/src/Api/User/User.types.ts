@@ -22,3 +22,5 @@ export type Author = PrismaTypes.UserGetPayload<{
   ExtendedType;
 
 export type SearchResponse = Array<Author>;
+
+export type Relations = Array<Author>;

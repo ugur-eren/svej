@@ -26,6 +26,7 @@ export type BottomStackParams = {
   Profile: {
     userId: string;
     username: string;
+    hideBack?: boolean;
   };
 };
 
@@ -48,6 +49,8 @@ export type MainStackParams = {
   Search: undefined;
   Notifications: undefined;
   Relations: {
+    userId: string;
+    username: string;
     type: 'followers' | 'follows';
   };
   Chats: undefined;
@@ -91,6 +94,10 @@ export type SettingsBlockedUsersScreenProps = CompositeScreenProps<
 // Bottom
 export type BottomShareInitScreenProps = CompositeScreenProps<
   NativeStackScreenProps<BottomStackParams, 'ShareInit'>,
+  NativeStackScreenProps<RootStackParams>
+>;
+export type BottomProfileScreenProps = CompositeScreenProps<
+  NativeStackScreenProps<BottomStackParams, 'Profile'>,
   NativeStackScreenProps<RootStackParams>
 >;
 

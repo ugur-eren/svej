@@ -15,4 +15,6 @@ export default {
 
   commentMaxLength: 512,
   commentMaxLines: 5,
+
+  relationsPerPage: 20,
 } as const;
