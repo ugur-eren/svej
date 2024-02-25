@@ -10,6 +10,21 @@ export class LocalFileSystem implements BaseFileSystem {
     this.rootPath = rootPath;
   }
 
+  public async stats(key: string): Promise<FileSystemResponse<{size: number}>> {
+    const fullPath = join(this.rootPath, key);
+
+    if (!(await this.exists(key))) {
+      return {ok: false, error: 'NotFound'};
+    }
+
+    try {
+      const stats = await fs.stat(fullPath);
+      return {ok: true, response: {size: stats.size}};
+    } catch (err) {
+      return {ok: false, error: 'Unknown'};
+    }
+  }
+
   public async exists(key: string): Promise<boolean> {
     const fullPath = join(this.rootPath, key);
 
@@ -36,7 +51,10 @@ export class LocalFileSystem implements BaseFileSystem {
     }
   }
 
-  public async readStream(key: string): Promise<FileSystemResponse<NodeJS.ReadableStream>> {
+  public async readStream(
+    key: string,
+    config?: {start?: number; end?: number},
+  ): Promise<FileSystemResponse<NodeJS.ReadableStream>> {
     const fullPath = join(this.rootPath, key);
 
     if (!(await this.exists(key))) {
@@ -44,7 +62,7 @@ export class LocalFileSystem implements BaseFileSystem {
     }
 
     try {
-      const stream = createReadStream(fullPath);
+      const stream = createReadStream(fullPath, {start: config?.start, end: config?.end});
       return {ok: true, response: stream};
     } catch (err) {
       return {ok: false, error: 'Unknown'};

@@ -48,10 +48,31 @@ export class S3FileSystem implements BaseFileSystem {
     }
   }
 
+  private checkExists(response: Awaited<ReturnType<typeof this.getHead>>) {
+    return response.ok && response.response?.$metadata.httpStatusCode === 200;
+  }
+
+  public async stats(key: string): Promise<FileSystemResponse<{size: number}>> {
+    const response = await this.getHead(key);
+
+    if (!this.checkExists(response)) {
+      return {ok: false, error: 'NotFound'};
+    }
+
+    const size = response.response?.ContentLength || 0;
+
+    return {
+      ok: true,
+      response: {
+        size,
+      },
+    };
+  }
+
   public async exists(key: string): Promise<boolean> {
     const response = await this.getHead(key);
 
-    return !!(response.ok && response.response?.$metadata.httpStatusCode === 200);
+    return this.checkExists(response);
   }
 
   public async read(key: string): Promise<FileSystemResponse<Buffer>> {
@@ -80,7 +101,10 @@ export class S3FileSystem implements BaseFileSystem {
     }
   }
 
-  public async readStream(key: string): Promise<FileSystemResponse<NodeJS.ReadableStream>> {
+  public async readStream(
+    key: string,
+    config?: {start?: number; end?: number},
+  ): Promise<FileSystemResponse<NodeJS.ReadableStream>> {
     if (!(await this.exists(key))) {
       return {ok: false, error: 'NotFound'};
     }
@@ -88,6 +112,7 @@ export class S3FileSystem implements BaseFileSystem {
     const command = new GetObjectCommand({
       Bucket: this.bucket,
       Key: key,
+      Range: config ? `bytes=${config.start || 0}-${config.end || ''}` : undefined,
     });
 
     try {
