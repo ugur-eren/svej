@@ -39,7 +39,7 @@ Router.get('/:fileKey', async (req, res) => {
   if (rangeHeader) {
     const parts = rangeHeader.replace(/bytes=/, '').split('-');
     const start = parseInt(parts[0], 10);
-    const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
+    const end = (parts[1] ? parseInt(parts[1], 10) : 0) || fileSize - 1;
     const chunkSize = end - start + 1;
 
     partialConfig = {
