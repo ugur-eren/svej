@@ -111,6 +111,11 @@ export default {
     share_button: 'Share',
     picture: 'Picture',
     video: 'Video',
+    share_in_progress_title: 'Share in progress',
+    share_in_progress_message:
+      'There is already an active share process. Please wait until it is finished.',
+    share_success_title: 'Post shared',
+    share_success_message: 'Your post has been shared successfully.',
   },
 
   settings: {

@@ -44,8 +44,8 @@ const Share: React.FC<ShareScreenProps> = ({navigation}) => {
   const onSubmit = async () => {
     if (isUploadActive()) {
       showToast({
-        title: 'Share in progress',
-        message: 'There is already an active share process. Please wait until it is finished.',
+        title: language.share.share_in_progress_title,
+        message: language.share.share_in_progress_message,
         type: 'warning',
       });
       return;
