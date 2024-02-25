@@ -24,8 +24,8 @@ export const useInfiniteQuery = <
     TQueryKey,
     TPageParam
   >,
-  showErrorPortal?: boolean,
-  queryClient?: QueryClient,
+  showErrorToast = true,
+  queryClient: QueryClient | undefined = undefined,
 ): UseInfiniteQueryResult<TData, ApiError> => {
   const query = useReactInfiniteQuery(
     {
@@ -41,14 +41,14 @@ export const useInfiniteQuery = <
   const showApiError = useShowApiError();
 
   useEffect(() => {
-    if (showErrorPortal && query.error) {
+    if (showErrorToast && query.error) {
       return showApiError(query.error);
     }
 
     return () => {
       //
     };
-  }, [showErrorPortal, query.error, showApiError]);
+  }, [showErrorToast, query.error, showApiError]);
 
   return query;
 };

@@ -161,6 +161,7 @@ export default {
     UsernameAlreadyExists: 'Username is already in use.',
     EmailAlreadyExists: 'Email is already in use.',
     UserNotFound: 'User not found.',
+    CannotFollowYourself: 'You cannot follow yourself.',
 
     PostNotFound: 'Post not found.',
     PostDoesntHaveMediaOrDescription: 'Post must have a media or description.',

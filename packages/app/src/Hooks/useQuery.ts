@@ -15,8 +15,8 @@ export const useQuery = <
   TQueryKey extends QueryKey = QueryKey,
 >(
   options: UseQueryOptions<TQueryFnData, ApiError, TData, TQueryKey>,
-  showErrorPortal?: boolean,
-  queryClient?: QueryClient,
+  showErrorToast = true,
+  queryClient: QueryClient | undefined = undefined,
 ): UseQueryResult<TData, ApiError> => {
   const query = useReactQuery(
     {
@@ -32,14 +32,14 @@ export const useQuery = <
   const showApiError = useShowApiError();
 
   useEffect(() => {
-    if (showErrorPortal && query.error) {
+    if (showErrorToast && query.error) {
       return showApiError(query.error);
     }
 
     return () => {
       //
     };
-  }, [showErrorPortal, query.error, showApiError]);
+  }, [showErrorToast, query.error, showApiError]);
 
   return query;
 };

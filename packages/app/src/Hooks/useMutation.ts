@@ -15,8 +15,8 @@ export const useMutation = <
   TContext = unknown,
 >(
   options: UseMutationOptions<TFnData, ApiError, TVariables, TContext>,
-  showErrorPortal?: boolean,
-  queryClient?: QueryClient,
+  showErrorToast = true,
+  queryClient: QueryClient | undefined = undefined,
 ): UseMutationResult<TData, ApiError, TVariables, TContext> => {
   const mutation = useReactMutation(
     {
@@ -32,14 +32,14 @@ export const useMutation = <
   const showApiError = useShowApiError();
 
   useEffect(() => {
-    if (showErrorPortal && mutation.error) {
+    if (showErrorToast && mutation.error) {
       return showApiError(mutation.error);
     }
 
     return () => {
       //
     };
-  }, [showErrorPortal, mutation.error, showApiError]);
+  }, [showErrorToast, mutation.error, showApiError]);
 
   return mutation as any;
 };

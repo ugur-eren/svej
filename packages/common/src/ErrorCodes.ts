@@ -13,6 +13,7 @@ const ErrorCodesArray = [
   'UsernameAlreadyExists',
   'EmailAlreadyExists',
   'UserNotFound',
+  'CannotFollowYourself',
 
   // Post
   'PostNotFound',

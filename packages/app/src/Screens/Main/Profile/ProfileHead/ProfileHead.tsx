@@ -3,8 +3,9 @@ import {View, TouchableWithoutFeedback, TouchableOpacity} from 'react-native';
 import {Image} from 'expo-image';
 import {useNavigation} from '@react-navigation/native';
 import {Feather} from '@expo/vector-icons';
+import {useQueryClient} from '@tanstack/react-query';
 import {Avatar, Divider, Text, TextButton} from '../../../../Components';
-import {useLanguage, useQuery, useTheme} from '../../../../Hooks';
+import {useLanguage, useMutation, useQuery, useTheme} from '../../../../Hooks';
 import {UserApi, FileApi} from '../../../../Api';
 import {Selectors, useAppSelector} from '../../../../Redux';
 import {ProfileScreenProps} from '../../../../Types';
@@ -23,9 +24,16 @@ const ProfileHead: React.FC<ProfileHeadProps> = ({userId, username}) => {
 
   const isSelf = useAppSelector((state) => Selectors.Auth.UserIsSelf(state, username));
 
+  const queryClient = useQueryClient();
+
   const user = useQuery({
     queryFn: () => UserApi.getByUsername(username),
     queryKey: ['user', username],
+  });
+
+  const relation = useMutation({
+    mutationKey: ['relation', userId],
+    mutationFn: (type: 'follow' | 'unfollow') => UserApi.updateRelation(userId, type),
   });
 
   const styles = getStyles(theme);
@@ -44,11 +52,28 @@ const ProfileHead: React.FC<ProfileHeadProps> = ({userId, username}) => {
     });
   };
 
-  const onFollowsPress = () =>
-    navigation.navigate('Relations', {type: 'follows', userId, username});
+  const onFollowsPress = () => {
+    navigation.push('Relations', {type: 'follows', userId, username});
+  };
+  const onFollowersPress = () => {
+    navigation.push('Relations', {type: 'followers', userId, username});
+  };
 
-  const onFollowersPress = () =>
-    navigation.navigate('Relations', {type: 'followers', userId, username});
+  const onUpdateRelationPress = async () => {
+    if (!user.data) return;
+
+    try {
+      await relation.mutateAsync(user.data.isFollowing ? 'unfollow' : 'follow', {
+        onSuccess: () => {
+          queryClient.invalidateQueries({
+            queryKey: ['user', username],
+          });
+        },
+      });
+    } catch (error) {
+      //
+    }
+  };
 
   // TODO: Add loading indicator
   if (!user.data) return null;
@@ -90,13 +115,11 @@ const ProfileHead: React.FC<ProfileHeadProps> = ({userId, username}) => {
 
         {!isSelf ? (
           <View style={styles.userActions}>
-            <TextButton color="primary" showLoading containerProps={{style: {flex: undefined}}}>
-              {language.common.follow}
+            <TextButton color="primary" showLoading onPress={onUpdateRelationPress}>
+              {user.data.isFollowing ? language.common.unfollow : language.common.follow}
             </TextButton>
 
-            <TextButton color="primary" containerProps={{style: {flex: undefined}}}>
-              {language.common.send_message}
-            </TextButton>
+            <TextButton color="primary">{language.common.send_message}</TextButton>
           </View>
         ) : null}
       </View>

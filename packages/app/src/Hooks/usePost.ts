@@ -5,13 +5,10 @@ import {PostApi} from '../Api';
 import {Post} from '../Api/Post/Post.types';
 
 export const usePost = (postId: string): Post | null => {
-  const post = useQuery(
-    {
-      queryKey: ['post', postId],
-      queryFn: () => PostApi.getById(postId),
-    },
-    true,
-  );
+  const post = useQuery({
+    queryKey: ['post', postId],
+    queryFn: () => PostApi.getById(postId),
+  });
 
   const fallbackPost = useAppSelector((state) => Selectors.Posts.PostById(state, postId));
 

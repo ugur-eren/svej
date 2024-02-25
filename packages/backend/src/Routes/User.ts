@@ -122,6 +122,40 @@ Router.get('/:id/relations/:type(follows|followers)', onlyAuthorized, async (req
   res.status(HTTPStatus.OK).send(relations);
 });
 
+Router.post('/:id/relation/:type(follow|unfollow)', onlyAuthorized, async (req, res) => {
+  const {id, type} = req.params;
+
+  if (type !== 'follow' && type !== 'unfollow') {
+    res.status(HTTPStatus.BadRequest).send({code: ErrorCodes.FillAllFields});
+    return;
+  }
+
+  if (id === res.locals.user.id) {
+    res.status(HTTPStatus.BadRequest).send({code: ErrorCodes.CannotFollowYourself});
+    return;
+  }
+
+  const user = await Prisma.user.findUnique({where: {id}});
+  if (!user) {
+    res.status(HTTPStatus.NotFound).send({code: ErrorCodes.UserNotFound});
+    return;
+  }
+
+  if (type === 'follow') {
+    await Prisma.user.update({
+      where: {id: res.locals.user.id},
+      data: {follows: {connect: {id}}},
+    });
+  } else {
+    await Prisma.user.update({
+      where: {id: res.locals.user.id},
+      data: {follows: {disconnect: {id}}},
+    });
+  }
+
+  res.status(HTTPStatus.OK).send();
+});
+
 Router.put('/', async (req, res) => {
   const body = Zod.User.Create.safeParse(req.body);
 
