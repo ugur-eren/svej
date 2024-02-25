@@ -10,11 +10,11 @@ import Touchable from '../Touchable/Touchable';
 import PostContent from '../PostContent/PostContent';
 import ActionButton from '../ActionButton/ActionButton';
 import {useLanguage, useMutation, usePost, useTheme} from '../../Hooks';
+import {PostApi, FileApi} from '../../Api';
 import type {Author} from '../../Api/User/User.types';
 import type {ReactionType} from '../../Api/Post/Post.types';
 import {MainNavigationProp} from '../../Types';
 import getStyles from './Post.styles';
-import {PostApi} from '../../Api';
 
 export type PostProps = {
   postId: string;
@@ -65,7 +65,7 @@ const Post: React.FC<PostProps> = ({postId}) => {
             } as const
           )[media.type],
           ratio: media.width / media.height,
-          uri: media.fileKey,
+          uri: FileApi.getFileURL(media.fileKey),
         }))}
       />
 

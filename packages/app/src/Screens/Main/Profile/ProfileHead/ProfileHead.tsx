@@ -5,7 +5,7 @@ import {useNavigation} from '@react-navigation/native';
 import {Feather} from '@expo/vector-icons';
 import {Avatar, Divider, Text, TextButton} from '../../../../Components';
 import {useLanguage, useQuery, useTheme} from '../../../../Hooks';
-import {UserApi} from '../../../../Api';
+import {UserApi, FileApi} from '../../../../Api';
 import {Selectors, useAppSelector} from '../../../../Redux';
 import {ProfileScreenProps} from '../../../../Types';
 import {GlobalStyles} from '../../../../Styles';
@@ -32,14 +32,14 @@ const ProfileHead: React.FC<ProfileHeadProps> = ({username}) => {
   const onPPPress = () => {
     navigation.navigate('ImageViewer', {
       title: username,
-      image: user.data?.profilePhoto?.fileKey ?? '',
+      image: FileApi.getFileURL(user.data?.profilePhoto?.fileKey),
     });
   };
 
   const onBGPress = () => {
     navigation.navigate('ImageViewer', {
       title: username,
-      image: user.data?.coverPhoto?.fileKey ?? '',
+      image: FileApi.getFileURL(user.data?.coverPhoto?.fileKey),
     });
   };
 
@@ -58,7 +58,7 @@ const ProfileHead: React.FC<ProfileHeadProps> = ({username}) => {
         >
           <View style={GlobalStyles.flex1}>
             <Image
-              source={{uri: user.data.coverPhoto?.fileKey}}
+              source={{uri: FileApi.getFileURL(user.data.coverPhoto?.fileKey)}}
               contentFit="cover"
               style={GlobalStyles.flex1}
             />
@@ -72,7 +72,7 @@ const ProfileHead: React.FC<ProfileHeadProps> = ({username}) => {
             style={styles.profilePhotoContainer}
             onPress={user.data.profilePhoto?.fileKey ? onPPPress : undefined}
           >
-            <Avatar avatar={user.data.profilePhoto?.fileKey} style={styles.profilePhoto} />
+            <Avatar avatarKey={user.data.profilePhoto?.fileKey} style={styles.profilePhoto} />
           </TouchableWithoutFeedback>
         </View>
 

@@ -13,6 +13,7 @@ export const VideoHandler = async (file: Express.Multer.File) => {
   const tempProcessedFilePath = `${TEMP_DIR}/${uuid()}-processed.tmp`;
   const tempThumbnailPath = `${TEMP_DIR}/${uuid()}-thumb.tmp`;
   const fileId = uuid();
+  const fileName = `${fileId}.mp4`;
 
   await fs.writeFile(tempFilePath, file.buffer);
 
@@ -65,7 +66,7 @@ export const VideoHandler = async (file: Express.Multer.File) => {
   }
 
   const processedFile = await fs.readFile(tempProcessedFilePath);
-  fileSystem.write(`${fileId}.mp4`, processedFile, 'video/mp4');
+  fileSystem.write(fileName, processedFile, 'video/mp4');
 
   const thumbnailProcess = await Spawn('ffmpeg', [
     ['-vf', 'select=eq(n,34)'],
@@ -91,7 +92,7 @@ export const VideoHandler = async (file: Express.Multer.File) => {
 
   return {
     type: MediaType.VIDEO,
-    fileKey: fileId,
+    fileKey: fileName,
     width: 300,
     height: 300,
     thumbnail,

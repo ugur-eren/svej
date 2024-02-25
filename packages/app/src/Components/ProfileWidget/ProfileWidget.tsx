@@ -18,7 +18,7 @@ const ProfileWidget: React.FC = () => {
       <TouchableOpacity style={styles.touchable} onPress={onUserPress}>
         <View style={styles.imageContainer}>
           <Avatar
-            avatar={`https://unsplash.it/600/600/?random=${Math.random()}`}
+            avatarKey={`https://unsplash.it/600/600/?random=${Math.random()}`}
             style={styles.image}
           />
         </View>

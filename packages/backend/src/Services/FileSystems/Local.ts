@@ -24,7 +24,7 @@ export class LocalFileSystem implements BaseFileSystem {
   public async read(key: string): Promise<FileSystemResponse<Buffer>> {
     const fullPath = join(this.rootPath, key);
 
-    if (!(await this.exists(fullPath))) {
+    if (!(await this.exists(key))) {
       return {ok: false, error: 'NotFound'};
     }
 
@@ -39,7 +39,7 @@ export class LocalFileSystem implements BaseFileSystem {
   public async readStream(key: string): Promise<FileSystemResponse<NodeJS.ReadableStream>> {
     const fullPath = join(this.rootPath, key);
 
-    if (!(await this.exists(fullPath))) {
+    if (!(await this.exists(key))) {
       return {ok: false, error: 'NotFound'};
     }
 

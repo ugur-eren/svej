@@ -7,6 +7,7 @@ import {fileSystem} from '../Services';
 
 export const ImageHandler = async (file: Express.Multer.File) => {
   const fileId = uuid();
+  const fileName = `${fileId}.webp`;
 
   const image = sharp(file.buffer);
   const {width: oldWidth = Config.maxImageDimension, height: oldHeight = Config.maxImageDimension} =
@@ -32,7 +33,7 @@ export const ImageHandler = async (file: Express.Multer.File) => {
   image.toFormat('webp');
 
   const buffer = await image.toBuffer();
-  await fileSystem.write(`${fileId}.webp`, buffer, 'image/webp');
+  await fileSystem.write(fileName, buffer, 'image/webp');
 
   let thumbnail: string | null = null;
   try {
@@ -50,7 +51,7 @@ export const ImageHandler = async (file: Express.Multer.File) => {
 
   return {
     type: MediaType.IMAGE,
-    fileKey: fileId,
+    fileKey: fileName,
     width: newWidth,
     height: newHeight,
     thumbnail,
