@@ -1,11 +1,11 @@
 import type {Prisma} from '@prisma/client';
 
-export const Author: Prisma.UserInclude = {
+export const Author = {
   profilePhoto: true,
   tags: true,
-};
+} satisfies Prisma.UserInclude;
 
-export const User: Prisma.UserInclude = {
+export const User = {
   _count: {
     select: {
       posts: true,
@@ -17,7 +17,7 @@ export const User: Prisma.UserInclude = {
   profilePhoto: true,
   coverPhoto: true,
   tags: true,
-};
+} satisfies Prisma.UserInclude;
 
 export const Post = (userId: string) =>
   ({
