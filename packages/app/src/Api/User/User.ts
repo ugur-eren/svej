@@ -2,6 +2,10 @@ import ApiInstance from '../ApiInstance';
 import {Response} from '../Types';
 import * as ApiTypes from './User.types';
 
+export const search = (query: string): Response<ApiTypes.SearchResponse> => {
+  return ApiInstance.get(`/user/search`, {query});
+};
+
 export const getMe = (): Response<ApiTypes.User> => {
   return ApiInstance.get(`/user/me`);
 };

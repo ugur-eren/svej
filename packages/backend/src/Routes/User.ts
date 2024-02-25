@@ -1,44 +1,94 @@
 import {Password} from 'server-side';
 import express from 'express';
 import {ErrorCodes, HTTPStatus, Zod} from 'common';
-import {Prisma, PrismaIncludes} from '../Services';
+import {Prisma, PrismaIncludes, PrismaTypes} from '../Services';
 import {onlyAuthorized} from '../Middlewares';
 
 const Router = express.Router();
 
+const extendUser = (
+  user: PrismaTypes.UserGetPayload<{include: ReturnType<typeof PrismaIncludes.Author>}>,
+  userId: string,
+) => {
+  return {
+    ...user,
+    isFollowing: user.followers.some((follower) => follower.id === userId),
+  };
+};
+
+Router.get('/search', onlyAuthorized, async (req, res) => {
+  const {query} = req.query;
+
+  if (typeof query !== 'string') {
+    res.status(HTTPStatus.BadRequest).send({code: ErrorCodes.FillAllFields});
+    return;
+  }
+
+  if (!query.trim()) {
+    res.status(HTTPStatus.OK).send([]);
+    return;
+  }
+
+  const users = await Prisma.user.findMany({
+    where: {
+      OR: [{username: {contains: query.trim()}}, {fullname: {contains: query.trim()}}],
+    },
+    orderBy: {followers: {_count: 'desc'}},
+    take: 20,
+    include: PrismaIncludes.Author(res.locals.user.id),
+  });
+
+  const extendedUsers = users.map((user) => extendUser(user, res.locals.user.id));
+
+  res.status(HTTPStatus.OK).send(extendedUsers);
+});
+
 Router.get('/me', onlyAuthorized, async (req, res) => {
   const user = await Prisma.user.findUnique({
     where: {id: res.locals.user.id},
-    include: PrismaIncludes.User,
+    include: PrismaIncludes.User(res.locals.user.id),
   });
 
-  res.status(HTTPStatus.OK).send(user);
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const extendedUser = extendUser(user!, res.locals.user.id);
+
+  res.status(HTTPStatus.OK).send(extendedUser);
 });
 
-Router.get('/username/:username', async (req, res) => {
+Router.get('/username/:username', onlyAuthorized, async (req, res) => {
   const {username} = req.params;
 
-  const user = await Prisma.user.findUnique({where: {username}, include: PrismaIncludes.User});
+  const user = await Prisma.user.findUnique({
+    where: {username},
+    include: PrismaIncludes.User(res.locals.user.id),
+  });
 
   if (!user) {
     res.status(HTTPStatus.NotFound).send({code: ErrorCodes.UserNotFound});
     return;
   }
 
-  res.status(HTTPStatus.OK).send(user);
+  const extendedUser = extendUser(user, res.locals.user.id);
+
+  res.status(HTTPStatus.OK).send(extendedUser);
 });
 
-Router.get('/:id', async (req, res) => {
+Router.get('/:id', onlyAuthorized, async (req, res) => {
   const {id} = req.params;
 
-  const user = await Prisma.user.findUnique({where: {id}, include: PrismaIncludes.User});
+  const user = await Prisma.user.findUnique({
+    where: {id},
+    include: PrismaIncludes.User(res.locals.user.id),
+  });
 
   if (!user) {
     res.status(HTTPStatus.NotFound).send({code: ErrorCodes.UserNotFound});
     return;
   }
 
-  res.status(HTTPStatus.OK).send(user);
+  const extendedUser = extendUser(user, res.locals.user.id);
+
+  res.status(HTTPStatus.OK).send(extendedUser);
 });
 
 Router.put('/', async (req, res) => {

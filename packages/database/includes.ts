@@ -1,30 +1,34 @@
 import type {Prisma} from '@prisma/client';
 
-export const Author = {
-  profilePhoto: true,
-  tags: true,
-} satisfies Prisma.UserInclude;
+export const Author = (userId: string) =>
+  ({
+    profilePhoto: true,
+    tags: true,
+    followers: {select: {id: true}, where: {id: userId}},
+  } satisfies Prisma.UserInclude);
 
-export const User = {
-  _count: {
-    select: {
-      posts: true,
-      follows: true,
-      followers: true,
+export const User = (userId: string) =>
+  ({
+    _count: {
+      select: {
+        posts: true,
+        follows: true,
+        followers: true,
+      },
     },
-  },
 
-  profilePhoto: true,
-  coverPhoto: true,
-  tags: true,
-} satisfies Prisma.UserInclude;
+    profilePhoto: true,
+    coverPhoto: true,
+    tags: true,
+    followers: {select: {id: true}, where: {id: userId}},
+  } satisfies Prisma.UserInclude);
 
 export const Post = (userId: string) =>
   ({
     _count: true,
 
     medias: true,
-    author: {include: Author},
+    author: {include: Author(userId)},
 
     likes: {
       select: {
@@ -45,7 +49,7 @@ export const Post = (userId: string) =>
 
     comments: {
       include: {
-        author: {include: Author},
+        author: {include: Author(userId)},
       },
       take: 2,
       orderBy: {
@@ -82,5 +86,5 @@ export const Comment = (userId: string) =>
       },
     },
 
-    author: {include: Author},
+    author: {include: Author(userId)},
   } satisfies Prisma.CommentInclude);

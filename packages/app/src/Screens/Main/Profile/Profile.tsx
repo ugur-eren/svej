@@ -29,7 +29,6 @@ const Profile: React.FC<ProfileScreenProps> = ({navigation, route}) => {
         title={username}
         onSettingsPress={isSelf ? onSettingsPress : undefined}
         onMorePress={isSelf ? undefined : onMorePress}
-        hideBack={isSelf}
       />
     </PageContainer>
   );

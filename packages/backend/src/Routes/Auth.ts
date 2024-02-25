@@ -18,7 +18,7 @@ Router.post('/login', async (req, res) => {
 
   const {username, password} = body.data;
 
-  const user = await Prisma.user.findUnique({where: {username}, include: PrismaIncludes.User});
+  const user = await Prisma.user.findUnique({where: {username}, include: PrismaIncludes.User('')});
 
   if (!user || !user.active) {
     res.status(HTTPStatus.NotFound).send({code: ErrorCodes.UserNotFound});
