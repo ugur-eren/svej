@@ -35,14 +35,14 @@ export const VideoHandler = async (file: Express.Multer.File) => {
   let newWidth: number = Config.maxImageDimension;
   let newHeight: number = Config.maxImageDimension;
 
-  if (oldWidth > oldHeight && oldWidth > Config.maxImageDimension) {
-    newWidth = Config.maxImageDimension;
-    newHeight = Math.round((oldHeight / oldWidth) * Config.maxImageDimension);
-  }
-
-  if (oldHeight > oldWidth && oldHeight > Config.maxImageDimension) {
-    newWidth = Math.round((oldWidth / oldHeight) * Config.maxImageDimension);
-    newHeight = Config.maxImageDimension;
+  if (oldWidth > Config.maxImageDimension || oldHeight > Config.maxImageDimension) {
+    if (oldWidth > oldHeight) {
+      newWidth = Config.maxImageDimension;
+      newHeight = Math.round((oldHeight / oldWidth) * Config.maxImageDimension);
+    } else {
+      newWidth = Math.round((oldWidth / oldHeight) * Config.maxImageDimension);
+      newHeight = Config.maxImageDimension;
+    }
   }
 
   const ffmpegProcess = await Spawn('ffmpeg', [
