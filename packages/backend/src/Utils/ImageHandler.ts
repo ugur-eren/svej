@@ -50,7 +50,7 @@ export const ImageHandler = async (file: Express.Multer.File) => {
 
   return {
     type: MediaType.IMAGE,
-    url: fileId,
+    fileKey: fileId,
     width: newWidth,
     height: newHeight,
     thumbnail,

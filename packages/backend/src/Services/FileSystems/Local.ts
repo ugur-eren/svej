@@ -10,8 +10,8 @@ export class LocalFileSystem implements BaseFileSystem {
     this.rootPath = rootPath;
   }
 
-  public async exists(path: string): Promise<boolean> {
-    const fullPath = join(this.rootPath, path);
+  public async exists(key: string): Promise<boolean> {
+    const fullPath = join(this.rootPath, key);
 
     try {
       await fs.access(fullPath, fs.constants.F_OK);
@@ -21,8 +21,8 @@ export class LocalFileSystem implements BaseFileSystem {
     }
   }
 
-  public async read(path: string): Promise<FileSystemResponse<Buffer>> {
-    const fullPath = join(this.rootPath, path);
+  public async read(key: string): Promise<FileSystemResponse<Buffer>> {
+    const fullPath = join(this.rootPath, key);
 
     if (!(await this.exists(fullPath))) {
       return {ok: false, error: 'NotFound'};
@@ -36,8 +36,8 @@ export class LocalFileSystem implements BaseFileSystem {
     }
   }
 
-  public async readStream(path: string): Promise<FileSystemResponse<NodeJS.ReadableStream>> {
-    const fullPath = join(this.rootPath, path);
+  public async readStream(key: string): Promise<FileSystemResponse<NodeJS.ReadableStream>> {
+    const fullPath = join(this.rootPath, key);
 
     if (!(await this.exists(fullPath))) {
       return {ok: false, error: 'NotFound'};
@@ -51,8 +51,8 @@ export class LocalFileSystem implements BaseFileSystem {
     }
   }
 
-  public async write(path: string, data: Buffer): Promise<boolean> {
-    const fullPath = join(this.rootPath, path);
+  public async write(key: string, data: Buffer): Promise<boolean> {
+    const fullPath = join(this.rootPath, key);
 
     try {
       await fs.writeFile(fullPath, data);
@@ -62,8 +62,8 @@ export class LocalFileSystem implements BaseFileSystem {
     }
   }
 
-  public async delete(path: string): Promise<boolean> {
-    const fullPath = join(this.rootPath, path);
+  public async delete(key: string): Promise<boolean> {
+    const fullPath = join(this.rootPath, key);
 
     try {
       await fs.unlink(fullPath);

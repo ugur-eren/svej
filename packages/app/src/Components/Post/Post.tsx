@@ -65,7 +65,7 @@ const Post: React.FC<PostProps> = ({postId}) => {
             } as const
           )[media.type],
           ratio: media.width / media.height,
-          uri: media.url,
+          uri: media.fileKey,
         }))}
       />
 

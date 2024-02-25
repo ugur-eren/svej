@@ -91,7 +91,7 @@ export const VideoHandler = async (file: Express.Multer.File) => {
 
   return {
     type: MediaType.VIDEO,
-    url: fileId,
+    fileKey: fileId,
     width: 300,
     height: 300,
     thumbnail,

@@ -32,14 +32,14 @@ const ProfileHead: React.FC<ProfileHeadProps> = ({username}) => {
   const onPPPress = () => {
     navigation.navigate('ImageViewer', {
       title: username,
-      image: user.data?.profilePhoto?.url ?? '',
+      image: user.data?.profilePhoto?.fileKey ?? '',
     });
   };
 
   const onBGPress = () => {
     navigation.navigate('ImageViewer', {
       title: username,
-      image: user.data?.coverPhoto?.url ?? '',
+      image: user.data?.coverPhoto?.fileKey ?? '',
     });
   };
 
@@ -54,11 +54,11 @@ const ProfileHead: React.FC<ProfileHeadProps> = ({username}) => {
       <View style={styles.backgroundContainer}>
         <TouchableWithoutFeedback
           style={GlobalStyles.flex1}
-          onPress={user.data.coverPhoto?.url ? onBGPress : undefined}
+          onPress={user.data.coverPhoto?.fileKey ? onBGPress : undefined}
         >
           <View style={GlobalStyles.flex1}>
             <Image
-              source={{uri: user.data.coverPhoto?.url}}
+              source={{uri: user.data.coverPhoto?.fileKey}}
               contentFit="cover"
               style={GlobalStyles.flex1}
             />
@@ -70,9 +70,9 @@ const ProfileHead: React.FC<ProfileHeadProps> = ({username}) => {
         <View style={styles.profilePhotoContainer}>
           <TouchableWithoutFeedback
             style={styles.profilePhotoContainer}
-            onPress={user.data.profilePhoto?.url ? onPPPress : undefined}
+            onPress={user.data.profilePhoto?.fileKey ? onPPPress : undefined}
           >
-            <Avatar avatar={user.data.profilePhoto?.url} style={styles.profilePhoto} />
+            <Avatar avatar={user.data.profilePhoto?.fileKey} style={styles.profilePhoto} />
           </TouchableWithoutFeedback>
         </View>
 

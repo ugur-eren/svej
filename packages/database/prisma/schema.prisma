@@ -82,7 +82,7 @@ model UserTag {
 model Media {
   id        String    @id @default(uuid())
   type      MediaType
-  url       String
+  fileKey   String
   width     Int
   height    Int
   thumbnail String?

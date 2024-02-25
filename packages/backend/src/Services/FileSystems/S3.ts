@@ -48,20 +48,20 @@ export class S3FileSystem implements BaseFileSystem {
     }
   }
 
-  public async exists(path: string): Promise<boolean> {
-    const response = await this.getHead(path);
+  public async exists(key: string): Promise<boolean> {
+    const response = await this.getHead(key);
 
     return !!(response.ok && response.response?.$metadata.httpStatusCode === 200);
   }
 
-  public async read(path: string): Promise<FileSystemResponse<Buffer>> {
-    if (!(await this.exists(path))) {
+  public async read(key: string): Promise<FileSystemResponse<Buffer>> {
+    if (!(await this.exists(key))) {
       return {ok: false, error: 'NotFound'};
     }
 
     const command = new GetObjectCommand({
       Bucket: this.bucket,
-      Key: path,
+      Key: key,
     });
 
     try {
@@ -80,14 +80,14 @@ export class S3FileSystem implements BaseFileSystem {
     }
   }
 
-  public async readStream(path: string): Promise<FileSystemResponse<NodeJS.ReadableStream>> {
-    if (!(await this.exists(path))) {
+  public async readStream(key: string): Promise<FileSystemResponse<NodeJS.ReadableStream>> {
+    if (!(await this.exists(key))) {
       return {ok: false, error: 'NotFound'};
     }
 
     const command = new GetObjectCommand({
       Bucket: this.bucket,
-      Key: path,
+      Key: key,
     });
 
     try {
@@ -107,12 +107,12 @@ export class S3FileSystem implements BaseFileSystem {
     }
   }
 
-  public async write(path: string, data: Buffer, mime: string): Promise<boolean> {
+  public async write(key: string, data: Buffer, mime: string): Promise<boolean> {
     const dataHash = createHash('md5').update(data).digest('base64');
 
     const command = new PutObjectCommand({
       Bucket: this.bucket,
-      Key: path,
+      Key: key,
       Body: data,
       ContentType: mime,
       ContentMD5: dataHash,
@@ -127,10 +127,10 @@ export class S3FileSystem implements BaseFileSystem {
     }
   }
 
-  public async delete(path: string): Promise<boolean> {
+  public async delete(key: string): Promise<boolean> {
     const deleteCommand = new DeleteObjectCommand({
       Bucket: this.bucket,
-      Key: path,
+      Key: key,
     });
 
     try {

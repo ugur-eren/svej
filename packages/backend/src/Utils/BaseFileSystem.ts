@@ -14,12 +14,12 @@ export type FileSystemResponse<TResponse> =
     };
 
 export abstract class BaseFileSystem {
-  public abstract exists(path: string): Promise<boolean>;
+  public abstract exists(key: string): Promise<boolean>;
 
-  public abstract read(path: string): Promise<FileSystemResponse<Buffer>>;
-  public abstract readStream(path: string): Promise<FileSystemResponse<NodeJS.ReadableStream>>;
+  public abstract read(key: string): Promise<FileSystemResponse<Buffer>>;
+  public abstract readStream(key: string): Promise<FileSystemResponse<NodeJS.ReadableStream>>;
 
-  public abstract write(path: string, data: Buffer, mime: string): Promise<boolean>;
+  public abstract write(key: string, data: Buffer, mime: string): Promise<boolean>;
 
-  public abstract delete(path: string): Promise<boolean>;
+  public abstract delete(key: string): Promise<boolean>;
 }
