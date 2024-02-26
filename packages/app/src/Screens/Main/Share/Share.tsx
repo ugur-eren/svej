@@ -1,3 +1,4 @@
+import {Zod} from 'common';
 import {useState} from 'react';
 import {View, ScrollView} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -9,9 +10,9 @@ import {Feather} from '@expo/vector-icons';
 import {PageContainer} from '../../../Containers';
 import {AutoGrid, Divider, Header, Input, Text, Touchable} from '../../../Components';
 import {useLanguage, useShowDialog, useShowToast, useTheme, useUploadPost} from '../../../Hooks';
-import getStyles from './Share.styles';
-import {Spacing} from '../../../Styles';
 import {ShareScreenProps} from '../../../Types';
+import {Spacing} from '../../../Styles';
+import getStyles from './Share.styles';
 
 const Share: React.FC<ShareScreenProps> = ({navigation}) => {
   const theme = useTheme();
@@ -47,6 +48,25 @@ const Share: React.FC<ShareScreenProps> = ({navigation}) => {
       showToast({
         title: language.share.share_in_progress_title,
         message: language.share.share_in_progress_message,
+        type: 'warning',
+      });
+      return;
+    }
+
+    const messageValidation = Zod.Post.Create.safeParse({description: message});
+    if (!messageValidation.success) {
+      showToast({
+        title: language.share.message_too_long_title,
+        message: language.share.message_too_long_message,
+        type: 'warning',
+      });
+      return;
+    }
+
+    if (medias.length === 0 && !messageValidation.data.description) {
+      showToast({
+        title: language.common.warning,
+        message: language.api_errors.PostDoesntHaveMediaOrDescription,
         type: 'warning',
       });
       return;

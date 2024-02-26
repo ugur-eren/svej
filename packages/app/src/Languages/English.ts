@@ -26,6 +26,7 @@ export default {
     theme: 'Theme',
     language: 'Language',
     logout: 'Logout',
+    warning: 'Warning',
   },
 
   auth: {
@@ -115,14 +116,20 @@ export default {
     share_button: 'Share',
     picture: 'Picture',
     video: 'Video',
+
     share_in_progress_title: 'Share in progress',
     share_in_progress_message:
       'There is already an active share process. Please wait until it is finished.',
+
     share_success_title: 'Post shared',
     share_success_message: 'Your post has been shared successfully.',
+
     dialog_title: 'Share',
     dialog_message: 'Are you sure you want to share this post?',
     dialog_share_button: 'Share',
+
+    message_too_long_title: 'Message too long',
+    message_too_long_message: 'Your message is too long. It must be at most %max% characters.',
   },
 
   settings: {
