@@ -8,9 +8,15 @@ export default ThemedStyleSheet((theme) => ({
     position: 'relative',
   },
 
-  backgroundContainer: {
+  coverPhotoContainer: {
     position: 'relative',
     height: IsAndroid ? 200 : 235,
+  },
+  coverPhotoCamera: {
+    position: 'absolute',
+    right: Spacing.xxxsmall,
+    bottom: Spacing.xxxsmall,
+    backgroundColor: theme.colors.surface,
   },
 
   topInfoContainer: {
@@ -23,12 +29,23 @@ export default ThemedStyleSheet((theme) => ({
   profilePhotoContainer: {
     width: 100,
     height: 100,
-    borderRadius: 100,
     top: -25,
+    position: 'relative',
+  },
+  profilePhotoContent: {
+    width: 100,
+    height: 100,
+    borderRadius: 100,
     borderWidth: StyleSheet.hairlineWidth,
     borderColor: theme.colors.primary,
     overflow: 'hidden',
     position: 'relative',
+  },
+  profilePhotoCamera: {
+    position: 'absolute',
+    right: -Spacing.small,
+    bottom: -Spacing.small,
+    backgroundColor: theme.colors.surface,
   },
   profilePhoto: {
     width: '100%',

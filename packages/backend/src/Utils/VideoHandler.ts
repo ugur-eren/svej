@@ -7,6 +7,7 @@ import sharp from 'sharp';
 import {Spawn} from './Spawn';
 import {TEMP_DIR} from './Constants';
 import {fileSystem} from '../Services';
+import {clampDimensions} from './Helpers';
 
 export const VideoHandler = async (file: Express.Multer.File) => {
   const tempFilePath = `${TEMP_DIR}/${uuid()}.tmp`;
@@ -29,21 +30,14 @@ export const VideoHandler = async (file: Express.Multer.File) => {
     throw new Error(ffprobeProcess.stderr.join('\n'));
   }
 
-  const [oldWidth = Config.maxImageDimension, oldHeight = Config.maxImageDimension] =
+  const [oldWidth = Config.maxPostVideoDimension, oldHeight = Config.maxPostVideoDimension] =
     ffprobeProcess.stdout[0].split('x').map((x) => parseInt(x, 10));
 
-  let newWidth: number = Config.maxImageDimension;
-  let newHeight: number = Config.maxImageDimension;
-
-  if (oldWidth > Config.maxImageDimension || oldHeight > Config.maxImageDimension) {
-    if (oldWidth > oldHeight) {
-      newWidth = Config.maxImageDimension;
-      newHeight = Math.round((oldHeight / oldWidth) * Config.maxImageDimension);
-    } else {
-      newWidth = Math.round((oldWidth / oldHeight) * Config.maxImageDimension);
-      newHeight = Config.maxImageDimension;
-    }
-  }
+  const {width: newWidth, height: newHeight} = clampDimensions(
+    oldWidth,
+    oldHeight,
+    Config.maxPostVideoDimension,
+  );
 
   const ffmpegProcess = await Spawn('ffmpeg', [
     ['-hide_banner'],

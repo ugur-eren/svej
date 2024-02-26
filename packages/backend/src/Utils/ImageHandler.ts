@@ -4,27 +4,44 @@ import sharp from 'sharp';
 import {v4 as uuid} from 'uuid';
 import {encode} from 'blurhash';
 import {fileSystem} from '../Services';
+import {clampDimensions, getCropArea} from './Helpers';
 
-export const ImageHandler = async (file: Express.Multer.File) => {
+export const ImageHandler = async (
+  file: Express.Multer.File,
+  type: 'post' | 'profile' | 'cover',
+) => {
   const fileId = uuid();
   const fileName = `${fileId}.webp`;
 
+  const maxDimension = {
+    post: Config.maxPostImageDimension,
+    profile: Config.maxProfilePhotoDimension,
+    cover: Config.maxCoverPhotoDimension,
+  }[type];
+
   const image = sharp(file.buffer);
-  const {width: oldWidth = Config.maxImageDimension, height: oldHeight = Config.maxImageDimension} =
-    await image.metadata();
+  let {width: oldWidth = maxDimension, height: oldHeight = maxDimension} = await image.metadata();
 
-  let newWidth: number = Config.maxImageDimension;
-  let newHeight: number = Config.maxImageDimension;
+  if (type === 'profile' || type === 'cover') {
+    const aspectRatio = {
+      profile: Config.profilePhotoAspectRatio,
+      cover: Config.coverPhotoAspectRatio,
+    }[type];
 
-  if (oldWidth > Config.maxImageDimension || oldHeight > Config.maxImageDimension) {
-    if (oldWidth > oldHeight) {
-      newWidth = Config.maxImageDimension;
-      newHeight = Math.round((oldHeight / oldWidth) * Config.maxImageDimension);
-    } else {
-      newWidth = Math.round((oldWidth / oldHeight) * Config.maxImageDimension);
-      newHeight = Config.maxImageDimension;
-    }
+    const cropArea = getCropArea(oldWidth, oldHeight, [...aspectRatio]);
+
+    image.extract({
+      left: cropArea.x,
+      top: cropArea.y,
+      width: cropArea.width,
+      height: cropArea.height,
+    });
+
+    oldWidth = cropArea.width;
+    oldHeight = cropArea.height;
   }
+
+  const {width: newWidth, height: newHeight} = clampDimensions(oldWidth, oldHeight, maxDimension);
 
   image.resize({
     width: newWidth,

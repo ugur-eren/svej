@@ -1,8 +1,9 @@
 import {Password} from 'server-side';
 import express from 'express';
 import {Config, ErrorCodes, HTTPStatus, Zod} from 'common';
-import {Prisma, PrismaIncludes, PrismaTypes} from '../Services';
+import {Prisma, PrismaIncludes, PrismaTypes, Upload} from '../Services';
 import {onlyAuthorized} from '../Middlewares';
+import {ImageHandler} from '../Utils/ImageHandler';
 
 const Router = express.Router();
 
@@ -155,6 +156,33 @@ Router.post('/:id/relation/:type(follow|unfollow)', onlyAuthorized, async (req, 
 
   res.status(HTTPStatus.OK).send();
 });
+
+Router.post(
+  '/photo/:type(profile|cover)',
+  onlyAuthorized,
+  Upload.single('photo'),
+  async (req, res) => {
+    const {type} = req.params;
+
+    if (!req.file || (type !== 'profile' && type !== 'cover')) {
+      res.status(HTTPStatus.BadRequest).send({code: ErrorCodes.FillAllFields});
+      return;
+    }
+
+    const media = await ImageHandler(req.file, type);
+
+    await Prisma.user.update({
+      where: {id: res.locals.user.id},
+      data: {
+        [type === 'profile' ? 'profilePhoto' : 'coverPhoto']: {
+          create: media,
+        },
+      },
+    });
+
+    res.status(HTTPStatus.OK).send();
+  },
+);
 
 Router.put('/', async (req, res) => {
   const body = Zod.User.Create.safeParse(req.body);

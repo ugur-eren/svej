@@ -1,11 +1,21 @@
-import {memo} from 'react';
+import {Config} from 'common';
+import {memo, useState} from 'react';
 import {View, TouchableWithoutFeedback, TouchableOpacity} from 'react-native';
 import {Image} from 'expo-image';
+import * as ImagePicker from 'expo-image-picker';
 import {useNavigation} from '@react-navigation/native';
 import {Feather} from '@expo/vector-icons';
+import {IconButton} from 'react-native-paper';
 import {useQueryClient} from '@tanstack/react-query';
 import {Avatar, Divider, Text, TextButton} from '../../../../Components';
-import {useLanguage, useMutation, useQuery, useTheme} from '../../../../Hooks';
+import {
+  useLanguage,
+  useMutation,
+  useQuery,
+  useShowApiError,
+  useShowToast,
+  useTheme,
+} from '../../../../Hooks';
 import {UserApi, FileApi} from '../../../../Api';
 import {Selectors, useAppSelector} from '../../../../Redux';
 import {ProfileScreenProps} from '../../../../Types';
@@ -21,8 +31,13 @@ const ProfileHead: React.FC<ProfileHeadProps> = ({userId, username}) => {
   const theme = useTheme();
   const language = useLanguage();
   const navigation = useNavigation<ProfileScreenProps['navigation']>();
+  const showToast = useShowToast();
+  const showApiError = useShowApiError();
 
   const isSelf = useAppSelector((state) => Selectors.Auth.UserIsSelf(state, username));
+
+  const [profilePhotoLoading, setProfilePhotoLoading] = useState(false);
+  const [coverPhotoLoading, setCoverPhotoLoading] = useState(false);
 
   const queryClient = useQueryClient();
 
@@ -59,6 +74,58 @@ const ProfileHead: React.FC<ProfileHeadProps> = ({userId, username}) => {
     navigation.push('Relations', {type: 'followers', userId, username});
   };
 
+  const changePhoto = async (type: 'profile' | 'cover') => {
+    const pickerResult = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      aspect: [
+        ...(type === 'profile' ? Config.profilePhotoAspectRatio : Config.coverPhotoAspectRatio),
+      ],
+      allowsEditing: true,
+      allowsMultipleSelection: false,
+      selectionLimit: 1,
+      exif: false,
+      quality: 0.75,
+    });
+
+    if (pickerResult.canceled || !pickerResult.assets.length) return;
+    const file = pickerResult.assets[0];
+
+    try {
+      const result = await UserApi.changePhoto(type, file, {timeout: 0});
+      if (!result.ok) throw result.data;
+
+      queryClient.invalidateQueries({
+        queryKey: ['user', username],
+      });
+
+      showToast({
+        type: 'success',
+        title: {
+          profile: language.profile.profile_photo_changed_title,
+          cover: language.profile.cover_photo_changed_title,
+        }[type],
+        message: {
+          profile: language.profile.profile_photo_changed_message,
+          cover: language.profile.cover_photo_changed_message,
+        }[type],
+      });
+    } catch (error) {
+      showApiError(error as Error);
+    }
+  };
+
+  const onProfilePhotoCameraPress = async () => {
+    setProfilePhotoLoading(true);
+    await changePhoto('profile');
+    setProfilePhotoLoading(false);
+  };
+
+  const onCoverPhotoCameraPress = async () => {
+    setCoverPhotoLoading(true);
+    await changePhoto('cover');
+    setCoverPhotoLoading(false);
+  };
+
   const onUpdateRelationPress = async () => {
     if (!user.data) return;
 
@@ -80,7 +147,7 @@ const ProfileHead: React.FC<ProfileHeadProps> = ({userId, username}) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.backgroundContainer}>
+      <View style={styles.coverPhotoContainer}>
         <TouchableWithoutFeedback
           style={GlobalStyles.flex1}
           onPress={user.data.coverPhoto?.fileKey ? onBGPress : undefined}
@@ -91,18 +158,35 @@ const ProfileHead: React.FC<ProfileHeadProps> = ({userId, username}) => {
               contentFit="cover"
               style={GlobalStyles.flex1}
             />
+
+            {isSelf ? (
+              <IconButton
+                icon={coverPhotoLoading ? 'loader' : 'camera'}
+                style={styles.coverPhotoCamera}
+                onPress={coverPhotoLoading ? undefined : onCoverPhotoCameraPress}
+              />
+            ) : null}
           </View>
         </TouchableWithoutFeedback>
       </View>
 
       <View style={styles.topInfoContainer}>
         <View style={styles.profilePhotoContainer}>
-          <TouchableWithoutFeedback
-            style={styles.profilePhotoContainer}
-            onPress={user.data.profilePhoto?.fileKey ? onPPPress : undefined}
-          >
-            <Avatar avatarKey={user.data.profilePhoto?.fileKey} style={styles.profilePhoto} />
-          </TouchableWithoutFeedback>
+          <View style={styles.profilePhotoContent}>
+            <TouchableWithoutFeedback
+              onPress={user.data.profilePhoto?.fileKey ? onPPPress : undefined}
+            >
+              <Avatar avatarKey={user.data.profilePhoto?.fileKey} style={styles.profilePhoto} />
+            </TouchableWithoutFeedback>
+          </View>
+
+          {isSelf ? (
+            <IconButton
+              icon={profilePhotoLoading ? 'loader' : 'camera'}
+              style={styles.profilePhotoCamera}
+              onPress={profilePhotoLoading ? undefined : onProfilePhotoCameraPress}
+            />
+          ) : null}
         </View>
 
         <View style={styles.userInfo}>

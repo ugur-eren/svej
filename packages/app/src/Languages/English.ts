@@ -96,6 +96,10 @@ export default {
 
   profile: {
     title: 'Profile',
+    profile_photo_changed_title: 'Success',
+    profile_photo_changed_message: 'Your profile photo changed successfuly',
+    cover_photo_changed_title: 'Success',
+    cover_photo_changed_message: 'Your cover photo changed successfuly',
   },
 
   search: {

@@ -1,3 +1,5 @@
+import type {AxiosRequestConfig} from 'axios';
+import type {ImagePickerAsset} from 'expo-image-picker';
 import ApiInstance from '../ApiInstance';
 import {Response} from '../Types';
 import * as ApiTypes from './User.types';
@@ -31,6 +33,28 @@ export const updateRelation = (
   type: 'follow' | 'unfollow',
 ): Response<ApiTypes.Relations> => {
   return ApiInstance.post(`/user/${id}/relation/${type}`);
+};
+
+export const changePhoto = (
+  type: 'profile' | 'cover',
+  file: ImagePickerAsset,
+  config?: AxiosRequestConfig,
+): Response<void> => {
+  const formData = new FormData();
+
+  formData.append('photo', {
+    uri: file.uri,
+    name: 'photo',
+    type: file.mimeType,
+  });
+
+  return ApiInstance.post(`/user/photo/${type}`, formData, {
+    ...config,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      ...config?.headers,
+    },
+  });
 };
 
 export const register = (data: ApiTypes.RegisterRequest): Response<ApiTypes.RegisterResponse> => {

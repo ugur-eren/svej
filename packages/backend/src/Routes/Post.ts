@@ -177,7 +177,7 @@ Router.put(
               if (file.size > Config.maxFileSize) return null;
 
               if (file.mimetype.startsWith('image/')) {
-                return ImageHandler(file);
+                return ImageHandler(file, 'post');
               }
 
               if (file.mimetype.startsWith('video/')) {
