@@ -36,12 +36,12 @@ export const clampDimensions = (
   if (width > height) {
     return {
       width: maxDimension,
-      height: maxDimension / aspectRatio,
+      height: Math.round(maxDimension / aspectRatio),
     };
   }
 
   return {
-    width: maxDimension * aspectRatio,
+    width: Math.round(maxDimension * aspectRatio),
     height: maxDimension,
   };
 };
