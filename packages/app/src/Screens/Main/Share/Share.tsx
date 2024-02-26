@@ -8,7 +8,7 @@ import * as ImagePicker from 'expo-image-picker';
 import {Feather} from '@expo/vector-icons';
 import {PageContainer} from '../../../Containers';
 import {AutoGrid, Divider, Header, Input, Text, Touchable} from '../../../Components';
-import {useLanguage, useShowToast, useTheme, useUploadPost} from '../../../Hooks';
+import {useLanguage, useShowDialog, useShowToast, useTheme, useUploadPost} from '../../../Hooks';
 import getStyles from './Share.styles';
 import {Spacing} from '../../../Styles';
 import {ShareScreenProps} from '../../../Types';
@@ -21,6 +21,7 @@ const Share: React.FC<ShareScreenProps> = ({navigation}) => {
   const [medias, setMedias] = useState<ImagePicker.ImagePickerAsset[]>([]);
   const {uploadPost, isUploadActive} = useUploadPost();
   const showToast = useShowToast();
+  const showDialog = useShowDialog();
 
   const styles = getStyles(theme);
 
@@ -41,7 +42,7 @@ const Share: React.FC<ShareScreenProps> = ({navigation}) => {
     setMedias([...medias, ...result.assets]);
   };
 
-  const onSubmit = async () => {
+  const onSharePress = () => {
     if (isUploadActive()) {
       showToast({
         title: language.share.share_in_progress_title,
@@ -51,6 +52,25 @@ const Share: React.FC<ShareScreenProps> = ({navigation}) => {
       return;
     }
 
+    showDialog({
+      title: language.share.dialog_title,
+      message: language.share.dialog_message,
+      actions: [
+        {
+          label: language.common.cancel,
+          type: 'cancel',
+        },
+        {
+          label: language.share.dialog_share_button,
+          type: 'success',
+          hideOnPress: true,
+          onPress: onSubmit,
+        },
+      ],
+    });
+  };
+
+  const onSubmit = async () => {
     uploadPost(message, medias);
     navigation.goBack();
   };
@@ -132,7 +152,7 @@ const Share: React.FC<ShareScreenProps> = ({navigation}) => {
       </ScrollView>
 
       <Surface elevation={2} style={styles.submitButton}>
-        <Touchable onPress={onSubmit}>
+        <Touchable onPress={onSharePress}>
           <SafeAreaView edges={['bottom']} style={styles.submitButtonContent}>
             <Feather
               name="upload"

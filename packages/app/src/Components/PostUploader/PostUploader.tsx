@@ -78,8 +78,10 @@ const PostUploader = memo(
           },
         );
         if (!result.ok) throw result.data;
+        return true;
       } catch (error) {
         showApiError(error as Error);
+        return false;
       } finally {
         // Reset the progress
         progress.value = 0;

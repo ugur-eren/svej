@@ -23,17 +23,19 @@ export const useUploadPost = () => {
   const language = useLanguage();
 
   const uploadPost: PostUploader['uploadPost'] = async (description, medias) => {
-    if (!postUploader?.current?.uploadPost) return undefined;
+    if (!postUploader?.current?.uploadPost) return false;
 
-    await postUploader.current?.uploadPost(description, medias);
+    const status = await postUploader.current?.uploadPost(description, medias);
 
-    showToast({
-      title: language.share.share_success_title,
-      message: language.share.share_success_message,
-      type: 'success',
-    });
+    if (status) {
+      showToast({
+        title: language.share.share_success_title,
+        message: language.share.share_success_message,
+        type: 'success',
+      });
+    }
 
-    return undefined;
+    return status;
   };
 
   const isUploadActive = () => {

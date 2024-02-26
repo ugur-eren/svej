@@ -120,6 +120,9 @@ export default {
       'There is already an active share process. Please wait until it is finished.',
     share_success_title: 'Post shared',
     share_success_message: 'Your post has been shared successfully.',
+    dialog_title: 'Share',
+    dialog_message: 'Are you sure you want to share this post?',
+    dialog_share_button: 'Share',
   },
 
   settings: {

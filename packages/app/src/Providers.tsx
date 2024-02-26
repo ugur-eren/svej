@@ -6,14 +6,15 @@ import {Provider as ReduxProvider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {StyleSheet} from 'react-native';
+import {ToastContainer} from './Containers';
 import {store, persistor} from './Redux';
 import {CurrentTimeProvider, useTheme} from './Hooks';
 import {LanguageProvider} from './Hooks/Language';
 import {ThemeProvider} from './Hooks/Theming';
 import {ToastProvider} from './Hooks/useToast';
-import {PaperIconProp} from './Utils/CommonComponents';
-import {ToastContainer} from './Containers';
+import {DialogProvider} from './Hooks/useDialog';
 import {PostUploaderProvider} from './Hooks/useUploadPost';
+import {PaperIconProp} from './Utils/CommonComponents';
 
 const queryClient = new QueryClient();
 
@@ -58,7 +59,9 @@ const Providers: React.FC<{children: React.ReactNode}> = ({children}) => {
       <PortalizeProvider>
         <ToastProvider>
           <ToastContainer>
-            <CurrentTimeProvider>{children}</CurrentTimeProvider>
+            <DialogProvider>
+              <CurrentTimeProvider>{children}</CurrentTimeProvider>
+            </DialogProvider>
           </ToastContainer>
         </ToastProvider>
       </PortalizeProvider>
