@@ -1,4 +1,5 @@
+import {Notification} from '../../../../Api/Notification/Notification.types';
+
 export type NotificationProps = {
-  type: 'comment' | 'follow' | 'unfollow' | 'like' | 'comment_tag' | 'post_tag' | 'warning';
-  content: string;
+  notification: Notification;
 };

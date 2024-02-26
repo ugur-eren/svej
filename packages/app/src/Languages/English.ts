@@ -1,5 +1,6 @@
 import {ErrorCodesKeys} from 'common';
 import {PROBLEM_CODE} from 'apisauce';
+import {NotificationType} from 'database';
 
 export default {
   about_language: {
@@ -85,14 +86,14 @@ export default {
   notifications: {
     title: 'Notifications',
     types: {
-      comment: 'made a comment on your post',
-      follow: 'started following you',
-      unfollow: 'unfollowed you',
-      like: 'liked your post',
-      comment_tag: 'tagged you in a comment',
-      post_tag: 'tagged you in a post',
-      warning: 'You got a warning!',
-    },
+      COMMENT: 'made a comment on your post',
+      FOLLOW: 'started following you',
+      UNFOLLOW: 'unfollowed you',
+      POST_LIKE: 'liked your post',
+      COMMENT_TAG: 'tagged you in a comment',
+      POST_TAG: 'tagged you in a post',
+      WARNING: 'You got a warning!',
+    } satisfies Record<NotificationType, string>,
   },
 
   profile: {
