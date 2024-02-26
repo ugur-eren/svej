@@ -8,14 +8,14 @@ const Router = express.Router();
 Router.get('/:id', onlyAuthorized, async (req, res) => {
   const {id} = req.params;
 
-  const user = await Prisma.media.findUnique({where: {id}});
+  const media = await Prisma.media.findUnique({where: {id}});
 
-  if (!user) {
-    res.status(HTTPStatus.NotFound).send({code: ErrorCodes.UserNotFound});
+  if (!media) {
+    res.status(HTTPStatus.NotFound).send({code: ErrorCodes.MediaNotFound});
     return;
   }
 
-  res.status(HTTPStatus.OK).send(user);
+  res.status(HTTPStatus.OK).send(media);
 });
 
 export default Router;

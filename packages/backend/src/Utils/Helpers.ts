@@ -1,3 +1,5 @@
+import type {ParsedQs} from 'qs';
+
 export const GetPostgresTimestamp = (date: Date = new Date()): string => {
   /**
    * Date.prototype.toISOString returns: 2022-01-22T13:59:11.983Z
@@ -79,4 +81,14 @@ export const getCropArea = (
   }
 
   return {x, y, width: cropWidth, height: cropHeight};
+};
+
+export const getBeforeDate = (beforeDate: ParsedQs[string]): Date => {
+  if (beforeDate && typeof beforeDate === 'string') {
+    const date = new Date(beforeDate);
+
+    if (!Number.isNaN(date.getTime())) return date;
+  }
+
+  return new Date();
 };

@@ -1,9 +1,11 @@
-import express from 'express';
+import {NotificationType} from 'database';
 import {Config, ErrorCodes, HTTPStatus, Zod} from 'common';
+import express from 'express';
 import {Prisma, PrismaTypes, PrismaIncludes, Upload} from '../Services';
 import {onlyAuthorized} from '../Middlewares';
 import {ImageHandler} from '../Utils/ImageHandler';
 import {VideoHandler} from '../Utils/VideoHandler';
+import {getBeforeDate} from '../Utils/Helpers';
 
 const Router = express.Router();
 
@@ -26,11 +28,7 @@ Router.get('/', onlyAuthorized, async (req, res) => {
 });
 
 Router.get('/explore', onlyAuthorized, async (req, res) => {
-  let beforeDate = new Date();
-  if (req.query.beforeDate && typeof req.query.beforeDate === 'string') {
-    const date = new Date(req.query.beforeDate);
-    if (!Number.isNaN(date.getTime())) beforeDate = date;
-  }
+  const beforeDate = getBeforeDate(req.query.beforeDate);
 
   const posts = await Prisma.post.findMany({
     include: PrismaIncludes.Post(res.locals.user.id),
@@ -46,12 +44,7 @@ Router.get('/explore', onlyAuthorized, async (req, res) => {
 
 Router.get('/user/:id', onlyAuthorized, async (req, res) => {
   const {id} = req.params;
-
-  let beforeDate = new Date();
-  if (req.query.beforeDate && typeof req.query.beforeDate === 'string') {
-    const date = new Date(req.query.beforeDate);
-    if (!Number.isNaN(date.getTime())) beforeDate = date;
-  }
+  const beforeDate = getBeforeDate(req.query.beforeDate);
 
   const posts = await Prisma.post.findMany({
     where: {authorId: id, createdAt: {lt: beforeDate}},
@@ -114,6 +107,15 @@ Router.get('/:id/reactions', onlyAuthorized, async (req, res) => {
 Router.post('/:id/reactions/:type(like|dislike|remove)', onlyAuthorized, async (req, res) => {
   const {id, type} = req.params as {id: string; type: 'like' | 'dislike' | 'remove'};
 
+  const post = await Prisma.post.findUnique({
+    where: {id},
+    select: {id: true, authorId: true},
+  });
+  if (!post) {
+    res.status(HTTPStatus.NotFound).send({code: ErrorCodes.PostNotFound});
+    return;
+  }
+
   if (type === 'remove') {
     await Prisma.post.update({
       where: {
@@ -143,6 +145,17 @@ Router.post('/:id/reactions/:type(like|dislike|remove)', onlyAuthorized, async (
         type === 'dislike'
           ? {connect: {id: res.locals.user.id}}
           : {disconnect: {id: res.locals.user.id}},
+
+      notifications: {
+        create:
+          type === 'like' && post.authorId !== res.locals.user.id
+            ? {
+                type: NotificationType.POST_LIKE,
+                owner: {connect: {id: post.authorId}},
+                user: {connect: {id: res.locals.user.id}},
+              }
+            : undefined,
+      },
     },
   });
 

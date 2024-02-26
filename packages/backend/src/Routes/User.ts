@@ -1,3 +1,4 @@
+import {NotificationType} from 'database';
 import {Password} from 'server-side';
 import express from 'express';
 import {Config, ErrorCodes, HTTPStatus, Zod} from 'common';
@@ -136,23 +137,38 @@ Router.post('/:id/relation/:type(follow|unfollow)', onlyAuthorized, async (req, 
     return;
   }
 
-  const user = await Prisma.user.findUnique({where: {id}});
+  const user = await Prisma.user.findUnique({
+    where: {id},
+    include: {followers: {where: {id: res.locals.user.id}}},
+  });
   if (!user) {
     res.status(HTTPStatus.NotFound).send({code: ErrorCodes.UserNotFound});
     return;
   }
 
-  if (type === 'follow') {
-    await Prisma.user.update({
-      where: {id: res.locals.user.id},
-      data: {follows: {connect: {id}}},
-    });
-  } else {
-    await Prisma.user.update({
-      where: {id: res.locals.user.id},
-      data: {follows: {disconnect: {id}}},
-    });
+  if (type === 'follow' && user.followers.length) {
+    res.status(HTTPStatus.BadRequest).send({code: ErrorCodes.AlreadyFollowing});
+    return;
   }
+
+  if (type === 'unfollow' && !user.followers.length) {
+    res.status(HTTPStatus.BadRequest).send({code: ErrorCodes.NotFollowing});
+    return;
+  }
+
+  await Prisma.$transaction([
+    Prisma.user.update({
+      where: {id: res.locals.user.id},
+      data: {follows: type === 'follow' ? {connect: {id}} : {disconnect: {id}}},
+    }),
+    Prisma.notification.create({
+      data: {
+        type: type === 'follow' ? NotificationType.FOLLOW : NotificationType.UNFOLLOW,
+        owner: {connect: {id}},
+        user: {connect: {id: res.locals.user.id}},
+      },
+    }),
+  ]);
 
   res.status(HTTPStatus.OK).send();
 });

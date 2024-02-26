@@ -14,6 +14,8 @@ const ErrorCodesArray = [
   'EmailAlreadyExists',
   'UserNotFound',
   'CannotFollowYourself',
+  'AlreadyFollowing',
+  'NotFollowing',
 
   // Post
   'PostNotFound',
@@ -24,6 +26,12 @@ const ErrorCodesArray = [
 
   // Comment
   'CommentNotFound',
+
+  // Media
+  'MediaNotFound',
+
+  // Notification
+  'NotificationNotFound',
 ] as const;
 
 export type ErrorCodesKeys = (typeof ErrorCodesArray)[number];

@@ -20,20 +20,21 @@ model User {
   updatedAt DateTime @updatedAt
 
   // Relations
-  profilePhoto    Media?         @relation("ProfilePhoto", fields: [profilePhotoId], references: [id])
-  profilePhotoId  String?
-  coverPhoto      Media?         @relation("CoverPhoto", fields: [coverPhotoId], references: [id])
-  coverPhotoId    String?
-  tags            UserTag[]      @relation("UserTags")
-  followers       User[]         @relation("UserFollows")
-  follows         User[]         @relation("UserFollows")
-  posts           Post[]         @relation("UserPosts")
-  postLikes       Post[]         @relation("PostLikes")
-  postDislikes    Post[]         @relation("PostDislikes")
-  comments        Comment[]      @relation("UserComments")
-  commentLikes    Comment[]      @relation("CommentLikes")
-  commentDislikes Comment[]      @relation("CommentDislikes")
-  notifications   Notification[] @relation("NotificationUser")
+  profilePhoto         Media?         @relation("ProfilePhoto", fields: [profilePhotoId], references: [id])
+  profilePhotoId       String?
+  coverPhoto           Media?         @relation("CoverPhoto", fields: [coverPhotoId], references: [id])
+  coverPhotoId         String?
+  tags                 UserTag[]      @relation("UserTags")
+  followers            User[]         @relation("UserFollows")
+  follows              User[]         @relation("UserFollows")
+  posts                Post[]         @relation("UserPosts")
+  postLikes            Post[]         @relation("PostLikes")
+  postDislikes         Post[]         @relation("PostDislikes")
+  comments             Comment[]      @relation("UserComments")
+  commentLikes         Comment[]      @relation("CommentLikes")
+  commentDislikes      Comment[]      @relation("CommentDislikes")
+  relatedNotifications Notification[] @relation("NotificationUser")
+  ownedNotifications   Notification[] @relation("NotificationOwner")
 }
 
 model Post {
@@ -114,6 +115,8 @@ model Notification {
   updatedAt DateTime         @updatedAt
 
   // Relations
+  owner     User     @relation("NotificationOwner", fields: [ownerId], references: [id])
+  ownerId   String
   user      User     @relation("NotificationUser", fields: [userId], references: [id])
   userId    String
   comment   Comment? @relation("NotificationComment", fields: [commentId], references: [id])

@@ -23,4 +23,6 @@ export default {
   commentMaxLines: 5,
 
   relationsPerPage: 20,
+
+  notificationsPerPage: 20,
 } as const;

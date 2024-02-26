@@ -176,6 +176,8 @@ export default {
     EmailAlreadyExists: 'Email is already in use.',
     UserNotFound: 'User not found.',
     CannotFollowYourself: 'You cannot follow yourself.',
+    AlreadyFollowing: 'You are already following this user.',
+    NotFollowing: 'You are not following this user.',
 
     PostNotFound: 'Post not found.',
     PostDoesntHaveMediaOrDescription: 'Post must have a media or description.',

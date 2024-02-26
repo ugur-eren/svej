@@ -1,5 +1,6 @@
-import express from 'express';
+import {NotificationType} from 'database';
 import {ErrorCodes, HTTPStatus, Zod} from 'common';
+import express from 'express';
 import {Prisma, PrismaIncludes, PrismaTypes} from '../Services';
 import {onlyAuthorized} from '../Middlewares';
 
@@ -115,17 +116,36 @@ Router.post('/:id/reactions/:type(like|dislike|remove)', onlyAuthorized, async (
 
 Router.put('/', onlyAuthorized, async (req, res) => {
   const body = Zod.Comment.Create.safeParse(req.body);
-
   if (!body.success) {
     res.status(HTTPStatus.BadRequest).send({code: ErrorCodes.FillAllFields, error: body.error});
     return;
   }
 
+  const post = await Prisma.post.findUnique({
+    where: {id: body.data.postId},
+    select: {id: true, authorId: true},
+  });
+  if (!post) {
+    res.status(HTTPStatus.BadRequest).send({code: ErrorCodes.PostNotFound});
+    return;
+  }
+
   const comment = await Prisma.comment.create({
     data: {
-      post: {connect: {id: body.data.postId}},
+      post: {connect: {id: post.id}},
       author: {connect: {id: res.locals.user.id}},
       text: body.data.text,
+      notifications: {
+        create:
+          post.authorId === res.locals.user.id
+            ? undefined
+            : {
+                type: NotificationType.COMMENT,
+                owner: {connect: {id: post.authorId}},
+                user: {connect: {id: res.locals.user.id}},
+                post: {connect: {id: post.id}},
+              },
+      },
     },
   });
 

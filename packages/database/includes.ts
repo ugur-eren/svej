@@ -88,3 +88,11 @@ export const Comment = (userId: string) =>
 
     author: {include: Author(userId)},
   } satisfies Prisma.CommentInclude);
+
+export const Notification = (userId: string) =>
+  ({
+    user: {include: Author(userId)},
+    post: {include: Post(userId)},
+    comment: {include: Comment(userId)},
+    warning: true,
+  } satisfies Prisma.NotificationInclude);
