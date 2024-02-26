@@ -6,7 +6,17 @@ import {GlobalStyles} from '../../../Styles';
 import {BottomProfileScreenProps, ProfileScreenProps} from '../../../Types';
 
 const Profile: React.FC<ProfileScreenProps & BottomProfileScreenProps> = ({navigation, route}) => {
-  const {userId, username, hideBack} = route.params;
+  const {hideBack} = route.params;
+  let {userId, username} = route.params;
+
+  /**
+   * If userId and username are not provided, use the current user's id and username
+   */
+  const user = useAppSelector(Selectors.Auth.User);
+  if (!userId && !username) {
+    userId = user?.id;
+    username = user?.username;
+  }
 
   const isSelf = useAppSelector((state) => Selectors.Auth.UserIsSelf(state, username));
 
