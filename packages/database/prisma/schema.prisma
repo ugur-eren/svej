@@ -20,19 +20,20 @@ model User {
   updatedAt DateTime @updatedAt
 
   // Relations
-  profilePhoto    Media?    @relation("ProfilePhoto", fields: [profilePhotoId], references: [id])
+  profilePhoto    Media?         @relation("ProfilePhoto", fields: [profilePhotoId], references: [id])
   profilePhotoId  String?
-  coverPhoto      Media?    @relation("CoverPhoto", fields: [coverPhotoId], references: [id])
+  coverPhoto      Media?         @relation("CoverPhoto", fields: [coverPhotoId], references: [id])
   coverPhotoId    String?
-  tags            UserTag[] @relation("UserTags")
-  followers       User[]    @relation("UserFollows")
-  follows         User[]    @relation("UserFollows")
-  posts           Post[]    @relation("UserPosts")
-  postLikes       Post[]    @relation("PostLikes")
-  postDislikes    Post[]    @relation("PostDislikes")
-  comments        Comment[] @relation("UserComments")
-  commentLikes    Comment[] @relation("CommentLikes")
-  commentDislikes Comment[] @relation("CommentDislikes")
+  tags            UserTag[]      @relation("UserTags")
+  followers       User[]         @relation("UserFollows")
+  follows         User[]         @relation("UserFollows")
+  posts           Post[]         @relation("UserPosts")
+  postLikes       Post[]         @relation("PostLikes")
+  postDislikes    Post[]         @relation("PostDislikes")
+  comments        Comment[]      @relation("UserComments")
+  commentLikes    Comment[]      @relation("CommentLikes")
+  commentDislikes Comment[]      @relation("CommentDislikes")
+  notifications   Notification[] @relation("NotificationUser")
 }
 
 model Post {
@@ -44,11 +45,12 @@ model Post {
   updatedAt   DateTime @updatedAt
 
   // Relations
-  author   User      @relation("UserPosts", fields: [authorId], references: [id])
-  authorId String
-  likes    User[]    @relation("PostLikes")
-  dislikes User[]    @relation("PostDislikes")
-  comments Comment[] @relation("PostComments")
+  author        User           @relation("UserPosts", fields: [authorId], references: [id])
+  authorId      String
+  likes         User[]         @relation("PostLikes")
+  dislikes      User[]         @relation("PostDislikes")
+  comments      Comment[]      @relation("PostComments")
+  notifications Notification[] @relation("NotificationPost")
 }
 
 model Comment {
@@ -59,12 +61,13 @@ model Comment {
   updatedAt DateTime @updatedAt
 
   // Relations
-  author   User   @relation("UserComments", fields: [authorId], references: [id])
-  authorId String
-  post     Post   @relation("PostComments", fields: [postId], references: [id])
-  postId   String
-  likes    User[] @relation("CommentLikes")
-  dislikes User[] @relation("CommentDislikes")
+  author        User           @relation("UserComments", fields: [authorId], references: [id])
+  authorId      String
+  post          Post           @relation("PostComments", fields: [postId], references: [id])
+  postId        String
+  likes         User[]         @relation("CommentLikes")
+  dislikes      User[]         @relation("CommentDislikes")
+  notifications Notification[] @relation("NotificationComment")
 }
 
 model UserTag {
@@ -94,6 +97,41 @@ model Media {
   coverPhoto   User[]  @relation("CoverPhoto")
   post         Post?   @relation(fields: [postId], references: [id])
   postId       String?
+}
+
+model Warning {
+  id            String         @id @default(uuid())
+  text          String
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  notifications Notification[] @relation("NotificationWarning")
+}
+
+model Notification {
+  id        String           @id @default(uuid())
+  type      NotificationType
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  // Relations
+  user      User     @relation("NotificationUser", fields: [userId], references: [id])
+  userId    String
+  comment   Comment? @relation("NotificationComment", fields: [commentId], references: [id])
+  commentId String?
+  post      Post?    @relation("NotificationPost", fields: [postId], references: [id])
+  postId    String?
+  warning   Warning? @relation("NotificationWarning", fields: [warningId], references: [id])
+  warningId String?
+}
+
+enum NotificationType {
+  COMMENT
+  FOLLOW
+  UNFOLLOW
+  POST_LIKE
+  POST_TAG
+  COMMENT_TAG
+  WARNING
 }
 
 enum MediaType {
