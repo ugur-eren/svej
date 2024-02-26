@@ -22,7 +22,7 @@ Router.get('/', onlyAuthorized, async (req, res) => {
 Router.get('/count', onlyAuthorized, async (req, res) => {
   const count = await Prisma.notification.count({where: {ownerId: res.locals.user.id}});
 
-  res.status(HTTPStatus.OK).send(count);
+  res.status(HTTPStatus.OK).send({count});
 });
 
 Router.get('/:id', onlyAuthorized, async (req, res) => {

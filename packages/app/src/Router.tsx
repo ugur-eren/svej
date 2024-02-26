@@ -8,7 +8,7 @@ import {
   BottomStackParams,
   MainStackParams,
 } from './Types';
-import {useLanguage, useTheme} from './Hooks';
+import {useLanguage, useNotificationCount, useTheme} from './Hooks';
 import {Typography} from './Styles';
 import {ThemedStyleSheet} from './Utils/ThemedStyleSheet';
 import {IsAndroid} from './Utils/Helpers';
@@ -73,6 +73,7 @@ const SettingsStackNavigator = () => {
 const BottomStackNavigator = () => {
   const theme = useTheme();
   const language = useLanguage();
+  const notificationCount = useNotificationCount();
 
   const styles = getBottomBarStyles(theme);
 
@@ -104,7 +105,7 @@ const BottomStackNavigator = () => {
         options={{
           title: language.notifications.title,
           tabBarIcon: TabBarBellIcon,
-          tabBarBadge: '3',
+          tabBarBadge: notificationCount ? notificationCount.toString() : undefined,
         }}
       />
       <BottomStack.Screen

@@ -9,3 +9,7 @@ export const getAll = (beforeDate?: string): Response<ApiTypes.Notification[]> =
 export const getById = (id: string): Response<ApiTypes.Notification> => {
   return ApiInstance.get(`/notification/${id}`);
 };
+
+export const getCount = (): Response<ApiTypes.CountResponse> => {
+  return ApiInstance.get('/notification/count');
+};
