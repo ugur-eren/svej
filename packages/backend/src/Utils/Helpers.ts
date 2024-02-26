@@ -13,6 +13,13 @@ export const throwError = (message: string, options?: ErrorOptions): never => {
   throw new Error(message, options);
 };
 
+/**
+ * Clamps the dimensions of an image to a maximum dimension while maintaining the aspect ratio
+ * @param width Width of the image
+ * @param height Height of the image
+ * @param maxDimension Maximum dimension for the image
+ * @returns Clamped dimensions `{width, height}`
+ */
 export const clampDimensions = (
   width: number,
   height: number,
@@ -37,6 +44,13 @@ export const clampDimensions = (
   };
 };
 
+/**
+ * Gets the crop area for an image with a given aspect ratio
+ * @param width Width of the image
+ * @param height Height of the image
+ * @param aspectRatio Aspect ratio of the crop area `[x, y]`
+ * @returns Crop area `{x, y, width, height}`
+ */
 export const getCropArea = (
   width: number,
   height: number,
