@@ -27,3 +27,4 @@ export {default as Toast} from './Toast/Toast';
 export {default as Avatar} from './Avatar/Avatar';
 export {default as AutoGrid} from './AutoGrid/AutoGrid';
 export {default as PostUploader} from './PostUploader/PostUploader';
+export * as Placeholders from './Placeholders';

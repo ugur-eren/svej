@@ -2,7 +2,7 @@ import {forwardRef, useCallback, useEffect, useRef, useState} from 'react';
 import {FlatList, FlatListProps, RefreshControl, View} from 'react-native';
 import {useFocusEffect, useScrollToTop} from '@react-navigation/native';
 import {useQueryClient} from '@tanstack/react-query';
-import {Post} from '../../Components';
+import {Placeholders, Post} from '../../Components';
 import {VisibilityContext, useForwardedRef, useInfiniteQuery} from '../../Hooks';
 import {PostApi} from '../../Api';
 import {PostsActions, useAppDispatch} from '../../Redux';
@@ -101,8 +101,15 @@ const PostList = forwardRef<FlatList, PostListProps>((props, ref) => {
     },
   ]);
 
-  // TODO: add loading indicator
-  if (!posts.data) return null;
+  if (posts.isLoading || !posts.data) {
+    return (
+      <>
+        {flatlistProps.ListHeaderComponent}
+        <Placeholders.PostList />
+        {flatlistProps.ListFooterComponent}
+      </>
+    );
+  }
 
   return (
     <FlatList

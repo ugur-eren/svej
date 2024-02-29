@@ -15,6 +15,7 @@ import type {Author} from '../../Api/User/User.types';
 import type {ReactionType} from '../../Api/Post/Post.types';
 import {MainNavigationProp} from '../../Types';
 import getStyles from './Post.styles';
+import {Post as PostPlaceholder} from '../Placeholders/Post';
 
 export type PostProps = {
   postId: string;
@@ -46,8 +47,7 @@ const Post: React.FC<PostProps> = ({postId}) => {
     });
   };
 
-  // TODO: show loading indicator
-  if (!post) return null;
+  if (!post) return <PostPlaceholder />;
 
   return (
     <View style={styles.container}>

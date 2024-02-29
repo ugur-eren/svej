@@ -7,7 +7,7 @@ import {useNavigation} from '@react-navigation/native';
 import {Feather} from '@expo/vector-icons';
 import {IconButton} from 'react-native-paper';
 import {useQueryClient} from '@tanstack/react-query';
-import {Avatar, Divider, Text, TextButton} from '../../../../Components';
+import {Avatar, Divider, Placeholders, Text, TextButton} from '../../../../Components';
 import {
   useLanguage,
   useMutation,
@@ -142,8 +142,7 @@ const ProfileHead: React.FC<ProfileHeadProps> = ({userId, username}) => {
     }
   };
 
-  // TODO: Add loading indicator
-  if (!user.data) return null;
+  if (user.isLoading || !user.data) return <Placeholders.Profile />;
 
   return (
     <View style={styles.container}>
