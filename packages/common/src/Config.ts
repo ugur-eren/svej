@@ -15,6 +15,9 @@ export default {
   passwordMinLength: 6,
   passwordMaxLength: 512,
 
+  bioMaxLength: 256,
+  bioMaxLines: 5,
+
   postDescriptionMaxLength: 1024,
   postDescriptionMaxLines: 10,
   postsPerPage: 10,

@@ -200,6 +200,66 @@ Router.post(
   },
 );
 
+Router.post('/change-password', onlyAuthorized, async (req, res) => {
+  const body = Zod.User.ChangePassword.safeParse(req.body);
+
+  if (!body.success) {
+    res.status(HTTPStatus.BadRequest).send({code: ErrorCodes.FillAllFields, error: body.error});
+    return;
+  }
+
+  if (body.data.newPassword !== body.data.newPasswordConfirm) {
+    res.status(HTTPStatus.BadRequest).send({code: ErrorCodes.PasswordsDoNotMatch});
+    return;
+  }
+
+  const verified = await Password.verify(body.data.currentPassword, res.locals.user.password);
+  if (!verified) {
+    res.status(HTTPStatus.BadRequest).send({code: ErrorCodes.WrongPassword});
+    return;
+  }
+
+  await Prisma.user.update({
+    where: {id: res.locals.user.id},
+    data: {
+      password: await Password.hash(body.data.newPassword),
+    },
+  });
+});
+
+Router.patch('/', onlyAuthorized, async (req, res) => {
+  const body = Zod.User.Edit.safeParse(req.body);
+
+  if (!body.success) {
+    res.status(HTTPStatus.BadRequest).send({code: ErrorCodes.FillAllFields, error: body.error});
+    return;
+  }
+
+  const usernameExists = await Prisma.user.findUnique({where: {username: body.data.username}});
+  if (usernameExists && usernameExists.id !== res.locals.user.id) {
+    res.status(HTTPStatus.BadRequest).send({code: ErrorCodes.UsernameAlreadyExists});
+    return;
+  }
+
+  const emailExists = await Prisma.user.findUnique({where: {email: body.data.email}});
+  if (emailExists && emailExists.id !== res.locals.user.id) {
+    res.status(HTTPStatus.BadRequest).send({code: ErrorCodes.EmailAlreadyExists});
+    return;
+  }
+
+  await Prisma.user.update({
+    where: {id: res.locals.user.id},
+    data: {
+      username: body.data.username,
+      fullname: body.data.fullname || null,
+      email: body.data.email,
+      bio: body.data.bio || null,
+    },
+  });
+
+  res.status(HTTPStatus.OK).send();
+});
+
 Router.put('/', async (req, res) => {
   const body = Zod.User.Create.safeParse(req.body);
 
