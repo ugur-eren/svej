@@ -3,7 +3,6 @@ import {useNavigation} from '@react-navigation/native';
 import Avatar from '../Avatar/Avatar';
 import Text from '../Text/Text';
 import TextButton from '../TextButton/TextButton';
-import {FileApi} from '../../Api';
 import {useLanguage} from '../../Hooks';
 import {MainNavigationProp} from '../../Types';
 import {ProfileWidgetProps} from './ProfileWidget.props';
@@ -19,7 +18,7 @@ const ProfileWidget: React.FC<ProfileWidgetProps> = ({user}) => {
     <View style={styles.container}>
       <TouchableOpacity style={styles.touchable} onPress={onUserPress}>
         <View style={styles.imageContainer}>
-          <Avatar avatarKey={FileApi.getFileURL(user.profilePhoto?.fileKey)} style={styles.image} />
+          <Avatar avatarKey={user.profilePhoto?.fileKey} style={styles.image} />
         </View>
 
         <View>
