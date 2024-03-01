@@ -36,7 +36,6 @@ Router.post('/login', async (req, res) => {
   // Using jti whitelist instead of blacklist
   await Prisma.user.update({where: {id: user.id}, data: {jtis: {push: jti}}});
 
-  // TODO: Include jti claim
   const result = await JWT.sign({sub: user.id, jti});
 
   if (result.ok) {

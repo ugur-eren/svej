@@ -24,8 +24,6 @@ const PostCarousel: React.FC<PostCarouselProps> = (props) => {
     [width, activeSlide],
   );
 
-  // TODO: Flatlist keyExtractor
-
   return (
     <View style={styles.container}>
       <FlatList
@@ -34,6 +32,7 @@ const PostCarousel: React.FC<PostCarouselProps> = (props) => {
         data={data}
         pagingEnabled
         disableIntervalMomentum
+        keyExtractor={(item) => item.uri}
         snapToAlignment="center"
         decelerationRate="fast"
         showsHorizontalScrollIndicator={false}

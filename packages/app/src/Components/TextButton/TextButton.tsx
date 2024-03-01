@@ -1,5 +1,6 @@
 import {useState} from 'react';
 import {StyleSheet, TouchableOpacity} from 'react-native';
+import {useLanguage} from '../../Hooks/Language';
 import {TextButtonProps} from './TextButton.props';
 import styles from './TextButton.styles';
 import Text from '../Text/Text';
@@ -7,6 +8,7 @@ import Text from '../Text/Text';
 const TextButton: React.FC<TextButtonProps> = (props) => {
   const {children, showLoading, onPress, containerProps, ...textProps} = props;
 
+  const language = useLanguage();
   const [loading, setLoading] = useState(false);
 
   const onButtonPress = async () => {
@@ -34,8 +36,7 @@ const TextButton: React.FC<TextButtonProps> = (props) => {
       style={StyleSheet.compose(styles.container, containerProps?.style)}
     >
       <Text {...textProps} color={loading ? 'textLight' : textProps?.color}>
-        {/* TODO: Get the loading text from language context */}
-        {loading ? 'Loading...' : children}
+        {loading ? language.common.loading : children}
       </Text>
     </TouchableOpacity>
   );

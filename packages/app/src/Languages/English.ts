@@ -28,6 +28,7 @@ export default {
     language: 'Language',
     logout: 'Logout',
     warning: 'Warning',
+    loading: 'Loading...',
   },
 
   auth: {

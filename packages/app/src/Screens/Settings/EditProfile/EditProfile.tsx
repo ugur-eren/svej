@@ -37,7 +37,7 @@ const EditProfile: React.FC<SettingsEditProfileScreenProps> = () => {
   };
 
   const onFormSubmit = (values: typeof initialValues) => {
-    // TODO: handle register
+    // TODO: handle edit profile
   };
 
   return (
