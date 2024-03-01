@@ -1,7 +1,7 @@
 import {useCallback, useState} from 'react';
 import {FlatList, RefreshControl} from 'react-native';
 import Notification from './Notification/Notification';
-import {MainHeader, Divider} from '../../../Components';
+import {MainHeader, Divider, Placeholders} from '../../../Components';
 import {PageContainer} from '../../../Containers';
 import {useInfiniteQuery} from '../../../Hooks';
 import {NotificationApi} from '../../../Api';
@@ -33,20 +33,21 @@ const Notifications: React.FC = () => {
     }
   }, [notifications]);
 
-  // TODO: Show loading indicator
-  if (!notifications.data) return null;
-
   return (
     <PageContainer>
       <MainHeader />
 
-      <FlatList
-        data={notifications.data?.pages.flat() as any[]}
-        ItemSeparatorComponent={Divider}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({item}) => <Notification notification={item} />}
-      />
+      {notifications.isLoading || !notifications.data ? (
+        <Placeholders.NotificationList />
+      ) : (
+        <FlatList
+          data={notifications.data?.pages.flat() as any[]}
+          ItemSeparatorComponent={Divider}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({item}) => <Notification notification={item} />}
+        />
+      )}
     </PageContainer>
   );
 };
