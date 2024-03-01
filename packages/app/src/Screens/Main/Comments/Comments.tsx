@@ -4,7 +4,7 @@ import {useQueryClient} from '@tanstack/react-query';
 import Comment from './Comment/Comment';
 import CommentInput from './CommentInput/CommentInput';
 import {PageContainer} from '../../../Containers';
-import {Header, Divider} from '../../../Components';
+import {Header, Divider, Placeholders} from '../../../Components';
 import {useLanguage, useMutation, useQuery, useShowToast} from '../../../Hooks';
 import {CommentApi} from '../../../Api';
 import {GlobalStyles} from '../../../Styles';
@@ -48,23 +48,26 @@ const Comments: React.FC<CommentsScreenProps> = ({route}) => {
     });
   };
 
-  // TODO: show loading indicator
-  if (!comments.data) return null;
-
   return (
     <PageContainer>
       <Header title={language.comments.title} />
 
-      <FlatList
-        data={comments.data}
-        ItemSeparatorComponent={Divider}
-        keyExtractor={(item) => item.id}
-        renderItem={({item}) => <Comment comment={item} />}
-        style={GlobalStyles.flex1}
-        automaticallyAdjustKeyboardInsets
-      />
+      {comments.isLoading || !comments.data ? (
+        <Placeholders.CommentList />
+      ) : (
+        <>
+          <FlatList
+            data={comments.data}
+            ItemSeparatorComponent={Divider}
+            keyExtractor={(item) => item.id}
+            renderItem={({item}) => <Comment comment={item} />}
+            style={GlobalStyles.flex1}
+            automaticallyAdjustKeyboardInsets
+          />
 
-      <CommentInput onCommentSend={onCommentSend} />
+          <CommentInput onCommentSend={onCommentSend} />
+        </>
+      )}
     </PageContainer>
   );
 };
