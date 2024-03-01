@@ -1,6 +1,6 @@
 import {FlatList, View} from 'react-native';
 import {PageContainer} from '../../../Containers';
-import {Divider, Header, ProfileWidget} from '../../../Components';
+import {Divider, Header, Placeholders, ProfileWidget} from '../../../Components';
 import {useInfiniteQuery, useLanguage, useTheme} from '../../../Hooks';
 import {UserApi} from '../../../Api';
 import {RelationsScreenProps} from '../../../Types';
@@ -25,23 +25,24 @@ const Relations: React.FC<RelationsScreenProps> = ({route}) => {
     queryFn: ({pageParam}) => UserApi.getRelations(userId, type, pageParam),
   });
 
-  // TODO: Add loading indicator
-  if (!relations.data) return null;
-
   return (
     <PageContainer>
       <Header title={`${username} ${language.common[type]}`} />
 
-      <FlatList
-        data={relations.data?.pages.flat() as any[]}
-        keyExtractor={(item) => item.id}
-        ItemSeparatorComponent={Divider}
-        renderItem={({item}) => (
-          <View style={styles.item}>
-            <ProfileWidget user={item} />
-          </View>
-        )}
-      />
+      {relations.isLoading || !relations.data ? (
+        <Placeholders.ProfileWidgetList />
+      ) : (
+        <FlatList
+          data={relations.data?.pages.flat() as any[]}
+          keyExtractor={(item) => item.id}
+          ItemSeparatorComponent={Divider}
+          renderItem={({item}) => (
+            <View style={styles.item}>
+              <ProfileWidget user={item} />
+            </View>
+          )}
+        />
+      )}
     </PageContainer>
   );
 };
