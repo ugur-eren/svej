@@ -1,5 +1,9 @@
 # Screenshots
 
+## Demo Video
+
+https://github.com/ugur-eren/svej/assets/86152092/0b110410-35b8-4f16-9fe3-766047432bad
+
 ## Explore
 
 <table>
