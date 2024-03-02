@@ -143,6 +143,8 @@ export default {
     light_theme: 'Light Theme',
     dark_theme: 'Dark Theme',
     system_default: 'System Default',
+    password_changed_title: 'Password Changed',
+    password_changed_message: 'Your password has been changed successfully.',
   },
 
   explore: {

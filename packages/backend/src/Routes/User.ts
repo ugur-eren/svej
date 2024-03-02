@@ -225,6 +225,8 @@ Router.post('/change-password', onlyAuthorized, async (req, res) => {
       password: await Password.hash(body.data.newPassword),
     },
   });
+
+  res.status(HTTPStatus.OK).send();
 });
 
 Router.patch('/', onlyAuthorized, async (req, res) => {

@@ -1,8 +1,11 @@
+import {Config} from 'common';
 import {ScrollView} from 'react-native';
 import {Formik} from 'formik';
 import {Button, Header, Input} from '../../../Components';
 import {PageContainer} from '../../../Containers';
-import {useLanguage, useTheme} from '../../../Hooks';
+import {useLanguage, useMutation, useShowToast, useTheme} from '../../../Hooks';
+import {UserApi} from '../../../Api';
+import {parseLanguageParts} from '../../../Utils/Helpers';
 import {SettingsChangePasswordScreenProps} from '../../../Types';
 import getStyles from './ChangePassword.styles';
 
@@ -12,9 +15,14 @@ const initialValues = {
   newPasswordValidation: '',
 };
 
-const ChangePassword: React.FC<SettingsChangePasswordScreenProps> = () => {
+const ChangePassword: React.FC<SettingsChangePasswordScreenProps> = ({navigation}) => {
   const theme = useTheme();
   const language = useLanguage();
+  const showToast = useShowToast();
+
+  const mutation = useMutation({
+    mutationFn: UserApi.changePassword,
+  });
 
   const styles = getStyles(theme);
 
@@ -22,15 +30,34 @@ const ChangePassword: React.FC<SettingsChangePasswordScreenProps> = () => {
     const errors: Partial<typeof initialValues> = {};
 
     if (!values.currentPassword) errors.currentPassword = language.errors.PASSWORD_REQUIRED;
-    if (values.newPassword.length < 6) errors.newPassword = language.errors.PASSWORD_SHORT;
+    if (values.newPassword.length < 6)
+      errors.newPassword = parseLanguageParts(language.errors.PASSWORD_SHORT, {
+        min: Config.passwordMinLength,
+      });
     if (values.newPassword !== values.newPasswordValidation)
       errors.newPasswordValidation = language.errors.PASSWORDS_NOT_MATCH;
 
     return errors;
   };
 
-  const onFormSubmit = (values: typeof initialValues) => {
-    // TODO: handle register
+  const onFormSubmit = async (values: typeof initialValues) => {
+    try {
+      await mutation.mutateAsync({
+        currentPassword: values.currentPassword,
+        newPassword: values.newPassword,
+        newPasswordConfirm: values.newPasswordValidation,
+      });
+
+      navigation.goBack();
+
+      showToast({
+        type: 'success',
+        title: language.settings.password_changed_title,
+        message: language.settings.password_changed_message,
+      });
+    } catch (error) {
+      // Mutations handle errors automatically, so we don't need to do anything here.
+    }
   };
 
   return (

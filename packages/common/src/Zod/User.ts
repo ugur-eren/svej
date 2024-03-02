@@ -37,7 +37,7 @@ export const Edit = z.object({
 });
 
 export const ChangePassword = z.object({
-  currentPassword: password,
+  currentPassword: z.string(),
   newPassword: password,
   newPasswordConfirm: password,
 });
