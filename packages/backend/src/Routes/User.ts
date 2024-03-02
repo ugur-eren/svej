@@ -53,7 +53,7 @@ Router.get('/me', onlyAuthorized, async (req, res) => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const extendedUser = extendUser(user!, res.locals.user.id);
 
-  res.status(HTTPStatus.OK).send(extendedUser);
+  res.status(HTTPStatus.OK).send({...extendedUser, email: user?.email()});
 });
 
 Router.get('/username/:username', onlyAuthorized, async (req, res) => {
