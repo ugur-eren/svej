@@ -1,13 +1,14 @@
 import express from 'express';
 import {JWT} from 'server-side';
 import {HTTPStatus, ErrorCodes} from 'common';
-import {User} from 'database';
+
+type JWTReturnType = JWT.VerifyReturnType & {ok: true};
 
 type Locals = {
   authenticated?: boolean;
-  decoded: JWT.JwtPayload;
+  decoded: JWTReturnType['decoded'];
   token: string;
-  user: User;
+  user: JWTReturnType['user'];
 };
 
 export const onlyAuthorized = async (

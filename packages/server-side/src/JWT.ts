@@ -1,4 +1,3 @@
-import {User} from 'database';
 import JWT from 'jsonwebtoken';
 import {JWT_EXPIRE_TIME, JWT_PRIV_KEY} from './Env';
 import PrismaClient from './Prisma';
@@ -19,7 +18,7 @@ export type SignReturnType =
 export type VerifyReturnType =
   | {
       ok: true;
-      user: User;
+      user: NonNullable<Awaited<ReturnType<typeof PrismaClient.user.findUnique>>>;
       decoded: JWT.JwtPayload;
     }
   | {
@@ -74,7 +73,7 @@ export const verify = async (token: string): Promise<VerifyReturnType> => {
           },
         })
         .then((user) => {
-          if (!user || !user.id || !decoded.jti || !user.jtis.includes(decoded.jti)) {
+          if (!user || !user.id || !decoded.jti || !user.jtis().includes(decoded.jti)) {
             resolve({ok: false, cause: 'Unauthorized'});
             return;
           }

@@ -25,7 +25,7 @@ Router.post('/login', async (req, res) => {
     return;
   }
 
-  const passwordMatched = await Password.verify(password, user.password);
+  const passwordMatched = await Password.verify(password, user.password());
   if (!passwordMatched) {
     res.status(HTTPStatus.Unauthorized).send({code: ErrorCodes.WrongPassword});
     return;
@@ -51,7 +51,7 @@ Router.post('/logout', onlyAuthorized, async (req, res) => {
   // Using jti whitelist instead of blacklist
   await Prisma.user.update({
     where: {id: decoded.sub},
-    data: {jtis: {set: user.jtis.filter((jti: string) => jti !== decoded.jti)}},
+    data: {jtis: {set: user.jtis().filter((jti: string) => jti !== decoded.jti)}},
   });
 
   res.status(HTTPStatus.OK).send({ok: true});

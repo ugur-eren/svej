@@ -213,7 +213,7 @@ Router.post('/change-password', onlyAuthorized, async (req, res) => {
     return;
   }
 
-  const verified = await Password.verify(body.data.currentPassword, res.locals.user.password);
+  const verified = await Password.verify(body.data.currentPassword, res.locals.user.password());
   if (!verified) {
     res.status(HTTPStatus.BadRequest).send({code: ErrorCodes.WrongPassword});
     return;
