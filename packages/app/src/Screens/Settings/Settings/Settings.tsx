@@ -3,7 +3,8 @@ import {ScrollView} from 'react-native';
 import {List, Switch} from 'react-native-paper';
 import {Header, ListItem, ListMenu} from '../../../Components';
 import {PageContainer} from '../../../Containers';
-import {useLanguage, useTheme} from '../../../Hooks';
+import {useLanguage, useMutation, useTheme} from '../../../Hooks';
+import {AuthApi} from '../../../Api';
 import * as Languages from '../../../Languages';
 import {GlobalStyles} from '../../../Styles';
 import {SettingsScreenProps} from '../../../Types';
@@ -13,7 +14,9 @@ import {
   useAppDispatch,
   useAppSelector,
   Selectors,
+  AuthActions,
 } from '../../../Redux';
+import Storage from '../../../Utils/Storage';
 
 type Props = SettingsScreenProps;
 
@@ -24,6 +27,10 @@ const Settings: React.FC<Props> = ({navigation}) => {
   const dispatch = useAppDispatch();
 
   const [notifications, setNotifications] = useState(false);
+
+  const logoutMutation = useMutation({
+    mutationFn: AuthApi.logout,
+  });
 
   const onLanguageSelect = useCallback(
     (key: string) => {
@@ -38,6 +45,15 @@ const Settings: React.FC<Props> = ({navigation}) => {
     },
     [dispatch],
   );
+
+  const onLogoutPress = useCallback(async () => {
+    await logoutMutation.mutateAsync(undefined);
+
+    dispatch(AuthActions.setAuthenticated(false));
+    dispatch(AuthActions.setUser());
+
+    await Storage.set('token', '');
+  }, [logoutMutation, dispatch]);
 
   const NotificationsSwitch = useCallback(
     () => (
@@ -121,7 +137,7 @@ const Settings: React.FC<Props> = ({navigation}) => {
             onPress={() => navigation.navigate('BlockedUsers')}
           />
 
-          <ListItem title={language.common.logout} icon="log-out" />
+          <ListItem title={language.common.logout} icon="log-out" onPress={onLogoutPress} />
         </List.Section>
       </ScrollView>
     </PageContainer>
