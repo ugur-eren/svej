@@ -249,8 +249,9 @@ Router.patch('/', onlyAuthorized, async (req, res) => {
     return;
   }
 
-  await Prisma.user.update({
+  const updatedUser = await Prisma.user.update({
     where: {id: res.locals.user.id},
+    include: PrismaIncludes.User(res.locals.user.id),
     data: {
       username: body.data.username,
       fullname: body.data.fullname || null,
@@ -259,7 +260,7 @@ Router.patch('/', onlyAuthorized, async (req, res) => {
     },
   });
 
-  res.status(HTTPStatus.OK).send();
+  res.status(HTTPStatus.OK).send(updatedUser);
 });
 
 Router.put('/', async (req, res) => {

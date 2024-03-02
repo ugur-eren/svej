@@ -145,6 +145,8 @@ export default {
     system_default: 'System Default',
     password_changed_title: 'Password Changed',
     password_changed_message: 'Your password has been changed successfully.',
+    profile_updated_title: 'Profile Updated',
+    profile_updated_message: 'Your profile has been updated successfully.',
   },
 
   explore: {

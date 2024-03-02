@@ -6,4 +6,9 @@ export default ThemedStyleSheet((theme) => ({
     backgroundColor: theme.colors.surface,
     padding: Spacing.pagePadding,
   },
+  loader: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 }));

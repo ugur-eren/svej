@@ -61,7 +61,7 @@ export const changePassword = (data: ApiTypes.ChangePasswordRequest): Response<n
   return ApiInstance.post('/user/change-password', data);
 };
 
-export const edit = (data: ApiTypes.EditRequest): Response<null> => {
+export const edit = (data: ApiTypes.EditRequest): Response<ApiTypes.User> => {
   return ApiInstance.patch('/user', data);
 };
 
