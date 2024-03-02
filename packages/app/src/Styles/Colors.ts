@@ -37,6 +37,8 @@ export const LightThemeColors = {
     inputBorder: '#EEF2F7',
     inputPlaceholder: '#737985',
 
+    placeholder: '#E5E5E5',
+
     success: '#44D775',
     error: '#ff4747',
     info: '#1979ff',
@@ -71,6 +73,8 @@ export const DarkThemeColors = {
     inputBackground: '#272727',
     inputBorder: '#3D3D3D',
     inputPlaceholder: '#BABABA',
+
+    placeholder: '#272727',
 
     success: '#44D775',
     error: '#ff4747',

@@ -1,5 +1,6 @@
 import {StyleSheet, View} from 'react-native';
-import {Placeholder, PlaceholderMedia, PlaceholderLine, Fade} from 'rn-placeholder';
+import {Placeholder, Fade} from 'rn-placeholder';
+import {PlaceholderLine, PlaceholderMedia} from '../Placeholder/Placeholder';
 import {Spacing} from '../../Styles';
 
 export const Profile: React.FC = () => {
