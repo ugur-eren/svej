@@ -35,6 +35,8 @@ model User {
   commentDislikes      Comment[]      @relation("CommentDislikes")
   relatedNotifications Notification[] @relation("NotificationUser")
   ownedNotifications   Notification[] @relation("NotificationOwner")
+  chatMessageSent      ChatMessage[]  @relation("ChatMessageFrom")
+  chatMessageReceived  ChatMessage[]  @relation("ChatMessageTo")
 }
 
 model Post {
@@ -125,6 +127,19 @@ model Notification {
   postId    String?
   warning   Warning? @relation("NotificationWarning", fields: [warningId], references: [id])
   warningId String?
+}
+
+model ChatMessage {
+  id        String   @id @default(uuid())
+  message   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  from   User   @relation("ChatMessageFrom", fields: [fromId], references: [id])
+  fromId String
+  to     User   @relation("ChatMessageTo", fields: [toId], references: [id])
+  toId   String
 }
 
 enum NotificationType {
