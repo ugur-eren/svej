@@ -33,6 +33,8 @@ const EditProfile: React.FC<SettingsEditProfileScreenProps> = ({navigation}) => 
   const me = useQuery({
     queryKey: ['me'],
     queryFn: UserApi.getMe,
+    staleTime: 0,
+    gcTime: 0,
   });
 
   const mutation = useMutation({
