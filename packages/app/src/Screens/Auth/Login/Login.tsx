@@ -20,12 +20,9 @@ const Login: React.FC<Props> = ({navigation}) => {
   const dispatch = useAppDispatch();
   const language = useLanguage();
 
-  const mutation = useMutation(
-    {
-      mutationFn: AuthApi.login,
-    },
-    true,
-  );
+  const mutation = useMutation({
+    mutationFn: AuthApi.login,
+  });
 
   const validateForm = (values: typeof initialValues) => {
     const errors: Partial<typeof initialValues> = {};

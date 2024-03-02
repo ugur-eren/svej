@@ -2,9 +2,12 @@ import {Formik} from 'formik';
 import {Config} from 'common';
 import {AuthPage} from '../../../Containers';
 import {Input} from '../../../Components';
-import {useLanguage} from '../../../Hooks';
+import {useLanguage, useMutation} from '../../../Hooks';
+import {AuthApi, UserApi} from '../../../Api';
+import {AuthActions, useAppDispatch} from '../../../Redux';
 import EmailValidator from '../../../Utils/EmailValidator';
 import {parseLanguageParts} from '../../../Utils/Helpers';
+import Storage from '../../../Utils/Storage';
 import {AuthRegisterScreenProps} from '../../../Types';
 
 type Props = AuthRegisterScreenProps;
@@ -19,6 +22,14 @@ const initialValues = {
 
 const Register: React.FC<Props> = ({navigation}) => {
   const language = useLanguage();
+  const dispatch = useAppDispatch();
+
+  const registerMutation = useMutation({
+    mutationFn: UserApi.register,
+  });
+  const loginMutation = useMutation({
+    mutationFn: AuthApi.login,
+  });
 
   const validateForm = (values: typeof initialValues) => {
     const errors: Partial<typeof initialValues> = {};
@@ -43,8 +54,24 @@ const Register: React.FC<Props> = ({navigation}) => {
     return errors;
   };
 
-  const onFormSubmit = (values: typeof initialValues) => {
-    navigation.navigate('MainStack', {screen: 'BottomStack', params: {screen: 'Explore'}});
+  const onFormSubmit = async (values: typeof initialValues) => {
+    try {
+      const registerResult = await registerMutation.mutateAsync(values);
+
+      const loginResult = await loginMutation.mutateAsync({
+        username: registerResult.username,
+        password: values.password,
+      });
+
+      dispatch(AuthActions.setAuthenticated(true));
+      dispatch(AuthActions.setUser(loginResult.user));
+
+      await Storage.set('token', loginResult.token);
+
+      navigation.navigate('MainStack', {screen: 'BottomStack', params: {screen: 'Explore'}});
+    } catch (error) {
+      // Mutation alreadys shows the error, no need to do anything here
+    }
   };
 
   return (

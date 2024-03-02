@@ -1,4 +1,4 @@
-import type {User} from 'database';
+import type {User} from '../User/User.types';
 
 export type LoginRequest = {
   username: string;
