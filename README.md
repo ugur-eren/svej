@@ -2,9 +2,15 @@
 
 **SveJ** or previously known as **Sib0p** was a social media platform I've worked on years ago. I've created the designs, developed the app and the backend. It had more than 50k downloads world-wide. It was a fun project to work on and I've learned a lot from it. I've decided to re-create it based on the old repo and open source it.
 
-The app is not finished yet. Screens and the backend is not yet fully completed.
+The app is almost completed. Most pages are done and the backend is working. However there are many small things to fix and improve.
 
 I'll be working on it in my free time. If you want to contribute, feel free to open a PR. I'll be happy to review it.
+
+## Screenshots
+
+You can find the screenshots of the app in the `screenshots` folder.
+
+[screenshots/README.md](https://github.com/ugur-eren/svej/blob/main/screenshots/README.md)
 
 ## Tech Stack
 
