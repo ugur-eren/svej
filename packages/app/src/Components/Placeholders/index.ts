@@ -7,3 +7,5 @@ export {ProfileWidget} from './ProfileWidget';
 export {ProfileWidgetList} from './ProfileWidgetList';
 export {Notification} from './Notification';
 export {NotificationList} from './NotificationList';
+export {Chat} from './Chat';
+export {ChatList} from './ChatList';

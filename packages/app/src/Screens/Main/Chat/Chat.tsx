@@ -5,7 +5,7 @@ import uuid from 'react-native-uuid';
 import {ActivityIndicator} from 'react-native-paper';
 import Message from './Message/Message';
 import MessageInput from './MessageInput/MessageInput';
-import {Avatar, Header} from '../../../Components';
+import {Avatar, Header, Placeholders} from '../../../Components';
 import {PageContainer} from '../../../Containers';
 import {
   useLanguage,
@@ -92,9 +92,6 @@ const Chat: React.FC<ChatScreenProps> = ({route}) => {
     }
   };
 
-  // TODO: show loading indicator
-  if (initialLoading || socketConnecting) return null;
-
   return (
     <PageContainer>
       <Header
@@ -103,30 +100,34 @@ const Chat: React.FC<ChatScreenProps> = ({route}) => {
         left={<Avatar key={avatarKey} style={styles.headerAvatar} />}
       />
 
-      <FlatList
-        inverted
-        data={messages}
-        keyExtractor={(item) => item.id}
-        renderItem={({item}) => (
-          <Message
-            message={item}
-            type={item.toId === userId ? 'sent' : 'received'}
-            sending={item.sending}
-            userAvatarKey={avatarKey}
-          />
-        )}
-        ListFooterComponent={
-          loading ? (
-            <View style={styles.loader}>
-              <ActivityIndicator size="large" />
-            </View>
-          ) : undefined
-        }
-        keyboardDismissMode="on-drag"
-        keyboardShouldPersistTaps="handled"
-        removeClippedSubviews
-        automaticallyAdjustKeyboardInsets
-      />
+      {initialLoading || socketConnecting ? (
+        <Placeholders.ChatList />
+      ) : (
+        <FlatList
+          inverted
+          data={messages}
+          keyExtractor={(item) => item.id}
+          renderItem={({item}) => (
+            <Message
+              message={item}
+              type={item.toId === userId ? 'sent' : 'received'}
+              sending={item.sending}
+              userAvatarKey={avatarKey}
+            />
+          )}
+          ListFooterComponent={
+            loading ? (
+              <View style={styles.loader}>
+                <ActivityIndicator size="large" />
+              </View>
+            ) : undefined
+          }
+          keyboardDismissMode="on-drag"
+          keyboardShouldPersistTaps="handled"
+          removeClippedSubviews
+          automaticallyAdjustKeyboardInsets
+        />
+      )}
 
       <MessageInput onSendMessage={onSendMessage} />
     </PageContainer>
