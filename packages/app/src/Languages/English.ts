@@ -169,6 +169,9 @@ export default {
     PASSWORDS_NOT_MATCH: 'Passwords do not match',
     EMAIL_INVALID: 'Email is invalid',
     COMMENT_INVALID: 'Your comment is invalid and cannot be posted',
+
+    socket_connection_title: 'Could not connect to the chat server',
+    socket_connection_message: 'Please check your internet connection and try again',
   },
 
   api_errors: {
