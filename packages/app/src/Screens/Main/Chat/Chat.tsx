@@ -1,5 +1,5 @@
 import {ChatMessage} from 'database';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {FlatList, View} from 'react-native';
 import uuid from 'react-native-uuid';
 import {ActivityIndicator} from 'react-native-paper';
@@ -55,6 +55,22 @@ const Chat: React.FC<ChatScreenProps> = ({route}) => {
       setInitialLoading(false);
     })();
   });
+
+  useEffect(() => {
+    if (ioClient.current) {
+      const client = ioClient.current;
+
+      client.on('message', (message) => {
+        setMessages((prev) => [message, ...prev]);
+      });
+
+      return () => {
+        client?.off('message');
+      };
+    }
+
+    return undefined;
+  }, [ioClient, socketConnecting]);
 
   const onSendMessage = async (message: string) => {
     if (ioClient.current) {

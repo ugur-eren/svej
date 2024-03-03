@@ -30,7 +30,7 @@ WS.on('connection', (socket) => {
 
     callback({ok: true, message: createdMessage});
 
-    socket.to(`user:${toUser.id}`).emit('message', user.id, message);
+    socket.to(`user:${toUser.id}`).emit('message', createdMessage);
   });
 
   socket.on('disconnect', () => {

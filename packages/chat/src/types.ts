@@ -24,7 +24,7 @@ export interface ClientToServerEvents {
 }
 
 export interface ServerToClientEvents {
-  message: (fromUserId: string, message: string) => void;
+  message: (message: ChatMessage) => void;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
