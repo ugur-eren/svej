@@ -1,6 +1,6 @@
 import express from 'express';
 import {HTTPStatus} from 'common';
-import {Prisma} from '../Services';
+import {Prisma, PrismaIncludes} from '../Services';
 import {onlyAuthorized} from '../Middlewares';
 
 const Router = express.Router();
@@ -11,15 +11,40 @@ Router.get('/', onlyAuthorized, async (req, res) => {
       OR: [{fromId: res.locals.user.id}, {toId: res.locals.user.id}],
     },
     distinct: ['toId', 'fromId'],
-    include: {from: true, to: true},
-    orderBy: {createdAt: 'desc'},
   });
 
-  const filteredChats = chats.filter(
-    (chat) => chat.fromId !== res.locals.user.id && chat.toId !== res.locals.user.id,
+  const chatUserIds = chats.map((chat) =>
+    chat.fromId !== res.locals.user.id ? chat.fromId : chat.toId,
   );
 
-  res.status(HTTPStatus.OK).send(filteredChats);
+  const users = await Prisma.user.findMany({
+    where: {id: {in: chatUserIds}},
+    include: {
+      ...PrismaIncludes.Author(res.locals.user.id),
+      chatMessageSent: {
+        take: 1,
+        orderBy: {createdAt: 'desc'},
+      },
+      chatMessageReceived: {
+        take: 1,
+        orderBy: {createdAt: 'desc'},
+      },
+    },
+  });
+
+  const result = users.map((user) => {
+    const lastMessage =
+      user.chatMessageSent?.[0]?.createdAt > user.chatMessageReceived?.[0]?.createdAt
+        ? user.chatMessageSent?.[0]
+        : user.chatMessageReceived?.[0];
+
+    return {
+      ...user,
+      lastMessage,
+    };
+  });
+
+  res.status(HTTPStatus.OK).send(result);
 });
 
 Router.get('/:userId', onlyAuthorized, async (req, res) => {

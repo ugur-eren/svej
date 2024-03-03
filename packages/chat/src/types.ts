@@ -1,5 +1,5 @@
 import {AckResponse, ErrorCodesKeys} from 'common';
-import {User} from 'database';
+import {ChatMessage, User} from 'database';
 
 export class WSError<TData = unknown> extends Error {
   public code: ErrorCodesKeys;
@@ -16,7 +16,11 @@ export class WSError<TData = unknown> extends Error {
 }
 
 export interface ClientToServerEvents {
-  sendMessage: (toUserId: string, message: string, callback: (ack: AckResponse) => void) => void;
+  sendMessage: (
+    toUserId: string,
+    message: string,
+    callback: (ack: AckResponse<{message: ChatMessage}>) => void,
+  ) => void;
 }
 
 export interface ServerToClientEvents {

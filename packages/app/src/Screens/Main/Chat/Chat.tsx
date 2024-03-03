@@ -1,36 +1,134 @@
-import {FlatList} from 'react-native';
-import {Image} from 'expo-image';
+import {ChatMessage} from 'database';
+import {useState} from 'react';
+import {FlatList, View} from 'react-native';
+import uuid from 'react-native-uuid';
+import {ActivityIndicator} from 'react-native-paper';
 import Message from './Message/Message';
 import MessageInput from './MessageInput/MessageInput';
-import {Header} from '../../../Components';
+import {Avatar, Header} from '../../../Components';
 import {PageContainer} from '../../../Containers';
+import {
+  useLanguage,
+  useOnMount,
+  useShowApiError,
+  useShowToast,
+  useSocketClient,
+} from '../../../Hooks';
+import {Selectors, useAppSelector} from '../../../Redux';
+import {ChatApi} from '../../../Api';
+import {ChatScreenProps} from '../../../Types';
 import styles from './Chat.styles';
 
-const Chat: React.FC = () => {
+const Chat: React.FC<ChatScreenProps> = ({route}) => {
+  const {userId, username, avatarKey} = route.params;
+
+  const selfId = useAppSelector((state) => Selectors.Auth.User(state).id);
+
+  const {ioClient, connecting: socketConnecting} = useSocketClient();
+  const showApiError = useShowApiError();
+  const showToast = useShowToast();
+  const language = useLanguage();
+
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [messages, setMessages] = useState<(ChatMessage & {sending?: boolean})[]>([]);
+
+  const getMessages = async () => {
+    setLoading(true);
+
+    try {
+      const response = await ChatApi.getChatMessages(userId);
+      if (!response.ok || !response.data) return;
+
+      setMessages(response.data);
+    } catch (err) {
+      showApiError(err as Error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useOnMount(() => {
+    (async () => {
+      setInitialLoading(true);
+      await getMessages();
+      setInitialLoading(false);
+    })();
+  });
+
+  const onSendMessage = async (message: string) => {
+    if (ioClient.current) {
+      try {
+        const tempMessageId = uuid.v4().toString();
+
+        setMessages((prev) => [
+          {
+            id: tempMessageId,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            fromId: selfId,
+            toId: userId,
+            message,
+            sending: true,
+          },
+          ...prev,
+        ]);
+
+        const ack = await ioClient.current.emitWithAck('sendMessage', userId, message);
+
+        if (!ack.ok) {
+          showToast({
+            type: 'error',
+            title: language.chat.couldnt_send_title,
+            message: language.chat.couldnt_send_message,
+          });
+          return;
+        }
+
+        setMessages((prev) => [ack.message, ...prev.filter((m) => m.id !== tempMessageId)]);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  };
+
+  // TODO: show loading indicator
+  if (initialLoading || socketConnecting) return null;
+
   return (
     <PageContainer>
       <Header
         mode="small"
-        title="ugur-eren"
-        left={
-          <Image
-            source={{uri: `https://unsplash.it/600/600/?random=${Math.random()}`}}
-            style={styles.headerAvatar}
-          />
-        }
+        title={username}
+        left={<Avatar key={avatarKey} style={styles.headerAvatar} />}
       />
 
       <FlatList
         inverted
-        data={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]}
-        renderItem={({item}) => <Message type={item % 2 ? 'sent' : 'received'} />}
+        data={messages}
+        keyExtractor={(item) => item.id}
+        renderItem={({item}) => (
+          <Message
+            message={item}
+            type={item.toId === userId ? 'sent' : 'received'}
+            sending={item.sending}
+            userAvatarKey={avatarKey}
+          />
+        )}
+        ListFooterComponent={
+          loading ? (
+            <View style={styles.loader}>
+              <ActivityIndicator size="large" />
+            </View>
+          ) : undefined
+        }
         keyboardDismissMode="on-drag"
         keyboardShouldPersistTaps="handled"
         removeClippedSubviews
         automaticallyAdjustKeyboardInsets
       />
 
-      <MessageInput />
+      <MessageInput onSendMessage={onSendMessage} />
     </PageContainer>
   );
 };

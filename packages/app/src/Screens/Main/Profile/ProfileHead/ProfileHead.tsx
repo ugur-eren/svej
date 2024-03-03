@@ -142,6 +142,10 @@ const ProfileHead: React.FC<ProfileHeadProps> = ({userId, username}) => {
     }
   };
 
+  const onSendMessagePress = () => {
+    navigation.navigate('Chat', {userId, username, avatarKey: user.data?.profilePhoto?.fileKey});
+  };
+
   if (user.isLoading || !user.data) return <Placeholders.Profile />;
 
   return (
@@ -202,7 +206,9 @@ const ProfileHead: React.FC<ProfileHeadProps> = ({userId, username}) => {
               {user.data.isFollowing ? language.common.unfollow : language.common.follow}
             </TextButton>
 
-            <TextButton color="primary">{language.common.send_message}</TextButton>
+            <TextButton color="primary" onPress={onSendMessagePress}>
+              {language.common.send_message}
+            </TextButton>
           </View>
         ) : null}
       </View>

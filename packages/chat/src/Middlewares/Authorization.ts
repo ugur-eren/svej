@@ -24,9 +24,11 @@ export const onlyAuthorized: Parameters<Server['use']>[0] = async (socket, next)
     return;
   }
 
+  // eslint-disable-next-line no-param-reassign
   socket.data = {
     user: result.user,
   };
 
+  console.log('success');
   next();
 };

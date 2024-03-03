@@ -3,12 +3,21 @@ import {IconButton} from 'react-native-paper';
 import {BottomFixedInput} from '../../../../Components';
 import {useLanguage} from '../../../../Hooks';
 
-const MessageInput = () => {
+export type MessageInputProps = {
+  onSendMessage: (message: string) => void;
+};
+
+const MessageInput: React.FC<MessageInputProps> = (props) => {
+  const {onSendMessage} = props;
+
   const language = useLanguage();
 
   const [message, setMessage] = useState('');
 
   const sendMessage = () => {
+    if (message.trim().length < 1) return;
+
+    onSendMessage(message.trim());
     setMessage('');
   };
 
@@ -19,7 +28,10 @@ const MessageInput = () => {
       placeholder={language.chat.message_placeholder}
       onSubmitEditing={sendMessage}
       blurOnSubmit={false}
-      left={message.length < 1 ? <IconButton icon="image" /> : null}
+      left={
+        undefined
+        /* message.length < 1 ? <IconButton icon="image" /> : null */
+      }
       right={<IconButton icon="send" onPress={sendMessage} />}
     />
   );

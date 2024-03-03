@@ -12,4 +12,8 @@ export default StyleSheet.create({
   messageInput: {
     marginTop: Spacing.small,
   },
+
+  loader: {
+    paddingVertical: Spacing.large,
+  },
 });

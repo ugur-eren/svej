@@ -6,6 +6,7 @@ export default ThemedStyleSheet((theme) => ({
     flexDirection: 'row',
     paddingHorizontal: Spacing.xsmall,
     marginVertical: Spacing.xsmall,
+    alignItems: 'center',
   },
   imageContainer: {
     width: 50,

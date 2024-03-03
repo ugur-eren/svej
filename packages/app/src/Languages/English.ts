@@ -77,6 +77,8 @@ export default {
   chat: {
     title: 'Messages',
     message_placeholder: 'Your message...',
+    couldnt_send_title: 'Could not send message',
+    couldnt_send_message: 'Could not send your message. Please try again.',
   },
 
   comments: {

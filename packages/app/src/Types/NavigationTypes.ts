@@ -54,7 +54,11 @@ export type MainStackParams = {
     type: 'followers' | 'follows';
   };
   Chats: undefined;
-  Chat: undefined;
+  Chat: {
+    userId: string;
+    username: string;
+    avatarKey?: string;
+  };
 };
 
 // Root Stack

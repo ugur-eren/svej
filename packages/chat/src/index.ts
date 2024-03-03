@@ -20,7 +20,7 @@ WS.on('connection', (socket) => {
       return;
     }
 
-    await Prisma.chatMessage.create({
+    const createdMessage = await Prisma.chatMessage.create({
       data: {
         from: {connect: {id: user.id}},
         to: {connect: {id: toUser.id}},
@@ -28,7 +28,7 @@ WS.on('connection', (socket) => {
       },
     });
 
-    callback({ok: true});
+    callback({ok: true, message: createdMessage});
 
     socket.to(`user:${toUser.id}`).emit('message', user.id, message);
   });

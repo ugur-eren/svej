@@ -1,24 +1,28 @@
 import {View} from 'react-native';
-import {Image} from 'expo-image';
-import {Text} from '../../../../Components';
+import {Avatar, Text} from '../../../../Components';
 import {useTheme} from '../../../../Hooks';
+import {ChatMessage} from '../../../../Api/Chat/Chat.types';
 import getStyles from './Message.styles';
 
-const MessageReceived: React.FC = () => {
+export type MessageReceivedProps = {
+  message: ChatMessage;
+  avatarKey?: string;
+};
+
+const MessageReceived: React.FC<MessageReceivedProps> = (props) => {
+  const {message, avatarKey} = props;
+
   const theme = useTheme();
 
   const styles = getStyles(theme);
 
   return (
     <View style={styles.receivedContainer}>
-      <Image
-        source={{uri: `https://unsplash.it/600/600/?random=${Math.random()}`}}
-        style={styles.receivedAvatar}
-      />
+      <Avatar avatarKey={avatarKey} style={styles.receivedAvatar} />
 
       <View style={styles.received}>
         <View style={styles.receivedText}>
-          <Text>Aliquip consequat aliquip minim laboris non veniam.</Text>
+          <Text>{message.message}</Text>
         </View>
       </View>
     </View>
