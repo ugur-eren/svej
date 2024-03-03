@@ -14,6 +14,8 @@ You can find the screenshots of the app in the `screenshots` folder.
 
 ## Tech Stack
 
+### App
+
 - [TypeScript](https://www.typescriptlang.org/)
 - [React Native](https://reactnative.dev/)
 - [Expo](https://expo.dev/)
@@ -22,7 +24,16 @@ You can find the screenshots of the app in the `screenshots` folder.
 - [React Native Gesture Handler](https://software-mansion.github.io/react-native-gesture-handler/)
 - [React Native Reanimated](https://docs.swmansion.com/react-native-reanimated/)
 - [Redux](https://redux.js.org/) & [Redux Toolkit](https://redux-toolkit.js.org/) & [Redux Persist](https://github.com/rt2zz/redux-persist)
-- [FFmpeg](https://ffmpeg.org/) & [FFprobe](https://ffmpeg.org/ffprobe.html)
+
+### Backend
+
+- [TypeScript](https://www.typescriptlang.org/)
+- [Express](https://expressjs.com/)
+- [Socket.io](https://socket.io/)
+- [PostgreSQL](https://www.postgresql.org/)
+- [Prisma ORM](https://www.prisma.io/)
+- [Sharp](https://sharp.pixelplumbing.com/) for image processing
+- [FFmpeg](https://ffmpeg.org/) & [FFprobe](https://ffmpeg.org/ffprobe.html) for video processing
 
 ## Prerequisites
 
