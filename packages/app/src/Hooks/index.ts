@@ -18,3 +18,4 @@ export {useShowApiError} from './useShowApiError';
 export {useUploadPost} from './useUploadPost';
 export {useShowDialog, useHideDialog, type DialogConfig} from './useDialog';
 export {useNotificationCount} from './useNotificationCount';
+export {useSocketClient} from './useSocketClient';

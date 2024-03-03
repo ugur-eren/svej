@@ -96,3 +96,9 @@ export const Notification = (userId: string) =>
     comment: {include: Comment(userId)},
     warning: true,
   } satisfies Prisma.NotificationInclude);
+
+export const ChatMessage = (userId: string) =>
+  ({
+    from: {include: Author(userId)},
+    to: {include: Author(userId)},
+  } satisfies Prisma.ChatMessageInclude);

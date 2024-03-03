@@ -1,0 +1,1 @@
+export {onlyAuthorized} from './Authorization';

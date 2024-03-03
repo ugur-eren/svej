@@ -1,27 +1,20 @@
-import {useState} from 'react';
 import {View} from 'react-native';
 import {Feather} from '@expo/vector-icons';
 import {Text} from '../../../../Components';
-import {useOnMount, useTheme} from '../../../../Hooks';
+import {useTheme} from '../../../../Hooks';
+import {ChatMessage} from '../../../../Api/Chat/Chat.types';
 import getStyles from './Message.styles';
 
-const MessageSent: React.FC = () => {
+const MessageSent: React.FC<{message: ChatMessage; sending?: boolean}> = ({message, sending}) => {
   const theme = useTheme();
-  const [sending, setSending] = useState(true);
 
   const styles = getStyles(theme);
-
-  useOnMount(() => {
-    setTimeout(() => setSending(false), Math.random() * 3000);
-  });
 
   return (
     <View style={styles.sentContainer}>
       <View style={styles.sent}>
         <View style={styles.sentText}>
-          <Text color="onPrimary">
-            Voluptate fugiat ex veniam occaecat ad culpa et eu ad est ex veniam.
-          </Text>
+          <Text color="onPrimary">{message.message}</Text>
         </View>
 
         {sending ? (

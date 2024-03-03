@@ -4,6 +4,7 @@ const env = (key: string) => process.env[`SVEJ_${key}`];
 export const USE_CONFIG = env('PUBLIC_USE_CONFIG') || 'false';
 
 export const BACKEND_PORT = Number(env('BACKEND_PORT')) || 3001;
+export const CHAT_PORT = Number(env('CHAT_PORT')) || 3002;
 
 export const BCRYPT_ROUNDS = Number(env('BCRYPT_ROUNDS')) || 10;
 

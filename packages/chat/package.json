@@ -1,0 +1,39 @@
+{
+  "name": "chat",
+  "description": "Created with project-manager CLI",
+  "private": true,
+  "version": "1.0.0",
+  "main": "./exports.ts",
+  "types": "./exports.ts",
+  "scripts": {
+    "start": "dotenv -e ../../.env ts-node ./index.ts",
+    "watch": "dotenv -e ../../.env nodemon ./index.ts",
+    "test": "dotenv -e ../../.env jest ./tests --passWithNoTests",
+    "format:check": "prettier -c \"src/**/*.ts\"",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "lint:check": "eslint \"src/**/*.ts\"",
+    "lint": "yarn lint:check --fix",
+    "ts:check": "tsc --noEmit",
+    "check": "yarn format && yarn format:check && yarn lint:check && yarn ts:check"
+  },
+  "dependencies": {
+    "common": "*",
+    "database": "*",
+    "dotenv": "^16.4.5",
+    "server-side": "*",
+    "socket.io": "^4.7.4",
+    "zod": "^3.21.4"
+  },
+  "devDependencies": {
+    "@types/dotenv": "^8.2.0",
+    "@types/jest": "^27.4.1",
+    "@types/node": "^20.2.5",
+    "dotenv-cli": "^7.2.1",
+    "eslint": "8.8.0",
+    "jest": "^27.5.1",
+    "nodemon": "^2.0.15",
+    "rimraf": "^5.0.1",
+    "ts-node": "^10.4.0",
+    "typescript": "~5.1.0"
+  }
+}
