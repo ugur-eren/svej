@@ -1,5 +1,5 @@
 import {memo, useCallback} from 'react';
-import {View} from 'react-native';
+import {View, Platform} from 'react-native';
 import {useFonts} from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import * as StatusBar from 'expo-status-bar';
@@ -9,6 +9,7 @@ import Router from './Router';
 import Env from './Utils/Env';
 import {IsAndroid} from './Utils/Helpers';
 import {ThemedStyleSheet} from './Utils/ThemedStyleSheet';
+import {WEB_MAX_WIDTH} from './Utils/Constants';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -52,9 +53,11 @@ const AppContent = memo(() => {
 
   return (
     <View style={styles.container} onLayout={onLayoutRootView}>
-      <AfterLoadProviders>
-        <Router />
-      </AfterLoadProviders>
+      <View style={styles.content}>
+        <AfterLoadProviders>
+          <Router />
+        </AfterLoadProviders>
+      </View>
     </View>
   );
 });
@@ -62,7 +65,13 @@ const AppContent = memo(() => {
 const getStyles = ThemedStyleSheet((theme) => ({
   container: {
     flex: 1,
+    alignItems: 'center',
     backgroundColor: theme.colors.background,
+  },
+  content: {
+    flex: 1,
+    width: '100%',
+    maxWidth: Platform.OS === 'web' ? WEB_MAX_WIDTH : '100%',
   },
 }));
 

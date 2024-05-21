@@ -1,7 +1,8 @@
 import {memo, useState, useCallback, useRef} from 'react';
-import {View, FlatList, useWindowDimensions} from 'react-native';
+import {View, FlatList} from 'react-native';
 import PostMedia from '../../PostMedia/PostMedia';
 import Pagination from '../../Pagination/Pagination';
+import {useDimensions} from '../../../Hooks';
 import {PostData} from '../PostContent.props';
 import {PostCarouselProps} from './PostCarousel.props';
 import styles from './PostCarousel.styles';
@@ -11,7 +12,7 @@ const PostCarousel: React.FC<PostCarouselProps> = (props) => {
 
   const flatlistRef = useRef<FlatList>(null);
 
-  const {width} = useWindowDimensions();
+  const {width} = useDimensions();
   const [activeSlide, setActiveSlide] = useState(0);
 
   const PostCarouselItem = useCallback(

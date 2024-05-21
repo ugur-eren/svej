@@ -1,16 +1,10 @@
 import {memo, useState} from 'react';
-import {
-  View,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  StyleSheet,
-  useWindowDimensions,
-} from 'react-native';
+import {View, TouchableOpacity, TouchableWithoutFeedback, StyleSheet} from 'react-native';
 import {Video, ResizeMode} from 'expo-av';
 import {Feather} from '@expo/vector-icons';
 import Text from '../../Text/Text';
 import Spinner from '../../Spinner/Spinner';
-import {usePromisedState, useTheme} from '../../../Hooks';
+import {useDimensions, usePromisedState, useTheme} from '../../../Hooks';
 import {Selectors, SettingsActions, useAppDispatch, useAppSelector} from '../../../Redux';
 import {PostVideoProps} from './PostVideo.props';
 import getStyles from './PostVideo.styles';
@@ -25,7 +19,7 @@ const PostVideo: React.FC<PostVideoProps> = (props) => {
 
   const styles = getStyles(theme);
 
-  const {width} = useWindowDimensions();
+  const {width} = useDimensions();
   const [renderVideo, setRenderVideo] = usePromisedState(true);
   const [ready, setReady] = useState(false);
   const [error, setError] = useState(false);
@@ -55,6 +49,7 @@ const PostVideo: React.FC<PostVideoProps> = (props) => {
           <Video
             source={{uri}}
             style={StyleSheet.compose(style, {height: width / ratio, aspectRatio: ratio})}
+            videoStyle={{width, height: width / ratio}}
             isLooping
             usePoster
             shouldPlay={visible}

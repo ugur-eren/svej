@@ -8,3 +8,5 @@ export const INITIAL_MEASURE_BOUNDS: ReturnType<typeof measure> = {
   pageX: 0,
   pageY: 0,
 };
+
+export const WEB_MAX_WIDTH = 520;

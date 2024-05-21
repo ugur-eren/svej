@@ -69,6 +69,7 @@ Router.get('/:fileKey', async (req, res) => {
   res.writeHead(partialConfig ? HTTPStatus.PartialContent : HTTPStatus.OK, {
     'Content-Type': mimeType,
     'Accept-Ranges': 'bytes',
+    'Cross-Origin-Resource-Policy': 'cross-origin',
 
     ...(partialConfig
       ? {

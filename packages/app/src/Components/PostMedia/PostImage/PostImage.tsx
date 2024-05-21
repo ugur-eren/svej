@@ -1,15 +1,16 @@
 import {useState} from 'react';
-import {View, StyleSheet, useWindowDimensions} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import {Image, ImageStyle} from 'expo-image';
 import {useSharedValue} from 'react-native-reanimated';
+import CircleProgress from '../../CircleProgress/CircleProgress';
+import {useDimensions} from '../../../Hooks';
 import {PostImageProps} from './PostImage.props';
 import styles from './PostImage.styles';
-import CircleProgress from '../../CircleProgress/CircleProgress';
 
 const PostImage: React.FC<PostImageProps> = (props) => {
   const {uri, ratio, thumbnail, style, ...imageProps} = props;
 
-  const {width} = useWindowDimensions();
+  const {width} = useDimensions();
 
   const [loading, setLoading] = useState(true);
   const progress = useSharedValue(0);

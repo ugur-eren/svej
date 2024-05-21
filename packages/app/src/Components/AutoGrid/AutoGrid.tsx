@@ -1,5 +1,6 @@
 import {Children, useCallback, useState} from 'react';
-import {LayoutChangeEvent, StyleSheet, View, useWindowDimensions} from 'react-native';
+import {LayoutChangeEvent, StyleSheet, View} from 'react-native';
+import {useDimensions} from '../../Hooks';
 import Element from './AutoGrid.Element';
 import {AutoGridContext} from './AutoGrid.context';
 import {AutoGridProps, AutoGridSubComponents} from './AutoGrid.props';
@@ -8,7 +9,7 @@ import styles from './AutoGrid.styles';
 const AutoGrid: React.FC<AutoGridProps> & AutoGridSubComponents = (props) => {
   const {itemSize, gap, style, children, ...restProps} = props;
 
-  const {width: windowWidth} = useWindowDimensions();
+  const {width: windowWidth} = useDimensions();
   const [containerWidth, setContainerWidth] = useState(windowWidth);
 
   const itemsPerRow = Math.round(containerWidth / itemSize);

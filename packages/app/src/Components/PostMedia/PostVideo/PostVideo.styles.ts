@@ -2,6 +2,10 @@ import Color from 'color';
 import {ThemedStyleSheet} from '../../../Utils/ThemedStyleSheet';
 
 export default ThemedStyleSheet((theme) => ({
+  video: {
+    width: '100%',
+  },
+
   loader: {
     position: 'absolute',
     left: 0,
