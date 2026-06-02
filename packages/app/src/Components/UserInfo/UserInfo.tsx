@@ -35,6 +35,7 @@ const UserInfo: React.FC<UserInfoProps> = (props) => {
 
             {user.tags.map((tag) => (
               <Feather
+                key={tag.id}
                 name={tag.icon as never}
                 size={small ? 12 : 16}
                 color={tag.color}

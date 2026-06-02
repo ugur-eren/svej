@@ -1,5 +1,5 @@
 {
-  "name": "svej-app",
+  "name": "app",
   "version": "1.0.0",
   "private": true,
   "license": "GPL-2.0",
@@ -10,11 +10,11 @@
     "ios": "dotenv -e ../../.env expo start --ios",
     "web": "dotenv -e ../../.env expo start --web",
     "format": "prettier --write \"src/**/*.{ts,tsx}\"",
-    "lint": "yarn lint:check --fix",
+    "lint": "eslint \"src/**/*.{ts,tsx}\"",
+    "lint:fix": "yarn lint --fix",
     "format:check": "prettier -c \"src/**/*.{ts,tsx}\"",
-    "lint:check": "eslint \"src/**/*.{ts,tsx}\"",
     "ts:check": "tsc --noEmit",
-    "check": "yarn format && yarn format:check && yarn lint:check && yarn ts:check"
+    "check": "yarn format && yarn format:check && yarn lint && yarn ts:check"
   },
   "dependencies": {
     "@expo/vector-icons": "^14.0.0",
@@ -27,8 +27,8 @@
     "apisauce": "^3.0.1",
     "axios": "^1.4.0",
     "color": "3.2.1",
-    "common": "*",
-    "database": "*",
+    "common": "workspace:*",
+    "database": "workspace:*",
     "expo": "~50.0.0",
     "expo-av": "~13.10.5",
     "expo-blur": "~12.9.2",
@@ -63,20 +63,18 @@
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@babel/plugin-proposal-export-namespace-from": "^7.16.7",
-    "@react-native-community/eslint-config": "^3.2.0",
-    "@tanstack/eslint-plugin-query": "^5.20.1",
+    "@tanstack/eslint-plugin-query": "^5.100.14",
     "@types/color": "^3.0.3",
     "@types/react": "~18.2.45",
-    "chat": "*",
+    "chat": "workspace:*",
     "dotenv": "^16.1.3",
     "dotenv-cli": "^7.2.1",
-    "eslint": "8.8.0",
+    "eslint": "9.39.3",
     "eslint-config-airbnb": "19.0.4",
-    "eslint-plugin-jsx-a11y": "^6.5.1",
-    "eslint-plugin-react": "^7.29.3",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-native": "^4.0.0",
-    "tsconfig": "*",
-    "typescript": "^5.3.0"
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-native": "^5.0.0",
+    "typescript": "~6.0.3"
   }
 }

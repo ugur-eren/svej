@@ -41,7 +41,7 @@ export const useSocketClient = () => {
     return () => {
       ioClient.current?.disconnect();
     };
-  }, []);
+  }, [language, showToast]);
 
   return {ioClient, connecting};
 };

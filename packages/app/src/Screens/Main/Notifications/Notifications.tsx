@@ -12,13 +12,13 @@ const Notifications: React.FC = () => {
   const notifications = useInfiniteQuery({
     initialPageParam: Date.now().toString(),
     queryKey: ['notifications'],
+    queryFn: async ({pageParam}) => NotificationApi.getAll(pageParam),
     getNextPageParam: (lastPage: any, allPages, lastPageParam) => {
       if (!lastPage?.length) return undefined;
       const pageParam = lastPage[lastPage.length - 1].createdAt;
       if (!pageParam || pageParam === lastPageParam) return undefined;
       return pageParam;
     },
-    queryFn: async ({pageParam}) => NotificationApi.getAll(pageParam),
   });
 
   const onRefresh = useCallback(async () => {

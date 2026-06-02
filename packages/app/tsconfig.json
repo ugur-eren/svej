@@ -1,17 +1,16 @@
 {
-  "extends": "expo/tsconfig.base",
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
-    "jsx": "react-native",
-    "lib": ["ESNext"],
-    "isolatedModules": false,
-    "strict": true,
-    "noImplicitAny": true,
-    "noImplicitReturns": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true
-  }
+    "target": "ESNext",
+    "module": "ES6",
+    "moduleResolution": "Node",
+    "noUnusedLocals": false,
+    "noFallthroughCasesInSwitch": true,
+    "useUnknownInCatchVariables": false,
+    "downlevelIteration": true,
+    "allowSyntheticDefaultImports": true,
+    "jsx": "react-native"
+  },
+  "exclude": ["node_modules", "dist", "babel.config.js"],
+  "include": ["**/*.ts", "**/*.tsx"]
 }

@@ -1,4 +1,3 @@
-// eslint-disable-next-line prefer-destructuring
 const env = (key: string) => process.env[`SVEJ_${key}`];
 
 export const USE_CONFIG = env('PUBLIC_USE_CONFIG') || 'false';

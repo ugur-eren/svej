@@ -5,33 +5,33 @@
   "version": "1.0.0",
   "license": "GPL-2.0",
   "scripts": {
-    "start": "dotenv -e ../../.env ts-node ./index.ts",
-    "watch": "dotenv -e ../../.env nodemon ./index.ts",
+    "start": "tsx --env-file=../../.env ./index.ts",
+    "watch": "tsx watch --env-file=../../.env ./index.ts",
     "test": "dotenv -e ../../.env jest ./tests --passWithNoTests",
     "format:check": "prettier -c \"src/**/*.ts\"",
     "format": "prettier --write \"src/**/*.ts\"",
-    "lint:check": "eslint \"src/**/*.ts\"",
-    "lint": "yarn lint:check --fix",
+    "lint": "eslint \"src/**/*.ts\"",
+    "lint:fix": "yarn lint --fix",
     "ts:check": "tsc --noEmit",
-    "check": "yarn format && yarn format:check && yarn lint:check && yarn ts:check"
+    "check": "yarn format && yarn format:check && yarn lint && yarn ts:check"
   },
   "dependencies": {
     "bcrypt": "^5.1.0",
     "blurhash": "^2.0.5",
-    "common": "*",
+    "common": "workspace:*",
     "cors": "^2.8.5",
     "cross-spawn": "^7.0.3",
-    "database": "*",
+    "database": "workspace:*",
     "debug": "^4.3.4",
     "dedent": "^0.7.0",
     "dotenv": "^16.1.3",
     "express": "^4.18.2",
-    "file-system": "*",
+    "file-system": "workspace:*",
     "helmet": "^7.0.0",
     "jsonwebtoken": "^9.0.0",
     "mime-types": "^2.1.35",
     "multer": "^1.4.5-lts.1",
-    "server-side": "*",
+    "server-side": "workspace:*",
     "sharp": "^0.32.1",
     "uuid": "^9.0.0"
   },
@@ -50,11 +50,10 @@
     "@types/uuid": "^9.0.1",
     "debug": "^4.3.4",
     "dotenv-cli": "^7.2.1",
-    "eslint": "8.8.0",
+    "eslint": "9.39.3",
     "jest": "^27.5.1",
-    "nodemon": "^2.0.15",
     "rimraf": "^3.0.2",
-    "ts-node": "^10.4.0",
-    "typescript": "~5.1.0"
+    "tsx": "^4.22.4",
+    "typescript": "~6.0.3"
   }
 }

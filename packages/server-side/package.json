@@ -7,19 +7,19 @@
   "scripts": {
     "format:check": "prettier -c \"src/**/*.ts\"",
     "format": "prettier --write \"src/**/*.ts\"",
-    "lint:check": "eslint \"src/**/*.ts\"",
-    "lint": "yarn lint:check --fix",
+    "lint": "eslint \"src/**/*.ts\"",
+    "lint:fix": "yarn lint --fix",
     "ts:check": "tsc --noEmit",
-    "check": "yarn format && yarn format:check && yarn lint:check && yarn ts:check"
+    "check": "yarn format && yarn format:check && yarn lint && yarn ts:check"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
-    "database": "*",
+    "database": "workspace:*",
     "jsonwebtoken": "^9.0.2"
   },
   "devDependencies": {
     "@types/node": "^20.2.5",
-    "ts-node": "^10.9.1",
-    "typescript": "~5.1.0"
+    "eslint": "9.39.3",
+    "typescript": "~6.0.3"
   }
 }
