@@ -4,9 +4,8 @@ import fs from 'fs/promises';
 import {v4 as uuid} from 'uuid';
 import {encode} from 'blurhash';
 import sharp from 'sharp';
+import {FileSystem, TEMP_DIR} from 'file-system';
 import {Spawn} from './Spawn';
-import {TEMP_DIR} from './Constants';
-import {fileSystem} from '../Services';
 import {clampDimensions} from './Helpers';
 
 export const VideoHandler = async (file: Express.Multer.File) => {
@@ -60,7 +59,7 @@ export const VideoHandler = async (file: Express.Multer.File) => {
   }
 
   const processedFile = await fs.readFile(tempProcessedFilePath);
-  fileSystem.write(fileName, processedFile, 'video/mp4');
+  await FileSystem.write(fileName, processedFile, 'video/mp4');
 
   const thumbnailProcess = await Spawn('ffmpeg', [
     ['-vf', 'select=eq(n,34)'],

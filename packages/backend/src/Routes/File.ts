@@ -1,7 +1,7 @@
 import express from 'express';
 import {HTTPStatus} from 'common';
 import mime from 'mime-types';
-import {fileSystem} from '../Services';
+import {FileSystem} from 'file-system';
 
 const Router = express.Router();
 
@@ -14,7 +14,7 @@ Router.get('/:fileKey', async (req, res) => {
     return;
   }
 
-  const stat = await fileSystem.stats(fileKey);
+  const stat = await FileSystem.stats(fileKey);
   if (!stat.ok) {
     if (stat.error === 'NotFound') {
       res.status(HTTPStatus.NotFound).send();
@@ -51,7 +51,7 @@ Router.get('/:fileKey', async (req, res) => {
   }
 
   // No range header
-  const stream = await fileSystem.readStream(
+  const stream = await FileSystem.readStream(
     fileKey,
     partialConfig ? {start: partialConfig.start, end: partialConfig.end} : undefined,
   );

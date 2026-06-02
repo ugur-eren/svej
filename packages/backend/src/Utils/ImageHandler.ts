@@ -3,7 +3,7 @@ import {MediaType, PrismaTypes} from 'database';
 import sharp from 'sharp';
 import {v4 as uuid} from 'uuid';
 import {encode} from 'blurhash';
-import {fileSystem} from '../Services';
+import {FileSystem} from 'file-system';
 import {clampDimensions, getCropArea} from './Helpers';
 
 export const ImageHandler = async (
@@ -50,7 +50,7 @@ export const ImageHandler = async (
   image.toFormat('webp');
 
   const buffer = await image.toBuffer();
-  await fileSystem.write(fileName, buffer, 'image/webp');
+  await FileSystem.write(fileName, buffer, 'image/webp');
 
   let thumbnail: string | null = null;
   try {

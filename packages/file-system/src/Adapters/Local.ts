@@ -1,7 +1,7 @@
 import {join} from 'node:path';
 import fs from 'node:fs/promises';
 import {createReadStream} from 'node:fs';
-import {BaseFileSystem, FileSystemResponse} from '../../Utils/BaseFileSystem';
+import {BaseFileSystem, FileSystemResponse} from './Base';
 
 export class LocalFileSystem implements BaseFileSystem {
   private rootPath: string;
@@ -73,7 +73,7 @@ export class LocalFileSystem implements BaseFileSystem {
     const fullPath = join(this.rootPath, key);
 
     try {
-      await fs.writeFile(fullPath, data);
+      await fs.writeFile(fullPath, new Uint8Array(data));
       return true;
     } catch (err) {
       return false;

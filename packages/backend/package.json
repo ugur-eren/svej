@@ -16,7 +16,6 @@
     "check": "yarn format && yarn format:check && yarn lint:check && yarn ts:check"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.511.0",
     "bcrypt": "^5.1.0",
     "blurhash": "^2.0.5",
     "common": "*",
@@ -27,6 +26,7 @@
     "dedent": "^0.7.0",
     "dotenv": "^16.1.3",
     "express": "^4.18.2",
+    "file-system": "*",
     "helmet": "^7.0.0",
     "jsonwebtoken": "^9.0.0",
     "mime-types": "^2.1.35",

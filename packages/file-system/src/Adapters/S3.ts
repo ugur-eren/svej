@@ -6,7 +6,7 @@ import {
   PutObjectCommand,
   DeleteObjectCommand,
 } from '@aws-sdk/client-s3';
-import {BaseFileSystem, FileSystemResponse} from '../../Utils/BaseFileSystem';
+import {BaseFileSystem, FileSystemResponse} from './Base';
 
 export class S3FileSystem implements BaseFileSystem {
   private bucket: string;
@@ -133,7 +133,7 @@ export class S3FileSystem implements BaseFileSystem {
   }
 
   public async write(key: string, data: Buffer, mime: string): Promise<boolean> {
-    const dataHash = createHash('md5').update(data).digest('base64');
+    const dataHash = createHash('md5').update(new Uint8Array(data)).digest('base64');
 
     const command = new PutObjectCommand({
       Bucket: this.bucket,
