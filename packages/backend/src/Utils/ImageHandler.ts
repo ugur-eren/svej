@@ -41,7 +41,7 @@ export const ImageHandler = async (
     oldHeight = cropArea.height;
   }
 
-  const {width: newWidth, height: newHeight} = clampDimensions(oldWidth, oldHeight, maxDimension);
+  const [newWidth, newHeight] = clampDimensions(oldWidth, oldHeight, maxDimension);
 
   image.resize({
     width: newWidth,
@@ -54,14 +54,16 @@ export const ImageHandler = async (
 
   let thumbnail: string | null = null;
   try {
+    const [thumbWidth, thumbHeight] = clampDimensions(newWidth, newHeight, 32);
+
     const thumbnailBuffer = await image
       .clone()
       .raw()
       .ensureAlpha()
-      .resize({width: 32, height: 32})
+      .resize({width: thumbWidth, height: thumbHeight})
       .toBuffer();
 
-    thumbnail = encode(new Uint8ClampedArray(thumbnailBuffer), 32, 32, 4, 4);
+    thumbnail = encode(new Uint8ClampedArray(thumbnailBuffer), thumbWidth, thumbHeight, 4, 4);
   } catch (_) {
     //
   }

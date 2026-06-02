@@ -15,7 +15,7 @@ export const VideoHandler = async (file: Express.Multer.File) => {
   const fileId = uuid();
   const fileName = `${fileId}.mp4`;
 
-  await fs.writeFile(tempFilePath, file.buffer);
+  await fs.writeFile(tempFilePath, new Uint8Array(file.buffer));
 
   const ffprobeProcess = await Spawn('ffprobe', [
     ['-v', 'error'],
@@ -32,11 +32,7 @@ export const VideoHandler = async (file: Express.Multer.File) => {
   const [oldWidth = Config.maxPostVideoDimension, oldHeight = Config.maxPostVideoDimension] =
     ffprobeProcess.stdout[0].split('x').map((x) => parseInt(x, 10));
 
-  const {width: newWidth, height: newHeight} = clampDimensions(
-    oldWidth,
-    oldHeight,
-    Config.maxPostVideoDimension,
-  );
+  const [newWidth, newHeight] = clampDimensions(oldWidth, oldHeight, Config.maxPostVideoDimension);
 
   const ffmpegProcess = await Spawn('ffmpeg', [
     ['-hide_banner'],
@@ -62,6 +58,7 @@ export const VideoHandler = async (file: Express.Multer.File) => {
   await FileSystem.write(fileName, processedFile, 'video/mp4');
 
   const thumbnailProcess = await Spawn('ffmpeg', [
+    ['-i', tempProcessedFilePath],
     ['-vf', 'select=eq(n,34)'],
     ['-vframes', '1'],
     tempThumbnailPath,
@@ -71,13 +68,15 @@ export const VideoHandler = async (file: Express.Multer.File) => {
 
   if (thumbnailProcess.status) {
     try {
+      const [thumbWidth, thumbHeight] = clampDimensions(newWidth, newHeight, 32);
+
       const thumbnailBuffer = await sharp(tempThumbnailPath)
         .raw()
         .ensureAlpha()
-        .resize(32, 32, {fit: 'inside'})
+        .resize(thumbWidth, thumbHeight, {fit: 'inside'})
         .toBuffer();
 
-      thumbnail = encode(new Uint8ClampedArray(thumbnailBuffer), 32, 32, 4, 4);
+      thumbnail = encode(new Uint8ClampedArray(thumbnailBuffer), thumbWidth, thumbHeight, 4, 4);
     } catch (_) {
       //
     }
@@ -86,8 +85,8 @@ export const VideoHandler = async (file: Express.Multer.File) => {
   return {
     type: MediaType.VIDEO,
     fileKey: fileName,
-    width: 300,
-    height: 300,
+    width: newWidth,
+    height: newHeight,
     thumbnail,
   } satisfies PrismaTypes.MediaCreateInput;
 };

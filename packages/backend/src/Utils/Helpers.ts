@@ -20,30 +20,24 @@ export const throwError = (message: string, options?: ErrorOptions): never => {
  * @param width Width of the image
  * @param height Height of the image
  * @param maxDimension Maximum dimension for the image
- * @returns Clamped dimensions `{width, height}`
+ * @returns Clamped dimensions `[width, height]`
  */
 export const clampDimensions = (
   width: number,
   height: number,
   maxDimension: number,
-): {width: number; height: number} => {
+): [width: number, height: number] => {
   if (width <= maxDimension && height <= maxDimension) {
-    return {width, height};
+    return [width, height];
   }
 
   const aspectRatio = width / height;
 
   if (width > height) {
-    return {
-      width: maxDimension,
-      height: Math.round(maxDimension / aspectRatio),
-    };
+    return [maxDimension, Math.round(maxDimension / aspectRatio)];
   }
 
-  return {
-    width: Math.round(maxDimension * aspectRatio),
-    height: maxDimension,
-  };
+  return [Math.round(maxDimension * aspectRatio), maxDimension];
 };
 
 /**
