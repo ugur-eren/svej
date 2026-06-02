@@ -1,6 +1,6 @@
 import {Server} from 'socket.io';
-import {ErrorCodes} from 'common';
-import {JWT} from 'server-side';
+import {ErrorCodes} from '@svej/common';
+import {JWT} from '@svej/server-side';
 import {WSError} from '../types';
 
 export const onlyAuthorized: Parameters<Server['use']>[0] = async (socket, next) => {

@@ -1,5 +1,5 @@
 {
-  "name": "chat",
+  "name": "@svej/chat",
   "description": "Created with project-manager CLI",
   "private": true,
   "version": "1.0.0",
@@ -17,10 +17,10 @@
     "check": "yarn format && yarn format:check && yarn lint && yarn ts:check"
   },
   "dependencies": {
-    "common": "workspace:*",
-    "database": "workspace:*",
+    "@svej/common": "workspace:*",
+    "@svej/database": "workspace:*",
+    "@svej/server-side": "workspace:*",
     "dotenv": "^16.4.5",
-    "server-side": "workspace:*",
     "socket.io": "^4.7.4",
     "zod": "^3.21.4"
   },

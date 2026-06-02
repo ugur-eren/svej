@@ -1,9 +1,9 @@
-import {Config} from 'common';
-import {MediaType, PrismaTypes} from 'database';
+import {Config} from '@svej/common';
+import {MediaType, PrismaTypes} from '@svej/database';
 import sharp from 'sharp';
 import {v4 as uuid} from 'uuid';
 import {encode} from 'blurhash';
-import {FileSystem} from 'file-system';
+import {FileSystem} from '@svej/file-system';
 import {clampDimensions, getCropArea} from './Helpers';
 
 export const ImageHandler = async (

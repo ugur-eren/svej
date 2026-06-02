@@ -1,5 +1,5 @@
-import type {PrismaTypes, PrismaIncludes, User as PrismaUser} from 'database';
-import {Zod} from 'common';
+import type {PrismaTypes, PrismaIncludes, User as PrismaUser} from '@svej/database';
+import {Zod} from '@svej/common';
 
 export type ExtendedType = {
   isFollowing: boolean;

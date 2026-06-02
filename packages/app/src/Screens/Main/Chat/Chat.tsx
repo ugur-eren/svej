@@ -1,4 +1,4 @@
-import {ChatMessage} from 'database';
+import {ChatMessage} from '@svej/database';
 import {useEffect, useState} from 'react';
 import {FlatList, View} from 'react-native';
 import uuid from 'react-native-uuid';

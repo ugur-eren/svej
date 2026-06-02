@@ -1,5 +1,5 @@
 {
-  "name": "svej-monorepo",
+  "name": "svej",
   "private": true,
   "license": "GPL-2.0",
   "workspaces": [

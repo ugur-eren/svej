@@ -1,6 +1,6 @@
 import express from 'express';
-import {JWT} from 'server-side';
-import {HTTPStatus, ErrorCodes} from 'common';
+import {JWT} from '@svej/server-side';
+import {HTTPStatus, ErrorCodes} from '@svej/common';
 
 type JWTReturnType = JWT.VerifyReturnType & {ok: true};
 

@@ -1,4 +1,4 @@
-import {Env} from 'server-side';
+import {Env} from '@svej/server-side';
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';

@@ -1,4 +1,4 @@
-import {Zod} from 'common';
+import {Zod} from '@svej/common';
 import {FlatList} from 'react-native';
 import {useQueryClient} from '@tanstack/react-query';
 import Comment from './Comment/Comment';

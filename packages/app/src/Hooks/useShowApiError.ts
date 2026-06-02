@@ -1,4 +1,4 @@
-import {ErrorCodesKeys} from 'common';
+import {ErrorCodesKeys} from '@svej/common';
 import {useCallback} from 'react';
 import {useLanguage} from './Language';
 import {useShowToast} from './useToast';

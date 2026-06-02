@@ -1,5 +1,5 @@
 {
-  "name": "backend",
+  "name": "@svej/backend",
   "description": "Created with project-manager CLI",
   "private": true,
   "version": "1.0.0",
@@ -16,22 +16,22 @@
     "check": "yarn format && yarn format:check && yarn lint && yarn ts:check"
   },
   "dependencies": {
+    "@svej/common": "workspace:*",
+    "@svej/database": "workspace:*",
+    "@svej/file-system": "workspace:*",
+    "@svej/server-side": "workspace:*",
     "bcrypt": "^5.1.0",
     "blurhash": "^2.0.5",
-    "common": "workspace:*",
     "cors": "^2.8.5",
     "cross-spawn": "^7.0.3",
-    "database": "workspace:*",
     "debug": "^4.3.4",
     "dedent": "^0.7.0",
     "dotenv": "^16.1.3",
     "express": "^4.18.2",
-    "file-system": "workspace:*",
     "helmet": "^7.0.0",
     "jsonwebtoken": "^9.0.0",
     "mime-types": "^2.1.35",
     "multer": "^1.4.5-lts.1",
-    "server-side": "workspace:*",
     "sharp": "^0.32.1",
     "uuid": "^9.0.0"
   },

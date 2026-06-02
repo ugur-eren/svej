@@ -1,5 +1,5 @@
 import express from 'express';
-import {ErrorCodes, HTTPStatus} from 'common';
+import {ErrorCodes, HTTPStatus} from '@svej/common';
 import {Prisma} from '../Services';
 import {onlyAuthorized} from '../Middlewares';
 

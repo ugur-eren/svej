@@ -1,7 +1,7 @@
 import express from 'express';
-import {HTTPStatus} from 'common';
+import {HTTPStatus} from '@svej/common';
 import mime from 'mime-types';
-import {FileSystem} from 'file-system';
+import {FileSystem} from '@svej/file-system';
 
 const Router = express.Router();
 

@@ -1,6 +1,6 @@
-import {ErrorCodesKeys} from 'common';
+import {ErrorCodesKeys} from '@svej/common';
 import {PROBLEM_CODE} from 'apisauce';
-import {NotificationType} from 'database';
+import {NotificationType} from '@svej/database';
 
 export default {
   about_language: {

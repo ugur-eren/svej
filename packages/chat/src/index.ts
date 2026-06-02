@@ -1,5 +1,5 @@
-import {Env} from 'server-side';
-import {ErrorCodes} from 'common';
+import {Env} from '@svej/server-side';
+import {ErrorCodes} from '@svej/common';
 import {onlyAuthorized} from './Middlewares';
 import {WS, Prisma} from './Services';
 

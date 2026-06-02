@@ -1,4 +1,4 @@
-import {PrismaClient} from 'database';
+import {PrismaClient} from '@svej/database';
 
 const prisma = new PrismaClient({log: ['query', 'info', 'warn', 'error']});
 

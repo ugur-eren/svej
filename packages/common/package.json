@@ -1,5 +1,5 @@
 {
-  "name": "common",
+  "name": "@svej/common",
   "version": "0.0.0",
   "private": true,
   "license": "GPL-2.0",

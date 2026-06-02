@@ -1,7 +1,7 @@
-import {NotificationType} from 'database';
-import {Password} from 'server-side';
+import {NotificationType} from '@svej/database';
+import {Password} from '@svej/server-side';
 import express from 'express';
-import {Config, ErrorCodes, HTTPStatus, Zod} from 'common';
+import {Config, ErrorCodes, HTTPStatus, Zod} from '@svej/common';
 import {Prisma, PrismaIncludes, PrismaTypes, Upload} from '../Services';
 import {onlyAuthorized} from '../Middlewares';
 import {ImageHandler} from '../Utils/ImageHandler';

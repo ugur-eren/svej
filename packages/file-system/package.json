@@ -1,5 +1,5 @@
 {
-  "name": "file-system",
+  "name": "@svej/file-system",
   "version": "0.0.0",
   "private": true,
   "main": "./src/index.ts",

@@ -1,6 +1,6 @@
 import {ScrollView, View} from 'react-native';
 import {Formik} from 'formik';
-import {Config} from 'common';
+import {Config} from '@svej/common';
 import {ActivityIndicator} from 'react-native-paper';
 import {useQueryClient} from '@tanstack/react-query';
 import {Button, Header, Input} from '../../../Components';

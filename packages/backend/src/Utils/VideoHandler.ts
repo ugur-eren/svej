@@ -1,10 +1,10 @@
-import {Config} from 'common';
-import {MediaType, PrismaTypes} from 'database';
+import {Config} from '@svej/common';
+import {MediaType, PrismaTypes} from '@svej/database';
 import fs from 'fs/promises';
 import {v4 as uuid} from 'uuid';
 import {encode} from 'blurhash';
 import sharp from 'sharp';
-import {FileSystem, TEMP_DIR} from 'file-system';
+import {FileSystem, TEMP_DIR} from '@svej/file-system';
 import {Spawn} from './Spawn';
 import {clampDimensions} from './Helpers';
 

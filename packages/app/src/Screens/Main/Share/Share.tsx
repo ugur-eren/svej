@@ -1,4 +1,4 @@
-import {Zod} from 'common';
+import {Zod} from '@svej/common';
 import {useState} from 'react';
 import {View, ScrollView} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';

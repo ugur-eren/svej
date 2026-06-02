@@ -1,5 +1,5 @@
 {
-  "name": "server-side",
+  "name": "@svej/server-side",
   "version": "0.0.0",
   "private": true,
   "main": "./src/index.ts",
@@ -13,8 +13,8 @@
     "check": "yarn format && yarn format:check && yarn lint && yarn ts:check"
   },
   "dependencies": {
+    "@svej/database": "workspace:*",
     "bcrypt": "^5.1.1",
-    "database": "workspace:*",
     "jsonwebtoken": "^9.0.2"
   },
   "devDependencies": {

@@ -1,4 +1,4 @@
-import {Config} from 'common';
+import {Config} from '@svej/common';
 import {memo, useState} from 'react';
 import {View, TouchableWithoutFeedback, TouchableOpacity} from 'react-native';
 import {Image} from 'expo-image';

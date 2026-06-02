@@ -1,5 +1,5 @@
 import {Formik} from 'formik';
-import {Config} from 'common';
+import {Config} from '@svej/common';
 import {AuthPage} from '../../../Containers';
 import {Input} from '../../../Components';
 import {useLanguage, useMutation} from '../../../Hooks';

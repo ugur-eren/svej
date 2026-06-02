@@ -1,4 +1,4 @@
-import {Config} from 'common';
+import {Config} from '@svej/common';
 import {Formik} from 'formik';
 import {AuthPage} from '../../../Containers';
 import {Input, TextButton} from '../../../Components';

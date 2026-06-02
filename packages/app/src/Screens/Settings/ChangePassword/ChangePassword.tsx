@@ -1,4 +1,4 @@
-import {Config} from 'common';
+import {Config} from '@svej/common';
 import {ScrollView} from 'react-native';
 import {Formik} from 'formik';
 import {Button, Header, Input} from '../../../Components';

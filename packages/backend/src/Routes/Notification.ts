@@ -1,5 +1,5 @@
 import express from 'express';
-import {Config, ErrorCodes, HTTPStatus} from 'common';
+import {Config, ErrorCodes, HTTPStatus} from '@svej/common';
 import {Prisma, PrismaIncludes} from '../Services';
 import {onlyAuthorized} from '../Middlewares';
 import {getBeforeDate} from '../Utils/Helpers';

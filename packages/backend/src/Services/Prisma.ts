@@ -1,7 +1,7 @@
-import {PrismaClient} from 'server-side';
+import {PrismaClient} from '@svej/server-side';
 
-export {PrismaIncludes} from 'database';
+export {PrismaIncludes} from '@svej/database';
 
 export default PrismaClient;
 
-export type {PrismaTypes} from 'database';
+export type {PrismaTypes} from '@svej/database';

@@ -1,6 +1,6 @@
 import express from 'express';
-import {JWT, Password} from 'server-side';
-import {ErrorCodes, HTTPStatus, Zod} from 'common';
+import {JWT, Password} from '@svej/server-side';
+import {ErrorCodes, HTTPStatus, Zod} from '@svej/common';
 import {v4 as uuid} from 'uuid';
 import {Prisma, PrismaIncludes} from '../Services';
 import {onlyAuthorized} from '../Middlewares';

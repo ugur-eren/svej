@@ -1,5 +1,5 @@
-import {AckResponse, ErrorCodesKeys} from 'common';
-import {ChatMessage, User} from 'database';
+import {AckResponse, ErrorCodesKeys} from '@svej/common';
+import {ChatMessage, User} from '@svej/database';
 
 export class WSError<TData = unknown> extends Error {
   public code: ErrorCodesKeys;

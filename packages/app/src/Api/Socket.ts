@@ -1,5 +1,5 @@
 import {io as IOClient, Socket} from 'socket.io-client';
-import type {ServerToClientEvents, ClientToServerEvents} from 'chat';
+import type {ServerToClientEvents, ClientToServerEvents} from '@svej/chat';
 import Env from '../Utils/Env';
 import Storage from '../Utils/Storage';
 

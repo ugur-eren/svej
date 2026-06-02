@@ -1,5 +1,5 @@
-import {NotificationType} from 'database';
-import {Config, ErrorCodes, HTTPStatus, Zod} from 'common';
+import {NotificationType} from '@svej/database';
+import {Config, ErrorCodes, HTTPStatus, Zod} from '@svej/common';
 import express from 'express';
 import {Prisma, PrismaTypes, PrismaIncludes, Upload} from '../Services';
 import {onlyAuthorized} from '../Middlewares';
