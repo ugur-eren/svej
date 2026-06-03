@@ -29,6 +29,5 @@ export const onlyAuthorized: Parameters<Server['use']>[0] = async (socket, next)
     user: result.user,
   };
 
-  console.log('success');
   next();
 };

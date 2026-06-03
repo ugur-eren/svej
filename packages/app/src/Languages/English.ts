@@ -79,6 +79,11 @@ export default {
     message_placeholder: 'Your message...',
     couldnt_send_title: 'Could not send message',
     couldnt_send_message: 'Could not send your message. Please try again.',
+    message_too_long_title: 'Message too long',
+    message_too_long_message: 'Your message is too long. It must be at most %max% characters.',
+    message_too_many_lines_title: 'Message too long',
+    message_too_many_lines_message:
+      'Your message has too many lines. It must be at most %max% lines.',
   },
 
   comments: {

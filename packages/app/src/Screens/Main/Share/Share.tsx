@@ -1,4 +1,4 @@
-import {Zod} from '@svej/common';
+import {Config, Zod} from '@svej/common';
 import {useState} from 'react';
 import {View, ScrollView} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -10,6 +10,7 @@ import {Feather} from '@expo/vector-icons';
 import {PageContainer} from '../../../Containers';
 import {AutoGrid, Divider, Header, Input, Text, Touchable} from '../../../Components';
 import {useLanguage, useShowDialog, useShowToast, useTheme, useUploadPost} from '../../../Hooks';
+import {parseLanguageParts} from '../../../Utils/Helpers';
 import {ShareScreenProps} from '../../../Types';
 import {Spacing} from '../../../Styles';
 import getStyles from './Share.styles';
@@ -57,7 +58,9 @@ const Share: React.FC<ShareScreenProps> = ({navigation}) => {
     if (!messageValidation.success) {
       showToast({
         title: language.share.message_too_long_title,
-        message: language.share.message_too_long_message,
+        message: parseLanguageParts(language.share.message_too_long_message, {
+          max: Config.postDescriptionMaxLength,
+        }),
         type: 'warning',
       });
       return;

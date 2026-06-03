@@ -25,6 +25,9 @@ export default {
   commentMaxLength: 512,
   commentMaxLines: 5,
 
+  chatMessageMaxLength: 512,
+  chatMessageMaxLines: 5,
+
   relationsPerPage: 20,
 
   notificationsPerPage: 20,

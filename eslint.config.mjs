@@ -38,6 +38,12 @@ export default defineConfig([
     files: ['**/*.{js,mjs,cjs,jsx,mjsx,ts,tsx,mtsx}'],
 
     rules: {
+      'no-console': [
+        'error',
+        {
+          allow: ['info', 'warn', 'error'],
+        },
+      ],
       'object-curly-spacing': ['error', 'never'],
       'prefer-destructuring': 'error',
       'lines-between-class-members': 'off',

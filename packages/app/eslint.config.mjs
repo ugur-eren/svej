@@ -49,12 +49,7 @@ export default defineConfig(baseConfig, [
     },
 
     rules: {
-      'no-console': [
-        'error',
-        {
-          allow: ['info', 'warn', 'error'],
-        },
-      ],
+      'no-console': 'warn',
       '@typescript-eslint/no-require-imports': 'off',
       'jsx-quotes': ['error', 'prefer-double'],
 

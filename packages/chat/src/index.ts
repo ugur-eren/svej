@@ -1,5 +1,5 @@
 import {Env} from '@svej/server-side';
-import {ErrorCodes} from '@svej/common';
+import {ErrorCodes, Zod} from '@svej/common';
 import {onlyAuthorized} from './Middlewares';
 import {WS, Prisma} from './Services';
 
@@ -14,23 +14,37 @@ WS.on('connection', (socket) => {
   socket.on('sendMessage', async (toUserId, message, callback) => {
     if (!callback || typeof callback !== 'function') return;
 
-    const toUser = await Prisma.user.findUnique({select: {id: true}, where: {id: toUserId}});
-    if (!toUser?.id) {
-      callback({ok: false, code: ErrorCodes.UserNotFound});
+    const validation = Zod.Chat.SendMessage.safeParse({toUserId, message});
+    if (!validation.success) {
+      callback({ok: false, code: ErrorCodes.FillAllFields, error: validation.error});
       return;
     }
 
-    const createdMessage = await Prisma.chatMessage.create({
-      data: {
-        from: {connect: {id: user.id}},
-        to: {connect: {id: toUser.id}},
-        message,
-      },
-    });
+    try {
+      const toUser = await Prisma.user.findUnique({
+        select: {id: true},
+        where: {id: validation.data.toUserId},
+      });
+      if (!toUser?.id) {
+        callback({ok: false, code: ErrorCodes.UserNotFound});
+        return;
+      }
 
-    callback({ok: true, message: createdMessage});
+      const createdMessage = await Prisma.chatMessage.create({
+        data: {
+          from: {connect: {id: user.id}},
+          to: {connect: {id: toUser.id}},
+          message: validation.data.message,
+        },
+      });
 
-    socket.to(`user:${toUser.id}`).emit('message', createdMessage);
+      callback({ok: true, message: createdMessage});
+
+      socket.to(`user:${toUser.id}`).emit('message', createdMessage);
+    } catch (error) {
+      callback({ok: false, code: ErrorCodes.UnknownError});
+      console.error(error);
+    }
   });
 
   socket.on('disconnect', () => {
