@@ -42,8 +42,8 @@ export const createPost = (
     formData.append(`medias`, {
       uri: media.uri,
       name: `medias[${index}]`,
-      type: media.mimeType,
-    });
+      type: media.mimeType ?? 'application/octet-stream',
+    } as any);
   });
 
   return ApiInstance.put('/post', formData, {

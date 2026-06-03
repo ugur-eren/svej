@@ -194,6 +194,7 @@ export default {
     CannotFollowYourself: 'You cannot follow yourself.',
     AlreadyFollowing: 'You are already following this user.',
     NotFollowing: 'You are not following this user.',
+    PasswordsDoNotMatch: 'Passwords do not match.',
 
     PostNotFound: 'Post not found.',
     PostDoesntHaveMediaOrDescription: 'Post must have a media or description.',
@@ -201,6 +202,10 @@ export default {
     FileProcessingError: 'There has been an error while processing the file.',
 
     CommentNotFound: 'Comment not found.',
+
+    MediaNotFound: 'Media not found.',
+
+    NotificationNotFound: 'Notification not found.',
 
     ChatRateLimited: 'You are sending messages too quickly. Please wait a moment.',
   } satisfies Partial<Record<ErrorCodesKeys, string>>,

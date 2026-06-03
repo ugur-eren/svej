@@ -45,8 +45,8 @@ export const changePhoto = (
   formData.append('photo', {
     uri: file.uri,
     name: 'photo',
-    type: file.mimeType,
-  });
+    type: file.mimeType ?? 'application/octet-stream',
+  } as any);
 
   return ApiInstance.post(`/user/photo/${type}`, formData, {
     ...config,

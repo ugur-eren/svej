@@ -12,5 +12,5 @@ export const ThemedStyleSheet = <T extends StyleSheet.NamedStyles<T>, A extends 
 ): ((theme: ThemeType, ...args: A) => T) => {
   return memoizeOne((theme, ...args: A) => {
     return StyleSheet.create(getThemedStyleSheet(theme, ...args));
-  });
+  }) as unknown as (theme: ThemeType, ...args: A) => T;
 };

@@ -1,4 +1,3 @@
-import {ErrorCodesKeys} from '@svej/common';
 import {useCallback} from 'react';
 import {useLanguage} from './Language';
 import {useShowToast} from './useToast';
@@ -15,7 +14,7 @@ export const useShowApiError = () => {
           return showToast({
             type: 'error',
             title: 'Error',
-            message: language.api_errors[error.code as ErrorCodesKeys],
+            message: language.api_errors[error.code as keyof typeof language.api_errors],
           });
         }
 

@@ -3,11 +3,10 @@
   "compilerOptions": {
     "target": "ESNext",
     "module": "ES6",
-    "moduleResolution": "Node",
+    "moduleResolution": "bundler",
     "noUnusedLocals": false,
     "noFallthroughCasesInSwitch": true,
     "useUnknownInCatchVariables": false,
-    "downlevelIteration": true,
     "allowSyntheticDefaultImports": true,
     "jsx": "react-native"
   },

@@ -20,7 +20,7 @@ export class LocalFileSystem implements BaseFileSystem {
     try {
       const stats = await fs.stat(fullPath);
       return {ok: true, response: {size: stats.size}};
-    } catch (err) {
+    } catch {
       return {ok: false, error: 'Unknown'};
     }
   }
@@ -31,7 +31,7 @@ export class LocalFileSystem implements BaseFileSystem {
     try {
       await fs.access(fullPath, fs.constants.F_OK);
       return true;
-    } catch (err) {
+    } catch {
       return false;
     }
   }
@@ -46,7 +46,7 @@ export class LocalFileSystem implements BaseFileSystem {
     try {
       const data = await fs.readFile(fullPath);
       return {ok: true, response: data};
-    } catch (err) {
+    } catch {
       return {ok: false, error: 'Unknown'};
     }
   }
@@ -64,7 +64,7 @@ export class LocalFileSystem implements BaseFileSystem {
     try {
       const stream = createReadStream(fullPath, {start: config?.start, end: config?.end});
       return {ok: true, response: stream};
-    } catch (err) {
+    } catch {
       return {ok: false, error: 'Unknown'};
     }
   }
@@ -75,7 +75,7 @@ export class LocalFileSystem implements BaseFileSystem {
     try {
       await fs.writeFile(fullPath, new Uint8Array(data));
       return true;
-    } catch (err) {
+    } catch {
       return false;
     }
   }
@@ -86,7 +86,7 @@ export class LocalFileSystem implements BaseFileSystem {
     try {
       await fs.unlink(fullPath);
       return true;
-    } catch (err) {
+    } catch {
       return false;
     }
   }

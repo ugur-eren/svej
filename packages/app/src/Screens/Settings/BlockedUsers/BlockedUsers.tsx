@@ -21,7 +21,7 @@ const BlockedUsers: React.FC<SettingsBlockedUsersScreenProps> = () => {
         ItemSeparatorComponent={Divider}
         renderItem={() => (
           <View style={styles.item}>
-            <ProfileWidget />
+            <ProfileWidget user={{} as any} />
           </View>
         )}
       />

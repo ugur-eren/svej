@@ -39,7 +39,7 @@ export const AnimatedToast: React.FC<{toast: ToastConfig}> = ({toast}) => {
     });
 
   const animatedStyle = useAnimatedStyle(() => ({
-    top: `-${top.value * 100}%`,
+    top: `${top.value * 100 * -1}%`,
     transform: [{translateY: translateY.value}],
   }));
 

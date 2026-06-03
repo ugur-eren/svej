@@ -11,5 +11,5 @@ export const CustomStyleSheet = <T extends StyleSheet.NamedStyles<T>, A extends 
 ): ((...args: A) => T) => {
   return memoizeOne((...args: A) => {
     return StyleSheet.create(getCustomStyleSheet(...args));
-  });
+  }) as unknown as (...args: A) => T;
 };
