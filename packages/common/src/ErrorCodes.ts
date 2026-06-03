@@ -33,6 +33,9 @@ const ErrorCodesArray = [
 
   // Notification
   'NotificationNotFound',
+
+  // Chat
+  'ChatRateLimited',
 ] as const;
 
 export type ErrorCodesKeys = (typeof ErrorCodesArray)[number];

@@ -27,6 +27,8 @@ export default {
 
   chatMessageMaxLength: 512,
   chatMessageMaxLines: 5,
+  chatMessageRateLimitMax: 10,
+  chatMessageRateLimitWindowMs: 10 * 1000,
 
   relationsPerPage: 20,
 

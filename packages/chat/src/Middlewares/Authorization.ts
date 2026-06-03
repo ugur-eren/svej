@@ -7,27 +7,31 @@ export const onlyAuthorized: Parameters<Server['use']>[0] = async (socket, next)
   // const token = socket.handshake.auth?.token;
   const token = socket.handshake.headers?.authorization;
 
-  if (!token) {
-    next(new WSError(ErrorCodes.NoTokenInput));
-    return;
-  }
-
-  const result = await JWT.verify(token);
-
-  if (!result.ok) {
-    if (result.cause === 'Unauthorized') {
-      next(new WSError(ErrorCodes.Unauthorized));
+  try {
+    if (!token) {
+      next(new WSError(ErrorCodes.NoTokenInput));
       return;
     }
 
-    next(new WSError(ErrorCodes.InvalidAuthToken, result.error));
-    return;
+    const result = await JWT.verify(token);
+
+    if (!result.ok) {
+      if (result.cause === 'Unauthorized') {
+        next(new WSError(ErrorCodes.Unauthorized));
+        return;
+      }
+
+      next(new WSError(ErrorCodes.InvalidAuthToken, result.error));
+      return;
+    }
+
+    // eslint-disable-next-line no-param-reassign
+    socket.data = {
+      user: result.user,
+    };
+
+    next();
+  } catch (error) {
+    next(new WSError(ErrorCodes.InvalidAuthToken, error as Error));
   }
-
-  // eslint-disable-next-line no-param-reassign
-  socket.data = {
-    user: result.user,
-  };
-
-  next();
 };

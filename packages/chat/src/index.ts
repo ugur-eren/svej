@@ -1,7 +1,19 @@
 import {Env} from '@svej/server-side';
-import {ErrorCodes, Zod} from '@svej/common';
+import {Config, ErrorCodes, Zod} from '@svej/common';
 import {onlyAuthorized} from './Middlewares';
+import RateLimiter from './Utils/RateLimiter';
 import {WS, Prisma} from './Services';
+
+const sendMessageRateLimiter = new RateLimiter({
+  maxAttempts: Config.chatMessageRateLimitMax,
+  windowMs: Config.chatMessageRateLimitWindowMs,
+});
+
+const rateLimitSweep = setInterval(
+  () => sendMessageRateLimiter.sweepExpired(),
+  Config.chatMessageRateLimitWindowMs,
+);
+rateLimitSweep.unref();
 
 WS.use(onlyAuthorized);
 
@@ -13,6 +25,11 @@ WS.on('connection', (socket) => {
 
   socket.on('sendMessage', async (toUserId, message, callback) => {
     if (!callback || typeof callback !== 'function') return;
+
+    if (!sendMessageRateLimiter.consume(user.id)) {
+      callback({ok: false, code: ErrorCodes.ChatRateLimited});
+      return;
+    }
 
     const validation = Zod.Chat.SendMessage.safeParse({toUserId, message});
     if (!validation.success) {
@@ -46,14 +63,7 @@ WS.on('connection', (socket) => {
       console.error(error);
     }
   });
-
-  socket.on('disconnect', () => {
-    //
-  });
 });
 
 WS.listen(Env.CHAT_PORT);
-
-(async () => {
-  console.info(`Chat server listening on port ${Env.CHAT_PORT}`);
-})();
+console.info(`Chat server listening on port ${Env.CHAT_PORT}`);

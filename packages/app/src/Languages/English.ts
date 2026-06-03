@@ -201,6 +201,8 @@ export default {
     FileProcessingError: 'There has been an error while processing the file.',
 
     CommentNotFound: 'Comment not found.',
+
+    ChatRateLimited: 'You are sending messages too quickly. Please wait a moment.',
   } satisfies Partial<Record<ErrorCodesKeys, string>>,
 
   api_problems: {
