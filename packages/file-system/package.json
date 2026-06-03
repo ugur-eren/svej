@@ -13,7 +13,8 @@
     "check": "yarn format && yarn format:check && yarn lint:check && yarn ts:check"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.511.0"
+    "@aws-sdk/client-s3": "^3.1060.0",
+    "@google-cloud/storage": "^7.19.0"
   },
   "devDependencies": {
     "@types/node": "^25.9.1",

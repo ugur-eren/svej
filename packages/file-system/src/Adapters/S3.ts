@@ -8,22 +8,29 @@ import {
 } from '@aws-sdk/client-s3';
 import {BaseFileSystem, FileSystemResponse} from './Base';
 
+/**
+ * Adapter for AWS S3 that implements the BaseFileSystem interface.
+ * This class provides methods to interact with S3, such as reading, writing, and deleting files.
+ * It uses the @aws-sdk/client-s3 library to communicate with S3.
+ * Note: Ensure that the appropriate permissions and credentials are set up for the S3 bucket being accessed.
+ * This implementation assumes that the bucket already exists and that the necessary AWS credentials are configured for authentication.
+ */
 export class S3FileSystem implements BaseFileSystem {
-  private bucket: string;
+  private bucketName: string;
   private client: S3Client;
 
   public constructor({
-    bucket,
+    bucketName,
     region,
     accessKeyId,
     secretAccessKey,
   }: {
-    bucket: string;
+    bucketName: string;
     region: string;
     accessKeyId: string;
     secretAccessKey: string;
   }) {
-    this.bucket = bucket;
+    this.bucketName = bucketName;
 
     this.client = new S3Client({
       region,
@@ -36,7 +43,7 @@ export class S3FileSystem implements BaseFileSystem {
 
   private async getHead(key: string) {
     const command = new HeadObjectCommand({
-      Bucket: this.bucket,
+      Bucket: this.bucketName,
       Key: key,
     });
 
@@ -81,7 +88,7 @@ export class S3FileSystem implements BaseFileSystem {
     }
 
     const command = new GetObjectCommand({
-      Bucket: this.bucket,
+      Bucket: this.bucketName,
       Key: key,
     });
 
@@ -96,7 +103,7 @@ export class S3FileSystem implements BaseFileSystem {
       const buffer = Buffer.from(byteArray);
 
       return {ok: true, response: buffer};
-    } catch (err) {
+    } catch {
       return {ok: false, error: 'Unknown'};
     }
   }
@@ -110,7 +117,7 @@ export class S3FileSystem implements BaseFileSystem {
     }
 
     const command = new GetObjectCommand({
-      Bucket: this.bucket,
+      Bucket: this.bucketName,
       Key: key,
       Range: config ? `bytes=${config.start || 0}-${config.end || ''}` : undefined,
     });
@@ -127,7 +134,7 @@ export class S3FileSystem implements BaseFileSystem {
       }
 
       return {ok: false, error: 'Unknown'};
-    } catch (err) {
+    } catch {
       return {ok: false, error: 'Unknown'};
     }
   }
@@ -136,7 +143,7 @@ export class S3FileSystem implements BaseFileSystem {
     const dataHash = createHash('md5').update(new Uint8Array(data)).digest('base64');
 
     const command = new PutObjectCommand({
-      Bucket: this.bucket,
+      Bucket: this.bucketName,
       Key: key,
       Body: data,
       ContentType: mime,
@@ -147,21 +154,21 @@ export class S3FileSystem implements BaseFileSystem {
       await this.client.send(command);
 
       return true;
-    } catch (err) {
+    } catch {
       return false;
     }
   }
 
   public async delete(key: string): Promise<boolean> {
     const deleteCommand = new DeleteObjectCommand({
-      Bucket: this.bucket,
+      Bucket: this.bucketName,
       Key: key,
     });
 
     try {
       await this.client.send(deleteCommand);
       return true;
-    } catch (err) {
+    } catch {
       return false;
     }
   }
