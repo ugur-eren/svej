@@ -16,6 +16,7 @@ export default {
   NotAcceptable: 406,
   Timeout: 408,
   Gone: 410,
+  RangeNotSatisfiable: 416,
   TooManyRequests: 429,
 
   InternalServerError: 500,
