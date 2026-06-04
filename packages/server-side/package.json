@@ -14,10 +14,11 @@
   },
   "dependencies": {
     "@svej/database": "workspace:*",
-    "bcrypt": "^5.1.1",
+    "bcrypt": "6.0.0",
     "jsonwebtoken": "^9.0.2"
   },
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
     "@types/node": "^25.9.1",
     "eslint": "9.39.3",
     "typescript": "~6.0.3"
