@@ -92,7 +92,7 @@ Router.get('/:id', onlyAuthorized, async (req, res) => {
   res.status(HTTPStatus.OK).send(extendedUser);
 });
 
-Router.get('/:id/relations/:type(follows|followers)', onlyAuthorized, async (req, res) => {
+Router.get('/:id/relations/:type', onlyAuthorized, async (req, res) => {
   const {id, type} = req.params;
 
   if (type !== 'follows' && type !== 'followers') {
@@ -124,7 +124,7 @@ Router.get('/:id/relations/:type(follows|followers)', onlyAuthorized, async (req
   res.status(HTTPStatus.OK).send(relations);
 });
 
-Router.post('/:id/relation/:type(follow|unfollow)', onlyAuthorized, async (req, res) => {
+Router.post('/:id/relation/:type', onlyAuthorized, async (req, res) => {
   const {id, type} = req.params;
 
   if (type !== 'follow' && type !== 'unfollow') {
@@ -173,32 +173,27 @@ Router.post('/:id/relation/:type(follow|unfollow)', onlyAuthorized, async (req, 
   res.status(HTTPStatus.OK).send();
 });
 
-Router.post(
-  '/photo/:type(profile|cover)',
-  onlyAuthorized,
-  Upload.single('photo'),
-  async (req, res) => {
-    const {type} = req.params;
+Router.post('/photo/:type', onlyAuthorized, Upload.single('photo'), async (req, res) => {
+  const {type} = req.params;
 
-    if (!req.file || (type !== 'profile' && type !== 'cover')) {
-      res.status(HTTPStatus.BadRequest).send({code: ErrorCodes.FillAllFields});
-      return;
-    }
+  if (!req.file || (type !== 'profile' && type !== 'cover')) {
+    res.status(HTTPStatus.BadRequest).send({code: ErrorCodes.FillAllFields});
+    return;
+  }
 
-    const media = await ImageHandler(req.file, type);
+  const media = await ImageHandler(req.file, type);
 
-    await Prisma.user.update({
-      where: {id: res.locals.user.id},
-      data: {
-        [type === 'profile' ? 'profilePhoto' : 'coverPhoto']: {
-          create: media,
-        },
+  await Prisma.user.update({
+    where: {id: res.locals.user.id},
+    data: {
+      [type === 'profile' ? 'profilePhoto' : 'coverPhoto']: {
+        create: media,
       },
-    });
+    },
+  });
 
-    res.status(HTTPStatus.OK).send();
-  },
-);
+  res.status(HTTPStatus.OK).send();
+});
 
 Router.post('/change-password', onlyAuthorized, async (req, res) => {
   const body = Zod.User.ChangePassword.safeParse(req.body);

@@ -76,8 +76,14 @@ Router.get('/:id/reactions', onlyAuthorized, async (req, res) => {
   res.status(HTTPStatus.OK).send(comment?._count);
 });
 
-Router.post('/:id/reactions/:type(like|dislike|remove)', onlyAuthorized, async (req, res) => {
+Router.post('/:id/reactions/:type', onlyAuthorized, async (req, res) => {
   const {id, type} = req.params as {id: string; type: 'like' | 'dislike' | 'remove'};
+
+  const VALID_TYPES = new Set(['like', 'dislike', 'remove']);
+  if (typeof type !== 'string' || !VALID_TYPES.has(type)) {
+    res.status(400).json();
+    return;
+  }
 
   if (type === 'remove') {
     const post = await Prisma.comment.update({

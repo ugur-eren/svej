@@ -13,12 +13,14 @@
     "check": "yarn format && yarn format:check && yarn lint && yarn ts:check"
   },
   "dependencies": {
+    "@svej/common": "workspace:*",
     "@svej/database": "workspace:*",
     "bcrypt": "6.0.0",
     "jsonwebtoken": "^9.0.2"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
+    "@types/express": "^5.0.6",
     "@types/node": "^25.9.1",
     "eslint": "9.39.3",
     "typescript": "~6.0.3"
