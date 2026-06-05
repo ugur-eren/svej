@@ -1,4 +1,4 @@
-import type {User} from '../User/User.types';
+import {SessionUser} from '@svej/common';
 
 export type LoginRequest = {
   username: string;
@@ -6,18 +6,15 @@ export type LoginRequest = {
 };
 
 export type LoginResponse = {
-  token: string;
-  user: User;
+  accessToken: string;
+  user: SessionUser;
 };
 
 export type LogoutResponse = {
   ok: boolean;
 };
 
-export type VerifyRequest = {
-  token: string;
-};
-
-export type VerifyResponse = {
-  ok: boolean;
+export type RefreshResponse = {
+  accessToken: string;
+  user: SessionUser;
 };

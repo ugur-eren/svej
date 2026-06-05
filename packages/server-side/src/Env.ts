@@ -7,8 +7,7 @@ export const CHAT_PORT = Number(env('CHAT_PORT')) || 3002;
 
 export const BCRYPT_ROUNDS = Number(env('BCRYPT_ROUNDS')) || 10;
 
-export const JWT_EXPIRE_TIME = Number(env('JWT_EXPIRE_TIME')) || 60 * 60;
-export const JWT_PRIV_KEY = env('JWT_PRIV_KEY') || 'secret';
+export const JWT_SECRET = env('JWT_SECRET') || 'secret';
 
 export const AWS_S3_BUCKET = env('AWS_S3_BUCKET');
 export const AWS_S3_REGION = env('AWS_S3_REGION');

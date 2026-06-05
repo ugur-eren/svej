@@ -1,5 +1,5 @@
 import {NotificationType} from '@svej/database';
-import {Password} from '@svej/server-side';
+import {JWTAuth, Password} from '@svej/server-side';
 import express from 'express';
 import {Config, ErrorCodes, HTTPStatus, Zod} from '@svej/common';
 import {Prisma, PrismaIncludes, PrismaTypes, Upload} from '../Services';
@@ -208,7 +208,16 @@ Router.post('/change-password', onlyAuthorized, async (req, res) => {
     return;
   }
 
-  const verified = await Password.verify(body.data.currentPassword, res.locals.user.password());
+  const user = await Prisma.user.findUnique({
+    where: {id: res.locals.user.id},
+    select: {password: true},
+  });
+  if (!user) {
+    res.status(HTTPStatus.NotFound).send({code: ErrorCodes.UserNotFound});
+    return;
+  }
+
+  const verified = await Password.verify(body.data.currentPassword, user.password());
   if (!verified) {
     res.status(HTTPStatus.BadRequest).send({code: ErrorCodes.WrongPassword});
     return;
@@ -285,7 +294,15 @@ Router.put('/', async (req, res) => {
     },
   });
 
-  res.status(HTTPStatus.OK).send(user);
+  const result = await JWTAuth.login(user.id);
+  if (!result) {
+    res
+      .status(HTTPStatus.InternalServerError)
+      .send({code: ErrorCodes.AccountCreatedButLoginFailed});
+    return;
+  }
+
+  res.status(HTTPStatus.OK).send({accessToken: result.accessToken, user: result.user});
 });
 
 export default Router;

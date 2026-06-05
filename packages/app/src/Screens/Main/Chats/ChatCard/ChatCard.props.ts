@@ -1,4 +1,4 @@
-import {ChatMessage} from '@svej/database';
+import type {ChatMessage} from '@svej/database';
 
 export type ChatCardProps = {
   username: string;

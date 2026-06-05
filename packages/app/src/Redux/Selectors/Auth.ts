@@ -5,6 +5,8 @@ export const Auth = (state: RootState) => state.auth;
 
 export const Authenticated = createSelector(Auth, (auth) => auth.authenticated);
 
+export const AccessToken = createSelector(Auth, (auth) => auth.accessToken);
+
 export const UserNullable = createSelector(Auth, (auth) => auth.user);
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

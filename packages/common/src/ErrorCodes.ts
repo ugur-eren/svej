@@ -8,6 +8,7 @@ const ErrorCodesArray = [
   'InvalidAuthToken',
   'NoTokenInput',
   'WrongPassword',
+  'AccountCreatedButLoginFailed',
 
   // User
   'UsernameAlreadyExists',

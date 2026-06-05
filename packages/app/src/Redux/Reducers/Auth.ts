@@ -1,14 +1,16 @@
+import {SessionUser} from '@svej/common';
 import {createSlice} from '@reduxjs/toolkit';
 import type {PayloadAction} from '@reduxjs/toolkit';
-import type {User} from '../../Api/User/User.types';
 
 export type AuthState = {
   authenticated: boolean;
-  user?: User;
+  accessToken?: string;
+  user?: SessionUser;
 };
 
 const initialState: AuthState = {
   authenticated: false,
+  accessToken: undefined,
   user: undefined,
 };
 
@@ -20,7 +22,11 @@ export const AuthSlice = createSlice({
       state.authenticated = action.payload;
     },
 
-    setUser: (state, action: PayloadAction<User | undefined>) => {
+    setAccessToken: (state, action: PayloadAction<string | undefined>) => {
+      state.accessToken = action.payload;
+    },
+
+    setUser: (state, action: PayloadAction<SessionUser | undefined>) => {
       state.user = action.payload;
     },
   },

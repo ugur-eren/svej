@@ -28,9 +28,17 @@ export default {
   chatMessageMaxLength: 512,
   chatMessageMaxLines: 5,
   chatMessageRateLimitMax: 10,
-  chatMessageRateLimitWindowMs: 10 * 1000,
+  chatMessageRateLimitWindowMs: 10_000,
 
   relationsPerPage: 20,
 
   notificationsPerPage: 20,
+
+  // JWT Configurations
+  jwtIssuer: 'svej',
+  jwtDefaultTTL: 24 * 60 * 60, // 24 hours
+  jwtAccessTokenTTL: 30 * 60, // 30 minutes
+  jwtRefreshTokenTTL: 30 * 24 * 60 * 60, // 30 days
+
+  refreshTokenCookieName: 'svej_refresh_token',
 } as const;

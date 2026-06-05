@@ -1,13 +1,13 @@
 import {Formik} from 'formik';
-import {Config} from '@svej/common';
+import {Config, ErrorCodes} from '@svej/common';
 import {AuthPage} from '../../../Containers';
 import {Input} from '../../../Components';
-import {useLanguage, useMutation} from '../../../Hooks';
-import {AuthApi, UserApi} from '../../../Api';
+import {useLanguage, useMutation, useShowToast} from '../../../Hooks';
+import {UserApi} from '../../../Api';
+import {ApiError} from '../../../Api/ApiInstance';
 import {AuthActions, useAppDispatch} from '../../../Redux';
 import EmailValidator from '../../../Utils/EmailValidator';
 import {parseLanguageParts} from '../../../Utils/Helpers';
-import Storage from '../../../Utils/Storage';
 import {AuthRegisterScreenProps} from '../../../Types';
 
 type Props = AuthRegisterScreenProps;
@@ -27,9 +27,8 @@ const Register: React.FC<Props> = ({navigation}) => {
   const registerMutation = useMutation({
     mutationFn: UserApi.register,
   });
-  const loginMutation = useMutation({
-    mutationFn: AuthApi.login,
-  });
+
+  const showToast = useShowToast();
 
   const validateForm = (values: typeof initialValues) => {
     const errors: Partial<typeof initialValues> = {};
@@ -58,19 +57,21 @@ const Register: React.FC<Props> = ({navigation}) => {
     try {
       const registerResult = await registerMutation.mutateAsync(values);
 
-      const loginResult = await loginMutation.mutateAsync({
-        username: registerResult.username,
-        password: values.password,
-      });
-
       dispatch(AuthActions.setAuthenticated(true));
-      dispatch(AuthActions.setUser(loginResult.user));
-
-      await Storage.set('token', loginResult.token);
+      dispatch(AuthActions.setAccessToken(registerResult.accessToken));
+      dispatch(AuthActions.setUser(registerResult.user));
 
       navigation.navigate('MainStack', {screen: 'BottomStack', params: {screen: 'Explore'}});
-    } catch (error) {
-      // Mutation alreadys shows the error, no need to do anything here
+    } catch (err) {
+      if (err instanceof ApiError && err.code === ErrorCodes.AccountCreatedButLoginFailed) {
+        navigation.navigate('Login');
+
+        showToast({
+          title: language.errors.ERROR,
+          message: language.api_errors.AccountCreatedButLoginFailed,
+          type: 'error',
+        });
+      }
     }
   };
 

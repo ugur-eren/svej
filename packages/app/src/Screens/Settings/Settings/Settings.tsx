@@ -47,7 +47,10 @@ const Settings: React.FC<Props> = ({navigation}) => {
   );
 
   const onLogoutPress = useCallback(async () => {
-    await logoutMutation.mutateAsync(undefined);
+    const refreshToken = await Storage.get('refreshToken');
+    if (!refreshToken) return;
+
+    await logoutMutation.mutateAsync(refreshToken);
 
     dispatch(AuthActions.setAuthenticated(false));
     dispatch(AuthActions.setUser());

@@ -7,7 +7,6 @@ import {AuthApi} from '../../../Api';
 import {AuthLoginScreenProps} from '../../../Types';
 import {AuthActions, useAppDispatch} from '../../../Redux';
 import {parseLanguageParts} from '../../../Utils/Helpers';
-import Storage from '../../../Utils/Storage';
 
 type Props = AuthLoginScreenProps;
 
@@ -46,9 +45,10 @@ const Login: React.FC<Props> = ({navigation}) => {
     mutation.mutate(values, {
       onSuccess: async (data) => {
         dispatch(AuthActions.setAuthenticated(true));
+        dispatch(AuthActions.setAccessToken(data.accessToken));
         dispatch(AuthActions.setUser(data.user));
 
-        await Storage.set('token', data.token);
+        // Refresh token is handled at ApiInstance
       },
     });
   };

@@ -1,18 +1,18 @@
+import crypto from 'node:crypto';
+import fs from 'node:fs/promises';
 import {Config} from '@svej/common';
 import {MediaType, PrismaTypes} from '@svej/database';
-import fs from 'fs/promises';
-import {v4 as uuid} from 'uuid';
+import {FileSystem, TEMP_DIR} from '@svej/file-system';
 import {encode} from 'blurhash';
 import sharp from 'sharp';
-import {FileSystem, TEMP_DIR} from '@svej/file-system';
 import {Spawn} from './Spawn';
 import {clampDimensions} from './Helpers';
 
 export const VideoHandler = async (file: Express.Multer.File) => {
-  const tempFilePath = `${TEMP_DIR}/${uuid()}.tmp`;
-  const tempProcessedFilePath = `${TEMP_DIR}/${uuid()}-processed.tmp`;
-  const tempThumbnailPath = `${TEMP_DIR}/${uuid()}-thumb.tmp`;
-  const fileId = uuid();
+  const tempFilePath = `${TEMP_DIR}/${crypto.randomUUID()}.tmp`;
+  const tempProcessedFilePath = `${TEMP_DIR}/${crypto.randomUUID()}-processed.tmp`;
+  const tempThumbnailPath = `${TEMP_DIR}/${crypto.randomUUID()}-thumb.tmp`;
+  const fileId = crypto.randomUUID();
   const fileName = `${fileId}.mp4`;
 
   await fs.writeFile(tempFilePath, new Uint8Array(file.buffer));

@@ -1,4 +1,4 @@
-import {Env} from '@svej/server-side';
+import {Env, RequestContextMiddleware} from '@svej/server-side';
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -12,6 +12,7 @@ app.use(helmet());
 app.use(cookieParser());
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
+app.use(RequestContextMiddleware);
 
 app.use('/', router);
 

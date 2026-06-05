@@ -11,5 +11,5 @@
     "jsx": "react-native"
   },
   "exclude": ["node_modules", "dist", "babel.config.js"],
-  "include": ["**/*.ts", "**/*.tsx"]
+  "include": ["**/*.js", "**/*.ts", "**/*.tsx"]
 }

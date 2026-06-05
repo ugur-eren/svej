@@ -13,7 +13,7 @@ export const useShowApiError = () => {
         if (error.code && error.code in language.api_errors) {
           return showToast({
             type: 'error',
-            title: 'Error',
+            title: language.errors.ERROR,
             message: language.api_errors[error.code as keyof typeof language.api_errors],
           });
         }

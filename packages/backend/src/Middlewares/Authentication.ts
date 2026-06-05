@@ -1,44 +1,65 @@
 import express from 'express';
+import type * as core from 'express-serve-static-core';
 import {JWT} from '@svej/server-side';
-import {HTTPStatus, ErrorCodes} from '@svej/common';
+import {HTTPStatus, ErrorCodes, SessionUser} from '@svej/common';
 
-type JWTReturnType = JWT.VerifyReturnType & {ok: true};
+type JWTReturnType = JWT.VerifyReturnType<{user: SessionUser}> & {ok: true};
 
 type Locals = {
   authenticated?: boolean;
-  decoded: JWTReturnType['decoded'];
+  decoded: Omit<JWTReturnType['decoded'], 'user'>;
   token: string;
-  user: JWTReturnType['user'];
+  user: SessionUser;
 };
 
-export const onlyAuthorized = async (
-  req: express.Request,
-  res: express.Response<unknown, Locals>,
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace Express {
+    interface Locals {
+      authenticated?: boolean;
+      decoded: Omit<JWTReturnType['decoded'], 'user'>;
+      token: string;
+      user: SessionUser;
+    }
+  }
+}
+
+export const onlyAuthorized = async <
+  P = core.ParamsDictionary,
+  ResBody = any,
+  ReqBody = any,
+  ReqQuery = core.Query,
+  LocalsObj extends Locals = Locals,
+>(
+  req: express.Request<P, ResBody, ReqBody, ReqQuery>,
+  res: express.Response<ResBody, LocalsObj>,
   next: express.NextFunction,
 ): Promise<void> => {
   const {authorization} = req.headers;
 
   if (!authorization || !authorization.startsWith('Bearer ')) {
-    res.status(HTTPStatus.Unauthorized).send({code: ErrorCodes.NoAuthToken});
+    res.status(HTTPStatus.Unauthorized).send({code: ErrorCodes.NoAuthToken} as any);
     return;
   }
 
   const token = authorization.split(' ')[1];
 
-  const result = await JWT.verify(token);
+  const result = await JWT.verify<{user: SessionUser}>(token);
 
   if (!result.ok) {
     res.status(HTTPStatus.Unauthorized).send({
-      code: result.cause === 'Unauthorized' ? ErrorCodes.Unauthorized : ErrorCodes.InvalidAuthToken,
+      code: ErrorCodes.Unauthorized,
       error: result.error,
-    });
+    } as any);
     return;
   }
 
+  const {user, ...decoded} = result.decoded;
+
   res.locals.authenticated = true;
-  res.locals.decoded = result.decoded;
+  res.locals.decoded = decoded;
   res.locals.token = token;
-  res.locals.user = result.user;
+  res.locals.user = user;
 
   next();
 };

@@ -1,16 +1,16 @@
+import crypto from 'node:crypto';
 import {Config} from '@svej/common';
 import {MediaType, PrismaTypes} from '@svej/database';
-import sharp from 'sharp';
-import {v4 as uuid} from 'uuid';
-import {encode} from 'blurhash';
 import {FileSystem} from '@svej/file-system';
+import sharp from 'sharp';
+import {encode} from 'blurhash';
 import {clampDimensions, getCropArea} from './Helpers';
 
 export const ImageHandler = async (
   file: Express.Multer.File,
   type: 'post' | 'profile' | 'cover',
 ) => {
-  const fileId = uuid();
+  const fileId = crypto.randomUUID();
   const fileName = `${fileId}.webp`;
 
   const maxDimension = {

@@ -1,10 +1,8 @@
 import express from 'express';
-import {JWT, Password} from '@svej/server-side';
+import {JWTAuth, Password} from '@svej/server-side';
 import {ErrorCodes, HTTPStatus, Zod} from '@svej/common';
-import {v4 as uuid} from 'uuid';
-import {Prisma, PrismaIncludes} from '../Services';
+import {Prisma} from '../Services';
 import {onlyAuthorized} from '../Middlewares';
-import type {ReqBody} from '../types';
 
 const Router = express.Router();
 
@@ -18,7 +16,10 @@ Router.post('/login', async (req, res) => {
 
   const {username, password} = body.data;
 
-  const user = await Prisma.user.findUnique({where: {username}, include: PrismaIncludes.User('')});
+  const user = await Prisma.user.findUnique({
+    where: {username},
+    select: {id: true, active: true, password: true},
+  });
 
   if (!user || !user.active) {
     res.status(HTTPStatus.NotFound).send({code: ErrorCodes.UserNotFound});
@@ -31,49 +32,30 @@ Router.post('/login', async (req, res) => {
     return;
   }
 
-  const jti = uuid();
-
-  // Using jti whitelist instead of blacklist
-  await Prisma.user.update({where: {id: user.id}, data: {jtis: {push: jti}}});
-
-  const result = await JWT.sign({sub: user.id, jti});
-
-  if (result.ok) {
-    res.status(HTTPStatus.OK).send({token: result.token, user});
-  } else {
+  const result = await JWTAuth.login(user.id);
+  if (!result) {
     res.status(HTTPStatus.InternalServerError).send({code: ErrorCodes.UnknownError});
+    return;
   }
+
+  res.status(HTTPStatus.OK).send({accessToken: result.accessToken, user: result.user});
 });
 
 Router.post('/logout', onlyAuthorized, async (req, res) => {
-  const {decoded, user} = res.locals;
-
-  // Using jti whitelist instead of blacklist
-  await Prisma.user.update({
-    where: {id: decoded.sub},
-    data: {jtis: {set: user.jtis().filter((jti: string) => jti !== decoded.jti)}},
-  });
+  await JWTAuth.logout();
 
   res.status(HTTPStatus.OK).send({ok: true});
 });
 
-Router.post('/verify', async (req: ReqBody<{token: string}>, res) => {
-  const {token} = req.body;
+Router.post('/refresh', async (req, res) => {
+  const result = await JWTAuth.rotateTokens();
 
-  if (!token) {
-    res.status(HTTPStatus.BadRequest).send({code: ErrorCodes.NoTokenInput});
+  if (!result) {
+    res.status(HTTPStatus.Unauthorized).send({code: ErrorCodes.InvalidAuthToken});
     return;
   }
 
-  const result = await JWT.verify(token);
-
-  if (result.ok) {
-    res.status(HTTPStatus.OK).send({ok: true});
-  } else {
-    res
-      .status(HTTPStatus.Unauthorized)
-      .send({code: ErrorCodes.InvalidAuthToken, error: result.error});
-  }
+  res.status(HTTPStatus.OK).send({accessToken: result.accessToken, user: result.user});
 });
 
 export default Router;

@@ -1,5 +1,5 @@
-import type {PrismaTypes, PrismaIncludes, User as PrismaUser} from '@svej/database';
-import {Zod} from '@svej/common';
+import type {PrismaTypes, PrismaIncludes} from '@svej/database';
+import {SessionUser, Zod} from '@svej/common';
 
 export type ExtendedType = {
   isFollowing: boolean;
@@ -14,7 +14,10 @@ export type EditRequest = (typeof Zod.User.Edit)['_output'];
 
 export type RegisterRequest = (typeof Zod.User.Create)['_output'];
 
-export type RegisterResponse = PrismaUser;
+export type RegisterResponse = {
+  accessToken: string;
+  user: SessionUser;
+};
 
 export type Author = PrismaTypes.UserGetPayload<{
   include: ReturnType<typeof PrismaIncludes.Author>;

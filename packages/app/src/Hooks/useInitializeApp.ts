@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
+import {SessionUser} from '@svej/common';
 import {AuthActions, useAppDispatch} from '../Redux';
-import {AuthApi, UserApi} from '../Api';
-import {User} from '../Api/User/User.types';
+import {AuthApi} from '../Api';
 import Storage from '../Utils/Storage';
 
 export const useInitializeApp = () => {
@@ -10,32 +10,33 @@ export const useInitializeApp = () => {
 
   useEffect(() => {
     (async () => {
-      const token = await Storage.get('token');
+      const refreshToken = await Storage.get('refreshToken');
 
-      if (token) {
-        let user: User | undefined;
+      if (refreshToken) {
+        let user: SessionUser | undefined;
+        let accessToken: string | undefined;
 
         try {
-          const verifyResult = await AuthApi.verify({token});
+          const refreshResult = await AuthApi.refresh(refreshToken);
 
-          if (verifyResult.ok && verifyResult.data?.ok) {
-            const meResult = await UserApi.getMe();
-
-            if (meResult.ok) {
-              user = meResult.data;
-            }
+          if (refreshResult.ok && refreshResult.data) {
+            accessToken = refreshResult.data.accessToken;
+            user = refreshResult.data.user;
           }
-        } catch (error) {
+        } catch {
           user = undefined;
+          accessToken = undefined;
         }
 
-        if (!user) {
+        if (!user || !accessToken) {
           dispatch(AuthActions.setAuthenticated(false));
+          dispatch(AuthActions.setAccessToken());
           dispatch(AuthActions.setUser());
           return;
         }
 
         dispatch(AuthActions.setAuthenticated(true));
+        dispatch(AuthActions.setAccessToken(accessToken));
         dispatch(AuthActions.setUser(user));
       }
     })().finally(() => setInitialized(true));

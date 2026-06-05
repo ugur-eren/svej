@@ -1,6 +1,6 @@
 import {ErrorCodesKeys} from '@svej/common';
 import {PROBLEM_CODE} from 'apisauce';
-import {NotificationType} from '@svej/database';
+import type {NotificationType} from '@svej/database';
 
 export default {
   about_language: {
@@ -195,6 +195,8 @@ export default {
     AlreadyFollowing: 'You are already following this user.',
     NotFollowing: 'You are not following this user.',
     PasswordsDoNotMatch: 'Passwords do not match.',
+    AccountCreatedButLoginFailed:
+      'Your account has been created, but we could not log you in. Please try logging in manually.',
 
     PostNotFound: 'Post not found.',
     PostDoesntHaveMediaOrDescription: 'Post must have a media or description.',

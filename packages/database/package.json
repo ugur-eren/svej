@@ -5,6 +5,16 @@
   "license": "GPL-2.0",
   "main": "./index.ts",
   "types": "./index.ts",
+  "exports": {
+    ".": {
+      "import": "./index.ts",
+      "require": "./index.ts"
+    },
+    "./enums": {
+      "import": "./enums.ts",
+      "require": "./enums.ts"
+    }
+  },
   "scripts": {
     "db:generate": "dotenv -e ../../.env prisma generate",
     "db:push": "dotenv -e ../../.env prisma db push --skip-generate",
