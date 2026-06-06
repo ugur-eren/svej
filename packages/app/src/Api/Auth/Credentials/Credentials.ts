@@ -10,6 +10,8 @@ export const register = (data: ApiTypes.RegisterRequest): Response<ApiTypes.Regi
   return AuthApiInstance.post('/auth/credentials/register', data);
 };
 
-export const changePassword = (data: ApiTypes.ChangePasswordRequest): Response<null> => {
+export const changePassword = (
+  data: ApiTypes.ChangePasswordRequest,
+): Response<ApiTypes.ChangePasswordResponse> => {
   return AuthApiInstance.post('/auth/credentials/change-password', data);
 };

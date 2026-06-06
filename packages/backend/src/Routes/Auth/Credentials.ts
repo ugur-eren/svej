@@ -116,12 +116,19 @@ Router.post('/change-password', onlyAuthorized, async (req, res) => {
     where: {id: res.locals.user.id},
     data: {
       password: await Password.hash(body.data.newPassword),
+      jtis: {
+        set: [],
+      },
     },
   });
 
-  // TODO: revoke old refresh tokens
+  const result = await JWTAuth.login(res.locals.user.id);
+  if (!result) {
+    res.status(HTTPStatus.InternalServerError).send({code: ErrorCodes.UnknownError});
+    return;
+  }
 
-  res.status(HTTPStatus.OK).send();
+  res.status(HTTPStatus.OK).send({accessToken: result.accessToken, user: result.user});
 });
 
 export default Router;

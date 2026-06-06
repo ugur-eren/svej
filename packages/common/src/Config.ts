@@ -37,7 +37,7 @@ export default {
   // JWT Configurations
   jwtIssuer: 'svej',
   jwtDefaultTTL: 24 * 60 * 60, // 24 hours
-  jwtAccessTokenTTL: 15, // 15 minutes
+  jwtAccessTokenTTL: 15 * 60, // 15 minutes
   jwtRefreshTokenTTL: 30 * 24 * 60 * 60, // 30 days
 
   refreshTokenCookieName: 'svej_refresh_token',

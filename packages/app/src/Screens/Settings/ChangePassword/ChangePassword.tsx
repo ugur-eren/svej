@@ -4,6 +4,7 @@ import {Formik} from 'formik';
 import {Button, Header, Input} from '../../../Components';
 import {PageContainer} from '../../../Containers';
 import {useLanguage, useMutation, useShowToast, useTheme} from '../../../Hooks';
+import {AuthActions, useAppDispatch} from '../../../Redux';
 import {AuthApi} from '../../../Api';
 import {parseLanguageParts} from '../../../Utils/Helpers';
 import {SettingsChangePasswordScreenProps} from '../../../Types';
@@ -19,6 +20,7 @@ const ChangePassword: React.FC<SettingsChangePasswordScreenProps> = ({navigation
   const theme = useTheme();
   const language = useLanguage();
   const showToast = useShowToast();
+  const dispatch = useAppDispatch();
 
   const mutation = useMutation({
     mutationFn: AuthApi.Credentials.changePassword,
@@ -42,10 +44,14 @@ const ChangePassword: React.FC<SettingsChangePasswordScreenProps> = ({navigation
 
   const onFormSubmit = async (values: typeof initialValues) => {
     try {
-      await mutation.mutateAsync({
+      const response = await mutation.mutateAsync({
         currentPassword: values.currentPassword,
         newPassword: values.newPassword,
       });
+
+      dispatch(AuthActions.setAuthenticated(true));
+      dispatch(AuthActions.setAccessToken(response.accessToken));
+      dispatch(AuthActions.setUser(response.user));
 
       navigation.goBack();
 

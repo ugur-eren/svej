@@ -16,3 +16,7 @@ export type RegisterResponse = {
 };
 
 export type ChangePasswordRequest = (typeof Zod.Auth.ChangePassword)['_output'];
+export type ChangePasswordResponse = {
+  accessToken: string;
+  user: SessionUser;
+};
