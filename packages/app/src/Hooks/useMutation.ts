@@ -6,7 +6,7 @@ import {
   useMutation as useReactMutation,
 } from '@tanstack/react-query';
 import {useShowApiError} from './useShowApiError';
-import {ApiError} from '../Api/ApiInstance';
+import {ApiError} from '../Api';
 
 export const useMutation = <
   TFnData = unknown,

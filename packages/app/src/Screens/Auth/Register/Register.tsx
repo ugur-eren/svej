@@ -3,8 +3,7 @@ import {Config, ErrorCodes} from '@svej/common';
 import {AuthPage} from '../../../Containers';
 import {Input} from '../../../Components';
 import {useLanguage, useMutation, useShowToast} from '../../../Hooks';
-import {UserApi} from '../../../Api';
-import {ApiError} from '../../../Api/ApiInstance';
+import {ApiError, AuthApi} from '../../../Api';
 import {AuthActions, useAppDispatch} from '../../../Redux';
 import EmailValidator from '../../../Utils/EmailValidator';
 import {parseLanguageParts} from '../../../Utils/Helpers';
@@ -25,7 +24,7 @@ const Register: React.FC<Props> = ({navigation}) => {
   const dispatch = useAppDispatch();
 
   const registerMutation = useMutation({
-    mutationFn: UserApi.register,
+    mutationFn: AuthApi.Credentials.register,
   });
 
   const showToast = useShowToast();

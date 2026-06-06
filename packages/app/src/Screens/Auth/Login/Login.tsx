@@ -20,7 +20,7 @@ const Login: React.FC<Props> = ({navigation}) => {
   const language = useLanguage();
 
   const mutation = useMutation({
-    mutationFn: AuthApi.login,
+    mutationFn: AuthApi.Credentials.login,
   });
 
   const validateForm = (values: typeof initialValues) => {

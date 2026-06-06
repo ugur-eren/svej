@@ -57,14 +57,6 @@ export const changePhoto = (
   });
 };
 
-export const changePassword = (data: ApiTypes.ChangePasswordRequest): Response<null> => {
-  return ApiInstance.post('/user/change-password', data);
-};
-
 export const edit = (data: ApiTypes.EditRequest): Response<ApiTypes.User> => {
   return ApiInstance.patch('/user', data);
-};
-
-export const register = (data: ApiTypes.RegisterRequest): Response<ApiTypes.RegisterResponse> => {
-  return ApiInstance.put('/user', data);
 };

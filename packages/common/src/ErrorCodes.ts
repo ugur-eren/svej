@@ -17,7 +17,6 @@ const ErrorCodesArray = [
   'CannotFollowYourself',
   'AlreadyFollowing',
   'NotFollowing',
-  'PasswordsDoNotMatch',
 
   // Post
   'PostNotFound',

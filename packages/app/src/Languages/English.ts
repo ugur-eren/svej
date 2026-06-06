@@ -194,7 +194,6 @@ export default {
     CannotFollowYourself: 'You cannot follow yourself.',
     AlreadyFollowing: 'You are already following this user.',
     NotFollowing: 'You are not following this user.',
-    PasswordsDoNotMatch: 'Passwords do not match.',
     AccountCreatedButLoginFailed:
       'Your account has been created, but we could not log you in. Please try logging in manually.',
 

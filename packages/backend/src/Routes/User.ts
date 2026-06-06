@@ -1,5 +1,4 @@
 import {NotificationType} from '@svej/database';
-import {JWTAuth, Password} from '@svej/server-side';
 import express from 'express';
 import {Config, ErrorCodes, HTTPStatus, Zod} from '@svej/common';
 import {Prisma, PrismaIncludes, PrismaTypes, Upload} from '../Services';
@@ -195,44 +194,6 @@ Router.post('/photo/:type', onlyAuthorized, Upload.single('photo'), async (req, 
   res.status(HTTPStatus.OK).send();
 });
 
-Router.post('/change-password', onlyAuthorized, async (req, res) => {
-  const body = Zod.User.ChangePassword.safeParse(req.body);
-
-  if (!body.success) {
-    res.status(HTTPStatus.BadRequest).send({code: ErrorCodes.FillAllFields, error: body.error});
-    return;
-  }
-
-  if (body.data.newPassword !== body.data.newPasswordConfirm) {
-    res.status(HTTPStatus.BadRequest).send({code: ErrorCodes.PasswordsDoNotMatch});
-    return;
-  }
-
-  const user = await Prisma.user.findUnique({
-    where: {id: res.locals.user.id},
-    select: {password: true},
-  });
-  if (!user) {
-    res.status(HTTPStatus.NotFound).send({code: ErrorCodes.UserNotFound});
-    return;
-  }
-
-  const verified = await Password.verify(body.data.currentPassword, user.password());
-  if (!verified) {
-    res.status(HTTPStatus.BadRequest).send({code: ErrorCodes.WrongPassword});
-    return;
-  }
-
-  await Prisma.user.update({
-    where: {id: res.locals.user.id},
-    data: {
-      password: await Password.hash(body.data.newPassword),
-    },
-  });
-
-  res.status(HTTPStatus.OK).send();
-});
-
 Router.patch('/', onlyAuthorized, async (req, res) => {
   const body = Zod.User.Edit.safeParse(req.body);
 
@@ -265,44 +226,6 @@ Router.patch('/', onlyAuthorized, async (req, res) => {
   });
 
   res.status(HTTPStatus.OK).send(updatedUser);
-});
-
-Router.put('/', async (req, res) => {
-  const body = Zod.User.Create.safeParse(req.body);
-
-  if (!body.success) {
-    res.status(HTTPStatus.BadRequest).send({code: ErrorCodes.FillAllFields, error: body.error});
-    return;
-  }
-
-  const usernameExists = await Prisma.user.findUnique({where: {username: body.data.username}});
-  if (usernameExists) {
-    res.status(HTTPStatus.BadRequest).send({code: ErrorCodes.UsernameAlreadyExists});
-    return;
-  }
-
-  const emailExists = await Prisma.user.findUnique({where: {email: body.data.email}});
-  if (emailExists) {
-    res.status(HTTPStatus.BadRequest).send({code: ErrorCodes.EmailAlreadyExists});
-    return;
-  }
-
-  const user = await Prisma.user.create({
-    data: {
-      ...body.data,
-      password: await Password.hash(body.data.password),
-    },
-  });
-
-  const result = await JWTAuth.login(user.id);
-  if (!result) {
-    res
-      .status(HTTPStatus.InternalServerError)
-      .send({code: ErrorCodes.AccountCreatedButLoginFailed});
-    return;
-  }
-
-  res.status(HTTPStatus.OK).send({accessToken: result.accessToken, user: result.user});
 });
 
 export default Router;

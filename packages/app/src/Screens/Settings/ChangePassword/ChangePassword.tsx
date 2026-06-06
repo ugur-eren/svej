@@ -4,7 +4,7 @@ import {Formik} from 'formik';
 import {Button, Header, Input} from '../../../Components';
 import {PageContainer} from '../../../Containers';
 import {useLanguage, useMutation, useShowToast, useTheme} from '../../../Hooks';
-import {UserApi} from '../../../Api';
+import {AuthApi} from '../../../Api';
 import {parseLanguageParts} from '../../../Utils/Helpers';
 import {SettingsChangePasswordScreenProps} from '../../../Types';
 import getStyles from './ChangePassword.styles';
@@ -21,7 +21,7 @@ const ChangePassword: React.FC<SettingsChangePasswordScreenProps> = ({navigation
   const showToast = useShowToast();
 
   const mutation = useMutation({
-    mutationFn: UserApi.changePassword,
+    mutationFn: AuthApi.Credentials.changePassword,
   });
 
   const styles = getStyles(theme);
@@ -45,7 +45,6 @@ const ChangePassword: React.FC<SettingsChangePasswordScreenProps> = ({navigation
       await mutation.mutateAsync({
         currentPassword: values.currentPassword,
         newPassword: values.newPassword,
-        newPasswordConfirm: values.newPasswordValidation,
       });
 
       navigation.goBack();
@@ -55,7 +54,7 @@ const ChangePassword: React.FC<SettingsChangePasswordScreenProps> = ({navigation
         title: language.settings.password_changed_title,
         message: language.settings.password_changed_message,
       });
-    } catch (error) {
+    } catch {
       // Mutations handle errors automatically, so we don't need to do anything here.
     }
   };

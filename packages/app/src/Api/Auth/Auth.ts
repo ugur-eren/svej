@@ -4,10 +4,6 @@ import AuthApiInstance from '../AuthApiInstance';
 import {Response} from '../Types';
 import * as ApiTypes from './Auth.types';
 
-export const login = (data: ApiTypes.LoginRequest): Response<ApiTypes.LoginResponse> => {
-  return AuthApiInstance.post('/auth/login', data);
-};
-
 export const logout = (refreshToken: string): Response<ApiTypes.LogoutResponse> => {
   return AuthApiInstance.post('/auth/logout', undefined, {
     headers: {
@@ -23,3 +19,5 @@ export const refresh = (refreshToken: string): Response<ApiTypes.RefreshResponse
     },
   });
 };
+
+export * as Credentials from './Credentials/Credentials';

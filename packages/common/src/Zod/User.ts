@@ -11,8 +11,6 @@ export const fullname = z.string().trim().optional();
 
 export const email = z.string().trim().email();
 
-export const password = z.string().min(Config.passwordMinLength).max(Config.passwordMaxLength);
-
 export const bio = z
   .string()
   .trim()
@@ -22,22 +20,9 @@ export const bio = z
   })
   .optional();
 
-export const Create = z.object({
-  username,
-  fullname,
-  email,
-  password,
-});
-
 export const Edit = z.object({
   username,
   fullname,
   email,
   bio,
-});
-
-export const ChangePassword = z.object({
-  currentPassword: z.string(),
-  newPassword: password,
-  newPasswordConfirm: password,
 });

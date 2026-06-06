@@ -10,16 +10,6 @@ const ApiInstance = createApiInstance();
 // Access Token Management
 //
 
-// Attach access token to all requests
-ApiInstance.addRequestTransform(async (request) => {
-  const token = store.getState().auth.accessToken;
-
-  request.headers = {
-    ...request.headers,
-    Authorization: token ? `Bearer ${token}` : undefined,
-  };
-});
-
 // Auto refresh access token on 401 responses
 let isRefreshing = false;
 let failedQueue: {

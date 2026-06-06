@@ -1,8 +1,6 @@
-import {Config} from '@svej/common';
 import {ApisauceConfig, create} from 'apisauce';
-import {parseSetCookie} from 'cookie';
 import Env from '../Utils/Env';
-import Storage from '../Utils/Storage';
+import {store} from '../Redux';
 import {ApiError} from './Error';
 
 const DefaultOptions: ApisauceConfig = {
@@ -36,45 +34,14 @@ export const createApiInstance = (options?: ApisauceConfig) => {
     }
   });
 
-  // TODO: Move refresh token management to AuthApiInstance
-  //
-  // Refresh Token Management
-  //
+  // Attach access token to all requests
+  ApiInstance.addRequestTransform(async (request) => {
+    const token = store.getState().auth.accessToken;
 
-  ApiInstance.addAsyncResponseTransform(async (response) => {
-    const cookieHeaders = (response.headers?.['Set-Cookie'] ?? response.headers?.['set-cookie']) as
-      | string
-      | string[]
-      | undefined;
-
-    if (!cookieHeaders) return;
-    const cookies = Array.isArray(cookieHeaders) ? cookieHeaders : [cookieHeaders];
-
-    const refreshTokenCookie = cookies.findLast(
-      (cookieStr) => parseSetCookie(cookieStr).name === Config.refreshTokenCookieName,
-    );
-    if (!refreshTokenCookie) return;
-
-    const cookie = parseSetCookie(refreshTokenCookie);
-
-    // Max-Age has precedence over Expires
-    let expiryDate: Date | null = null;
-    if (cookie.maxAge) {
-      expiryDate = new Date(Date.now() + cookie.maxAge * 1000);
-    } else if (cookie.expires) {
-      expiryDate = new Date(cookie.expires);
-    }
-
-    const isExpired = expiryDate && expiryDate.getTime() < Date.now();
-
-    if (!cookie.value || isExpired) {
-      // No value or expiryDate is in the past, remove the token
-      await Storage.remove('refreshToken');
-    }
-
-    if (cookie.value) {
-      await Storage.set('refreshToken', cookie.value);
-    }
+    request.headers = {
+      ...request.headers,
+      Authorization: token ? `Bearer ${token}` : undefined,
+    };
   });
 
   return ApiInstance;
