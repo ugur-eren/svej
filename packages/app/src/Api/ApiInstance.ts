@@ -1,37 +1,16 @@
-import {Config} from '@svej/common';
-import {ApisauceConfig, PROBLEM_CODE, create} from 'apisauce';
-import {parseSetCookie} from 'cookie';
-import Env from '../Utils/Env';
-import {store} from '../Redux';
+import {HTTPStatus} from '@svej/common';
+import {AuthActions, store} from '../Redux';
 import Storage from '../Utils/Storage';
+import {createApiInstance} from './CreateApiInstance';
+import {refresh} from './Auth/Auth';
 
-const ApiOptions: ApisauceConfig = {
-  baseURL: Env.SVEJ_PUBLIC_API_URL,
-  timeout: 15000,
-  headers: {
-    Accept: 'application/json',
-    'Content-Type': 'application/json',
-  },
-};
+const ApiInstance = createApiInstance();
 
-const ApiInstance = create(ApiOptions);
+//
+// Access Token Management
+//
 
-export class ApiError extends Error {
-  public message: string;
-  public problemCode: PROBLEM_CODE;
-  public code?: string;
-  public error?: object;
-
-  constructor(message: string, problemCode: PROBLEM_CODE, code?: string, error?: object) {
-    super(message);
-
-    this.message = message;
-    this.problemCode = problemCode;
-    this.code = code;
-    this.error = error;
-  }
-}
-
+// Attach access token to all requests
 ApiInstance.addRequestTransform(async (request) => {
   const token = store.getState().auth.accessToken;
 
@@ -41,51 +20,83 @@ ApiInstance.addRequestTransform(async (request) => {
   };
 });
 
-ApiInstance.addResponseTransform((response) => {
-  if (!response.ok) {
-    throw new ApiError(
-      response.originalError.message,
-      response.problem,
-      response.data?.code,
-      response.data?.error,
-    );
-  }
-});
+// Auto refresh access token on 401 responses
+let isRefreshing = false;
+let failedQueue: {
+  resolve: (value: unknown) => void;
+  reject: (reason?: unknown) => void;
+}[] = [];
 
-ApiInstance.addAsyncResponseTransform(async (response) => {
-  const cookieHeaders = (response.headers?.['Set-Cookie'] ?? response.headers?.['set-cookie']) as
-    | string
-    | string[]
-    | undefined;
+const processQueue = (error: unknown) => {
+  failedQueue.forEach((prom) => {
+    if (error) {
+      prom.reject(error);
+    } else {
+      prom.resolve(null);
+    }
+  });
 
-  if (!cookieHeaders) return;
-  const cookies = Array.isArray(cookieHeaders) ? cookieHeaders : [cookieHeaders];
+  failedQueue = [];
+};
 
-  const refreshTokenCookie = cookies.findLast(
-    (cookieStr) => parseSetCookie(cookieStr).name === Config.refreshTokenCookieName,
-  );
-  if (!refreshTokenCookie) return;
+// Access Token Response interceptor
+ApiInstance.axiosInstance.interceptors.response.use(
+  (response) => response, // Pass through successful responses
+  async (error) => {
+    const originalRequest = error.config;
 
-  const cookie = parseSetCookie(refreshTokenCookie);
+    if (
+      !originalRequest.url?.includes('/api/auth/session') &&
+      error.response?.status === HTTPStatus.Unauthorized &&
+      !originalRequest._retry
+    ) {
+      if (isRefreshing) {
+        // If already refreshing, queue this request
+        return new Promise((resolve, reject) => {
+          failedQueue.push({resolve, reject});
+        })
+          .then(() => {
+            return ApiInstance.any(originalRequest);
+          })
+          .catch((err) => {
+            return Promise.reject(err);
+          });
+      }
 
-  // Max-Age has precedence over Expires
-  let expiryDate: Date | null = null;
-  if (cookie.maxAge) {
-    expiryDate = new Date(Date.now() + cookie.maxAge * 1000);
-  } else if (cookie.expires) {
-    expiryDate = new Date(cookie.expires);
-  }
+      originalRequest._retry = true;
+      isRefreshing = true;
 
-  const isExpired = expiryDate && expiryDate.getTime() < Date.now();
+      try {
+        const refreshToken = await Storage.get('refreshToken');
+        if (!refreshToken) {
+          throw new Error('No refresh token available');
+        }
 
-  if (!cookie.value || isExpired) {
-    // No value or expiryDate is in the past, remove the token
-    await Storage.remove('refreshToken');
-  }
+        const response = await refresh(refreshToken);
+        if (!response.ok || !response.data) {
+          throw new Error('Failed to refresh access token');
+        }
 
-  if (cookie.value) {
-    await Storage.set('refreshToken', cookie.value);
-  }
-});
+        store.dispatch(AuthActions.setAuthenticated(true));
+        store.dispatch(AuthActions.setAccessToken(response.data.accessToken));
+        store.dispatch(AuthActions.setUser(response.data.user));
+
+        processQueue(null);
+        isRefreshing = false;
+
+        // Retry the original request
+        return ApiInstance.any(originalRequest);
+      } catch (refreshError) {
+        processQueue(refreshError);
+        isRefreshing = false;
+
+        // Refresh failed
+        return Promise.reject(refreshError);
+      }
+    }
+
+    return Promise.reject(error);
+  },
+);
 
 export default ApiInstance;

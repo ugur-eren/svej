@@ -14,6 +14,11 @@ app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 app.use(RequestContextMiddleware);
 
+app.use((req, res, next) => {
+  console.info(`${req.method} ${req.url}`);
+  next();
+});
+
 app.use('/', router);
 
 app.listen(Env.BACKEND_PORT, () => {
