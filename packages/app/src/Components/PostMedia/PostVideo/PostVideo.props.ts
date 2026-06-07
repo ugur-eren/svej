@@ -1,8 +1,8 @@
-import {VideoProps} from 'expo-av';
+import {VideoViewProps} from 'expo-video';
 import {PostData} from '../../PostContent/PostContent.props';
 
 export type PostVideoProps = (PostData & {type: 'video'}) &
-  VideoProps & {
+  VideoViewProps & {
     /**
      * Is the video visible?
      * Used to play or pause the video.

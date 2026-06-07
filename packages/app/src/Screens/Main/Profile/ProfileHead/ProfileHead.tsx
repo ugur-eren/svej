@@ -76,7 +76,7 @@ const ProfileHead: React.FC<ProfileHeadProps> = ({userId, username}) => {
 
   const changePhoto = async (type: 'profile' | 'cover') => {
     const pickerResult = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ['images'],
       aspect: [
         ...(type === 'profile' ? Config.profilePhotoAspectRatio : Config.coverPhotoAspectRatio),
       ],

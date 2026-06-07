@@ -4,7 +4,7 @@ import {useShowToast} from './useToast';
 import {useLanguage} from './Language';
 
 export const useSocketClient = () => {
-  const ioClient = useRef<SocketClient>();
+  const ioClient = useRef<SocketClient>(undefined);
 
   const [connecting, setConnecting] = useState(true);
 

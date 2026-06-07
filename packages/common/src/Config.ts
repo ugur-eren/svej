@@ -4,6 +4,7 @@ export default {
   maxMediasPerPost: 9,
   maxPostImageDimension: 1080,
   maxPostVideoDimension: 1080,
+  maxPostVideoDuration: 2 * 60, // 2 minutes
 
   maxProfilePhotoDimension: 512,
   maxCoverPhotoDimension: 1080,

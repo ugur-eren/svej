@@ -208,6 +208,8 @@ Router.put(
           )
         ).filter(<T>(file: T | null): file is T => file !== null);
       } catch (err) {
+        console.error('Error processing files:', err);
+
         res.status(HTTPStatus.BadRequest).send({code: ErrorCodes.FileProcessingError});
         return;
       }

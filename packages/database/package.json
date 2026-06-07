@@ -3,12 +3,23 @@
   "version": "0.0.0",
   "private": true,
   "license": "GPL-2.0",
-  "main": "./index.ts",
-  "types": "./index.ts",
   "exports": {
     ".": {
-      "import": "./index.ts",
-      "require": "./index.ts"
+      "react-native": {
+        "import": "./clientSafe.ts",
+        "require": "./clientSafe.ts",
+        "default": "./clientSafe.ts"
+      },
+      "browser": {
+        "import": "./clientSafe.ts",
+        "require": "./clientSafe.ts",
+        "default": "./clientSafe.ts"
+      },
+      "default": {
+        "import": "./index.ts",
+        "require": "./index.ts",
+        "default": "./index.ts"
+      }
     },
     "./enums": {
       "import": "./enums.ts",

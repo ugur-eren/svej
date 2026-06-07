@@ -11,6 +11,5 @@ export default ({config}) => {
         Object.entries(process.env).filter(([key]) => key.startsWith('SVEJ_PUBLIC_')),
       ),
     },
-    plugins: ['expo-font'],
   };
 };

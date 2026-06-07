@@ -1,9 +1,10 @@
 import Color from 'color';
 import {ThemedStyleSheet} from '../../../Utils/ThemedStyleSheet';
 
-export default ThemedStyleSheet((theme) => ({
+export default ThemedStyleSheet((theme, aspectRatio: number) => ({
   video: {
     width: '100%',
+    aspectRatio,
   },
 
   loader: {

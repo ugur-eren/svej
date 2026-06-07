@@ -10,7 +10,7 @@ export default StyleSheet.create({
   },
 
   loader: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: Color(Colors.CommonColors.black).alpha(0.25).toString(),

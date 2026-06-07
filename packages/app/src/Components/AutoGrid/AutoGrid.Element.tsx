@@ -10,7 +10,7 @@ const Element: React.FC<AutoGridElementProps> = (props) => {
   const itemSize = useContext(AutoGridContext);
 
   return (
-    <View style={StyleSheet.compose([styles.element, {flexBasis: itemSize}], style)} {...restProps}>
+    <View style={StyleSheet.compose([styles.element, {width: itemSize}], style)} {...restProps}>
       {children}
     </View>
   );

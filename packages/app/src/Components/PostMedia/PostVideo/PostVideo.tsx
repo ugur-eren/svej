@@ -1,10 +1,13 @@
-import {memo, useState} from 'react';
-import {View, TouchableOpacity, TouchableWithoutFeedback, StyleSheet} from 'react-native';
-import {Video, ResizeMode} from 'expo-av';
+/* eslint-disable no-param-reassign */
+
+import {memo, useEffect} from 'react';
+import {View, TouchableWithoutFeedback, StyleSheet, Image} from 'react-native';
+import {useEvent} from 'expo';
+import {VideoView, useVideoPlayer} from 'expo-video';
 import {Feather} from '@expo/vector-icons';
 import Text from '../../Text/Text';
 import Spinner from '../../Spinner/Spinner';
-import {useDimensions, usePromisedState, useTheme} from '../../../Hooks';
+import {useTheme} from '../../../Hooks';
 import {Selectors, SettingsActions, useAppDispatch, useAppSelector} from '../../../Redux';
 import {PostVideoProps} from './PostVideo.props';
 import getStyles from './PostVideo.styles';
@@ -17,62 +20,54 @@ const PostVideo: React.FC<PostVideoProps> = (props) => {
   const dispatch = useAppDispatch();
   const muted = useAppSelector(Selectors.Settings.Muted);
 
-  const styles = getStyles(theme);
+  const styles = getStyles(theme, ratio);
 
-  const {width} = useDimensions();
-  const [renderVideo, setRenderVideo] = usePromisedState(true);
-  const [ready, setReady] = useState(false);
-  const [error, setError] = useState(false);
+  const videoPlayer = useVideoPlayer({uri, useCaching: true}, (player) => {
+    player.loop = true;
+  });
+
+  useEffect(() => {
+    if (visible && !videoPlayer.playing) {
+      videoPlayer.play();
+    } else {
+      videoPlayer.pause();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [visible]);
+
+  useEffect(() => {
+    videoPlayer.muted = muted;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [muted]);
+
+  const {status} = useEvent(videoPlayer, 'statusChange', {status: videoPlayer.status});
 
   const onVideoPress = () => dispatch(SettingsActions.toggleMuted());
 
-  const onVideoReady = () => setReady(true);
-
-  const onVideoError = (err: string) => {
-    if (err) setError(true);
-  };
-
-  const tryAgain = async () => {
-    // TODO: Currently it's re-mounts the Video component to reload the video.
-    // This is not viable.
-    await setRenderVideo(false);
-
-    setRenderVideo(true);
-    setReady(false);
-    setError(false);
-  };
-
   return (
-    <TouchableWithoutFeedback disabled={!renderVideo} onPress={onVideoPress}>
+    <TouchableWithoutFeedback disabled={status === 'error'} onPress={onVideoPress}>
       <View>
-        {renderVideo ? (
-          <Video
-            source={{uri}}
-            style={StyleSheet.compose(style, {height: width / ratio, aspectRatio: ratio})}
-            videoStyle={{width, height: width / ratio}}
-            isLooping
-            usePoster
-            shouldPlay={visible}
-            isMuted={muted}
-            posterSource={{uri: poster, width, height: width / ratio}}
-            resizeMode={ResizeMode.CONTAIN}
-            onReadyForDisplay={onVideoReady}
-            onError={onVideoError}
+        <View style={styles.video}>
+          <VideoView
+            player={videoPlayer}
+            style={StyleSheet.compose(style, styles.video)}
+            contentFit="contain"
+            nativeControls={false}
             {...videoProps}
           />
-        ) : null}
 
-        {error ? (
+          {status === 'loading' && poster ? (
+            <Image source={{uri: poster}} style={StyleSheet.absoluteFill} resizeMode="cover" />
+          ) : null}
+        </View>
+
+        {status === 'error' ? (
           <View style={styles.loader}>
-            <TouchableOpacity onPress={tryAgain} style={styles.errorTouchable}>
-              <Text style={styles.errorText}>
-                Video couldn&apos;t loaded.{'\n'}Press to try again.
-              </Text>
-            </TouchableOpacity>
+            <Text style={styles.errorText}>Video couldn&apos;t loaded.</Text>
           </View>
         ) : null}
 
-        {!ready ? (
+        {status === 'loading' ? (
           <View style={styles.loader}>
             <Spinner size={36} color="primary" />
           </View>

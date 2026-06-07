@@ -9,7 +9,7 @@ import {ViewStyle} from 'react-native';
  * @param color IOS Shadow color
  * @returns Elevation and shadow values for both Android and IOS platforms
  */
-const CalculateElevation = (elevation: number, color = '#000'): ViewStyle => {
+const CalculateElevation = (elevation: number, color = '#000') => {
   const depth = elevation - 1;
 
   const [penumbraHeight, penumbraBlur] = Penumbras[depth];
@@ -28,7 +28,7 @@ const CalculateElevation = (elevation: number, color = '#000'): ViewStyle => {
     shadowRadius: parseFloat(radius),
 
     elevation,
-  };
+  } satisfies ViewStyle;
 };
 
 const interpolate = (i: number, a: number, b: number, a2: number, b2: number): number => {

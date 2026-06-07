@@ -26,7 +26,7 @@ const GradientOrView = <T extends string | string[]>({colors, ...props}: Props<T
     );
   }
 
-  return <LinearGradient colors={colors} {...props} />;
+  return <LinearGradient colors={colors as [string, string, ...string[]]} {...props} />;
 };
 
 export default GradientOrView;

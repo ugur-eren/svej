@@ -59,7 +59,7 @@ export default ThemedStyleSheet((theme) => ({
   },
 
   mediaAddButton: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     alignItems: 'center',
     justifyContent: 'center',
   },

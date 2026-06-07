@@ -37,7 +37,7 @@ Router.head('/:fileKey', async (req, res) => {
   if (fileSize === false) return;
 
   const range = parseRangeOrFail(req.header('range'), fileSize, res);
-  if (!range) return;
+  if (range === false) return;
 
   res.writeHead(
     range ? HTTPStatus.PartialContent : HTTPStatus.OK,
@@ -60,7 +60,7 @@ Router.get('/:fileKey', async (req, res) => {
   if (fileSize === false) return;
 
   const range = parseRangeOrFail(req.header('range'), fileSize, res);
-  if (!range) return;
+  if (range === false) return;
 
   const stream = await FileSystem.readStream(
     fileKey,

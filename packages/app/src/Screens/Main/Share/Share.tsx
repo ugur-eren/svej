@@ -4,7 +4,6 @@ import {View, ScrollView} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {IconButton, Surface} from 'react-native-paper';
 import {Image} from 'expo-image';
-import {ResizeMode, Video} from 'expo-av';
 import * as ImagePicker from 'expo-image-picker';
 import {Feather} from '@expo/vector-icons';
 import {PageContainer} from '../../../Containers';
@@ -12,6 +11,7 @@ import {AutoGrid, Divider, Header, Input, Text, Touchable} from '../../../Compon
 import {useLanguage, useShowDialog, useShowToast, useTheme, useUploadPost} from '../../../Hooks';
 import {parseLanguageParts} from '../../../Utils/Helpers';
 import {ShareScreenProps} from '../../../Types';
+import ShareVideo from './ShareVideo';
 import {Spacing} from '../../../Styles';
 import getStyles from './Share.styles';
 
@@ -29,12 +29,12 @@ const Share: React.FC<ShareScreenProps> = ({navigation}) => {
 
   const onAddMediaPress = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      mediaTypes: ['images', 'videos', 'livePhotos'],
       allowsEditing: true,
       allowsMultipleSelection: false,
       selectionLimit: 1,
       videoQuality: ImagePicker.UIImagePickerControllerQualityType.Medium,
-      videoMaxDuration: 120,
+      videoMaxDuration: Config.maxPostVideoDuration,
       exif: false,
       quality: 0.75,
     });
@@ -140,13 +140,7 @@ const Share: React.FC<ShareScreenProps> = ({navigation}) => {
                 <View style={styles.mediaContainer}>
                   <View style={styles.mediaContent}>
                     {media.type === 'video' ? (
-                      <Video
-                        source={{uri: media.uri}}
-                        isMuted
-                        usePoster
-                        resizeMode={ResizeMode.COVER}
-                        style={styles.media}
-                      />
+                      <ShareVideo uri={media.uri} ratio={1} />
                     ) : (
                       <Image source={{uri: media.uri}} style={styles.media} />
                     )}

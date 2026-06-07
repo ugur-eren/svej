@@ -4,7 +4,7 @@ import {ThemedStyleSheet} from '../../Utils/ThemedStyleSheet';
 
 export default ThemedStyleSheet((theme) => ({
   container: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     backgroundColor: Color(theme.colors.background).alpha(0.5).toString(),
     alignItems: 'center',
     justifyContent: 'center',

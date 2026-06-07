@@ -9,7 +9,7 @@ type SetTimeoutType = <T extends unknown[]>(
 type ClearTimeoutType = () => void;
 
 export const useTimeout = (): [set: SetTimeoutType, clear: ClearTimeoutType] => {
-  const timeout = useRef<NodeJS.Timeout>();
+  const timeout = useRef<NodeJS.Timeout | number>(undefined);
 
   const set: SetTimeoutType = (handler, timeoutInMS, ...args) => {
     timeout.current = setTimeout(handler, timeoutInMS, ...args);

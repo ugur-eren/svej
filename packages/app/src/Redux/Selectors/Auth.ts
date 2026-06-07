@@ -9,8 +9,9 @@ export const AccessToken = createSelector(Auth, (auth) => auth.accessToken);
 
 export const UserNullable = createSelector(Auth, (auth) => auth.user);
 
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-export const User = createSelector(UserNullable, (user) => user!);
+export const User = UserNullable as (
+  state: RootState,
+) => NonNullable<ReturnType<typeof UserNullable>>;
 
 export const UserIsSelf = createSelector(
   [User, (_state, username: string) => username],
