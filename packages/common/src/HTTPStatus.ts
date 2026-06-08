@@ -9,6 +9,8 @@ export default {
   ResetContent: 205,
   PartialContent: 206,
 
+  NotModified: 304,
+
   BadRequest: 400,
   Unauthorized: 401,
   Forbidden: 403,

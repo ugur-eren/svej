@@ -1,6 +1,4 @@
 import type {OutgoingHttpHeaders} from 'node:http';
-import {HTTPStatus} from '@svej/common';
-import type express from 'express';
 
 export type InvalidRange = {
   invalid: true;
@@ -24,6 +22,10 @@ export function parseRange(rangeHeader: string | undefined, fileSize: number): P
   }
 
   const range = rangeHeader.replace(/bytes=/, '');
+
+  // Reject multipart ranges (e.g., "bytes=0-50, 100-150")
+  if (range.includes(',')) return undefined;
+
   const [startRaw, endRaw] = range.split('-');
   const start = startRaw ? Number(startRaw) : NaN;
   const end = endRaw ? Number(endRaw) : NaN;
@@ -70,40 +72,18 @@ export function parseRange(rangeHeader: string | undefined, fileSize: number): P
   };
 }
 
-export function parseRangeOrFail(
-  rangeHeader: string | undefined,
-  fileSize: number,
-  res: express.Response,
-): ValidRange | undefined | false {
-  const rangeResult = parseRange(rangeHeader, fileSize);
-  if (rangeResult?.invalid) {
-    res.writeHead(HTTPStatus.RangeNotSatisfiable, {
-      'Content-Range': `bytes */${fileSize}`,
-    });
-    res.end();
-    return false;
-  }
-
-  return rangeResult;
-}
-
-export function createRangeHeader(
+export function createRangeHeaders(
   range: ValidRange | undefined,
-  mimeType: string,
   fileSize: number,
 ): OutgoingHttpHeaders {
-  return {
-    'Content-Type': mimeType,
-    'Accept-Ranges': 'bytes',
-    'Cross-Origin-Resource-Policy': 'cross-origin',
+  if (!range) {
+    return {
+      'Content-Length': fileSize,
+    };
+  }
 
-    ...(range
-      ? {
-          'Content-Range': `bytes ${range.start}-${range.end}/${range.fileSize}`,
-          'Content-Length': range.chunkSize,
-        }
-      : {
-          'Content-Length': fileSize,
-        }),
+  return {
+    'Content-Range': `bytes ${range.start}-${range.end}/${range.fileSize}`,
+    'Content-Length': range.chunkSize,
   };
 }

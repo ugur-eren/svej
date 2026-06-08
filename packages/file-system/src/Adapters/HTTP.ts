@@ -1,4 +1,4 @@
-import {BaseFileSystem, FileSystemResponse} from './Base';
+import {BaseFileSystem, FileSystemResponse, FileSystemStatsResponse} from './Base';
 
 /**
  * Adapter for HTTP storage endpoints that implements the BaseFileSystem interface.
@@ -46,7 +46,7 @@ export class HTTPFileSystem implements BaseFileSystem {
     }
   }
 
-  public async stats(key: string): Promise<FileSystemResponse<{size: number}>> {
+  public async stats(key: string): Promise<FileSystemResponse<FileSystemStatsResponse>> {
     const head = await this.head(key);
 
     if (!head.ok) {
@@ -64,6 +64,7 @@ export class HTTPFileSystem implements BaseFileSystem {
       ok: true,
       response: {
         size,
+        lastModified: new Date(0),
       },
     };
   }

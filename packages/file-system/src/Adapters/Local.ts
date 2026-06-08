@@ -1,7 +1,7 @@
 import {join} from 'node:path';
 import fs from 'node:fs/promises';
 import {createReadStream} from 'node:fs';
-import {BaseFileSystem, FileSystemResponse} from './Base';
+import {BaseFileSystem, FileSystemResponse, FileSystemStatsResponse} from './Base';
 
 export class LocalFileSystem implements BaseFileSystem {
   private rootPath: string;
@@ -10,7 +10,7 @@ export class LocalFileSystem implements BaseFileSystem {
     this.rootPath = rootPath;
   }
 
-  public async stats(key: string): Promise<FileSystemResponse<{size: number}>> {
+  public async stats(key: string): Promise<FileSystemResponse<FileSystemStatsResponse>> {
     const fullPath = join(this.rootPath, key);
 
     if (!(await this.exists(key))) {
@@ -19,7 +19,7 @@ export class LocalFileSystem implements BaseFileSystem {
 
     try {
       const stats = await fs.stat(fullPath);
-      return {ok: true, response: {size: stats.size}};
+      return {ok: true, response: {size: stats.size, lastModified: stats.mtime}};
     } catch {
       return {ok: false, error: 'Unknown'};
     }

@@ -1,5 +1,5 @@
 export default {
-  // Max File Size in bytes (30MB)
+  // Max File Size in bytes (200MB)
   maxFileSize: 1024 * 1024 * 200,
   maxMediasPerPost: 9,
   maxPostImageDimension: 1080,
@@ -42,4 +42,6 @@ export default {
   jwtRefreshTokenTTL: 30 * 24 * 60 * 60, // 30 days
 
   refreshTokenCookieName: 'svej_refresh_token',
+
+  defaultFileCacheTTL: 30 * 24 * 60 * 60, // 30 days
 } as const;

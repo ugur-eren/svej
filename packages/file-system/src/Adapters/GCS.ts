@@ -1,5 +1,5 @@
 import {FileMetadata, Storage, type Bucket} from '@google-cloud/storage';
-import {BaseFileSystem, FileSystemResponse} from './Base';
+import {BaseFileSystem, FileSystemResponse, FileSystemStatsResponse} from './Base';
 
 /**
  * Adapter for Google Cloud Storage (GCS) that implements the BaseFileSystem interface.
@@ -31,7 +31,7 @@ export class GCSFileSystem implements BaseFileSystem {
     }
   }
 
-  public async stats(key: string): Promise<FileSystemResponse<{size: number}>> {
+  public async stats(key: string): Promise<FileSystemResponse<FileSystemStatsResponse>> {
     const head = await this.getHead(key);
 
     if (!head.ok) {
@@ -44,6 +44,7 @@ export class GCSFileSystem implements BaseFileSystem {
       ok: true,
       response: {
         size,
+        lastModified: head.response.updated ? new Date(head.response.updated) : new Date(0),
       },
     };
   }

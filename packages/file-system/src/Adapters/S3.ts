@@ -6,7 +6,7 @@ import {
   PutObjectCommand,
   DeleteObjectCommand,
 } from '@aws-sdk/client-s3';
-import {BaseFileSystem, FileSystemResponse} from './Base';
+import {BaseFileSystem, FileSystemResponse, FileSystemStatsResponse} from './Base';
 
 /**
  * Adapter for AWS S3 that implements the BaseFileSystem interface.
@@ -55,31 +55,32 @@ export class S3FileSystem implements BaseFileSystem {
     }
   }
 
-  private checkExists(response: Awaited<ReturnType<typeof this.getHead>>) {
-    return response.ok && response.response?.$metadata.httpStatusCode === 200;
+  private checkExists(head: Awaited<ReturnType<typeof this.getHead>>) {
+    return head.ok && head.response?.$metadata.httpStatusCode === 200;
   }
 
-  public async stats(key: string): Promise<FileSystemResponse<{size: number}>> {
-    const response = await this.getHead(key);
+  public async stats(key: string): Promise<FileSystemResponse<FileSystemStatsResponse>> {
+    const head = await this.getHead(key);
 
-    if (!this.checkExists(response)) {
+    if (!this.checkExists(head)) {
       return {ok: false, error: 'NotFound'};
     }
 
-    const size = response.response?.ContentLength || 0;
+    const size = head.response?.ContentLength || 0;
 
     return {
       ok: true,
       response: {
         size,
+        lastModified: head.response?.LastModified || new Date(0),
       },
     };
   }
 
   public async exists(key: string): Promise<boolean> {
-    const response = await this.getHead(key);
+    const head = await this.getHead(key);
 
-    return this.checkExists(response);
+    return this.checkExists(head);
   }
 
   public async read(key: string): Promise<FileSystemResponse<Buffer>> {
