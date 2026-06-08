@@ -31,7 +31,6 @@ const extended = prisma
     result: {
       user: {
         password: hideField('password', ''),
-        jtis: hideField('jtis', [] as string[]),
         email: hideField('email', ''),
       },
     },

@@ -41,6 +41,9 @@ export default {
   jwtAccessTokenTTL: 15 * 60, // 15 minutes
   jwtRefreshTokenTTL: 30 * 24 * 60 * 60, // 30 days
 
+  sessionAbsoluteTTL: 180 * 24 * 60 * 60, // 180 days
+  sessionGracePeriod: 5, // 5 seconds
+
   refreshTokenCookieName: 'svej_refresh_token',
 
   defaultFileCacheTTL: 30 * 24 * 60 * 60, // 30 days

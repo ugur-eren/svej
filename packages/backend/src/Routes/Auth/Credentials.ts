@@ -112,15 +112,17 @@ Router.post('/change-password', onlyAuthorized, async (req, res) => {
     return;
   }
 
-  await Prisma.user.update({
-    where: {id: res.locals.user.id},
-    data: {
-      password: await Password.hash(body.data.newPassword),
-      jtis: {
-        set: [],
+  await Prisma.$transaction([
+    Prisma.user.update({
+      where: {id: res.locals.user.id},
+      data: {
+        password: await Password.hash(body.data.newPassword),
       },
-    },
-  });
+    }),
+    Prisma.session.deleteMany({
+      where: {userId: res.locals.user.id},
+    }),
+  ]);
 
   const result = await JWTAuth.login(res.locals.user.id);
   if (!result) {

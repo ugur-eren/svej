@@ -4,21 +4,25 @@ import {cookies, CookieManager, ResponseCookie} from './RequestContext';
 import {sign, verify} from './JWT';
 import Prisma from './Prisma';
 
-const setRefreshTokenCookie = (cookieStore: CookieManager, refreshToken?: string) => {
+const refreshTokenCookieConfig: Partial<ResponseCookie> = {
+  path: '/auth',
+  httpOnly: true,
+  secure: true,
+  sameSite: 'strict',
+};
+
+const setRefreshTokenCookie = (cookieStore: CookieManager, refreshToken: string) => {
   const config: Partial<ResponseCookie> = {
-    path: '/auth',
-    httpOnly: true,
-    secure: true,
-    sameSite: 'strict',
+    ...refreshTokenCookieConfig,
     maxAge: Config.jwtRefreshTokenTTL * 1_000,
     expires: new Date(Date.now() + Config.jwtRefreshTokenTTL * 1_000),
   };
 
-  if (refreshToken) {
-    cookieStore.set(Config.refreshTokenCookieName, refreshToken, config);
-  } else {
-    cookieStore.delete(Config.refreshTokenCookieName, config);
-  }
+  cookieStore.set(Config.refreshTokenCookieName, refreshToken, config);
+};
+
+const clearRefreshTokenCookie = (cookieStore: CookieManager) => {
+  cookieStore.delete(Config.refreshTokenCookieName, refreshTokenCookieConfig);
 };
 
 const getAccessTokenPayload = async (
@@ -50,7 +54,10 @@ const getAccessTokenPayload = async (
 
   return {
     sub: user.id,
-    user,
+    user: {
+      ...user,
+      email: user.email(),
+    },
   };
 };
 
@@ -94,10 +101,15 @@ export const login = async (
   const {accessToken, refreshToken, user, jti} = newPair;
 
   try {
-    await Prisma.user.update({
-      where: {id: user.id},
+    await Prisma.session.create({
       data: {
-        jtis: {push: jti},
+        currentJTI: jti,
+        absoluteExpiresAt: new Date(Date.now() + Config.sessionAbsoluteTTL * 1_000),
+        user: {
+          connect: {
+            id: user.id,
+          },
+        },
       },
     });
   } catch {
@@ -122,18 +134,15 @@ export const logout = async () => {
     if (refreshTokenCookie) {
       const refreshToken = await verify(refreshTokenCookie.value);
       if (refreshToken.ok && refreshToken.decoded.jti) {
-        const user = await Prisma.user.findUnique({
-          where: {id: refreshToken.decoded.sub},
-          select: {jtis: true},
+        const session = await Prisma.session.findUnique({
+          where: {currentJTI: refreshToken.decoded.jti},
+          select: {id: true},
         });
 
-        if (user && user.jtis().includes(refreshToken.decoded.jti)) {
-          await Prisma.user.update({
-            where: {id: refreshToken.decoded.sub},
-            data: {
-              jtis: {
-                set: user.jtis().filter((jti) => jti !== refreshToken.decoded.jti),
-              },
+        if (session?.id) {
+          await Prisma.session.delete({
+            where: {
+              id: session.id,
             },
           });
         }
@@ -141,7 +150,7 @@ export const logout = async () => {
     }
   } finally {
     // Clear cookies
-    setRefreshTokenCookie(cookieStore, undefined);
+    clearRefreshTokenCookie(cookieStore);
   }
 };
 
@@ -159,31 +168,71 @@ export const rotateTokens = async (): Promise<false | {accessToken: string; user
 
   const {jti: oldJTI, sub} = refreshToken.decoded;
 
-  const user = await Prisma.user.findUnique({
-    where: {id: sub},
-    select: {jtis: true},
+  const existingSession = await Prisma.session.findFirst({
+    where: {
+      OR: [{currentJTI: oldJTI}, {previousJTI: oldJTI}],
+    },
+    select: {
+      id: true,
+      currentJTI: true,
+      previousJTI: true,
+      rotatedAt: true,
+      absoluteExpiresAt: true,
+    },
   });
-  if (!user) return false;
-  if (!user.jtis().includes(oldJTI)) {
-    // TODO: Implement a proper invalidation strategy for refresh tokens.
-    // For now, if the JTI is not found, we clear all JTIs for the user, effectively logging them out from all devices.
-    await Prisma.user.update({
-      where: {id: sub},
-      data: {jtis: {set: []}},
-    });
+
+  if (!existingSession) {
+    // Session not found, possible invalid or expired session.
+    clearRefreshTokenCookie(cookieStore);
     return false;
   }
+
+  if (existingSession.absoluteExpiresAt < new Date()) {
+    // Session absolute expiration reached, force logout
+    try {
+      await Prisma.session.delete({where: {id: existingSession.id}});
+    } finally {
+      clearRefreshTokenCookie(cookieStore);
+    }
+    return false;
+  }
+
+  if (existingSession.previousJTI === oldJTI) {
+    // Token reuse detected, check if it's within grace period
+    const now = new Date();
+    const isWithinGracePeriod = existingSession.rotatedAt
+      ? now.getTime() - existingSession.rotatedAt.getTime() <= Config.sessionGracePeriod * 1_000
+      : false;
+
+    if (!isWithinGracePeriod) {
+      // Outside of grace period, possible token theft, revoke session
+      try {
+        await Prisma.session.delete({where: {id: existingSession.id}});
+      } finally {
+        clearRefreshTokenCookie(cookieStore);
+      }
+
+      return false;
+    }
+  }
+
+  // Current token is valid, proceed with rotation.
+  // This covers both normal rotation and reuse within grace period.
+  // Issue new tokens and update session with new JTI.
 
   const newPair = await getNewTokenPair(sub);
   if (!newPair) return false;
 
   try {
-    await Prisma.user.update({
-      where: {id: sub},
+    await Prisma.session.update({
+      where: {
+        id: existingSession.id,
+        currentJTI: existingSession.currentJTI,
+      },
       data: {
-        jtis: {
-          set: [...user.jtis().filter((jti) => jti !== oldJTI), newPair.jti],
-        },
+        currentJTI: newPair.jti,
+        previousJTI: existingSession.currentJTI,
+        rotatedAt: new Date(),
       },
     });
   } catch {
