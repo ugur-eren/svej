@@ -20,7 +20,16 @@ export const ImageHandler = async (
   }[type];
 
   const image = sharp(file.buffer);
-  let {width: oldWidth = maxDimension, height: oldHeight = maxDimension} = await image.metadata();
+  let {width: oldWidth, height: oldHeight} = await image.metadata();
+
+  if (
+    !oldWidth ||
+    !oldHeight ||
+    oldWidth < Config.minImageDimension ||
+    oldHeight < Config.minImageDimension
+  ) {
+    throw new Error('Image dimensions are too small');
+  }
 
   if (type === 'profile' || type === 'cover') {
     const aspectRatio = {

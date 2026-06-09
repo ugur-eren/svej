@@ -4142,7 +4142,7 @@ __metadata:
     react-native: "npm:0.85.3"
     react-native-gesture-handler: "npm:~2.31.1"
     react-native-modalize: "npm:^2.1.1"
-    react-native-paper: "npm:^5.12.3"
+    react-native-paper: "npm:^5.15.3"
     react-native-portalize: "npm:^1.0.7"
     react-native-reanimated: "npm:4.3.1"
     react-native-redash: "npm:^18.1.0"
@@ -12888,19 +12888,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-paper@npm:^5.12.3":
-  version: 5.12.3
-  resolution: "react-native-paper@npm:5.12.3"
+"react-native-paper@npm:^5.15.3":
+  version: 5.15.3
+  resolution: "react-native-paper@npm:5.15.3"
   dependencies:
     "@callstack/react-theme-provider": "npm:^3.0.9"
     color: "npm:^3.1.2"
-    use-latest-callback: "npm:^0.1.5"
+    use-latest-callback: "npm:^0.2.3"
   peerDependencies:
     react: "*"
     react-native: "*"
     react-native-safe-area-context: "*"
-    react-native-vector-icons: "*"
-  checksum: 10c0/0adc7c5dd3e47af357b9e0b700e9663d32d9e6e47cba10b26af76a4a63197bda47e5295d6bdc031904039aaa12b875a135fa512c323ea44d4c1ae97d68e1d356
+  checksum: 10c0/936afe4c2cd3dd15fcafb87b785ca59b3aed7048b3aebef860f797047acccf9f8757caaf5ef3a0797ad970a2361dde58df621406d10d2e1e0fe5133ac958f608
   languageName: node
   linkType: hard
 
@@ -15075,6 +15074,15 @@ __metadata:
   peerDependencies:
     react: ">=16.8"
   checksum: 10c0/514604ad33cb2f040ad3ece8ee787cc549ec92135ee12ebc6857bb309eeacf5d66426b3b94089842e8215a252d5ca6f04b059387f681688fb70ac37b238209f9
+  languageName: node
+  linkType: hard
+
+"use-latest-callback@npm:^0.2.3":
+  version: 0.2.6
+  resolution: "use-latest-callback@npm:0.2.6"
+  peerDependencies:
+    react: ">=16.8"
+  checksum: 10c0/6523747b2d76f12a91cf80a3cd9803449571e9defa8db69e9a03b8199b211127d88c038063714fe31d3c2e63ca51a491bd05f4e34203795a1c692a5a44416610
   languageName: node
   linkType: hard
 

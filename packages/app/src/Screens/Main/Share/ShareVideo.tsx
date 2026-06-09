@@ -1,6 +1,6 @@
-import {memo, useMemo} from 'react';
+import {memo} from 'react';
 import {View} from 'react-native';
-import {VideoView, useVideoPlayer, VideoSource, VideoViewProps} from 'expo-video';
+import {VideoView, useVideoPlayer, VideoViewProps} from 'expo-video';
 import {CustomStyleSheet} from '../../../Utils/CustomStyleSheet';
 
 export type ShareVideoProps = VideoViewProps & {
@@ -13,9 +13,7 @@ const ShareVideo: React.FC<ShareVideoProps> = (props) => {
 
   const styles = getStyles(ratio);
 
-  const source = useMemo(() => ({uri, useCaching: true}) satisfies VideoSource, [uri]);
-
-  const videoPlayer = useVideoPlayer(source);
+  const videoPlayer = useVideoPlayer({uri});
 
   return (
     <View>

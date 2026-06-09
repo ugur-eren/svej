@@ -6,6 +6,9 @@ export default {
   maxPostVideoDimension: 1080,
   maxPostVideoDuration: 2 * 60, // 2 minutes
 
+  minImageDimension: 16,
+  minVideoDimension: 16,
+
   maxProfilePhotoDimension: 512,
   maxCoverPhotoDimension: 1080,
   profilePhotoAspectRatio: [1, 1],

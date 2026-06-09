@@ -59,8 +59,6 @@ const Register: React.FC<Props> = ({navigation}) => {
       dispatch(AuthActions.setAuthenticated(true));
       dispatch(AuthActions.setAccessToken(registerResult.accessToken));
       dispatch(AuthActions.setUser(registerResult.user));
-
-      navigation.navigate('MainStack', {screen: 'BottomStack', params: {screen: 'Explore'}});
     } catch (err) {
       if (err instanceof ApiError && err.code === ErrorCodes.AccountCreatedButLoginFailed) {
         navigation.navigate('Login');
