@@ -185,7 +185,6 @@ export default {
     Unauthorized: 'You are not authorized to do this action.',
     NoAuthToken: 'You are not authorized to do this action.',
     InvalidAuthToken: 'You are not authorized to do this action.',
-    NoTokenInput: 'You are not authorized to do this action.',
     WrongPassword: 'Wrong password.',
 
     UsernameAlreadyExists: 'Username is already in use.',

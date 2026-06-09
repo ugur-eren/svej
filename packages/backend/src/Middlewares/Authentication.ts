@@ -42,7 +42,7 @@ export const onlyAuthorized = async <
     return;
   }
 
-  const token = authorization.split(' ')[1];
+  const token = authorization.slice(7);
 
   const result = await JWT.verify<{user: SessionUser}>(token);
 

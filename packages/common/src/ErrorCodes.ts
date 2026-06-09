@@ -6,7 +6,6 @@ const ErrorCodesArray = [
   'Unauthorized',
   'NoAuthToken',
   'InvalidAuthToken',
-  'NoTokenInput',
   'WrongPassword',
   'AccountCreatedButLoginFailed',
 
