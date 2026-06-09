@@ -4,7 +4,7 @@ import {Divider, Header, Placeholders, ProfileWidget} from '@/Components';
 import {useInfiniteQuery, useLanguage, useTheme} from '@/Hooks';
 import {UserApi} from '@/Api';
 import {RelationsScreenProps} from '@/Types';
-import getStyles from './Relations.styles';
+import getStyles from './styles';
 
 const Relations: React.FC<RelationsScreenProps> = ({route}) => {
   const {userId, username, type} = route.params;
@@ -18,8 +18,8 @@ const Relations: React.FC<RelationsScreenProps> = ({route}) => {
     queryKey: ['relations', type, userId],
     initialPageParam: 1,
     queryFn: ({pageParam}) => UserApi.getRelations(userId, type, pageParam),
-    getNextPageParam: (lastPage: any, allPages, lastPageParam) => {
-      if (!lastPage?.length) return undefined;
+    getNextPageParam: (lastPage, allPages, lastPageParam) => {
+      if (!(lastPage as any)?.length) return undefined;
 
       return lastPageParam + 1;
     },
@@ -33,7 +33,7 @@ const Relations: React.FC<RelationsScreenProps> = ({route}) => {
         <Placeholders.ProfileWidgetList />
       ) : (
         <FlatList
-          data={relations.data?.pages.flat() as any[]}
+          data={relations.data?.pages.flat()}
           keyExtractor={(item) => item.id}
           ItemSeparatorComponent={Divider}
           renderItem={({item}) => (

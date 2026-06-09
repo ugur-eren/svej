@@ -9,9 +9,9 @@ import {useLanguage, useOnMount, useShowApiError, useShowToast, useSocketClient}
 import {Selectors, useAppSelector} from '@/Redux';
 import {ChatApi} from '@/Api';
 import {ChatScreenProps} from '@/Types';
-import Message from './Message/Message';
-import MessageInput from './MessageInput/MessageInput';
-import styles from './Chat.styles';
+import Message from './Message';
+import MessageInput from './MessageInput';
+import styles from './styles';
 
 const Chat: React.FC<ChatScreenProps> = ({route}) => {
   const {userId, username, avatar} = route.params;

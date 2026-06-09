@@ -13,7 +13,7 @@ import {parseLanguageParts} from '@/Utils/Helpers';
 import {ShareScreenProps} from '@/Types';
 import {Spacing} from '@/Styles';
 import ShareVideo from './ShareVideo';
-import getStyles from './Share.styles';
+import getStyles from './styles';
 
 const Share: React.FC<ShareScreenProps> = ({navigation}) => {
   const theme = useTheme();

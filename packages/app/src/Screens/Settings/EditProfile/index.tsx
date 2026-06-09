@@ -11,7 +11,7 @@ import {AuthActions, useAppDispatch} from '@/Redux';
 import EmailValidator from '@/Utils/EmailValidator';
 import {parseLanguageParts} from '@/Utils/Helpers';
 import {SettingsEditProfileScreenProps} from '@/Types';
-import getStyles from './EditProfile.styles';
+import getStyles from './styles';
 
 const initialValues = {
   username: '',

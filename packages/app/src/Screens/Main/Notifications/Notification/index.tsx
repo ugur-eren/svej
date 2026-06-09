@@ -5,8 +5,8 @@ import {Feather} from '@expo/vector-icons';
 import {Avatar, Text, Timer, Touchable} from '@/Components';
 import {useLanguage, useTheme} from '@/Hooks';
 import {MainNavigationProp} from '@/Types';
-import {NotificationProps} from './Notification.props';
-import getStyles from './Notification.styles';
+import {NotificationProps} from './props';
+import getStyles from './styles';
 
 const Notification: React.FC<NotificationProps> = (props) => {
   const {notification} = props;

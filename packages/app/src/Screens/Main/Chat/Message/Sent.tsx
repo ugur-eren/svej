@@ -3,9 +3,14 @@ import {Feather} from '@expo/vector-icons';
 import {Text} from '@/Components';
 import {useTheme} from '@/Hooks';
 import {ChatMessage} from '@/Api/Chat/Chat.types';
-import getStyles from './Message.styles';
+import getStyles from './styles';
 
-const MessageSent: React.FC<{message: ChatMessage; sending?: boolean}> = ({message, sending}) => {
+export type MessageSentProps = {
+  message: ChatMessage;
+  sending?: boolean;
+};
+
+const MessageSent: React.FC<MessageSentProps> = ({message, sending}) => {
   const theme = useTheme();
 
   const styles = getStyles(theme);

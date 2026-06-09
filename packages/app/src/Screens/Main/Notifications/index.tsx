@@ -4,7 +4,7 @@ import {MainHeader, Divider, Placeholders} from '@/Components';
 import {PageContainer} from '@/Containers';
 import {useInfiniteQuery} from '@/Hooks';
 import {NotificationApi} from '@/Api';
-import Notification from './Notification/Notification';
+import Notification from './Notification';
 
 const Notifications: React.FC = () => {
   const [refreshing, setRefreshing] = useState(false);
@@ -13,9 +13,9 @@ const Notifications: React.FC = () => {
     initialPageParam: Date.now().toString(),
     queryKey: ['notifications'],
     queryFn: async ({pageParam}) => NotificationApi.getAll(pageParam),
-    getNextPageParam: (lastPage: any, allPages, lastPageParam) => {
-      if (!lastPage?.length) return undefined;
-      const pageParam = lastPage[lastPage.length - 1].createdAt;
+    getNextPageParam: (lastPage, allPages, lastPageParam) => {
+      if (!(lastPage as any)?.length) return undefined;
+      const pageParam = (lastPage as any)[(lastPage as any).length - 1].createdAt;
       if (!pageParam || pageParam === lastPageParam) return undefined;
       return pageParam;
     },
@@ -26,8 +26,6 @@ const Notifications: React.FC = () => {
 
     try {
       await notifications.refetch();
-    } catch (error) {
-      //
     } finally {
       setRefreshing(false);
     }
@@ -41,7 +39,7 @@ const Notifications: React.FC = () => {
         <Placeholders.NotificationList />
       ) : (
         <FlatList
-          data={notifications.data?.pages.flat() as any[]}
+          data={notifications.data?.pages.flat()}
           ItemSeparatorComponent={Divider}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
           keyExtractor={(item) => item.id.toString()}

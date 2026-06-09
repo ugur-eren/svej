@@ -3,7 +3,7 @@ import type {Media} from '@svej/database';
 import {Avatar, Text} from '@/Components';
 import {useTheme} from '@/Hooks';
 import {ChatMessage} from '@/Api/Chat/Chat.types';
-import getStyles from './Message.styles';
+import getStyles from './styles';
 
 export type MessageReceivedProps = {
   message: ChatMessage;

@@ -1,8 +1,8 @@
 import {useState} from 'react';
 import {BottomFixedInput, TextButton} from '@/Components';
 import {useLanguage} from '@/Hooks';
-import styles from './CommentInput.styles';
-import {CommentInputProps} from './CommentInput.props';
+import styles from './styles';
+import {CommentInputProps} from './props';
 
 const CommentInput: React.FC<CommentInputProps> = ({onCommentSend}) => {
   const language = useLanguage();

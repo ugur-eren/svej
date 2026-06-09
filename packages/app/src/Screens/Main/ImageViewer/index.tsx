@@ -5,7 +5,7 @@ import Animated, {useAnimatedStyle, useSharedValue, withTiming} from 'react-nati
 import {Header} from '@/Components';
 import {useTheme} from '@/Hooks';
 import {ImageViewerScreenProps} from '@/Types';
-import styles from './ImageViewer.styles';
+import styles from './styles';
 
 const ImageViewer: React.FC<ImageViewerScreenProps> = (props) => {
   const {route} = props;

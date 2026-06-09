@@ -5,8 +5,8 @@ import {useMutation, useTheme} from '@/Hooks';
 import {CommentApi} from '@/Api';
 import {ReactionType} from '@/Api/Comment/Comment.types';
 import {Author} from '@/Api/User/User.types';
-import {CommentProps} from './Comment.props';
-import getStyles from './Comment.styles';
+import {CommentProps} from './props';
+import getStyles from './styles';
 
 const Comment: React.FC<CommentProps> = ({comment}) => {
   const theme = useTheme();

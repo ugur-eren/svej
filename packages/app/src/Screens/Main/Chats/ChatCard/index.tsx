@@ -1,8 +1,8 @@
 import {View, TouchableOpacity} from 'react-native';
 import {Avatar, Text, Timer} from '@/Components';
 import {useTheme} from '@/Hooks';
-import {ChatCardProps} from './ChatCard.props';
-import getStyles from './ChatCard.styles';
+import {ChatCardProps} from './props';
+import getStyles from './styles';
 
 const ChatCard: React.FC<ChatCardProps> = (props) => {
   const {onPress, username, lastMessage, avatar} = props;

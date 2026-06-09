@@ -3,7 +3,7 @@ import {Divider, Header, ProfileWidget} from '@/Components';
 import {PageContainer} from '@/Containers';
 import {useLanguage, useTheme} from '@/Hooks';
 import {SettingsBlockedUsersScreenProps} from '@/Types';
-import getStyles from './BlockedUsers.styles';
+import getStyles from './styles';
 
 const BlockedUsers: React.FC<SettingsBlockedUsersScreenProps> = () => {
   const theme = useTheme();

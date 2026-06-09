@@ -13,7 +13,7 @@ import {UserApi, FileApi} from '@/Api';
 import {Selectors, useAppSelector} from '@/Redux';
 import {ProfileScreenProps} from '@/Types';
 import {GlobalStyles} from '@/Styles';
-import getStyles from './ProfileHead.styles';
+import getStyles from './styles';
 
 export type ProfileHeadProps = {
   userId: string;

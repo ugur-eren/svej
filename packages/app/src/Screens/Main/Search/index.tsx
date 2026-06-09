@@ -8,7 +8,7 @@ import {Divider, ProfileWidget} from '@/Components';
 import {useLanguage, useQuery, useTheme} from '@/Hooks';
 import {UserApi} from '@/Api';
 import {SearchScreenProps} from '@/Types';
-import getStyles from './Search.styles';
+import getStyles from './styles';
 
 const Search: React.FC<SearchScreenProps> = (props) => {
   const {navigation} = props;

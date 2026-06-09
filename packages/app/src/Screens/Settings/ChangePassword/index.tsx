@@ -8,7 +8,7 @@ import {AuthActions, useAppDispatch} from '@/Redux';
 import {AuthApi} from '@/Api';
 import {parseLanguageParts} from '@/Utils/Helpers';
 import {SettingsChangePasswordScreenProps} from '@/Types';
-import getStyles from './ChangePassword.styles';
+import getStyles from './styles';
 
 const initialValues = {
   currentPassword: '',

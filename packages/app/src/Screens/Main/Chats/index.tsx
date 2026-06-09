@@ -4,7 +4,7 @@ import {Header, Placeholders} from '@/Components';
 import {useLanguage, useQuery} from '@/Hooks';
 import {ChatApi} from '@/Api';
 import {ChatsScreenProps} from '@/Types';
-import ChatCard from './ChatCard/ChatCard';
+import ChatCard from './ChatCard';
 
 const Chats: React.FC<ChatsScreenProps> = ({navigation}) => {
   const language = useLanguage();
