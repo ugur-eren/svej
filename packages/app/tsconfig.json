@@ -8,7 +8,10 @@
     "noFallthroughCasesInSwitch": true,
     "useUnknownInCatchVariables": false,
     "allowSyntheticDefaultImports": true,
-    "jsx": "react-native"
+    "jsx": "react-native",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
   "exclude": ["node_modules", "dist", "babel.config.js"],
   "include": ["**/*.js", "**/*.ts", "**/*.tsx"]

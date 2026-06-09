@@ -1,8 +1,8 @@
 import {View} from 'react-native';
 import {Feather} from '@expo/vector-icons';
-import {Text} from '../../../../Components';
-import {useTheme} from '../../../../Hooks';
-import {ChatMessage} from '../../../../Api/Chat/Chat.types';
+import {Text} from '@/Components';
+import {useTheme} from '@/Hooks';
+import {ChatMessage} from '@/Api/Chat/Chat.types';
 import getStyles from './Message.styles';
 
 const MessageSent: React.FC<{message: ChatMessage; sending?: boolean}> = ({message, sending}) => {

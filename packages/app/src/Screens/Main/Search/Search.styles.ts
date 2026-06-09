@@ -1,5 +1,4 @@
-import {Spacing, Typography} from '../../../Styles';
-import {ThemedStyleSheet} from '../../../Utils/ThemedStyleSheet';
+import {Spacing, Typography, ThemedStyleSheet} from '@/Styles';
 
 export default ThemedStyleSheet((theme) => ({
   topContainer: {

@@ -1,5 +1,5 @@
 import {Platform, useWindowDimensions} from 'react-native';
-import {WEB_MAX_WIDTH} from '../Utils/Constants';
+import {WEB_MAX_WIDTH} from '@/Utils/Constants';
 
 export const useDimensions = () => {
   const dimensions = useWindowDimensions();

@@ -1,13 +1,13 @@
 import {Config} from '@svej/common';
 import {ScrollView} from 'react-native';
 import {Formik} from 'formik';
-import {Button, Header, Input} from '../../../Components';
-import {PageContainer} from '../../../Containers';
-import {useLanguage, useMutation, useShowToast, useTheme} from '../../../Hooks';
-import {AuthActions, useAppDispatch} from '../../../Redux';
-import {AuthApi} from '../../../Api';
-import {parseLanguageParts} from '../../../Utils/Helpers';
-import {SettingsChangePasswordScreenProps} from '../../../Types';
+import {Button, Header, Input} from '@/Components';
+import {PageContainer} from '@/Containers';
+import {useLanguage, useMutation, useShowToast, useTheme} from '@/Hooks';
+import {AuthActions, useAppDispatch} from '@/Redux';
+import {AuthApi} from '@/Api';
+import {parseLanguageParts} from '@/Utils/Helpers';
+import {SettingsChangePasswordScreenProps} from '@/Types';
 import getStyles from './ChangePassword.styles';
 
 const initialValues = {

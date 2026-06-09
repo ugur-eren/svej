@@ -1,10 +1,10 @@
 import {FlatList} from 'react-native';
+import {PageContainer} from '@/Containers';
+import {Header, Placeholders} from '@/Components';
+import {useLanguage, useQuery} from '@/Hooks';
+import {ChatApi} from '@/Api';
+import {ChatsScreenProps} from '@/Types';
 import ChatCard from './ChatCard/ChatCard';
-import {PageContainer} from '../../../Containers';
-import {Header, Placeholders} from '../../../Components';
-import {useLanguage, useQuery} from '../../../Hooks';
-import {ChatApi} from '../../../Api';
-import {ChatsScreenProps} from '../../../Types';
 
 const Chats: React.FC<ChatsScreenProps> = ({navigation}) => {
   const language = useLanguage();

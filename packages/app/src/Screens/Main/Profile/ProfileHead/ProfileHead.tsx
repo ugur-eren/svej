@@ -7,19 +7,12 @@ import {useNavigation} from '@react-navigation/native';
 import {Feather} from '@expo/vector-icons';
 import {IconButton} from 'react-native-paper';
 import {useQueryClient} from '@tanstack/react-query';
-import {Avatar, Divider, Placeholders, Text, TextButton} from '../../../../Components';
-import {
-  useLanguage,
-  useMutation,
-  useQuery,
-  useShowApiError,
-  useShowToast,
-  useTheme,
-} from '../../../../Hooks';
-import {UserApi, FileApi} from '../../../../Api';
-import {Selectors, useAppSelector} from '../../../../Redux';
-import {ProfileScreenProps} from '../../../../Types';
-import {GlobalStyles} from '../../../../Styles';
+import {Avatar, Divider, Placeholders, Text, TextButton} from '@/Components';
+import {useLanguage, useMutation, useQuery, useShowApiError, useShowToast, useTheme} from '@/Hooks';
+import {UserApi, FileApi} from '@/Api';
+import {Selectors, useAppSelector} from '@/Redux';
+import {ProfileScreenProps} from '@/Types';
+import {GlobalStyles} from '@/Styles';
 import getStyles from './ProfileHead.styles';
 
 export type ProfileHeadProps = {

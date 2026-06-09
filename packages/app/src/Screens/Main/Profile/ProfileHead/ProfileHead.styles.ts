@@ -1,7 +1,6 @@
 import {StyleSheet} from 'react-native';
-import {ThemedStyleSheet} from '../../../../Utils/ThemedStyleSheet';
-import {IsAndroid} from '../../../../Utils/Helpers';
-import {Spacing} from '../../../../Styles';
+import {Spacing, ThemedStyleSheet} from '@/Styles';
+import {IsAndroid} from '@/Utils/Helpers';
 
 export default ThemedStyleSheet((theme) => ({
   container: {

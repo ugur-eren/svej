@@ -1,8 +1,8 @@
 import {useCallback, useRef} from 'react';
 import {View, type FlatList} from 'react-native';
-import {MainHeader} from '../../../Components';
-import {PostList} from '../../../Containers';
-import {GlobalStyles} from '../../../Styles';
+import {MainHeader} from '@/Components';
+import {PostList} from '@/Containers';
+import {GlobalStyles} from '@/Styles';
 
 const Explore: React.FC = () => {
   const flatlistRef = useRef<FlatList>(null);

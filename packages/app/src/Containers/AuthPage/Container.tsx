@@ -1,5 +1,5 @@
 import {ScrollView} from 'react-native';
-import {useTheme} from '../../Hooks';
+import {useTheme} from '@/Hooks';
 import getStyles from './styles';
 
 export type AuthPageContainerProps = {

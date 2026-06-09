@@ -9,8 +9,7 @@ import {
   MainStackParams,
 } from './Types';
 import {useLanguage, useNotificationCount, useTheme} from './Hooks';
-import {Typography} from './Styles';
-import {ThemedStyleSheet} from './Utils/ThemedStyleSheet';
+import {Typography, ThemedStyleSheet} from './Styles';
 import {IsAndroid} from './Utils/Helpers';
 import {
   TabBarBellIcon,

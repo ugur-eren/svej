@@ -1,8 +1,8 @@
 import {View} from 'react-native';
 import type {Media} from '@svej/database';
-import {Avatar, Text} from '../../../../Components';
-import {useTheme} from '../../../../Hooks';
-import {ChatMessage} from '../../../../Api/Chat/Chat.types';
+import {Avatar, Text} from '@/Components';
+import {useTheme} from '@/Hooks';
+import {ChatMessage} from '@/Api/Chat/Chat.types';
 import getStyles from './Message.styles';
 
 export type MessageReceivedProps = {

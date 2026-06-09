@@ -1,14 +1,14 @@
 import {Zod} from '@svej/common';
 import {FlatList} from 'react-native';
 import {useQueryClient} from '@tanstack/react-query';
+import {PageContainer} from '@/Containers';
+import {Header, Divider, Placeholders} from '@/Components';
+import {useLanguage, useMutation, useQuery, useShowToast} from '@/Hooks';
+import {CommentApi} from '@/Api';
+import {GlobalStyles} from '@/Styles';
+import {CommentsScreenProps} from '@/Types';
 import Comment from './Comment/Comment';
 import CommentInput from './CommentInput/CommentInput';
-import {PageContainer} from '../../../Containers';
-import {Header, Divider, Placeholders} from '../../../Components';
-import {useLanguage, useMutation, useQuery, useShowToast} from '../../../Hooks';
-import {CommentApi} from '../../../Api';
-import {GlobalStyles} from '../../../Styles';
-import {CommentsScreenProps} from '../../../Types';
 
 const Comments: React.FC<CommentsScreenProps> = ({route}) => {
   const {postId} = route.params;

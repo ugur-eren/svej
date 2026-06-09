@@ -8,7 +8,7 @@ import Providers, {AfterLoadProviders} from './Providers';
 import Router from './Router';
 import Env from './Utils/Env';
 import {IsAndroid} from './Utils/Helpers';
-import {ThemedStyleSheet} from './Utils/ThemedStyleSheet';
+import {ThemedStyleSheet} from './Styles';
 import {WEB_MAX_WIDTH} from './Utils/Constants';
 
 SplashScreen.preventAutoHideAsync();

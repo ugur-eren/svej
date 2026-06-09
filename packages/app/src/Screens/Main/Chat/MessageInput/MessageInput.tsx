@@ -1,9 +1,9 @@
 import {Config, Zod} from '@svej/common';
 import {useState} from 'react';
 import {IconButton} from 'react-native-paper';
-import {BottomFixedInput} from '../../../../Components';
-import {useLanguage, useShowToast} from '../../../../Hooks';
-import {parseLanguageParts} from '../../../../Utils/Helpers';
+import {BottomFixedInput} from '@/Components';
+import {useLanguage, useShowToast} from '@/Hooks';
+import {parseLanguageParts} from '@/Utils/Helpers';
 
 export type MessageInputProps = {
   onSendMessage: (message: string) => void;

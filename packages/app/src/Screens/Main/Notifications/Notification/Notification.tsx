@@ -2,9 +2,9 @@ import {NotificationType} from '@svej/database/enums';
 import {View, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {Feather} from '@expo/vector-icons';
-import {Avatar, Text, Timer, Touchable} from '../../../../Components';
-import {useLanguage, useTheme} from '../../../../Hooks';
-import {MainNavigationProp} from '../../../../Types';
+import {Avatar, Text, Timer, Touchable} from '@/Components';
+import {useLanguage, useTheme} from '@/Hooks';
+import {MainNavigationProp} from '@/Types';
 import {NotificationProps} from './Notification.props';
 import getStyles from './Notification.styles';
 

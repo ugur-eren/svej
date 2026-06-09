@@ -6,7 +6,7 @@ import {ViewStyle} from 'react-native';
  * A function to automatically calulate elevation and shadow values for both Android and IOS platforms.
  * Because Lazy
  * @param elevation Android elevation value to calculate outputs
- * @param color IOS Shadow color
+ * @param color Shadow color
  * @returns Elevation and shadow values for both Android and IOS platforms
  */
 const CalculateElevation = (elevation: number, color = '#000') => {

@@ -1,5 +1,5 @@
 import {useEffect, useRef, useState} from 'react';
-import {SocketClient, getSocket} from '../Api';
+import {SocketClient, getSocket} from '@/Api';
 import {useShowToast} from './useToast';
 import {useLanguage} from './Language';
 

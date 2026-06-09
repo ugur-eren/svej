@@ -35,6 +35,12 @@ export default defineConfig(baseConfig, [
       react: {
         version: 'detect',
       },
+      'import/resolver': {
+        typescript: {
+          alwaysTryTypes: true,
+          project: './tsconfig.json',
+        },
+      },
     },
 
     languageOptions: {

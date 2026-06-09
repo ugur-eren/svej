@@ -1,9 +1,9 @@
+import {PageContainer, PostList} from '@/Containers';
+import {TransparentHeader} from '@/Components';
+import {Selectors, useAppSelector} from '@/Redux';
+import {GlobalStyles} from '@/Styles';
+import {BottomProfileScreenProps, ProfileScreenProps} from '@/Types';
 import ProfileHead from './ProfileHead/ProfileHead';
-import {PageContainer, PostList} from '../../../Containers';
-import {TransparentHeader} from '../../../Components';
-import {Selectors, useAppSelector} from '../../../Redux';
-import {GlobalStyles} from '../../../Styles';
-import {BottomProfileScreenProps, ProfileScreenProps} from '../../../Types';
 
 const Profile: React.FC<ProfileScreenProps & BottomProfileScreenProps> = ({navigation, route}) => {
   const {hideBack} = route.params;

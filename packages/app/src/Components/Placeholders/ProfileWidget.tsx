@@ -1,7 +1,7 @@
 import {StyleSheet, View} from 'react-native';
 import {Placeholder, Fade} from 'rn-placeholder';
-import {PlaceholderLine, PlaceholderMedia} from '../Placeholder/Placeholder';
-import {Spacing} from '../../Styles';
+import {PlaceholderLine, PlaceholderMedia} from '@/Components/Placeholder';
+import {Spacing} from '@/Styles';
 
 export const ProfileWidget: React.FC = () => {
   return (

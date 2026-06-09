@@ -8,8 +8,8 @@ import Animated, {
 import {scheduleOnRN} from 'react-native-worklets';
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 import {clamp, snapPoint} from 'react-native-redash';
-import {ToastConfig, useHideToast} from '../../Hooks/useToast';
-import {Toast} from '../../Components';
+import {ToastConfig, useHideToast} from '@/Hooks/useToast';
+import {Toast} from '@/Components';
 
 export const AnimatedToast: React.FC<{toast: ToastConfig}> = ({toast: toastProp}) => {
   const {key: toastKey, ...toast} = toastProp;

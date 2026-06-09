@@ -3,14 +3,14 @@ import {Formik} from 'formik';
 import {Config} from '@svej/common';
 import {ActivityIndicator} from 'react-native-paper';
 import {useQueryClient} from '@tanstack/react-query';
-import {Button, Header, Input} from '../../../Components';
-import {PageContainer} from '../../../Containers';
-import {useLanguage, useMutation, useQuery, useShowToast, useTheme} from '../../../Hooks';
-import {UserApi} from '../../../Api';
-import {AuthActions, useAppDispatch} from '../../../Redux';
-import EmailValidator from '../../../Utils/EmailValidator';
-import {parseLanguageParts} from '../../../Utils/Helpers';
-import {SettingsEditProfileScreenProps} from '../../../Types';
+import {Button, Header, Input} from '@/Components';
+import {PageContainer} from '@/Containers';
+import {useLanguage, useMutation, useQuery, useShowToast, useTheme} from '@/Hooks';
+import {UserApi} from '@/Api';
+import {AuthActions, useAppDispatch} from '@/Redux';
+import EmailValidator from '@/Utils/EmailValidator';
+import {parseLanguageParts} from '@/Utils/Helpers';
+import {SettingsEditProfileScreenProps} from '@/Types';
 import getStyles from './EditProfile.styles';
 
 const initialValues = {

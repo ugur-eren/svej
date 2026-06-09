@@ -1,12 +1,12 @@
 import {Config} from '@svej/common';
 import {Formik} from 'formik';
-import {AuthPage} from '../../../Containers';
-import {Input, TextButton} from '../../../Components';
-import {useLanguage, useMutation} from '../../../Hooks';
-import {AuthApi} from '../../../Api';
-import {AuthLoginScreenProps} from '../../../Types';
-import {AuthActions, useAppDispatch} from '../../../Redux';
-import {parseLanguageParts} from '../../../Utils/Helpers';
+import {AuthPage} from '@/Containers';
+import {Input, TextButton} from '@/Components';
+import {useLanguage, useMutation} from '@/Hooks';
+import {AuthApi} from '@/Api';
+import {AuthLoginScreenProps} from '@/Types';
+import {AuthActions, useAppDispatch} from '@/Redux';
+import {parseLanguageParts} from '@/Utils/Helpers';
 
 type Props = AuthLoginScreenProps;
 

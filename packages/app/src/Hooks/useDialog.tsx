@@ -1,8 +1,8 @@
 import {createContext, useCallback, useContext, useMemo, useState} from 'react';
 import {Dialog, Portal} from 'react-native-paper';
-import Text from '../Components/Text/Text';
-import TextButton from '../Components/TextButton/TextButton';
-import type {TextButtonProps} from '../Components/TextButton/TextButton.props';
+import Text from '@/Components/Text';
+import TextButton from '@/Components/TextButton';
+import type {TextButtonProps} from '@/Components/TextButton/props';
 
 export type DialogConfig = {
   title?: string;

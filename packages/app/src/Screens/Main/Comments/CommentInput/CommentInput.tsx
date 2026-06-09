@@ -1,6 +1,6 @@
 import {useState} from 'react';
-import {BottomFixedInput, TextButton} from '../../../../Components';
-import {useLanguage} from '../../../../Hooks';
+import {BottomFixedInput, TextButton} from '@/Components';
+import {useLanguage} from '@/Hooks';
 import styles from './CommentInput.styles';
 import {CommentInputProps} from './CommentInput.props';
 

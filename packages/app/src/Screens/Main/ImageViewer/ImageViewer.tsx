@@ -2,9 +2,9 @@ import {View} from 'react-native';
 import {Image} from 'expo-image';
 import {GestureDetector, Gesture} from 'react-native-gesture-handler';
 import Animated, {useAnimatedStyle, useSharedValue, withTiming} from 'react-native-reanimated';
-import {Header} from '../../../Components';
-import {useTheme} from '../../../Hooks';
-import {ImageViewerScreenProps} from '../../../Types';
+import {Header} from '@/Components';
+import {useTheme} from '@/Hooks';
+import {ImageViewerScreenProps} from '@/Types';
 import styles from './ImageViewer.styles';
 
 const ImageViewer: React.FC<ImageViewerScreenProps> = (props) => {

@@ -6,13 +6,13 @@ import {IconButton, Surface} from 'react-native-paper';
 import {Image} from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
 import {Feather} from '@expo/vector-icons';
-import {PageContainer} from '../../../Containers';
-import {AutoGrid, Divider, Header, Input, Text, Touchable} from '../../../Components';
-import {useLanguage, useShowDialog, useShowToast, useTheme, useUploadPost} from '../../../Hooks';
-import {parseLanguageParts} from '../../../Utils/Helpers';
-import {ShareScreenProps} from '../../../Types';
+import {PageContainer} from '@/Containers';
+import {AutoGrid, Divider, Header, Input, Text, Touchable} from '@/Components';
+import {useLanguage, useShowDialog, useShowToast, useTheme, useUploadPost} from '@/Hooks';
+import {parseLanguageParts} from '@/Utils/Helpers';
+import {ShareScreenProps} from '@/Types';
+import {Spacing} from '@/Styles';
 import ShareVideo from './ShareVideo';
-import {Spacing} from '../../../Styles';
 import getStyles from './Share.styles';
 
 const Share: React.FC<ShareScreenProps> = ({navigation}) => {

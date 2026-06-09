@@ -1,7 +1,7 @@
 import {memo} from 'react';
 import {View} from 'react-native';
 import {VideoView, useVideoPlayer, VideoViewProps} from 'expo-video';
-import {CustomStyleSheet} from '../../../Utils/CustomStyleSheet';
+import {CustomStyleSheet} from '@/Styles';
 
 export type ShareVideoProps = VideoViewProps & {
   uri: string;

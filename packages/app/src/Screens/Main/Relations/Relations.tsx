@@ -1,9 +1,9 @@
 import {FlatList, View} from 'react-native';
-import {PageContainer} from '../../../Containers';
-import {Divider, Header, Placeholders, ProfileWidget} from '../../../Components';
-import {useInfiniteQuery, useLanguage, useTheme} from '../../../Hooks';
-import {UserApi} from '../../../Api';
-import {RelationsScreenProps} from '../../../Types';
+import {PageContainer} from '@/Containers';
+import {Divider, Header, Placeholders, ProfileWidget} from '@/Components';
+import {useInfiniteQuery, useLanguage, useTheme} from '@/Hooks';
+import {UserApi} from '@/Api';
+import {RelationsScreenProps} from '@/Types';
 import getStyles from './Relations.styles';
 
 const Relations: React.FC<RelationsScreenProps> = ({route}) => {

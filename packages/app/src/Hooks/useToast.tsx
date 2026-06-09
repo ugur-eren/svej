@@ -1,6 +1,6 @@
 import {createContext, useCallback, useContext, useMemo, useState} from 'react';
 import uuid from 'react-native-uuid';
-import type {ToastProps} from '../Components/Toast/Toast.props';
+import type {ToastProps} from '@/Components/Toast/props';
 
 export type ToastConfig = ToastProps & {
   key: string;

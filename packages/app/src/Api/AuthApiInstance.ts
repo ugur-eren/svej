@@ -1,6 +1,6 @@
 import {Config} from '@svej/common';
 import {parseSetCookie} from 'cookie';
-import Storage from '../Utils/Storage';
+import Storage from '@/Utils/Storage';
 import {createApiInstance} from './CreateApiInstance';
 
 const AuthApiInstance = createApiInstance();

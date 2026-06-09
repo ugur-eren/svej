@@ -1,13 +1,13 @@
 import {useCallback, useMemo, useState} from 'react';
 import {ScrollView} from 'react-native';
 import {List, Switch} from 'react-native-paper';
-import {Header, ListItem, ListMenu} from '../../../Components';
-import {PageContainer} from '../../../Containers';
-import {useLanguage, useMutation, useTheme} from '../../../Hooks';
-import {AuthApi} from '../../../Api';
-import * as Languages from '../../../Languages';
-import {GlobalStyles} from '../../../Styles';
-import {SettingsScreenProps} from '../../../Types';
+import {Header, ListItem, ListMenu} from '@/Components';
+import {PageContainer} from '@/Containers';
+import {useLanguage, useMutation, useTheme} from '@/Hooks';
+import {AuthApi} from '@/Api';
+import * as Languages from '@/Languages';
+import {GlobalStyles} from '@/Styles';
+import {SettingsScreenProps} from '@/Types';
 import {
   SettingsActions,
   type SettingsState,
@@ -15,8 +15,8 @@ import {
   useAppSelector,
   Selectors,
   AuthActions,
-} from '../../../Redux';
-import Storage from '../../../Utils/Storage';
+} from '@/Redux';
+import Storage from '@/Utils/Storage';
 
 type Props = SettingsScreenProps;
 

@@ -1,4 +1,4 @@
-import {LanguageType} from '../Hooks/Language';
+import {LanguageType} from '@/Hooks/Language';
 import {parseLanguageParts} from './Helpers';
 
 export type TimeVariant = 'ago' | 'no_ago' | 'short';

@@ -1,7 +1,7 @@
 import {useCallback} from 'react';
+import {ApiError} from '@/Api';
 import {useLanguage} from './Language';
 import {useShowToast} from './useToast';
-import {ApiError} from '../Api';
 
 export const useShowApiError = () => {
   const language = useLanguage();

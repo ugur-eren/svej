@@ -1,5 +1,5 @@
 import {createContext, memo, useContext, useRef} from 'react';
-import PostUploader from '../Components/PostUploader/PostUploader';
+import PostUploader from '@/Components/PostUploader';
 import {useShowToast} from './useToast';
 import {useLanguage} from './Language';
 

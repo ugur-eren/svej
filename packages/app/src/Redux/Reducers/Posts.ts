@@ -1,6 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit';
 import type {PayloadAction} from '@reduxjs/toolkit';
-import {Post} from '../../Api/Post/Post.types';
+import {Post} from '@/Api/Post/Post.types';
 
 export type PostsState = {
   posts: Record<string, Post>;

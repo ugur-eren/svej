@@ -1,12 +1,12 @@
 import {View} from 'react-native';
 import {useQueryClient} from '@tanstack/react-query';
-import {ActionButton, Text, UserInfo} from '../../../../Components';
-import {useMutation, useTheme} from '../../../../Hooks';
-import {Author} from '../../../../Api/User/User.types';
+import {ActionButton, Text, UserInfo} from '@/Components';
+import {useMutation, useTheme} from '@/Hooks';
+import {CommentApi} from '@/Api';
+import {ReactionType} from '@/Api/Comment/Comment.types';
+import {Author} from '@/Api/User/User.types';
 import {CommentProps} from './Comment.props';
 import getStyles from './Comment.styles';
-import {CommentApi} from '../../../../Api';
-import {ReactionType} from '../../../../Api/Comment/Comment.types';
 
 const Comment: React.FC<CommentProps> = ({comment}) => {
   const theme = useTheme();

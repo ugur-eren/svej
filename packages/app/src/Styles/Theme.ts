@@ -65,3 +65,5 @@ const generateTheme = (dark: boolean, theme: typeof LightThemeColors) => {
 export const LightTheme = generateTheme(false, LightThemeColors);
 
 export const DarkTheme = generateTheme(true, DarkThemeColors);
+
+export type ThemeType = typeof LightTheme;

@@ -1,7 +1,7 @@
 import type {Media} from '@svej/database';
+import {ChatMessage} from '@/Api/Chat/Chat.types';
 import MessageReceived from './Message.Received';
 import MessageSent from './Message.Sent';
-import {ChatMessage} from '../../../../Api/Chat/Chat.types';
 
 export type MessageProps = {
   type: 'received' | 'sent';

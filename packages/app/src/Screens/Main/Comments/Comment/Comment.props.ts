@@ -1,4 +1,4 @@
-import {Comment} from '../../../../Api/Comment/Comment.types';
+import {Comment} from '@/Api/Comment/Comment.types';
 
 export type CommentProps = {
   comment: Comment;

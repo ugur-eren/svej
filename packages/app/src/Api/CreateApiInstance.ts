@@ -1,6 +1,6 @@
 import {ApisauceConfig, create} from 'apisauce';
-import Env from '../Utils/Env';
-import {store} from '../Redux';
+import Env from '@/Utils/Env';
+import {store} from '@/Redux';
 import {ApiError} from './Error';
 
 const DefaultOptions: ApisauceConfig = {

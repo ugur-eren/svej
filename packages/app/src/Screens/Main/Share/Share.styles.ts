@@ -1,8 +1,7 @@
 import Color from 'color';
 import {StyleSheet} from 'react-native';
-import {ThemedStyleSheet} from '../../../Utils/ThemedStyleSheet';
-import {Spacing} from '../../../Styles';
-import {CalculateElevation} from '../../../Utils/Elevation';
+import {Spacing, ThemedStyleSheet} from '@/Styles';
+import {CalculateElevation} from '@/Utils/Elevation';
 
 export default ThemedStyleSheet((theme) => ({
   content: {

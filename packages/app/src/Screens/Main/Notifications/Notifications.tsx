@@ -1,10 +1,10 @@
 import {useCallback, useState} from 'react';
 import {FlatList, RefreshControl} from 'react-native';
+import {MainHeader, Divider, Placeholders} from '@/Components';
+import {PageContainer} from '@/Containers';
+import {useInfiniteQuery} from '@/Hooks';
+import {NotificationApi} from '@/Api';
 import Notification from './Notification/Notification';
-import {MainHeader, Divider, Placeholders} from '../../../Components';
-import {PageContainer} from '../../../Containers';
-import {useInfiniteQuery} from '../../../Hooks';
-import {NotificationApi} from '../../../Api';
 
 const Notifications: React.FC = () => {
   const [refreshing, setRefreshing] = useState(false);

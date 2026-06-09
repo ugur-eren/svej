@@ -1,13 +1,13 @@
 import {Formik} from 'formik';
 import {Config, ErrorCodes} from '@svej/common';
-import {AuthPage} from '../../../Containers';
-import {Input} from '../../../Components';
-import {useLanguage, useMutation, useShowToast} from '../../../Hooks';
-import {ApiError, AuthApi} from '../../../Api';
-import {AuthActions, useAppDispatch} from '../../../Redux';
-import EmailValidator from '../../../Utils/EmailValidator';
-import {parseLanguageParts} from '../../../Utils/Helpers';
-import {AuthRegisterScreenProps} from '../../../Types';
+import {AuthPage} from '@/Containers';
+import {Input} from '@/Components';
+import {useLanguage, useMutation, useShowToast} from '@/Hooks';
+import {ApiError, AuthApi} from '@/Api';
+import {AuthActions, useAppDispatch} from '@/Redux';
+import EmailValidator from '@/Utils/EmailValidator';
+import {parseLanguageParts} from '@/Utils/Helpers';
+import {AuthRegisterScreenProps} from '@/Types';
 
 type Props = AuthRegisterScreenProps;
 

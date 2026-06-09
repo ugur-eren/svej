@@ -1,6 +1,6 @@
 import {HTTPStatus} from '@svej/common';
-import {AuthActions, store} from '../Redux';
-import Storage from '../Utils/Storage';
+import {AuthActions, store} from '@/Redux';
+import Storage from '@/Utils/Storage';
 import {createApiInstance} from './CreateApiInstance';
 import {refresh} from './Auth/Auth';
 

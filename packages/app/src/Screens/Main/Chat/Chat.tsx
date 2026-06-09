@@ -3,20 +3,14 @@ import {useEffect, useState} from 'react';
 import {FlatList, View} from 'react-native';
 import uuid from 'react-native-uuid';
 import {ActivityIndicator} from 'react-native-paper';
+import {Avatar, Header, Placeholders} from '@/Components';
+import {PageContainer} from '@/Containers';
+import {useLanguage, useOnMount, useShowApiError, useShowToast, useSocketClient} from '@/Hooks';
+import {Selectors, useAppSelector} from '@/Redux';
+import {ChatApi} from '@/Api';
+import {ChatScreenProps} from '@/Types';
 import Message from './Message/Message';
 import MessageInput from './MessageInput/MessageInput';
-import {Avatar, Header, Placeholders} from '../../../Components';
-import {PageContainer} from '../../../Containers';
-import {
-  useLanguage,
-  useOnMount,
-  useShowApiError,
-  useShowToast,
-  useSocketClient,
-} from '../../../Hooks';
-import {Selectors, useAppSelector} from '../../../Redux';
-import {ChatApi} from '../../../Api';
-import {ChatScreenProps} from '../../../Types';
 import styles from './Chat.styles';
 
 const Chat: React.FC<ChatScreenProps> = ({route}) => {
