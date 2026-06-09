@@ -1,9 +1,9 @@
-import type {ChatMessage} from '@svej/database';
+import type {ChatMessage, Media} from '@svej/database';
 
 export type ChatCardProps = {
   username: string;
   lastMessage?: ChatMessage;
-  avatarKey?: string;
+  avatar?: Media | null;
 
   onPress?: () => void | Promise<void>;
 };

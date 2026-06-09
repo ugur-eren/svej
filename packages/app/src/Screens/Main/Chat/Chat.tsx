@@ -20,7 +20,7 @@ import {ChatScreenProps} from '../../../Types';
 import styles from './Chat.styles';
 
 const Chat: React.FC<ChatScreenProps> = ({route}) => {
-  const {userId, username, avatarKey} = route.params;
+  const {userId, username, avatar} = route.params;
 
   const selfId = useAppSelector((state) => Selectors.Auth.User(state).id);
 
@@ -113,7 +113,7 @@ const Chat: React.FC<ChatScreenProps> = ({route}) => {
       <Header
         mode="small"
         title={username}
-        left={<Avatar key={avatarKey} style={styles.headerAvatar} />}
+        left={<Avatar image={avatar} style={styles.headerAvatar} />}
       />
 
       {initialLoading || socketConnecting ? (
@@ -128,7 +128,7 @@ const Chat: React.FC<ChatScreenProps> = ({route}) => {
               message={item}
               type={item.toId === userId ? 'sent' : 'received'}
               sending={item.sending}
-              userAvatarKey={avatarKey}
+              userAvatar={avatar}
             />
           )}
           ListFooterComponent={

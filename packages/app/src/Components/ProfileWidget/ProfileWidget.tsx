@@ -18,7 +18,7 @@ const ProfileWidget: React.FC<ProfileWidgetProps> = ({user}) => {
     <View style={styles.container}>
       <TouchableOpacity style={styles.touchable} onPress={onUserPress}>
         <View style={styles.imageContainer}>
-          <Avatar avatarKey={user.profilePhoto?.fileKey} style={styles.image} />
+          <Avatar image={user.profilePhoto} style={styles.image} />
         </View>
 
         <View>

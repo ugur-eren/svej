@@ -25,7 +25,7 @@ const UserInfo: React.FC<UserInfoProps> = (props) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.imageContainer} onPress={isSelf ? undefined : onUserPress}>
-        <Avatar style={styles.image} avatarKey={user.profilePhoto?.fileKey} />
+        <Avatar style={styles.image} image={user.profilePhoto} />
       </TouchableOpacity>
 
       <View style={styles.contentContainer}>

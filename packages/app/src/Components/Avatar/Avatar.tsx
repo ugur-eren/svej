@@ -4,10 +4,17 @@ import {FileApi} from '../../Api';
 import {AvatarProps} from './Avatar.props';
 
 const Avatar: React.FC<AvatarProps> = (props) => {
-  const {avatarKey, ...restProps} = props;
+  const {image, ...restProps} = props;
 
-  if (avatarKey) {
-    return <Image source={{uri: FileApi.getFileURL(avatarKey)}} {...restProps} />;
+  if (image?.fileKey) {
+    const ratio = image.width / image.height;
+    return (
+      <Image
+        source={{uri: FileApi.getFileURL(image.fileKey)}}
+        placeholder={{blurhash: image.blurhash ?? undefined, width: 32 * ratio, height: 32}}
+        {...restProps}
+      />
+    );
   }
 
   return <Image source={require('../../Assets/Images/DefaultAvatar.png')} {...restProps} />;

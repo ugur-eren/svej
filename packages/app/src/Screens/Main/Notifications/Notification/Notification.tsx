@@ -52,7 +52,7 @@ const Notification: React.FC<NotificationProps> = (props) => {
         ) : null}
 
         {hasUser ? (
-          <Avatar avatarKey={notification.user.profilePhoto?.fileKey} style={styles.userPhoto} />
+          <Avatar image={notification.user.profilePhoto} style={styles.userPhoto} />
         ) : null}
       </TouchableOpacity>
 

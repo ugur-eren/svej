@@ -52,18 +52,18 @@ export const ImageHandler = async (
   const buffer = await image.toBuffer();
   await FileSystem.write(fileName, buffer, 'image/webp');
 
-  let thumbnail: string | null = null;
+  let blurhash: string | null = null;
   try {
     const [thumbWidth, thumbHeight] = clampDimensions(newWidth, newHeight, 32);
 
-    const thumbnailBuffer = await image
+    const blurhashBuffer = await image
       .clone()
       .raw()
       .ensureAlpha()
       .resize({width: thumbWidth, height: thumbHeight})
       .toBuffer();
 
-    thumbnail = encode(new Uint8ClampedArray(thumbnailBuffer), thumbWidth, thumbHeight, 4, 4);
+    blurhash = encode(new Uint8ClampedArray(blurhashBuffer), thumbWidth, thumbHeight, 4, 4);
   } catch (_) {
     //
   }
@@ -73,6 +73,6 @@ export const ImageHandler = async (
     fileKey: fileName,
     width: newWidth,
     height: newHeight,
-    thumbnail,
+    blurhash,
   } satisfies PrismaTypes.MediaCreateInput;
 };

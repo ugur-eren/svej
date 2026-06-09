@@ -8,7 +8,7 @@ import {PostImageProps} from './PostImage.props';
 import styles from './PostImage.styles';
 
 const PostImage: React.FC<PostImageProps> = (props) => {
-  const {uri, ratio, thumbnail, style, ...imageProps} = props;
+  const {uri, ratio, blurhash, style, ...imageProps} = props;
 
   const {width} = useDimensions();
 
@@ -19,7 +19,7 @@ const PostImage: React.FC<PostImageProps> = (props) => {
     <View style={styles.container}>
       <Image
         source={{uri}}
-        placeholder={thumbnail}
+        placeholder={{blurhash, width: Math.round(32 * ratio), height: 32}}
         transition={500}
         contentFit="contain"
         onProgress={(e) => {

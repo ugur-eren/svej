@@ -28,12 +28,12 @@ const Chats: React.FC<ChatsScreenProps> = ({navigation}) => {
             <ChatCard
               username={item.username}
               lastMessage={item.lastMessage}
-              avatarKey={item.profilePhoto?.fileKey}
+              avatar={item.profilePhoto}
               onPress={() => {
                 navigation.navigate('Chat', {
                   userId: item.id,
                   username: item.username,
-                  avatarKey: item.profilePhoto?.fileKey,
+                  avatar: item.profilePhoto,
                 });
               }}
             />

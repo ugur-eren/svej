@@ -1,4 +1,5 @@
 import {ImageSourcePropType} from 'react-native';
+import type {Media} from '@svej/database';
 import {CompositeScreenProps, NavigatorScreenParams} from '@react-navigation/native';
 import {NativeStackScreenProps, NativeStackNavigationProp} from '@react-navigation/native-stack';
 
@@ -57,7 +58,7 @@ export type MainStackParams = {
   Chat: {
     userId: string;
     username: string;
-    avatarKey?: string;
+    avatar?: Media | null;
   };
 };
 

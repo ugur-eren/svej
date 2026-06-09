@@ -143,7 +143,7 @@ const ProfileHead: React.FC<ProfileHeadProps> = ({userId, username}) => {
   };
 
   const onSendMessagePress = () => {
-    navigation.navigate('Chat', {userId, username, avatarKey: user.data?.profilePhoto?.fileKey});
+    navigation.navigate('Chat', {userId, username, avatar: user.data?.profilePhoto});
   };
 
   if (user.isLoading || !user.data) return <Placeholders.Profile />;
@@ -179,7 +179,7 @@ const ProfileHead: React.FC<ProfileHeadProps> = ({userId, username}) => {
             <TouchableWithoutFeedback
               onPress={user.data.profilePhoto?.fileKey ? onPPPress : undefined}
             >
-              <Avatar avatarKey={user.data.profilePhoto?.fileKey} style={styles.profilePhoto} />
+              <Avatar image={user.data.profilePhoto} style={styles.profilePhoto} />
             </TouchableWithoutFeedback>
           </View>
 

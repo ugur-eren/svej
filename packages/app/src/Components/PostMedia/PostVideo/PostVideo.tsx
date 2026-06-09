@@ -1,9 +1,10 @@
 /* eslint-disable no-param-reassign */
 
 import {memo, useEffect} from 'react';
-import {View, TouchableWithoutFeedback, StyleSheet, Image} from 'react-native';
+import {View, TouchableWithoutFeedback, StyleSheet} from 'react-native';
 import {useEvent} from 'expo';
 import {VideoView, useVideoPlayer} from 'expo-video';
+import {Image} from 'expo-image';
 import {Feather} from '@expo/vector-icons';
 import Text from '../../Text/Text';
 import Spinner from '../../Spinner/Spinner';
@@ -13,7 +14,7 @@ import {PostVideoProps} from './PostVideo.props';
 import getStyles from './PostVideo.styles';
 
 const PostVideo: React.FC<PostVideoProps> = (props) => {
-  const {uri, ratio, poster, visible, style, ...videoProps} = props;
+  const {uri, ratio, blurhash, visible, style, ...videoProps} = props;
 
   const theme = useTheme();
 
@@ -56,8 +57,12 @@ const PostVideo: React.FC<PostVideoProps> = (props) => {
             {...videoProps}
           />
 
-          {status === 'loading' && poster ? (
-            <Image source={{uri: poster}} style={StyleSheet.absoluteFill} resizeMode="cover" />
+          {status === 'loading' && blurhash ? (
+            <Image
+              source={{blurhash, width: Math.round(32 * ratio), height: 32}}
+              style={StyleSheet.absoluteFill}
+              contentFit="cover"
+            />
           ) : null}
         </View>
 

@@ -5,7 +5,7 @@ import getStyles from './ChatCard.styles';
 import {Avatar, Text, Timer} from '../../../../Components';
 
 const ChatCard: React.FC<ChatCardProps> = (props) => {
-  const {onPress, username, lastMessage, avatarKey} = props;
+  const {onPress, username, lastMessage, avatar} = props;
 
   const theme = useTheme();
 
@@ -14,7 +14,7 @@ const ChatCard: React.FC<ChatCardProps> = (props) => {
   return (
     <TouchableOpacity onPress={onPress} style={styles.userContainer}>
       <View style={styles.imageContainer}>
-        <Avatar avatarKey={avatarKey} style={styles.image} />
+        <Avatar image={avatar} style={styles.image} />
         <View style={[styles.notSeen, {borderColor: theme.colors.background}]} />
       </View>
 

@@ -91,7 +91,7 @@ model Media {
   fileKey   String
   width     Int
   height    Int
-  thumbnail String?
+  blurhash  String?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 

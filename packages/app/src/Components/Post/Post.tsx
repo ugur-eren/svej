@@ -66,6 +66,7 @@ const Post: React.FC<PostProps> = ({postId}) => {
           )[media.type],
           ratio: media.width / media.height,
           uri: FileApi.getFileURL(media.fileKey),
+          blurhash: media.blurhash ?? undefined,
         }))}
       />
 

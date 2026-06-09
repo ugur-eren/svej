@@ -15,7 +15,7 @@ export default ThemedStyleSheet((theme, aspectRatio: number) => ({
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Color(theme.colors.surface).alpha(0.75).toString(),
+    backgroundColor: Color(theme.colors.surface).alpha(0.25).toString(),
   },
 
   errorTouchable: {

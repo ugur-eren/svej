@@ -1,3 +1,4 @@
+import type {Media} from '@svej/database';
 import MessageReceived from './Message.Received';
 import MessageSent from './Message.Sent';
 import {ChatMessage} from '../../../../Api/Chat/Chat.types';
@@ -6,13 +7,13 @@ export type MessageProps = {
   type: 'received' | 'sent';
   message: ChatMessage;
   sending?: boolean;
-  userAvatarKey?: string;
+  userAvatar?: Media | null;
 };
 
 const Message: React.FC<MessageProps> = (props) => {
-  const {type, message, sending, userAvatarKey} = props;
+  const {type, message, sending, userAvatar} = props;
 
-  if (type === 'received') return <MessageReceived message={message} avatarKey={userAvatarKey} />;
+  if (type === 'received') return <MessageReceived message={message} avatar={userAvatar} />;
 
   return <MessageSent message={message} sending={sending} />;
 };

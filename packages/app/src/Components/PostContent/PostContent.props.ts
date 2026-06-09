@@ -1,14 +1,13 @@
 export type PostData = {
   uri: string;
   ratio: number;
+  blurhash?: string;
 } & (
   | {
       type: 'image';
-      thumbnail?: string;
     }
   | {
       type: 'video';
-      poster?: string;
     }
 );
 

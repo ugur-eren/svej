@@ -66,19 +66,25 @@ export const VideoHandler = async (file: Express.Multer.File) => {
     tempThumbnailPath,
   ]);
 
-  let thumbnail: string | null = null;
+  let blurhash: string | null = null;
 
   if (thumbnailProcess.status) {
     try {
-      const [thumbWidth, thumbHeight] = clampDimensions(newWidth, newHeight, 32);
+      const [thumbWidth, thumbHeight] = clampDimensions(newWidth, newHeight, 128);
 
-      const thumbnailBuffer = await sharp(tempThumbnailPath)
-        .raw()
+      const blurhashBuffer = await sharp(tempThumbnailPath)
         .ensureAlpha()
         .resize(thumbWidth, thumbHeight, {fit: 'inside'})
+        .raw()
         .toBuffer();
 
-      thumbnail = encode(new Uint8ClampedArray(thumbnailBuffer), thumbWidth, thumbHeight, 4, 4);
+      blurhash = encode(
+        new Uint8ClampedArray(blurhashBuffer),
+        thumbWidth,
+        thumbHeight,
+        4,
+        thumbHeight < thumbWidth ? 3 : 4,
+      );
     } catch (_) {
       //
     }
@@ -89,6 +95,6 @@ export const VideoHandler = async (file: Express.Multer.File) => {
     fileKey: fileName,
     width: newWidth,
     height: newHeight,
-    thumbnail,
+    blurhash,
   } satisfies PrismaTypes.MediaCreateInput;
 };

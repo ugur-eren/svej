@@ -1,4 +1,5 @@
 import {View} from 'react-native';
+import type {Media} from '@svej/database';
 import {Avatar, Text} from '../../../../Components';
 import {useTheme} from '../../../../Hooks';
 import {ChatMessage} from '../../../../Api/Chat/Chat.types';
@@ -6,11 +7,11 @@ import getStyles from './Message.styles';
 
 export type MessageReceivedProps = {
   message: ChatMessage;
-  avatarKey?: string;
+  avatar?: Media | null;
 };
 
 const MessageReceived: React.FC<MessageReceivedProps> = (props) => {
-  const {message, avatarKey} = props;
+  const {message, avatar} = props;
 
   const theme = useTheme();
 
@@ -18,7 +19,7 @@ const MessageReceived: React.FC<MessageReceivedProps> = (props) => {
 
   return (
     <View style={styles.receivedContainer}>
-      <Avatar avatarKey={avatarKey} style={styles.receivedAvatar} />
+      <Avatar image={avatar} style={styles.receivedAvatar} />
 
       <View style={styles.received}>
         <View style={styles.receivedText}>
