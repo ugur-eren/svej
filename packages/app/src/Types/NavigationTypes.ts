@@ -22,7 +22,7 @@ export type SettingsStackParams = {
 
 export type BottomStackParams = {
   Explore: undefined;
-  ShareInit: undefined;
+  Share: undefined;
   Notifications: undefined;
   Profile: {
     userId: string;
@@ -39,7 +39,6 @@ export type MainStackParams = {
     userId: string;
     username: string;
   };
-  Share: undefined;
   Comments: {
     postId: string;
   };
@@ -97,8 +96,8 @@ export type SettingsBlockedUsersScreenProps = CompositeScreenProps<
 >;
 
 // Bottom
-export type BottomShareInitScreenProps = CompositeScreenProps<
-  NativeStackScreenProps<BottomStackParams, 'ShareInit'>,
+export type BottomShareScreenProps = CompositeScreenProps<
+  NativeStackScreenProps<BottomStackParams, 'Share'>,
   NativeStackScreenProps<RootStackParams>
 >;
 export type BottomProfileScreenProps = CompositeScreenProps<
@@ -115,10 +114,6 @@ export type ExploreScreenProps = CompositeScreenProps<
 >;
 export type ProfileScreenProps = CompositeScreenProps<
   NativeStackScreenProps<MainStackParams, 'Profile'>,
-  NativeStackScreenProps<RootStackParams>
->;
-export type ShareScreenProps = CompositeScreenProps<
-  NativeStackScreenProps<MainStackParams, 'Share'>,
   NativeStackScreenProps<RootStackParams>
 >;
 export type CommentsScreenProps = CompositeScreenProps<

@@ -1,7 +1,7 @@
 import {Config, Zod} from '@svej/common';
-import {useState} from 'react';
+import {useCallback, useState} from 'react';
 import {View, ScrollView} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import {useFocusEffect} from '@react-navigation/native';
 import {IconButton, Surface} from 'react-native-paper';
 import {Image} from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
@@ -10,12 +10,12 @@ import {PageContainer} from '@/Containers';
 import {AutoGrid, Divider, Header, Input, Text, Touchable} from '@/Components';
 import {useLanguage, useShowDialog, useShowToast, useTheme, useUploadPost} from '@/Hooks';
 import {parseLanguageParts} from '@/Utils/Helpers';
-import {ShareScreenProps} from '@/Types';
+import {BottomShareScreenProps} from '@/Types';
 import {Spacing} from '@/Styles';
 import ShareVideo from './ShareVideo';
 import getStyles from './styles';
 
-const Share: React.FC<ShareScreenProps> = ({navigation}) => {
+const Share: React.FC<BottomShareScreenProps> = ({navigation}) => {
   const theme = useTheme();
   const language = useLanguage();
 
@@ -26,6 +26,15 @@ const Share: React.FC<ShareScreenProps> = ({navigation}) => {
   const showDialog = useShowDialog();
 
   const styles = getStyles(theme);
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        setMessage('');
+        setMedias([]);
+      };
+    }, []),
+  );
 
   const onAddMediaPress = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -170,7 +179,7 @@ const Share: React.FC<ShareScreenProps> = ({navigation}) => {
 
       <Surface elevation={2} style={styles.submitButton}>
         <Touchable onPress={onSharePress}>
-          <SafeAreaView edges={['bottom']} style={styles.submitButtonContent}>
+          <View style={styles.submitButtonContent}>
             <Feather
               name="upload"
               size={24}
@@ -181,7 +190,7 @@ const Share: React.FC<ShareScreenProps> = ({navigation}) => {
             <Text color="primary" weight="semiBold" fontSize={16}>
               {language.share.share_button}
             </Text>
-          </SafeAreaView>
+          </View>
         </Touchable>
       </Surface>
     </PageContainer>

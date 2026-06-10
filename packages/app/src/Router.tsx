@@ -31,10 +31,9 @@ import EditProfile from './Screens/Settings/EditProfile';
 
 // Main
 import Explore from './Screens/Main/Explore';
+import Share from './Screens/Main/Share';
 import Profile from './Screens/Main/Profile';
 import Comments from './Screens/Main/Comments';
-import Share from './Screens/Main/Share';
-import ShareInit from './Screens/Main/Share/ShareInit';
 import ImageViewer from './Screens/Main/ImageViewer';
 import Search from './Screens/Main/Search';
 import Notifications from './Screens/Main/Notifications';
@@ -94,8 +93,8 @@ const BottomStackNavigator = () => {
         options={{title: language.explore.title, tabBarIcon: TabBarCompassIcon}}
       />
       <BottomStack.Screen
-        name="ShareInit"
-        component={ShareInit}
+        name="Share"
+        component={Share}
         options={{title: language.share.title, tabBarIcon: TabBarPlusSquareIcon}}
       />
       <BottomStack.Screen
@@ -124,7 +123,6 @@ const MainStackNavigator = () => {
       <MainStack.Screen name="SettingsStack" component={SettingsStackNavigator} />
       <MainStack.Screen name="Explore" component={Explore} />
       <MainStack.Screen name="Profile" component={Profile} />
-      <MainStack.Screen name="Share" component={Share} />
       <MainStack.Screen name="Comments" component={Comments} />
       <MainStack.Screen name="ImageViewer" component={ImageViewer} />
       <MainStack.Screen name="Search" component={Search} />
