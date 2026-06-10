@@ -2,18 +2,18 @@ import {memo, useCallback} from 'react';
 import {View, Platform} from 'react-native';
 import {useFonts} from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
-import * as StatusBar from 'expo-status-bar';
+import {StatusBar} from 'expo-status-bar';
 import {useInitializeApp, useTheme} from './Hooks';
 import Providers, {AfterLoadProviders} from './Providers';
 import Router from './Router';
 import Env from './Utils/Env';
 import {IsAndroid} from './Utils/Helpers';
-import {ThemedStyleSheet} from './Utils/ThemedStyleSheet';
+import {ThemedStyleSheet} from './Styles';
 import {WEB_MAX_WIDTH} from './Utils/Constants';
 
 SplashScreen.preventAutoHideAsync();
 
-if (IsAndroid) StatusBar.setStatusBarTranslucent(false);
+if (IsAndroid) StatusBar.setHidden(false, 'fade');
 
 function App() {
   if (!Env.SVEJ_PUBLIC_USE_CONFIG || Env.SVEJ_PUBLIC_USE_CONFIG !== 'true') {

@@ -1,15 +1,23 @@
-import ApiInstance from '../ApiInstance';
+import {Config} from '@svej/common';
+import {stringifyCookie} from 'cookie';
+import AuthApiInstance from '../AuthApiInstance';
 import {Response} from '../Types';
 import * as ApiTypes from './Auth.types';
 
-export const login = (data: ApiTypes.LoginRequest): Response<ApiTypes.LoginResponse> => {
-  return ApiInstance.post('/auth/login', data);
+export const logout = (refreshToken: string): Response<ApiTypes.LogoutResponse> => {
+  return AuthApiInstance.post('/auth/logout', undefined, {
+    headers: {
+      Cookie: stringifyCookie({[Config.refreshTokenCookieName]: refreshToken}),
+    },
+  });
 };
 
-export const logout = (): Response<ApiTypes.LogoutResponse> => {
-  return ApiInstance.post('/auth/logout');
+export const refresh = (refreshToken: string): Response<ApiTypes.RefreshResponse> => {
+  return AuthApiInstance.post('/auth/refresh', undefined, {
+    headers: {
+      Cookie: stringifyCookie({[Config.refreshTokenCookieName]: refreshToken}),
+    },
+  });
 };
 
-export const verify = (data: ApiTypes.VerifyRequest): Response<ApiTypes.VerifyResponse> => {
-  return ApiInstance.post('/auth/verify', data);
-};
+export * as Credentials from './Credentials/Credentials';

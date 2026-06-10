@@ -1,4 +1,4 @@
-import {NotificationApi} from '../Api';
+import {NotificationApi} from '@/Api';
 import {useQuery} from './useQuery';
 
 export const useNotificationCount = () => {

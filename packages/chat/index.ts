@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import {Env} from 'server-side';
+import {Env} from '@svej/server-side';
 
 if (Env.USE_CONFIG !== 'true') {
   throw new Error(`

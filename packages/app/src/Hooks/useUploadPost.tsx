@@ -1,12 +1,12 @@
 import {createContext, memo, useContext, useRef} from 'react';
-import PostUploader from '../Components/PostUploader/PostUploader';
+import PostUploader from '@/Components/PostUploader';
 import {useShowToast} from './useToast';
 import {useLanguage} from './Language';
 
-export const PostUploaderContext = createContext<React.RefObject<PostUploader> | null>(null);
+export const PostUploaderContext = createContext<React.RefObject<PostUploader | null> | null>(null);
 
 export const PostUploaderProvider: React.FC<{children?: React.ReactNode}> = memo(({children}) => {
-  const ref = useRef<PostUploader>(null);
+  const ref = useRef<PostUploader | null>(null);
 
   return (
     <PostUploaderContext.Provider value={ref}>

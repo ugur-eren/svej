@@ -1,6 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit';
 import type {PayloadAction} from '@reduxjs/toolkit';
-import * as Languages from '../../Languages';
+import * as Languages from '@/Languages';
 
 export type SettingsState = {
   theme: 'default' | 'light' | 'dark';

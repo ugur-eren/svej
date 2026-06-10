@@ -7,8 +7,8 @@ import {
   UseInfiniteQueryResult,
   useInfiniteQuery as useReactInfiniteQuery,
 } from '@tanstack/react-query';
+import {ApiError} from '@/Api';
 import {useShowApiError} from './useShowApiError';
-import {ApiError} from '../Api/ApiInstance';
 
 export const useInfiniteQuery = <
   TQueryFnData = unknown,

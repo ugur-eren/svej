@@ -1,8 +1,7 @@
-import {ErrorCodesKeys} from 'common';
 import {useCallback} from 'react';
+import {ApiError} from '@/Api';
 import {useLanguage} from './Language';
 import {useShowToast} from './useToast';
-import {ApiError} from '../Api/ApiInstance';
 
 export const useShowApiError = () => {
   const language = useLanguage();
@@ -14,8 +13,8 @@ export const useShowApiError = () => {
         if (error.code && error.code in language.api_errors) {
           return showToast({
             type: 'error',
-            title: 'Error',
-            message: language.api_errors[error.code as ErrorCodesKeys],
+            title: language.errors.ERROR,
+            message: language.api_errors[error.code as keyof typeof language.api_errors],
           });
         }
 

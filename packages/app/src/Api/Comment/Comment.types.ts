@@ -1,4 +1,4 @@
-import type {PrismaTypes, PrismaIncludes, Comment as PrismaComment} from 'database';
+import type {PrismaTypes, PrismaIncludes, Comment as PrismaComment} from '@svej/database';
 
 export type Comment = PrismaTypes.CommentGetPayload<{
   include: ReturnType<typeof PrismaIncludes.Comment>;

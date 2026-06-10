@@ -6,8 +6,8 @@ const ErrorCodesArray = [
   'Unauthorized',
   'NoAuthToken',
   'InvalidAuthToken',
-  'NoTokenInput',
   'WrongPassword',
+  'AccountCreatedButLoginFailed',
 
   // User
   'UsernameAlreadyExists',
@@ -16,7 +16,6 @@ const ErrorCodesArray = [
   'CannotFollowYourself',
   'AlreadyFollowing',
   'NotFollowing',
-  'PasswordsDoNotMatch',
 
   // Post
   'PostNotFound',
@@ -33,6 +32,9 @@ const ErrorCodesArray = [
 
   // Notification
   'NotificationNotFound',
+
+  // Chat
+  'ChatRateLimited',
 ] as const;
 
 export type ErrorCodesKeys = (typeof ErrorCodesArray)[number];

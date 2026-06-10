@@ -67,3 +67,7 @@ yarn-error.log
 # Uploads
 uploads/**/*
 !uploads/.gitkeep
+
+# Yarn Berry
+.yarn/*
+!.yarn/releases

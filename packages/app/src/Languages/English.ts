@@ -1,6 +1,6 @@
-import {ErrorCodesKeys} from 'common';
+import {ErrorCodesKeys} from '@svej/common';
 import {PROBLEM_CODE} from 'apisauce';
-import {NotificationType} from 'database';
+import type {NotificationType} from '@svej/database';
 
 export default {
   about_language: {
@@ -79,6 +79,11 @@ export default {
     message_placeholder: 'Your message...',
     couldnt_send_title: 'Could not send message',
     couldnt_send_message: 'Could not send your message. Please try again.',
+    message_too_long_title: 'Message too long',
+    message_too_long_message: 'Your message is too long. It must be at most %max% characters.',
+    message_too_many_lines_title: 'Message too long',
+    message_too_many_lines_message:
+      'Your message has too many lines. It must be at most %max% lines.',
   },
 
   comments: {
@@ -180,7 +185,6 @@ export default {
     Unauthorized: 'You are not authorized to do this action.',
     NoAuthToken: 'You are not authorized to do this action.',
     InvalidAuthToken: 'You are not authorized to do this action.',
-    NoTokenInput: 'You are not authorized to do this action.',
     WrongPassword: 'Wrong password.',
 
     UsernameAlreadyExists: 'Username is already in use.',
@@ -189,6 +193,8 @@ export default {
     CannotFollowYourself: 'You cannot follow yourself.',
     AlreadyFollowing: 'You are already following this user.',
     NotFollowing: 'You are not following this user.',
+    AccountCreatedButLoginFailed:
+      'Your account has been created, but we could not log you in. Please try logging in manually.',
 
     PostNotFound: 'Post not found.',
     PostDoesntHaveMediaOrDescription: 'Post must have a media or description.',
@@ -196,6 +202,12 @@ export default {
     FileProcessingError: 'There has been an error while processing the file.',
 
     CommentNotFound: 'Comment not found.',
+
+    MediaNotFound: 'Media not found.',
+
+    NotificationNotFound: 'Notification not found.',
+
+    ChatRateLimited: 'You are sending messages too quickly. Please wait a moment.',
   } satisfies Partial<Record<ErrorCodesKeys, string>>,
 
   api_problems: {

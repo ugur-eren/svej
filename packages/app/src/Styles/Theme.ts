@@ -5,6 +5,7 @@ import {
   DarkTheme as NavigationDarkTheme,
 } from '@react-navigation/native';
 import {LightThemeColors, DarkThemeColors} from './Colors';
+import Typography from './Typography';
 
 const generateTheme = (dark: boolean, theme: typeof LightThemeColors) => {
   const PaperTheme = dark ? PaperDarkTheme : PaperLightTheme;
@@ -58,6 +59,24 @@ const generateTheme = (dark: boolean, theme: typeof LightThemeColors) => {
         border: theme.colors.inputBorder,
         notification: theme.colors.primary,
       },
+      fonts: {
+        regular: {
+          fontFamily: Typography.regular.fontFamily,
+          fontWeight: Typography.regular.fontWeight,
+        },
+        medium: {
+          fontFamily: Typography.medium.fontFamily,
+          fontWeight: Typography.medium.fontWeight,
+        },
+        bold: {
+          fontFamily: Typography.bold.fontFamily,
+          fontWeight: Typography.bold.fontWeight,
+        },
+        heavy: {
+          fontFamily: Typography.bold.fontFamily,
+          fontWeight: Typography.bold.fontWeight,
+        },
+      },
     } satisfies typeof NavigationTheme,
   };
 };
@@ -65,3 +84,5 @@ const generateTheme = (dark: boolean, theme: typeof LightThemeColors) => {
 export const LightTheme = generateTheme(false, LightThemeColors);
 
 export const DarkTheme = generateTheme(true, DarkThemeColors);
+
+export type ThemeType = typeof LightTheme;

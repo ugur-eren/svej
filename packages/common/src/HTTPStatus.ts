@@ -9,6 +9,8 @@ export default {
   ResetContent: 205,
   PartialContent: 206,
 
+  NotModified: 304,
+
   BadRequest: 400,
   Unauthorized: 401,
   Forbidden: 403,
@@ -16,6 +18,7 @@ export default {
   NotAcceptable: 406,
   Timeout: 408,
   Gone: 410,
+  RangeNotSatisfiable: 416,
   TooManyRequests: 429,
 
   InternalServerError: 500,

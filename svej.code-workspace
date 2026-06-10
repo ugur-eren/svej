@@ -2,36 +2,36 @@
   "folders": [
     {
       "name": "Root",
-      "path": "."
+      "path": ".",
     },
     {
       "name": "App",
-      "path": "packages/app"
+      "path": "packages/app",
     },
     {
       "name": "Backend",
-      "path": "packages/backend"
+      "path": "packages/backend",
     },
     {
       "name": "Chat",
-      "path": "packages/chat"
+      "path": "packages/chat",
     },
     {
       "name": "Common",
-      "path": "packages/common"
+      "path": "packages/common",
     },
     {
       "name": "Server Side",
-      "path": "packages/server-side"
+      "path": "packages/server-side",
     },
     {
       "name": "Database",
-      "path": "packages/database"
-    }
+      "path": "packages/database",
+    },
   ],
   "settings": {
     "editor.formatOnSave": true,
-    "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"]
+    "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
   },
   "extensions": {
     "recommendations": [
@@ -39,7 +39,7 @@
       "esbenp.prettier-vscode",
       "mikestead.dotenv",
       "msjsdiag.vscode-react-native",
-      "expo.vscode-expo-tools"
-    ]
-  }
+      "expo.vscode-expo-tools",
+    ],
+  },
 }

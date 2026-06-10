@@ -1,59 +1,120 @@
+import type {OutgoingHttpHeaders} from 'node:http';
+import {Config, HTTPStatus} from '@svej/common';
+import {FileSystem} from '@svej/file-system';
 import express from 'express';
-import {HTTPStatus} from 'common';
 import mime from 'mime-types';
-import {fileSystem} from '../Services';
+import {createRangeHeaders, parseRange, type ValidRange} from '../Utils/RangeHeader';
 
 const Router = express.Router();
+
+const getFileHead = async (
+  fileKey: string,
+  req: express.Request,
+  res: express.Response,
+): Promise<
+  | undefined
+  | {
+      status: number;
+      headers: OutgoingHttpHeaders;
+      range: ValidRange | undefined;
+    }
+> => {
+  const mimeType = mime.lookup(fileKey.split('.').pop() || '');
+  if (!mimeType) {
+    res.status(HTTPStatus.InternalServerError).send();
+    return undefined;
+  }
+
+  const stat = await FileSystem.stats(fileKey);
+  if (!stat.ok) {
+    if (stat.error === 'NotFound') {
+      res.status(HTTPStatus.NotFound).send();
+      return undefined;
+    }
+
+    res.status(HTTPStatus.InternalServerError).send();
+    return undefined;
+  }
+
+  const fileSize = stat.response.size;
+
+  const sizeHex = fileSize.toString(16);
+  const lastModifiedHex = stat.response.lastModified.getTime().toString(16);
+  const etag = `"${sizeHex}-${lastModifiedHex}"`;
+
+  const lastModified = stat.response.lastModified.toUTCString();
+
+  const commonHeaders: OutgoingHttpHeaders = {
+    'Content-Type': mimeType,
+    'Accept-Ranges': 'bytes',
+
+    ETag: etag,
+    'Last-Modified': lastModified,
+    'Cache-Control': `public, max-age=${Config.defaultFileCacheTTL}, immutable`,
+  };
+
+  const ifNoneMatch = req.header('if-none-match');
+  if (
+    ifNoneMatch &&
+    ifNoneMatch
+      .split(',')
+      .map((value) => value.trim())
+      .includes(etag)
+  ) {
+    res.writeHead(HTTPStatus.NotModified, commonHeaders).end();
+    return undefined;
+  }
+
+  const ifModifiedSince = req.header('if-modified-since');
+  if (ifModifiedSince) {
+    const modifiedSince = Date.parse(ifModifiedSince);
+
+    if (!Number.isNaN(modifiedSince) && stat.response.lastModified.getTime() <= modifiedSince) {
+      res.writeHead(HTTPStatus.NotModified, commonHeaders).end();
+      return undefined;
+    }
+  }
+
+  const range = parseRange(req.header('range'), fileSize);
+  if (range?.invalid) {
+    res.writeHead(HTTPStatus.RangeNotSatisfiable, {
+      ...commonHeaders,
+      'Content-Range': `bytes */${fileSize}`,
+    });
+    res.end();
+    return undefined;
+  }
+
+  return {
+    range,
+    status: range ? HTTPStatus.PartialContent : HTTPStatus.OK,
+    headers: {
+      ...commonHeaders,
+      ...createRangeHeaders(range, fileSize),
+    },
+  };
+};
+
+// TODO: Cache control headers
+
+Router.head('/:fileKey', async (req, res) => {
+  const {fileKey} = req.params;
+
+  const fileHead = await getFileHead(fileKey, req, res);
+  if (!fileHead) return;
+
+  res.writeHead(fileHead.status, fileHead.headers).end();
+});
 
 Router.get('/:fileKey', async (req, res) => {
   const {fileKey} = req.params;
 
-  const mimeType = mime.lookup(fileKey.split('.').pop() || '');
-  if (!mimeType) {
-    res.status(HTTPStatus.InternalServerError).send();
-    return;
-  }
+  const fileHead = await getFileHead(fileKey, req, res);
+  if (!fileHead) return;
 
-  const stat = await fileSystem.stats(fileKey);
-  if (!stat.ok) {
-    if (stat.error === 'NotFound') {
-      res.status(HTTPStatus.NotFound).send();
-      return;
-    }
-
-    res.status(HTTPStatus.InternalServerError).send();
-    return;
-  }
-  const fileSize = stat.response.size;
-
-  let partialConfig:
-    | undefined
-    | {
-        start: number;
-        end: number;
-        fileSize: number;
-        chunkSize: number;
-      };
-
-  const rangeHeader = req.header('range');
-  if (rangeHeader) {
-    const parts = rangeHeader.replace(/bytes=/, '').split('-');
-    const start = parseInt(parts[0], 10);
-    const end = (parts[1] ? parseInt(parts[1], 10) : 0) || fileSize - 1;
-    const chunkSize = end - start + 1;
-
-    partialConfig = {
-      start,
-      end,
-      fileSize,
-      chunkSize,
-    };
-  }
-
-  // No range header
-  const stream = await fileSystem.readStream(
+  const stream = await FileSystem.readStream(
     fileKey,
-    partialConfig ? {start: partialConfig.start, end: partialConfig.end} : undefined,
+    fileHead.range ? {start: fileHead.range.start, end: fileHead.range.end} : undefined,
   );
 
   if (!stream.ok) {
@@ -66,21 +127,7 @@ Router.get('/:fileKey', async (req, res) => {
     return;
   }
 
-  res.writeHead(partialConfig ? HTTPStatus.PartialContent : HTTPStatus.OK, {
-    'Content-Type': mimeType,
-    'Accept-Ranges': 'bytes',
-    'Cross-Origin-Resource-Policy': 'cross-origin',
-
-    ...(partialConfig
-      ? {
-          'Content-Range': `bytes ${partialConfig.start}-${partialConfig.end}/${partialConfig.fileSize}`,
-          'Content-Length': partialConfig.chunkSize,
-        }
-      : {
-          'Content-Length': fileSize,
-        }),
-  });
-
+  res.writeHead(fileHead.status, fileHead.headers);
   stream.response.pipe(res);
 });
 

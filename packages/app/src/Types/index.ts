@@ -1,6 +1,5 @@
 import Feather from '@expo/vector-icons/Feather';
-import {Typography} from '../Styles';
-import {ThemeType} from '../Hooks/Theming';
+import {Typography, ThemeType} from '@/Styles';
 
 export * from './NavigationTypes';
 export * from './Generics';

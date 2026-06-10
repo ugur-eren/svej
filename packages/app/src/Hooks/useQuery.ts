@@ -6,8 +6,8 @@ import {
   UseQueryResult,
   useQuery as useReactQuery,
 } from '@tanstack/react-query';
+import {ApiError} from '@/Api';
 import {useShowApiError} from './useShowApiError';
-import {ApiError} from '../Api/ApiInstance';
 
 export const useQuery = <
   TQueryFnData = unknown,

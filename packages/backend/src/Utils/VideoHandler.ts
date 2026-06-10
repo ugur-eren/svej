@@ -1,22 +1,21 @@
-import {Config} from 'common';
-import {MediaType, PrismaTypes} from 'database';
-import fs from 'fs/promises';
-import {v4 as uuid} from 'uuid';
+import crypto from 'node:crypto';
+import fs from 'node:fs/promises';
+import {Config} from '@svej/common';
+import {MediaType, PrismaTypes} from '@svej/database';
+import {FileSystem, TEMP_DIR} from '@svej/file-system';
 import {encode} from 'blurhash';
 import sharp from 'sharp';
 import {Spawn} from './Spawn';
-import {TEMP_DIR} from './Constants';
-import {fileSystem} from '../Services';
 import {clampDimensions} from './Helpers';
 
 export const VideoHandler = async (file: Express.Multer.File) => {
-  const tempFilePath = `${TEMP_DIR}/${uuid()}.tmp`;
-  const tempProcessedFilePath = `${TEMP_DIR}/${uuid()}-processed.tmp`;
-  const tempThumbnailPath = `${TEMP_DIR}/${uuid()}-thumb.tmp`;
-  const fileId = uuid();
+  const tempFilePath = `${TEMP_DIR}/${crypto.randomUUID()}.tmp`;
+  const tempProcessedFilePath = `${TEMP_DIR}/${crypto.randomUUID()}-processed.tmp`;
+  const tempThumbnailPath = `${TEMP_DIR}/${crypto.randomUUID()}-thumb.tmp`;
+  const fileId = crypto.randomUUID();
   const fileName = `${fileId}.mp4`;
 
-  await fs.writeFile(tempFilePath, file.buffer);
+  await fs.writeFile(tempFilePath, new Uint8Array(file.buffer));
 
   const ffprobeProcess = await Spawn('ffprobe', [
     ['-v', 'error'],
@@ -30,28 +29,45 @@ export const VideoHandler = async (file: Express.Multer.File) => {
     throw new Error(ffprobeProcess.stderr.join('\n'));
   }
 
-  const [oldWidth = Config.maxPostVideoDimension, oldHeight = Config.maxPostVideoDimension] =
-    ffprobeProcess.stdout[0].split('x').map((x) => parseInt(x, 10));
+  const [oldWidth, oldHeight] = ffprobeProcess.stdout[0].split('x').map((x) => parseInt(x, 10));
+  if (Number.isNaN(oldWidth) || Number.isNaN(oldHeight)) {
+    throw new Error('Invalid video dimensions');
+  }
+  if (oldWidth < Config.minVideoDimension || oldHeight < Config.minVideoDimension) {
+    throw new Error('Video dimensions are too small');
+  }
 
-  const {width: newWidth, height: newHeight} = clampDimensions(
-    oldWidth,
-    oldHeight,
-    Config.maxPostVideoDimension,
-  );
+  const [newWidth, newHeight] = clampDimensions(oldWidth, oldHeight, Config.maxPostVideoDimension);
+
+  // eslint-disable-next-line no-bitwise
+  const [evenWidth, evenHeight] = [newWidth & ~1, newHeight & ~1];
 
   const ffmpegProcess = await Spawn('ffmpeg', [
-    ['-hide_banner'],
+    '-hide_banner',
     ['-loglevel', 'error'],
     '-y',
     ['-i', tempFilePath],
-    ['-s', `${newWidth}x${newHeight}`],
+    ['-map', '0:v:0'],
+    ['-map', '0:a:0?'],
+    ['-map_metadata', '-1'],
+    ['-map_chapters', '-1'],
+    ['-sn', '-dn'],
+    ['-vf', "fps=fps='min(30,source_fps)'"],
+    ['-s', `${evenWidth}x${evenHeight}`],
     ['-c:v', 'libx264'],
-    ['-maxrate', '600K'],
-    ['-preset', 'fast'],
-    ['-crf', '28'],
+    ['-b:v', '600k'],
+    ['-maxrate', '900k'],
+    ['-bufsize', '1200k'],
+    ['-preset', 'medium'],
+    ['-profile:v', 'high'],
+    ['-level', '4.0'],
+    ['-pix_fmt', 'yuv420p'],
     ['-c:a', 'aac'],
-    ['-b:a', '64K'],
+    ['-profile:a', 'aac_low'],
+    ['-ac', '2'],
+    ['-b:a', '96K'],
     ['-f', 'mp4'],
+    ['-movflags', '+faststart'],
     tempProcessedFilePath,
   ]);
 
@@ -60,25 +76,34 @@ export const VideoHandler = async (file: Express.Multer.File) => {
   }
 
   const processedFile = await fs.readFile(tempProcessedFilePath);
-  fileSystem.write(fileName, processedFile, 'video/mp4');
+  await FileSystem.write(fileName, processedFile, 'video/mp4');
 
   const thumbnailProcess = await Spawn('ffmpeg', [
+    ['-i', tempProcessedFilePath],
     ['-vf', 'select=eq(n,34)'],
     ['-vframes', '1'],
     tempThumbnailPath,
   ]);
 
-  let thumbnail: string | null = null;
+  let blurhash: string | null = null;
 
   if (thumbnailProcess.status) {
     try {
-      const thumbnailBuffer = await sharp(tempThumbnailPath)
-        .raw()
+      const [thumbWidth, thumbHeight] = clampDimensions(newWidth, newHeight, 128);
+
+      const blurhashBuffer = await sharp(tempThumbnailPath)
         .ensureAlpha()
-        .resize(32, 32, {fit: 'inside'})
+        .resize(thumbWidth, thumbHeight, {fit: 'inside'})
+        .raw()
         .toBuffer();
 
-      thumbnail = encode(new Uint8ClampedArray(thumbnailBuffer), 32, 32, 4, 4);
+      blurhash = encode(
+        new Uint8ClampedArray(blurhashBuffer),
+        thumbWidth,
+        thumbHeight,
+        4,
+        thumbHeight < thumbWidth ? 3 : 4,
+      );
     } catch (_) {
       //
     }
@@ -87,8 +112,8 @@ export const VideoHandler = async (file: Express.Multer.File) => {
   return {
     type: MediaType.VIDEO,
     fileKey: fileName,
-    width: 300,
-    height: 300,
-    thumbnail,
+    width: newWidth,
+    height: newHeight,
+    blurhash,
   } satisfies PrismaTypes.MediaCreateInput;
 };

@@ -9,8 +9,7 @@ import {
   MainStackParams,
 } from './Types';
 import {useLanguage, useNotificationCount, useTheme} from './Hooks';
-import {Typography} from './Styles';
-import {ThemedStyleSheet} from './Utils/ThemedStyleSheet';
+import {Typography, ThemedStyleSheet} from './Styles';
 import {IsAndroid} from './Utils/Helpers';
 import {
   TabBarBellIcon,
@@ -21,27 +20,26 @@ import {
 import {Selectors, useAppSelector} from './Redux';
 
 // Auth
-import AuthLogin from './Screens/Auth/Login/Login';
-import AuthRegister from './Screens/Auth/Register/Register';
+import AuthLogin from './Screens/Auth/Login';
+import AuthRegister from './Screens/Auth/Register';
 
 // Settings
-import Settings from './Screens/Settings/Settings/Settings';
-import ChangePassword from './Screens/Settings/ChangePassword/ChangePassword';
-import BlockedUsers from './Screens/Settings/BlockedUsers/BlockedUsers';
-import EditProfile from './Screens/Settings/EditProfile/EditProfile';
+import Settings from './Screens/Settings/Settings';
+import ChangePassword from './Screens/Settings/ChangePassword';
+import BlockedUsers from './Screens/Settings/BlockedUsers';
+import EditProfile from './Screens/Settings/EditProfile';
 
 // Main
-import Explore from './Screens/Main/Explore/Explore';
-import Profile from './Screens/Main/Profile/Profile';
-import Comments from './Screens/Main/Comments/Comments';
-import Share from './Screens/Main/Share/Share';
-import ShareInit from './Screens/Main/Share/ShareInit';
-import ImageViewer from './Screens/Main/ImageViewer/ImageViewer';
-import Search from './Screens/Main/Search/Search';
-import Notifications from './Screens/Main/Notifications/Notifications';
-import Relations from './Screens/Main/Relations/Relations';
-import Chats from './Screens/Main/Chats/Chats';
-import Chat from './Screens/Main/Chat/Chat';
+import Explore from './Screens/Main/Explore';
+import Share from './Screens/Main/Share';
+import Profile from './Screens/Main/Profile';
+import Comments from './Screens/Main/Comments';
+import ImageViewer from './Screens/Main/ImageViewer';
+import Search from './Screens/Main/Search';
+import Notifications from './Screens/Main/Notifications';
+import Relations from './Screens/Main/Relations';
+import Chats from './Screens/Main/Chats';
+import Chat from './Screens/Main/Chat';
 
 // Navigators
 const RootStack = createNativeStackNavigator<RootStackParams>();
@@ -95,8 +93,8 @@ const BottomStackNavigator = () => {
         options={{title: language.explore.title, tabBarIcon: TabBarCompassIcon}}
       />
       <BottomStack.Screen
-        name="ShareInit"
-        component={ShareInit}
+        name="Share"
+        component={Share}
         options={{title: language.share.title, tabBarIcon: TabBarPlusSquareIcon}}
       />
       <BottomStack.Screen
@@ -125,7 +123,6 @@ const MainStackNavigator = () => {
       <MainStack.Screen name="SettingsStack" component={SettingsStackNavigator} />
       <MainStack.Screen name="Explore" component={Explore} />
       <MainStack.Screen name="Profile" component={Profile} />
-      <MainStack.Screen name="Share" component={Share} />
       <MainStack.Screen name="Comments" component={Comments} />
       <MainStack.Screen name="ImageViewer" component={ImageViewer} />
       <MainStack.Screen name="Search" component={Search} />

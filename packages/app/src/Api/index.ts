@@ -7,3 +7,4 @@ export * as NotificationApi from './Notification/Notification';
 export * as ChatApi from './Chat/Chat';
 
 export * from './Socket';
+export * from './Error';

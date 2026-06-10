@@ -1,5 +1,5 @@
-import {NotificationType} from 'database';
-import {Config, ErrorCodes, HTTPStatus, Zod} from 'common';
+import {NotificationType} from '@svej/database';
+import {Config, ErrorCodes, HTTPStatus, Zod} from '@svej/common';
 import express from 'express';
 import {Prisma, PrismaTypes, PrismaIncludes, Upload} from '../Services';
 import {onlyAuthorized} from '../Middlewares';
@@ -104,8 +104,14 @@ Router.get('/:id/reactions', onlyAuthorized, async (req, res) => {
   res.status(HTTPStatus.OK).send(post?._count);
 });
 
-Router.post('/:id/reactions/:type(like|dislike|remove)', onlyAuthorized, async (req, res) => {
+Router.post('/:id/reactions/:type', onlyAuthorized, async (req, res) => {
   const {id, type} = req.params as {id: string; type: 'like' | 'dislike' | 'remove'};
+
+  const VALID_TYPES = new Set(['like', 'dislike', 'remove']);
+  if (typeof type !== 'string' || !VALID_TYPES.has(type)) {
+    res.status(400).json();
+    return;
+  }
 
   const post = await Prisma.post.findUnique({
     where: {id},
@@ -202,6 +208,8 @@ Router.put(
           )
         ).filter(<T>(file: T | null): file is T => file !== null);
       } catch (err) {
+        console.error('Error processing files:', err);
+
         res.status(HTTPStatus.BadRequest).send({code: ErrorCodes.FileProcessingError});
         return;
       }

@@ -1,10 +1,10 @@
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
+  output   = "./generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("SVEJ_DATABASE_URL")
 }
 
 model User {
@@ -14,7 +14,6 @@ model User {
   fullname  String?
   password  String
   bio       String?
-  jtis      String[]
   active    Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -37,6 +36,7 @@ model User {
   ownedNotifications   Notification[] @relation("NotificationOwner")
   chatMessageSent      ChatMessage[]  @relation("ChatMessageFrom")
   chatMessageReceived  ChatMessage[]  @relation("ChatMessageTo")
+  sessions             Session[]      @relation("UserSessions")
 }
 
 model Post {
@@ -91,7 +91,7 @@ model Media {
   fileKey   String
   width     Int
   height    Int
-  thumbnail String?
+  blurhash  String?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 
@@ -140,6 +140,21 @@ model ChatMessage {
   fromId String
   to     User   @relation("ChatMessageTo", fields: [toId], references: [id])
   toId   String
+}
+
+model Session {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  currentJTI        String    @unique
+  previousJTI       String?   @unique
+  rotatedAt         DateTime?
+  absoluteExpiresAt DateTime
+
+  // Relations
+  user   User   @relation("UserSessions", fields: [userId], references: [id])
+  userId String
 }
 
 enum NotificationType {

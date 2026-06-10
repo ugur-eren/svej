@@ -1,6 +1,6 @@
-import * as Languages from '../Languages';
-import createContext from '../Utils/ContextCreator';
-import {Selectors, useAppSelector} from '../Redux';
+import * as Languages from '@/Languages';
+import createContext from '@/Utils/ContextCreator';
+import {Selectors, useAppSelector} from '@/Redux';
 
 const {ContextProvider, useContext: useLanguage} = createContext(Languages.English);
 

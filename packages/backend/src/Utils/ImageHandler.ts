@@ -1,16 +1,16 @@
-import {Config} from 'common';
-import {MediaType, PrismaTypes} from 'database';
+import crypto from 'node:crypto';
+import {Config} from '@svej/common';
+import {MediaType, PrismaTypes} from '@svej/database';
+import {FileSystem} from '@svej/file-system';
 import sharp from 'sharp';
-import {v4 as uuid} from 'uuid';
 import {encode} from 'blurhash';
-import {fileSystem} from '../Services';
 import {clampDimensions, getCropArea} from './Helpers';
 
 export const ImageHandler = async (
   file: Express.Multer.File,
   type: 'post' | 'profile' | 'cover',
 ) => {
-  const fileId = uuid();
+  const fileId = crypto.randomUUID();
   const fileName = `${fileId}.webp`;
 
   const maxDimension = {
@@ -20,7 +20,16 @@ export const ImageHandler = async (
   }[type];
 
   const image = sharp(file.buffer);
-  let {width: oldWidth = maxDimension, height: oldHeight = maxDimension} = await image.metadata();
+  let {width: oldWidth, height: oldHeight} = await image.metadata();
+
+  if (
+    !oldWidth ||
+    !oldHeight ||
+    oldWidth < Config.minImageDimension ||
+    oldHeight < Config.minImageDimension
+  ) {
+    throw new Error('Image dimensions are too small');
+  }
 
   if (type === 'profile' || type === 'cover') {
     const aspectRatio = {
@@ -41,7 +50,7 @@ export const ImageHandler = async (
     oldHeight = cropArea.height;
   }
 
-  const {width: newWidth, height: newHeight} = clampDimensions(oldWidth, oldHeight, maxDimension);
+  const [newWidth, newHeight] = clampDimensions(oldWidth, oldHeight, maxDimension);
 
   image.resize({
     width: newWidth,
@@ -50,18 +59,20 @@ export const ImageHandler = async (
   image.toFormat('webp');
 
   const buffer = await image.toBuffer();
-  await fileSystem.write(fileName, buffer, 'image/webp');
+  await FileSystem.write(fileName, buffer, 'image/webp');
 
-  let thumbnail: string | null = null;
+  let blurhash: string | null = null;
   try {
-    const thumbnailBuffer = await image
+    const [thumbWidth, thumbHeight] = clampDimensions(newWidth, newHeight, 32);
+
+    const blurhashBuffer = await image
       .clone()
       .raw()
       .ensureAlpha()
-      .resize({width: 32, height: 32})
+      .resize({width: thumbWidth, height: thumbHeight})
       .toBuffer();
 
-    thumbnail = encode(new Uint8ClampedArray(thumbnailBuffer), 32, 32, 4, 4);
+    blurhash = encode(new Uint8ClampedArray(blurhashBuffer), thumbWidth, thumbHeight, 4, 4);
   } catch (_) {
     //
   }
@@ -71,6 +82,6 @@ export const ImageHandler = async (
     fileKey: fileName,
     width: newWidth,
     height: newHeight,
-    thumbnail,
+    blurhash,
   } satisfies PrismaTypes.MediaCreateInput;
 };

@@ -1,5 +1,5 @@
-import {AckResponse, ErrorCodesKeys} from 'common';
-import {ChatMessage, User} from 'database';
+import {AckResponse, ErrorCodesKeys} from '@svej/common';
+import {ChatMessage, User} from '@svej/database';
 
 export class WSError<TData = unknown> extends Error {
   public code: ErrorCodesKeys;
@@ -27,7 +27,7 @@ export interface ServerToClientEvents {
   message: (message: ChatMessage) => void;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface InterServerEvents {}
 
 export type SocketData = {

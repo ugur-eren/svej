@@ -1,8 +1,8 @@
 import {useMemo} from 'react';
 import {useColorScheme} from 'react-native';
-import {Theme} from '../Styles';
-import createContext from '../Utils/ContextCreator';
-import {Selectors, useAppSelector} from '../Redux';
+import {Theme} from '@/Styles';
+import createContext from '@/Utils/ContextCreator';
+import {Selectors, useAppSelector} from '@/Redux';
 
 const {ContextProvider, useContext: useTheme} = createContext(Theme.LightTheme);
 
@@ -20,4 +20,3 @@ export const ThemeProvider: typeof ContextProvider = ({children}) => {
 };
 
 export {useTheme};
-export type ThemeType = typeof Theme.LightTheme;

@@ -1,8 +1,8 @@
 import {useEffect} from 'react';
+import {PostsActions, Selectors, useAppDispatch, useAppSelector} from '@/Redux';
+import {PostApi} from '@/Api';
+import {Post} from '@/Api/Post/Post.types';
 import {useQuery} from './useQuery';
-import {PostsActions, Selectors, useAppDispatch, useAppSelector} from '../Redux';
-import {PostApi} from '../Api';
-import {Post} from '../Api/Post/Post.types';
 
 export const usePost = (postId: string): Post | null => {
   const post = useQuery({

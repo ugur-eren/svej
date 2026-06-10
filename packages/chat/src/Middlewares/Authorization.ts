@@ -1,34 +1,47 @@
+/* eslint-disable no-param-reassign */
+
 import {Server} from 'socket.io';
-import {ErrorCodes} from 'common';
-import {JWT} from 'server-side';
+import {ErrorCodes, SessionUser} from '@svej/common';
+import {JWT} from '@svej/server-side';
 import {WSError} from '../types';
 
 export const onlyAuthorized: Parameters<Server['use']>[0] = async (socket, next) => {
-  // const token = socket.handshake.auth?.token;
-  const token = socket.handshake.headers?.authorization;
+  const token = socket.handshake.auth?.token;
 
-  if (!token) {
-    next(new WSError(ErrorCodes.NoTokenInput));
-    return;
-  }
-
-  const result = await JWT.verify(token);
-
-  if (!result.ok) {
-    if (result.cause === 'Unauthorized') {
-      next(new WSError(ErrorCodes.Unauthorized));
+  try {
+    if (!token) {
+      next(new WSError(ErrorCodes.NoAuthToken));
       return;
     }
 
-    next(new WSError(ErrorCodes.InvalidAuthToken, result.error));
-    return;
+    const result = await JWT.verify<{user: SessionUser}>(token);
+
+    if (!result.ok) {
+      next(new WSError(ErrorCodes.Unauthorized, result.error));
+      return;
+    }
+
+    const {user, ...decoded} = result.decoded;
+
+    socket.data.user = user;
+    socket.data.decoded = decoded;
+
+    if (decoded.exp) {
+      const timeout = setTimeout(
+        () => {
+          socket.disconnect(true);
+        },
+        decoded.exp * 1_000 - Date.now(),
+      );
+      timeout.unref();
+
+      socket.once('disconnect', () => {
+        clearTimeout(timeout);
+      });
+    }
+
+    next();
+  } catch (error) {
+    next(new WSError(ErrorCodes.InvalidAuthToken, error as Error));
   }
-
-  // eslint-disable-next-line no-param-reassign
-  socket.data = {
-    user: result.user,
-  };
-
-  console.log('success');
-  next();
 };

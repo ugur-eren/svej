@@ -1,7 +1,7 @@
 import {View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {Text} from '../../Components';
-import {useLanguage, useTheme} from '../../Hooks';
+import {Text} from '@/Components';
+import {useLanguage, useTheme} from '@/Hooks';
 import getStyles from './styles';
 
 export type AuthPageHeaderProps = {

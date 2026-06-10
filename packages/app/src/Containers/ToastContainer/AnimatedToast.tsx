@@ -1,17 +1,19 @@
 import Animated, {
   measure,
-  runOnJS,
   useAnimatedRef,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
+import {scheduleOnRN} from 'react-native-worklets';
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 import {clamp, snapPoint} from 'react-native-redash';
-import {ToastConfig, useHideToast} from '../../Hooks/useToast';
-import {Toast} from '../../Components';
+import {ToastConfig, useHideToast} from '@/Hooks/useToast';
+import {Toast} from '@/Components';
 
-export const AnimatedToast: React.FC<{toast: ToastConfig}> = ({toast}) => {
+export const AnimatedToast: React.FC<{toast: ToastConfig}> = ({toast: toastProp}) => {
+  const {key: toastKey, ...toast} = toastProp;
+
   const hideToast = useHideToast();
 
   const containerRef = useAnimatedRef<Animated.View>();
@@ -31,7 +33,7 @@ export const AnimatedToast: React.FC<{toast: ToastConfig}> = ({toast}) => {
 
       if (snapTo < 0) {
         top.value = withTiming(1, {duration: 200}, () => {
-          runOnJS(hideToast)(toast.key);
+          scheduleOnRN(hideToast, toastKey);
         });
       }
 
@@ -39,7 +41,7 @@ export const AnimatedToast: React.FC<{toast: ToastConfig}> = ({toast}) => {
     });
 
   const animatedStyle = useAnimatedStyle(() => ({
-    top: `-${top.value * 100}%`,
+    top: `${top.value * 100 * -1}%`,
     transform: [{translateY: translateY.value}],
   }));
 
@@ -47,7 +49,7 @@ export const AnimatedToast: React.FC<{toast: ToastConfig}> = ({toast}) => {
     'worklet';
 
     top.value = withTiming(1, {duration: 200}, () => {
-      runOnJS(hideToast)(toast.key);
+      scheduleOnRN(hideToast, toastKey);
     });
   };
 

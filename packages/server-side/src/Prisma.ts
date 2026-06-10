@@ -1,6 +1,4 @@
-import {PrismaClient} from 'database';
-
-const prisma = new PrismaClient({log: ['query', 'info', 'warn', 'error']});
+import {prisma} from '@svej/database';
 
 const hideField = <TField extends string, THiddenValue>(
   field: TField,
@@ -33,7 +31,6 @@ const extended = prisma
     result: {
       user: {
         password: hideField('password', ''),
-        jtis: hideField('jtis', [] as string[]),
         email: hideField('email', ''),
       },
     },

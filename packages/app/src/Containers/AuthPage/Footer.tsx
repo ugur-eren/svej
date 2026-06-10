@@ -1,7 +1,7 @@
 import {View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {Button, Text, TextButton} from '../../Components';
-import {useTheme} from '../../Hooks';
+import {Button, Text, TextButton} from '@/Components';
+import {useTheme} from '@/Hooks';
 import getStyles from './styles';
 
 export type AuthPageFooterProps = {

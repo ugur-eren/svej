@@ -1,11 +1,11 @@
-import type {Prisma} from '@prisma/client';
+import type {Prisma} from './prisma/generated/prisma/client';
 
 export const Author = (userId: string) =>
   ({
     profilePhoto: true,
     tags: true,
     followers: {select: {id: true}, where: {id: userId}},
-  } satisfies Prisma.UserInclude);
+  }) satisfies Prisma.UserInclude;
 
 export const User = (userId: string) =>
   ({
@@ -21,7 +21,7 @@ export const User = (userId: string) =>
     coverPhoto: true,
     tags: true,
     followers: {select: {id: true}, where: {id: userId}},
-  } satisfies Prisma.UserInclude);
+  }) satisfies Prisma.UserInclude;
 
 export const Post = (userId: string) =>
   ({
@@ -58,7 +58,7 @@ export const Post = (userId: string) =>
         },
       },
     },
-  } satisfies Prisma.PostInclude);
+  }) satisfies Prisma.PostInclude;
 
 export const Comment = (userId: string) =>
   ({
@@ -87,7 +87,7 @@ export const Comment = (userId: string) =>
     },
 
     author: {include: Author(userId)},
-  } satisfies Prisma.CommentInclude);
+  }) satisfies Prisma.CommentInclude;
 
 export const Notification = (userId: string) =>
   ({
@@ -95,10 +95,10 @@ export const Notification = (userId: string) =>
     post: {include: Post(userId)},
     comment: {include: Comment(userId)},
     warning: true,
-  } satisfies Prisma.NotificationInclude);
+  }) satisfies Prisma.NotificationInclude;
 
 export const ChatMessage = (userId: string) =>
   ({
     from: {include: Author(userId)},
     to: {include: Author(userId)},
-  } satisfies Prisma.ChatMessageInclude);
+  }) satisfies Prisma.ChatMessageInclude;

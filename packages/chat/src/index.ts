@@ -1,7 +1,20 @@
-import {Env} from 'server-side';
-import {ErrorCodes} from 'common';
+import {Env} from '@svej/server-side';
+import {Config, ErrorCodes, Zod} from '@svej/common';
+import {Prisma as PrismaTypes} from '@svej/database';
 import {onlyAuthorized} from './Middlewares';
+import RateLimiter from './Utils/RateLimiter';
 import {WS, Prisma} from './Services';
+
+const sendMessageRateLimiter = new RateLimiter({
+  maxAttempts: Config.chatMessageRateLimitMax,
+  windowMs: Config.chatMessageRateLimitWindowMs,
+});
+
+const rateLimitSweep = setInterval(
+  () => sendMessageRateLimiter.sweepExpired(),
+  Config.chatMessageRateLimitWindowMs,
+);
+rateLimitSweep.unref();
 
 WS.use(onlyAuthorized);
 
@@ -12,34 +25,44 @@ WS.on('connection', (socket) => {
   socket.join(`user:${user.id}`);
 
   socket.on('sendMessage', async (toUserId, message, callback) => {
-    if (!callback || typeof callback !== 'function') return;
+    if (typeof callback !== 'function') return;
 
-    const toUser = await Prisma.user.findUnique({select: {id: true}, where: {id: toUserId}});
-    if (!toUser?.id) {
-      callback({ok: false, code: ErrorCodes.UserNotFound});
+    if (!sendMessageRateLimiter.consume(user.id)) {
+      callback({ok: false, code: ErrorCodes.ChatRateLimited});
       return;
     }
 
-    const createdMessage = await Prisma.chatMessage.create({
-      data: {
-        from: {connect: {id: user.id}},
-        to: {connect: {id: toUser.id}},
-        message,
-      },
-    });
+    const validation = Zod.Chat.SendMessage.safeParse({toUserId, message});
+    if (!validation.success) {
+      callback({ok: false, code: ErrorCodes.FillAllFields, error: validation.error});
+      return;
+    }
+
+    let createdMessage;
+    try {
+      createdMessage = await Prisma.chatMessage.create({
+        data: {
+          from: {connect: {id: user.id}},
+          to: {connect: {id: validation.data.toUserId}},
+          message: validation.data.message,
+        },
+      });
+    } catch (error) {
+      if (error instanceof PrismaTypes.PrismaClientKnownRequestError && error.code === 'P2003') {
+        callback({ok: false, code: ErrorCodes.UserNotFound});
+        return;
+      }
+
+      callback({ok: false, code: ErrorCodes.UnknownError});
+      console.error(error);
+      return;
+    }
+
+    socket.to(`user:${validation.data.toUserId}`).emit('message', createdMessage);
 
     callback({ok: true, message: createdMessage});
-
-    socket.to(`user:${toUser.id}`).emit('message', createdMessage);
-  });
-
-  socket.on('disconnect', () => {
-    //
   });
 });
 
 WS.listen(Env.CHAT_PORT);
-
-(async () => {
-  console.info(`Chat server listening on port ${Env.CHAT_PORT}`);
-})();
+console.info(`Chat server listening on port ${Env.CHAT_PORT}`);
