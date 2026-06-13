@@ -1,4 +1,4 @@
-import {SessionUser, Zod} from '@svej/common';
+import {SessionUser, Zod, ZodInfer} from '@svej/common';
 
 export type LoginRequest = {
   username: string;
@@ -9,13 +9,13 @@ export type LoginResponse = {
   user: SessionUser;
 };
 
-export type RegisterRequest = (typeof Zod.Auth.Register)['_output'];
+export type RegisterRequest = ZodInfer<typeof Zod.Auth.Register>;
 export type RegisterResponse = {
   accessToken: string;
   user: SessionUser;
 };
 
-export type ChangePasswordRequest = (typeof Zod.Auth.ChangePassword)['_output'];
+export type ChangePasswordRequest = ZodInfer<typeof Zod.Auth.ChangePassword>;
 export type ChangePasswordResponse = {
   accessToken: string;
   user: SessionUser;

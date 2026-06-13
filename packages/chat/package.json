@@ -22,7 +22,7 @@
     "@svej/server-side": "workspace:*",
     "dotenv": "^16.4.5",
     "socket.io": "^4.7.4",
-    "zod": "^3.21.4"
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@types/dotenv": "^8.2.0",

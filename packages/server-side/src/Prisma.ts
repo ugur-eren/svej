@@ -4,12 +4,12 @@ const hideField = <TField extends string, THiddenValue>(
   field: TField,
   hiddenValue: THiddenValue,
 ): {
-  needs: Record<TField, true>;
-  compute: <TData extends Record<TField, THiddenValue>>(
+  needs: {[key in TField]: true};
+  compute: <TData extends {[key in TField]: THiddenValue}>(
     data: TData,
   ) => (() => TData[TField]) & THiddenValue;
 } => {
-  const computeField = <TData extends Record<TField, THiddenValue>>(data: TData) => {
+  const computeField = <TData extends {[key in TField]: THiddenValue}>(data: TData) => {
     const getField = () => data[field];
     getField.toString = () => hiddenValue;
 
@@ -25,19 +25,14 @@ const hideField = <TField extends string, THiddenValue>(
   };
 };
 
-const extended = prisma
-  .$extends({
-    name: 'hideFields',
-    result: {
-      user: {
-        password: hideField('password', ''),
-        email: hideField('email', ''),
-      },
+const extended = prisma.$extends({
+  name: 'hideFields',
+  result: {
+    user: {
+      password: hideField('password', ''),
+      email: hideField('email', ''),
     },
-  })
-  .$extends({
-    name: 'views',
-    model: {},
-  });
+  },
+});
 
 export default extended;

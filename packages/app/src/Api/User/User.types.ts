@@ -1,5 +1,5 @@
 import type {PrismaTypes, PrismaIncludes} from '@svej/database';
-import {Zod} from '@svej/common';
+import {Zod, ZodInfer} from '@svej/common';
 
 export type ExtendedType = {
   isFollowing: boolean;
@@ -8,7 +8,7 @@ export type ExtendedType = {
 export type User = PrismaTypes.UserGetPayload<{include: ReturnType<typeof PrismaIncludes.User>}> &
   ExtendedType;
 
-export type EditRequest = (typeof Zod.User.Edit)['_output'];
+export type EditRequest = ZodInfer<typeof Zod.User.Edit>;
 
 export type Author = PrismaTypes.UserGetPayload<{
   include: ReturnType<typeof PrismaIncludes.Author>;

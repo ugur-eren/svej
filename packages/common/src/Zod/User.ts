@@ -9,14 +9,14 @@ export const username = z
 
 export const fullname = z.string().trim().optional();
 
-export const email = z.string().trim().email();
+export const email = z.email();
 
 export const bio = z
   .string()
   .trim()
   .max(Config.bioMaxLength)
   .refine((desc) => desc.split(/\r\n|\r|\n/).length <= Config.bioMaxLines, {
-    message: `Bio must have less than ${Config.bioMaxLines} lines`,
+    error: `Bio must have less than ${Config.bioMaxLines} lines`,
   })
   .optional();
 

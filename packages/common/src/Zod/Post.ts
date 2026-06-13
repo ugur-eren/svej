@@ -7,7 +7,7 @@ export const Create = z.object({
     .trim()
     .max(Config.postDescriptionMaxLength)
     .refine((desc) => desc.split(/\r\n|\r|\n/).length <= Config.postDescriptionMaxLines, {
-      message: `Description must have less than ${Config.postDescriptionMaxLines} lines`,
+      error: `Description must have less than ${Config.postDescriptionMaxLines} lines`,
     })
     .optional(),
 });

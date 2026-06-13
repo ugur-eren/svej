@@ -14,7 +14,7 @@
     "check": "yarn format && yarn format:check && yarn lint && yarn ts:check"
   },
   "dependencies": {
-    "zod": "^3.22.4"
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.10",
