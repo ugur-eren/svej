@@ -1815,6 +1815,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@elysia/node@npm:^1.4.6":
+  version: 1.4.6
+  resolution: "@elysia/node@npm:1.4.6"
+  dependencies:
+    crossws: "npm:^0.4.5"
+    srvx: "npm:^0.11.5"
+  peerDependencies:
+    elysia: ">= 1.4.0"
+  checksum: 10c0/5dca3f0fcb28ca14d5ae022377757c9c71b0e2b2a1eab0436bb10909b00638fcf5bb3f0a9831e7b5a605f764f316f49a57f6b64c09ee4618d4bb3ffd6015b637
+  languageName: node
+  linkType: hard
+
 "@emnapi/core@npm:1.10.0":
   version: 1.10.0
   resolution: "@emnapi/core@npm:1.10.0"
@@ -3999,6 +4011,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@sinclair/typebox@npm:^0.34.49":
+  version: 0.34.49
+  resolution: "@sinclair/typebox@npm:0.34.49"
+  checksum: 10c0/16b7d87f039a49b68c10bb4cdcae2ce5242b2472228851fd6483731616aba4ef977690aa517b230a8d20da8185bb416eb34e326f30568b3963c1cf26b05d1ad8
+  languageName: node
+  linkType: hard
+
 "@sinonjs/commons@npm:^1.7.0":
   version: 1.8.6
   resolution: "@sinonjs/commons@npm:1.8.6"
@@ -4206,6 +4225,44 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@svej/backend-elysia@workspace:packages/backend-elysia":
+  version: 0.0.0-use.local
+  resolution: "@svej/backend-elysia@workspace:packages/backend-elysia"
+  dependencies:
+    "@elysia/node": "npm:^1.4.6"
+    "@sinclair/typebox": "npm:^0.34.49"
+    "@svej/common": "workspace:*"
+    "@svej/database": "workspace:*"
+    "@svej/file-system": "workspace:*"
+    "@svej/server-side": "workspace:*"
+    "@types/cross-spawn": "npm:^6.0.2"
+    "@types/debug": "npm:^4.1.8"
+    "@types/dotenv": "npm:^8.2.0"
+    "@types/jest": "npm:^27.4.1"
+    "@types/jsonwebtoken": "npm:^9.0.10"
+    "@types/mime-types": "npm:^3.0.1"
+    "@types/node": "npm:^25.9.1"
+    blurhash: "npm:^2.0.5"
+    cross-spawn: "npm:^7.0.3"
+    debug: "npm:^4.3.4"
+    dedent: "npm:^0.7.0"
+    dotenv: "npm:^16.1.3"
+    dotenv-cli: "npm:^7.2.1"
+    elysia: "npm:^1.4.28"
+    eslint: "npm:9.39.3"
+    eslint-import-resolver-typescript: "npm:^4.4.5"
+    jest: "npm:^27.5.1"
+    jsonwebtoken: "npm:^9.0.3"
+    mime-types: "npm:^3.0.2"
+    openapi-types: "npm:^12.1.3"
+    rimraf: "npm:^3.0.2"
+    sharp: "npm:0.34.5"
+    tsx: "npm:^4.22.4"
+    typescript: "npm:~6.0.3"
+    zod: "npm:^4.4.3"
+  languageName: unknown
+  linkType: soft
+
 "@svej/backend@workspace:packages/backend":
   version: 0.0.0-use.local
   resolution: "@svej/backend@workspace:packages/backend"
@@ -4321,6 +4378,7 @@ __metadata:
     "@types/jsonwebtoken": "npm:^9.0.10"
     "@types/node": "npm:^25.9.1"
     bcrypt: "npm:6.0.0"
+    elysia: "npm:^1.4.28"
     eslint: "npm:9.39.3"
     jsonwebtoken: "npm:^9.0.3"
     typescript: "npm:~6.0.3"
@@ -6700,6 +6758,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"crossws@npm:^0.4.5":
+  version: 0.4.6
+  resolution: "crossws@npm:0.4.6"
+  peerDependencies:
+    srvx: ">=0.11.5"
+  peerDependenciesMeta:
+    srvx:
+      optional: true
+  checksum: 10c0/3eaf7cd7ec4855fd994391abf6a60b0e7729e917306c58c5199e1c97c0980ed473ce1985ad6d6f021eb1022bfcdeee686c28be44c8dd7460605f9488bc07bc15
+  languageName: node
+  linkType: hard
+
 "css-in-js-utils@npm:^3.1.0":
   version: 3.1.0
   resolution: "css-in-js-utils@npm:3.1.0"
@@ -7201,6 +7271,30 @@ __metadata:
   version: 1.5.365
   resolution: "electron-to-chromium@npm:1.5.365"
   checksum: 10c0/3f32cdad86d97c79a5778051fa3392cb99017e04b248f37756e3131ff4bf08f9a7575b840c6de45f3f0fb5aa1346bb22926ebd6336e4c28d465e470ea5c6ecb9
+  languageName: node
+  linkType: hard
+
+"elysia@npm:^1.4.28":
+  version: 1.4.28
+  resolution: "elysia@npm:1.4.28"
+  dependencies:
+    cookie: "npm:^1.1.1"
+    exact-mirror: "npm:^0.2.7"
+    fast-decode-uri-component: "npm:^1.0.1"
+    memoirist: "npm:^0.4.0"
+  peerDependencies:
+    "@sinclair/typebox": ">= 0.34.0 < 1"
+    "@types/bun": ">= 1.2.0"
+    exact-mirror: ">= 0.0.9"
+    file-type: ">= 20.0.0"
+    openapi-types: ">= 12.0.0"
+    typescript: ">= 5.0.0"
+  peerDependenciesMeta:
+    "@types/bun":
+      optional: true
+    typescript:
+      optional: true
+  checksum: 10c0/611ea6849b2f985bce864adaffa8aeaf332f5aaac82e1ba947764c4916f1522b31a18ced18359d97f9e302eaef188a141779db2214f5871e597a6fa97fa539d3
   languageName: node
   linkType: hard
 
@@ -8066,6 +8160,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"exact-mirror@npm:^0.2.7":
+  version: 0.2.7
+  resolution: "exact-mirror@npm:0.2.7"
+  peerDependencies:
+    "@sinclair/typebox": ^0.34.15
+  peerDependenciesMeta:
+    "@sinclair/typebox":
+      optional: true
+  checksum: 10c0/d50cadc69367df6fe4f28e5ce2ac4470b8d83eaacc02f8ae46ae1d8352335e5220b69dfa6c7ef6eabbaaa07e273873026d08f0ec6bee6d0dff4782487f301dbe
+  languageName: node
+  linkType: hard
+
 "execa@npm:^5.0.0":
   version: 5.1.1
   resolution: "execa@npm:5.1.1"
@@ -8420,6 +8526,13 @@ __metadata:
   dependencies:
     pure-rand: "npm:^6.1.0"
   checksum: 10c0/16fcff3c80321ee765e23c3aebd0f6427f175c9c6c1753104ec658970162365dc2d56bda046d815e8f2e90634c07ba7d6f0bcfd327fbd576d98c56a18a9765ed
+  languageName: node
+  linkType: hard
+
+"fast-decode-uri-component@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "fast-decode-uri-component@npm:1.0.1"
+  checksum: 10c0/039d50c2e99d64f999c3f2126c23fbf75a04a4117e218a149ca0b1d2aeb8c834b7b19d643b9d35d4eabce357189a6a94085f78cf48869e6e26cc59b036284bc3
   languageName: node
   linkType: hard
 
@@ -11408,6 +11521,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"memoirist@npm:^0.4.0":
+  version: 0.4.0
+  resolution: "memoirist@npm:0.4.0"
+  checksum: 10c0/986426c3474abe7018edeb6a88f11ef22409de652199096565a0c5479a9b91423cb0c8513411e017061b5b8df64cc5e15ccb6e7bac3e83d416753a9698aebe4f
+  languageName: node
+  linkType: hard
+
 "memoize-one@npm:^5.0.0":
   version: 5.2.1
   resolution: "memoize-one@npm:5.2.1"
@@ -12363,6 +12483,13 @@ __metadata:
     is-docker: "npm:^2.0.0"
     is-wsl: "npm:^2.1.1"
   checksum: 10c0/77573a6a68f7364f3a19a4c80492712720746b63680ee304555112605ead196afe91052bd3c3d165efdf4e9d04d255e87de0d0a77acec11ef47fd5261251813f
+  languageName: node
+  linkType: hard
+
+"openapi-types@npm:^12.1.3":
+  version: 12.1.3
+  resolution: "openapi-types@npm:12.1.3"
+  checksum: 10c0/4ad4eb91ea834c237edfa6ab31394e87e00c888fc2918009763389c00d02342345195d6f302d61c3fd807f17723cd48df29b47b538b68375b3827b3758cd520f
   languageName: node
   linkType: hard
 
@@ -14398,6 +14525,15 @@ __metadata:
   version: 2.3.3
   resolution: "sqlstring@npm:2.3.3"
   checksum: 10c0/3b5dd7badb3d6312f494cfa6c9a381ee630fbe3dbd571c4c9eb8ecdb99a7bf5a1f7a5043191d768797f6b3c04eed5958ac6a5f948b998f0a138294c6d3125fbd
+  languageName: node
+  linkType: hard
+
+"srvx@npm:^0.11.5":
+  version: 0.11.16
+  resolution: "srvx@npm:0.11.16"
+  bin:
+    srvx: bin/srvx.mjs
+  checksum: 10c0/cd3ed12c12481e2852409a7dfaa8c1ae0a7264769e9239e4a34da48033029c2ce4b2bccfd648a49f9bb10d13c4be91fcdbdb50feb08bf3de19bc8cfe71efa0a2
   languageName: node
   linkType: hard
 

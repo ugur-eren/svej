@@ -61,7 +61,7 @@ Router.get('/:id', onlyAuthorized, async (req, res) => {
 Router.get('/:id/reactions', onlyAuthorized, async (req, res) => {
   const {id} = req.params;
 
-  const comment = await Prisma.comment.findUnique({
+  const reactions = await Prisma.comment.findUnique({
     where: {id},
     select: {
       _count: {
@@ -73,7 +73,7 @@ Router.get('/:id/reactions', onlyAuthorized, async (req, res) => {
     },
   });
 
-  res.status(HTTPStatus.OK).send(comment?._count);
+  res.status(HTTPStatus.OK).send(reactions?._count);
 });
 
 Router.post('/:id/reactions/:type', onlyAuthorized, async (req, res) => {
@@ -85,7 +85,7 @@ Router.post('/:id/reactions/:type', onlyAuthorized, async (req, res) => {
     return;
   }
 
-  if (type === 'remove') {
+  /* if (type === 'remove') {
     const post = await Prisma.comment.update({
       where: {
         id,
@@ -98,7 +98,7 @@ Router.post('/:id/reactions/:type', onlyAuthorized, async (req, res) => {
 
     res.status(HTTPStatus.OK).send(post);
     return;
-  }
+  } */
 
   const comment = await Prisma.comment.update({
     where: {
