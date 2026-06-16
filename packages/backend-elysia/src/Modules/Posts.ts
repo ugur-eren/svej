@@ -31,9 +31,9 @@ export const PostsModule = {
   },
 
   // TODO: pagination
-  async getByUserId(viewerId: string) {
+  async getByUserId(viewerId: string, userId: string) {
     const posts = await Prisma.post.findMany({
-      where: {authorId: viewerId},
+      where: {authorId: userId},
       include: PrismaIncludes.Post(viewerId),
       orderBy: {createdAt: 'desc'},
     });

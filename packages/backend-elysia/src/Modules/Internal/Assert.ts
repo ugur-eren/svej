@@ -12,3 +12,9 @@ export function assertPostExists<T>(post: T | null): asserts post is T {
     throw new ModuleError(ErrorCodes.PostNotFound);
   }
 }
+
+export function assertUserExists<T>(user: T | null): asserts user is T {
+  if (!user) {
+    throw new ModuleError(ErrorCodes.UserNotFound);
+  }
+}
