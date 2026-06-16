@@ -11,12 +11,12 @@ export default new Elysia().group(
     app
       .use(onlyAuthenticated)
       .get('/', async ({session, params: {postId}}) => {
-        return CommentsModule.getByPostId(postId, session.user.id);
+        return CommentsModule.getByPostId(session.user.id, postId);
       })
       .post(
         '/',
         async ({session, params: {postId}, body: {text}}) => {
-          return CommentsModule.create(postId, session.user.id, text);
+          return CommentsModule.create(session.user.id, postId, text);
         },
         {
           body: Zod.Comment.Create,

@@ -18,19 +18,19 @@ const extendComment = (
 };
 
 export const CommentsModule = {
-  async getById(commentId: string, userId: string) {
+  async getById(viewerId: string, commentId: string) {
     const comment = await Prisma.comment.findUnique({
       where: {id: commentId},
-      include: PrismaIncludes.Comment(userId),
+      include: PrismaIncludes.Comment(viewerId),
     });
 
     assertCommentExists(comment);
 
-    return extendComment(comment, userId);
+    return extendComment(comment, viewerId);
   },
 
   // TODO: pagination
-  async getByPostId(postId: string, userId: string) {
+  async getByPostId(viewerId: string, postId: string) {
     const post = await Prisma.post.findUnique({
       where: {id: postId},
       select: {id: true},
@@ -40,10 +40,10 @@ export const CommentsModule = {
 
     const comments = await Prisma.comment.findMany({
       where: {post: {id: postId}},
-      include: PrismaIncludes.Comment(userId),
+      include: PrismaIncludes.Comment(viewerId),
     });
 
-    return comments.map((comment) => extendComment(comment, userId));
+    return comments.map((comment) => extendComment(comment, viewerId));
   },
 
   async getReactionCounts(commentId: string) {
@@ -64,7 +64,7 @@ export const CommentsModule = {
     return commentReactions._count;
   },
 
-  async setReaction(commentId: string, userId: string, type: Zod.Reaction.ALL_TYPES) {
+  async setReaction(viewerId: string, commentId: string, type: Zod.Reaction.ALL_TYPES) {
     const comment = await safeUpdate(() => {
       return Prisma.comment.update({
         where: {
@@ -73,13 +73,13 @@ export const CommentsModule = {
         data: {
           likes:
             type === Zod.Reaction.ALL_TYPES.LIKE
-              ? {connect: {id: userId}}
-              : {disconnect: {id: userId}},
+              ? {connect: {id: viewerId}}
+              : {disconnect: {id: viewerId}},
 
           dislikes:
             type === Zod.Reaction.ALL_TYPES.DISLIKE
-              ? {connect: {id: userId}}
-              : {disconnect: {id: userId}},
+              ? {connect: {id: viewerId}}
+              : {disconnect: {id: viewerId}},
         },
       });
     }, new ModuleError(ErrorCodes.CommentNotFound));
@@ -87,7 +87,7 @@ export const CommentsModule = {
     return comment;
   },
 
-  async create(postId: string, userId: string, content: string) {
+  async create(viewerId: string, postId: string, content: string) {
     const post = await Prisma.post.findUnique({
       where: {id: postId},
       select: {id: true, authorId: true},
@@ -95,19 +95,19 @@ export const CommentsModule = {
 
     assertPostExists(post);
 
-    const shouldNotify = post.authorId !== userId;
+    const shouldNotify = post.authorId !== viewerId;
 
     const comment = await Prisma.comment.create({
       data: {
         post: {connect: {id: post.id}},
-        author: {connect: {id: userId}},
+        author: {connect: {id: viewerId}},
         text: content,
         notifications: {
           create: shouldNotify
             ? {
                 type: NotificationType.COMMENT,
                 owner: {connect: {id: post.authorId}},
-                user: {connect: {id: userId}},
+                user: {connect: {id: viewerId}},
                 post: {connect: {id: post.id}},
               }
             : undefined,

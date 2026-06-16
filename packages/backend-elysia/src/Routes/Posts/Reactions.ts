@@ -16,13 +16,13 @@ export default new Elysia().group(
       .put(
         '/',
         async ({session, params: {postId}, body: {type}}) => {
-          return PostsModule.setReaction(postId, session.user.id, type);
+          return PostsModule.setReaction(session.user.id, postId, type);
         },
         {
           body: z.object({type: Zod.Reaction.type}),
         },
       )
       .delete('/', async ({session, params: {postId}}) => {
-        return PostsModule.setReaction(postId, session.user.id, Zod.Reaction.ALL_TYPES.NONE);
+        return PostsModule.setReaction(session.user.id, postId, Zod.Reaction.ALL_TYPES.NONE);
       }),
 );

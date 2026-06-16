@@ -12,33 +12,33 @@ const extendPost = (
 ) => {
   return {
     ...post,
-    liked: post.likes.some((like) => like.id === userId),
-    disliked: post.dislikes.some((dislike) => dislike.id === userId),
+    liked: post.likes.length > 0,
+    disliked: post.dislikes.length > 0,
     mine: post.authorId === userId,
   };
 };
 
 export const PostsModule = {
-  async getById(postId: string, userId: string) {
+  async getById(viewerId: string, postId: string) {
     const post = await Prisma.post.findUnique({
       where: {id: postId},
-      include: PrismaIncludes.Post(userId),
+      include: PrismaIncludes.Post(viewerId),
     });
 
     assertPostExists(post);
 
-    return extendPost(post, userId);
+    return extendPost(post, viewerId);
   },
 
   // TODO: pagination
-  async getByUserId(userId: string) {
+  async getByUserId(viewerId: string) {
     const posts = await Prisma.post.findMany({
-      where: {authorId: userId},
-      include: PrismaIncludes.Post(userId),
+      where: {authorId: viewerId},
+      include: PrismaIncludes.Post(viewerId),
       orderBy: {createdAt: 'desc'},
     });
 
-    return posts.map((post) => extendPost(post, userId));
+    return posts.map((post) => extendPost(post, viewerId));
   },
 
   async getReactionCounts(postId: string) {
@@ -60,7 +60,7 @@ export const PostsModule = {
     return postReactions._count;
   },
 
-  async setReaction(postId: string, userId: string, type: Zod.Reaction.ALL_TYPES) {
+  async setReaction(viewerId: string, postId: string, type: Zod.Reaction.ALL_TYPES) {
     const post = await Prisma.post.findUnique({
       where: {id: postId},
       select: {id: true, authorId: true},
@@ -68,7 +68,7 @@ export const PostsModule = {
 
     assertPostExists(post);
 
-    const shouldNotify = type === Zod.Reaction.ALL_TYPES.LIKE && post.authorId !== userId;
+    const shouldNotify = type === Zod.Reaction.ALL_TYPES.LIKE && post.authorId !== viewerId;
 
     const updatedPost = await Prisma.post.update({
       where: {
@@ -77,20 +77,20 @@ export const PostsModule = {
       data: {
         likes:
           type === Zod.Reaction.ALL_TYPES.LIKE
-            ? {connect: {id: userId}}
-            : {disconnect: {id: userId}},
+            ? {connect: {id: viewerId}}
+            : {disconnect: {id: viewerId}},
 
         dislikes:
           type === Zod.Reaction.ALL_TYPES.DISLIKE
-            ? {connect: {id: userId}}
-            : {disconnect: {id: userId}},
+            ? {connect: {id: viewerId}}
+            : {disconnect: {id: viewerId}},
 
         notifications: {
           create: shouldNotify
             ? {
                 type: NotificationType.POST_LIKE,
                 owner: {connect: {id: post.authorId}},
-                user: {connect: {id: userId}},
+                user: {connect: {id: viewerId}},
               }
             : undefined,
         },
@@ -100,7 +100,7 @@ export const PostsModule = {
     return updatedPost;
   },
 
-  async create(userId: string, files: File[], description?: string) {
+  async create(viewerId: string, files: File[], description?: string) {
     if (!description && !files.length) {
       throw new ModuleError(ErrorCodes.PostDoesntHaveMediaOrDescription);
     }
@@ -134,7 +134,7 @@ export const PostsModule = {
     const post = await Prisma.post.create({
       data: {
         description,
-        author: {connect: {id: userId}},
+        author: {connect: {id: viewerId}},
         medias: {
           createMany: {data: fileRecords},
         },

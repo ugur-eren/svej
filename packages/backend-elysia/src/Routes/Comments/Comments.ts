@@ -7,7 +7,7 @@ export default new Elysia().group('/:commentId', {params: z.object({commentId: z
   app
     .use(onlyAuthenticated)
     .get('/', async ({session, params: {commentId}}) => {
-      return CommentsModule.getById(commentId, session.user.id);
+      return CommentsModule.getById(session.user.id, commentId);
     })
     .patch('/', async ({status}) => {
       // TODO: comment editing

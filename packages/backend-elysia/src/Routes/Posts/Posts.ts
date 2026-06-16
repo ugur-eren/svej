@@ -28,7 +28,7 @@ export default new Elysia()
   .group('/:postId', {params: z.object({postId: z.uuid()})}, (app) =>
     app
       .get('/', async ({session, params: {postId}}) => {
-        return PostsModule.getById(postId, session.user.id);
+        return PostsModule.getById(session.user.id, postId);
       })
       .patch('/', async ({status}) => {
         // TODO: post editing

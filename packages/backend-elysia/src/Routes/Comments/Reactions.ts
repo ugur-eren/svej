@@ -18,13 +18,13 @@ export default new Elysia().group(
         '/',
         async ({session, params: {commentId}, body: {type}}) => {
           // TODO: move reactions to a separate table and optimize queries
-          return CommentsModule.setReaction(commentId, session.user.id, type);
+          return CommentsModule.setReaction(session.user.id, commentId, type);
         },
         {
           body: z.object({type: Zod.Reaction.type}),
         },
       )
       .delete('/', async ({session, params: {commentId}}) => {
-        return CommentsModule.setReaction(commentId, session.user.id, Zod.Reaction.ALL_TYPES.NONE);
+        return CommentsModule.setReaction(session.user.id, commentId, Zod.Reaction.ALL_TYPES.NONE);
       }),
 );
