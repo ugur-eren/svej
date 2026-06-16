@@ -95,21 +95,22 @@ export const CommentsModule = {
 
     assertPostExists(post);
 
+    const shouldNotify = post.authorId !== userId;
+
     const comment = await Prisma.comment.create({
       data: {
         post: {connect: {id: post.id}},
         author: {connect: {id: userId}},
         text: content,
         notifications: {
-          create:
-            post.authorId === userId
-              ? undefined
-              : {
-                  type: NotificationType.COMMENT,
-                  owner: {connect: {id: post.authorId}},
-                  user: {connect: {id: userId}},
-                  post: {connect: {id: post.id}},
-                },
+          create: shouldNotify
+            ? {
+                type: NotificationType.COMMENT,
+                owner: {connect: {id: post.authorId}},
+                user: {connect: {id: userId}},
+                post: {connect: {id: post.id}},
+              }
+            : undefined,
         },
       },
     });

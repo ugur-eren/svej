@@ -75,6 +75,8 @@ const Share: React.FC<BottomShareScreenProps> = ({navigation}) => {
       return;
     }
 
+    // TODO: max media count validation
+
     if (medias.length === 0 && !messageValidation.data.description) {
       showToast({
         title: language.common.warning,

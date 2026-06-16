@@ -1,6 +1,7 @@
 import {Elysia} from 'elysia';
 import Auth from './Routes/Auth';
-import Comments from './Routes/Comments';
 import Chat from './Routes/Chat';
+import Comments from './Routes/Comments';
+import Posts from './Routes/Posts';
 
-export default new Elysia().use(Auth).use(Comments).use(Chat);
+export default new Elysia().use(Auth).use(Chat).use(Comments).use(Posts);
