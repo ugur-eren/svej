@@ -18,3 +18,9 @@ export function assertUserExists<T>(user: T | null): asserts user is T {
     throw new ModuleError(ErrorCodes.UserNotFound);
   }
 }
+
+export function assertNotificationExists<T>(notification: T | null): asserts notification is T {
+  if (!notification) {
+    throw new ModuleError(ErrorCodes.NotificationNotFound);
+  }
+}
