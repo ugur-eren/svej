@@ -24,3 +24,9 @@ export function assertNotificationExists<T>(notification: T | null): asserts not
     throw new ModuleError(ErrorCodes.NotificationNotFound);
   }
 }
+
+export function assertConversationExists<T>(conversation: T | null): asserts conversation is T {
+  if (!conversation) {
+    throw new ModuleError(ErrorCodes.ConversationNotFound);
+  }
+}

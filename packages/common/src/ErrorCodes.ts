@@ -34,6 +34,7 @@ const ErrorCodesArray = [
   'NotificationNotFound',
 
   // Chat
+  'ConversationNotFound',
   'ChatRateLimited',
 ] as const;
 
