@@ -30,3 +30,9 @@ export function assertConversationExists<T>(conversation: T | null): asserts con
     throw new ModuleError(ErrorCodes.ConversationNotFound);
   }
 }
+
+export function assertMediaExists<T>(media: T | null): asserts media is T {
+  if (!media) {
+    throw new ModuleError(ErrorCodes.MediaNotFound);
+  }
+}

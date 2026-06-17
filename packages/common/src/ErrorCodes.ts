@@ -29,6 +29,7 @@ const ErrorCodesArray = [
 
   // Media
   'MediaNotFound',
+  'FileNotFound',
 
   // Notification
   'NotificationNotFound',
