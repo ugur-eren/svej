@@ -8,14 +8,14 @@ import sharp from 'sharp';
 import {Spawn} from './Spawn';
 import {clampDimensions} from './Helpers';
 
-export const VideoHandler = async (file: Express.Multer.File) => {
+export const VideoHandler = async (file: File) => {
   const tempFilePath = `${TEMP_DIR}/${crypto.randomUUID()}.tmp`;
   const tempProcessedFilePath = `${TEMP_DIR}/${crypto.randomUUID()}-processed.tmp`;
   const tempThumbnailPath = `${TEMP_DIR}/${crypto.randomUUID()}-thumb.tmp`;
   const fileId = crypto.randomUUID();
   const fileName = `${fileId}.mp4`;
 
-  await fs.writeFile(tempFilePath, new Uint8Array(file.buffer));
+  await fs.writeFile(tempFilePath, await file.bytes());
 
   const ffprobeProcess = await Spawn('ffprobe', [
     ['-v', 'error'],

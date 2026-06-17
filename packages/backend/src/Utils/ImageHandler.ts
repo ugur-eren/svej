@@ -6,10 +6,7 @@ import sharp from 'sharp';
 import {encode} from 'blurhash';
 import {clampDimensions, getCropArea} from './Helpers';
 
-export const ImageHandler = async (
-  file: Express.Multer.File,
-  type: 'post' | 'profile' | 'cover',
-) => {
+export const ImageHandler = async (file: File, type: 'post' | 'profile' | 'cover') => {
   const fileId = crypto.randomUUID();
   const fileName = `${fileId}.webp`;
 
@@ -19,7 +16,7 @@ export const ImageHandler = async (
     cover: Config.maxCoverPhotoDimension,
   }[type];
 
-  const image = sharp(file.buffer);
+  const image = sharp(await file.bytes());
   let {width: oldWidth, height: oldHeight} = await image.metadata();
 
   if (

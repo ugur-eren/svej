@@ -1,25 +1,13 @@
-import {Env, RequestContextMiddleware} from '@svej/server-side';
-import express from 'express';
-import cors from 'cors';
-import helmet from 'helmet';
-import cookieParser from 'cookie-parser';
+import {Env} from '@svej/server-side';
+import {node} from '@elysia/node';
+import {Elysia} from 'elysia';
 import router from './router';
 
-const app = express();
-
-app.use(cors());
-app.use(helmet());
-app.use(cookieParser());
-app.use(express.urlencoded({extended: false}));
-app.use(express.json());
-app.use(RequestContextMiddleware);
-
-app.use((req, res, next) => {
-  console.info(`${req.method} ${req.url}`);
-  next();
-});
-
-app.use('/', router);
+const app = new Elysia({adapter: node()})
+  .onBeforeHandle((req) => {
+    console.info(`${req.request.method} ${req.request.url}`);
+  })
+  .use(router);
 
 app.listen(Env.BACKEND_PORT, () => {
   console.info(`Express server started listening on port ${Env.BACKEND_PORT}`);

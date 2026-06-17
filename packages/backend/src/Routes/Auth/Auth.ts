@@ -1,25 +1,19 @@
-import express from 'express';
-import {JWTAuth} from '@svej/server-side';
 import {ErrorCodes, HTTPStatus} from '@svej/common';
-import {onlyAuthorized} from '../../Middlewares';
+import {JWTAuthElysia} from '@svej/server-side';
+import {Elysia} from 'elysia';
 
-const Router = express.Router();
+export default new Elysia()
+  .post('/logout', async ({cookie}) => {
+    await JWTAuthElysia.logout(cookie);
 
-Router.post('/logout', onlyAuthorized, async (req, res) => {
-  await JWTAuth.logout();
+    return {ok: true};
+  })
+  .post('/refresh', async ({status, cookie}) => {
+    const result = await JWTAuthElysia.rotateTokens(cookie);
 
-  res.status(HTTPStatus.OK).send({ok: true});
-});
+    if (!result) {
+      return status(HTTPStatus.Unauthorized, {code: ErrorCodes.InvalidAuthToken});
+    }
 
-Router.post('/refresh', async (req, res) => {
-  const result = await JWTAuth.rotateTokens();
-
-  if (!result) {
-    res.status(HTTPStatus.Unauthorized).send({code: ErrorCodes.InvalidAuthToken});
-    return;
-  }
-
-  res.status(HTTPStatus.OK).send({accessToken: result.accessToken, user: result.user});
-});
-
-export default Router;
+    return {accessToken: result.accessToken, user: result.user};
+  });

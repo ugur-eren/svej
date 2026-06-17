@@ -11,6 +11,14 @@ export default defineConfig(baseConfig, [
         ...globals.jest,
       },
     },
+    settings: {
+      'import/resolver': {
+        typescript: {
+          alwaysTryTypes: true,
+          project: './tsconfig.json',
+        },
+      },
+    },
     rules: {
       '@typescript-eslint/explicit-member-accessibility': 'warn',
     },
