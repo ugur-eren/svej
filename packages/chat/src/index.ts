@@ -1,9 +1,9 @@
-import {Env} from '@svej/server-side';
+import {Env, Prisma} from '@svej/server-side';
 import {Config, ErrorCodes, Zod} from '@svej/common';
 import {Prisma as PrismaTypes} from '@svej/database';
 import {onlyAuthorized} from './Middlewares';
 import RateLimiter from './Utils/RateLimiter';
-import {WS, Prisma} from './Services';
+import {WS} from './Services';
 
 const sendMessageRateLimiter = new RateLimiter({
   maxAttempts: Config.chatMessageRateLimitMax,

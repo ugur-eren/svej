@@ -1,13 +1,13 @@
 import {Config, ErrorCodes, Zod} from '@svej/common';
 import {NotificationType, Prisma as PrismaTypes} from '@svej/database';
-import {Prisma, PrismaIncludes} from '@/Services';
+import {Prisma, PrismaIncludes} from '@svej/server-side';
 import {ModuleError} from '@/Utils/Error';
 import {ImageHandler} from '@/Utils/ImageHandler';
 import {VideoHandler} from '@/Utils/VideoHandler';
 import {assertPostExists} from './Internal/Assert';
 
-const extendPost = (
-  post: PrismaTypes.PostGetPayload<{include: ReturnType<typeof PrismaIncludes.Post>}>,
+const extendPost = <T extends {likes: {id: string}[]; dislikes: {id: string}[]; authorId: string}>(
+  post: T,
   userId: string,
 ) => {
   return {

@@ -1,6 +1,6 @@
 import {ErrorCodes} from '@svej/common';
 import {NotificationType, Prisma as PrismaTypes} from '@svej/database';
-import {Prisma, PrismaIncludes} from '@/Services';
+import {Prisma, PrismaIncludes} from '@svej/server-side';
 import {ModuleError} from '@/Utils/Error';
 import {ImageHandler} from '@/Utils/ImageHandler';
 import {assertUserExists} from './Internal/Assert';
@@ -14,7 +14,7 @@ export type UpdateViewerInput = {
 
 type Author = PrismaTypes.UserGetPayload<{include: ReturnType<typeof PrismaIncludes.Author>}>;
 
-const extendUser = <T extends Author>(user: T, userId: string) => {
+const extendUser = <T extends {followers: {id: string}[]}>(user: T, userId: string) => {
   return {
     ...user,
     isFollowing: user.followers.some((follower) => follower.id === userId),
@@ -109,6 +109,9 @@ export const UsersModule = {
   async getViewer(viewerId: string) {
     const user = await Prisma.user.findUnique({
       where: {id: viewerId},
+      omit: {
+        email: false,
+      },
       include: PrismaIncludes.User(viewerId),
     });
 
@@ -117,7 +120,7 @@ export const UsersModule = {
     const extendedUser = extendUser(user, viewerId);
 
     // Send sensitive data only for the viewer's own profile
-    return {...extendedUser, email: user.email()};
+    return {...extendedUser, email: user.email};
   },
 
   async updateViewer(viewerId: string, data: UpdateViewerInput) {

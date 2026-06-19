@@ -32,6 +32,7 @@ export const createApiInstance = (config?: Treaty.Config) => {
       ...config?.headers,
     },
     throwHttpError: false,
+    parseDate: false,
     fetcher: async (input, init) => {
       const response = await fetchWithAuth(input, init);
 

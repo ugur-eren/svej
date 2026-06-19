@@ -1,4 +1,4 @@
-import {Prisma, PrismaIncludes} from '@/Services';
+import {Prisma, PrismaIncludes} from '@svej/server-side';
 import {assertNotificationExists} from './Internal/Assert';
 
 export const NotificationsModule = {

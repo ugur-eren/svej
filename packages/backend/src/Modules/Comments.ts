@@ -1,12 +1,14 @@
 import {ErrorCodes, Zod} from '@svej/common';
-import {NotificationType, Prisma as PrismaTypes} from '@svej/database';
-import {Prisma, PrismaIncludes} from '@/Services';
+import {NotificationType} from '@svej/database';
+import {Prisma, PrismaIncludes} from '@svej/server-side';
 import {ModuleError} from '@/Utils/Error';
 import {assertCommentExists, assertPostExists} from './Internal/Assert';
 import {safeUpdate} from './Internal/Query';
 
-const extendComment = (
-  comment: PrismaTypes.CommentGetPayload<{include: ReturnType<typeof PrismaIncludes.Comment>}>,
+const extendComment = <
+  T extends {likes: {id: string}[]; dislikes: {id: string}[]; authorId: string},
+>(
+  comment: T,
   userId: string,
 ) => {
   return {

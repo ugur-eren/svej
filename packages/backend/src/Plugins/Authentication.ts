@@ -2,7 +2,7 @@ import {HTTPStatus, ErrorCodes, SessionUser} from '@svej/common';
 import {JWT} from '@svej/server-side';
 import {Elysia} from 'elysia';
 
-export const onlyAuthenticated = new Elysia().resolve({as: 'global'}, async ({status, headers}) => {
+export const onlyAuthenticated = new Elysia().resolve({as: 'scoped'}, async ({status, headers}) => {
   const auth = headers.authorization;
 
   if (typeof auth !== 'string' || !auth.startsWith('Bearer ')) {

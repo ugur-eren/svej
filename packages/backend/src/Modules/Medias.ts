@@ -1,7 +1,7 @@
 import {ErrorCodes} from '@svej/common';
 import {FileSystem} from '@svej/file-system';
+import {Prisma} from '@svej/server-side';
 import mime from 'mime-types';
-import {Prisma} from '@/Services';
 import {ModuleError} from '@/Utils/Error';
 import {assertMediaExists} from './Internal/Assert';
 
@@ -14,7 +14,7 @@ export const MediasModule = {
     return media;
   },
 
-  async getFileMetadata(viewerId: string, fileKey: string) {
+  async getFileMetadata(fileKey: string) {
     const mimeType = mime.lookup(fileKey.split('.').pop() || '');
     if (!mimeType) {
       throw new ModuleError(ErrorCodes.UnknownError);
@@ -38,7 +38,7 @@ export const MediasModule = {
     };
   },
 
-  async getFileStream(viewerId: string, fileKey: string, range?: {start: number; end: number}) {
+  async getFileStream(fileKey: string, range?: {start: number; end: number}) {
     const stream = await FileSystem.readStream(fileKey, range || undefined);
 
     if (!stream.ok) {

@@ -1,4 +1,4 @@
-import {Prisma, PrismaIncludes} from '@/Services';
+import {Prisma, PrismaIncludes} from '@svej/server-side';
 import {assertConversationExists} from './Internal/Assert';
 
 export const ChatsModule = {

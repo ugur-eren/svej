@@ -13,13 +13,20 @@ export const createAuthApiInstance = (config?: Treaty.Config) => {
       ...config?.headers,
     },
     throwHttpError: false,
+    parseDate: false,
     fetcher: async (input, init) => {
       const response = await fetchWithAuth(input, init);
 
       // Pass through unsuccessful responses
       if (!response.ok) return response;
 
-      const cookieHeaders = response.headers.getSetCookie();
+      const cookieHeaders: string[] = [];
+      response.headers.forEach((value, key) => {
+        if (key.toLowerCase() === 'set-cookie') {
+          cookieHeaders.push(value);
+        }
+      });
+
       const refreshTokenCookie = cookieHeaders.findLast(
         (cookieStr) => parseSetCookie(cookieStr).name === Config.refreshTokenCookieName,
       );

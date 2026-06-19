@@ -9,6 +9,14 @@ const adapter = new PrismaPg({
 
 export const prisma = new PrismaClient({
   adapter,
+  omit: {
+    user: {
+      createdAt: true,
+      updatedAt: true,
+      email: true,
+      password: true,
+    },
+  },
   log: process.env.NODE_ENV === 'development' ? ['query', 'info', 'warn', 'error'] : ['error'],
 });
 

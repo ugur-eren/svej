@@ -1,6 +1,5 @@
 import {Elysia} from 'elysia';
 import {z} from 'zod';
-import {onlyAuthenticated} from '@/Plugins';
 import {MediasModule} from '@/Modules/Medias';
 import {createRangeHeaders, parseRange, ValidRange} from '@/Utils/RangeHeader';
 import {Config, HTTPStatus} from '@svej/common';
@@ -18,16 +17,12 @@ type FileHeadSuccessResult = {
   range: ValidRange | undefined;
 };
 
-const getFileHead = async (
-  viewerId: string,
-  fileKey: string,
-  headers: Record<string, string | undefined>,
-) => {
+const getFileHead = async (fileKey: string, headers: Record<string, string | undefined>) => {
   const {
     mimeType,
     size,
     lastModified: lastModifiedDate,
-  } = await MediasModule.getFileMetadata(viewerId, fileKey);
+  } = await MediasModule.getFileMetadata(fileKey);
 
   const sizeHex = size.toString(16);
   const lastModifiedHex = lastModifiedDate.getTime().toString(16);
@@ -95,28 +90,29 @@ const getFileHead = async (
   } satisfies FileHeadSuccessResult;
 };
 
-export default new Elysia()
-  .use(onlyAuthenticated)
-  .group('/files/:fileKey', {params: z.object({fileKey: z.uuid()})}, (app) =>
+export default new Elysia().group(
+  '/files/:fileKey',
+  {params: z.object({fileKey: z.string()})},
+  (app) =>
     app
-      .head('/', async ({set, status, session, headers, params: {fileKey}}) => {
-        const fileHead = await getFileHead(session.user.id, fileKey, headers);
+      .head('/', async ({set, status, headers, params: {fileKey}}) => {
+        const fileHead = await getFileHead(fileKey, headers);
 
         Object.assign(set.headers, fileHead.headers);
 
         return status(fileHead.status, undefined);
       })
-      .get('/', async ({set, status, session, headers, params: {fileKey}}) => {
-        const fileHead = await getFileHead(session.user.id, fileKey, headers);
+      .get('/', async ({set, status, headers, params: {fileKey}}) => {
+        const fileHead = await getFileHead(fileKey, headers);
         if (!fileHead.ok) {
           Object.assign(set.headers, fileHead.headers);
           return status(fileHead.status, undefined);
         }
 
-        const stream = await MediasModule.getFileStream(session.user.id, fileKey, fileHead.range);
+        const stream = await MediasModule.getFileStream(fileKey, fileHead.range);
 
         Object.assign(set.headers, fileHead.headers);
 
         return status(fileHead.status, stream);
       }),
-  );
+);

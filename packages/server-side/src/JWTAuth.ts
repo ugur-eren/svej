@@ -1,28 +1,32 @@
 import crypto from 'node:crypto';
 import {Config, SessionUser} from '@svej/common';
-import {cookies, CookieManager, ResponseCookie} from './RequestContext';
+import type {Cookie, CookieOptions} from 'elysia';
 import {sign, verify} from './JWT';
-import Prisma from './Prisma';
+import {Prisma} from './Prisma';
 
-const refreshTokenCookieConfig: Partial<ResponseCookie> = {
+const refreshTokenCookieConfig: Partial<CookieOptions> = {
   path: '/auth',
   httpOnly: true,
   secure: true,
   sameSite: 'strict',
 };
 
-const setRefreshTokenCookie = (cookieStore: CookieManager, refreshToken: string) => {
-  const config: Partial<ResponseCookie> = {
+const setRefreshTokenCookie = (cookies: Record<string, Cookie<unknown>>, refreshToken: string) => {
+  cookies[Config.refreshTokenCookieName].set({
     ...refreshTokenCookieConfig,
-    maxAge: Config.jwtRefreshTokenTTL * 1_000,
+    maxAge: Config.jwtRefreshTokenTTL,
     expires: new Date(Date.now() + Config.jwtRefreshTokenTTL * 1_000),
-  };
-
-  cookieStore.set(Config.refreshTokenCookieName, refreshToken, config);
+    value: refreshToken,
+  });
 };
 
-const clearRefreshTokenCookie = (cookieStore: CookieManager) => {
-  cookieStore.delete(Config.refreshTokenCookieName, refreshTokenCookieConfig);
+const clearRefreshTokenCookie = (cookies: Record<string, Cookie<unknown>>) => {
+  cookies[Config.refreshTokenCookieName].set({
+    ...refreshTokenCookieConfig,
+    maxAge: 0,
+    expires: new Date(0),
+    value: '',
+  });
 };
 
 const getAccessTokenPayload = async (
@@ -56,7 +60,7 @@ const getAccessTokenPayload = async (
     sub: user.id,
     user: {
       ...user,
-      email: user.email(),
+      email: user.email,
     },
   };
 };
@@ -93,6 +97,7 @@ const getNewTokenPair = async (
  * NOTE: This function will not do any validation or authentication.
  */
 export const login = async (
+  cookies: Record<string, Cookie<unknown>>,
   userId: string,
 ): Promise<false | {accessToken: string; user: SessionUser}> => {
   const newPair = await getNewTokenPair(userId);
@@ -116,8 +121,7 @@ export const login = async (
     return false;
   }
 
-  const cookieStore = cookies();
-  setRefreshTokenCookie(cookieStore, refreshToken);
+  setRefreshTokenCookie(cookies, refreshToken);
 
   return {accessToken, user};
 };
@@ -126,42 +130,41 @@ export const login = async (
  * Logs out the current user by clearing session cookies.
  * Also removes the token's JTI from the database.
  */
-export const logout = async () => {
-  const cookieStore = cookies();
+export const logout = async (cookies: Record<string, Cookie<unknown>>) => {
   try {
     // Remove JTI from user record
-    const refreshTokenCookie = cookieStore.get(Config.refreshTokenCookieName);
-    if (refreshTokenCookie) {
-      const refreshToken = await verify(refreshTokenCookie.value);
-      if (refreshToken.ok && refreshToken.decoded.jti) {
-        const session = await Prisma.session.findUnique({
-          where: {currentJTI: refreshToken.decoded.jti},
-          select: {id: true},
-        });
+    const refreshTokenCookie = cookies[Config.refreshTokenCookieName];
+    if (!refreshTokenCookie || typeof refreshTokenCookie.value !== 'string') return;
 
-        if (session?.id) {
-          await Prisma.session.delete({
-            where: {
-              id: session.id,
-            },
-          });
-        }
-      }
+    const refreshToken = await verify(refreshTokenCookie.value);
+    if (!refreshToken.ok || !refreshToken.decoded.jti) return;
+
+    const session = await Prisma.session.findUnique({
+      where: {currentJTI: refreshToken.decoded.jti},
+      select: {id: true},
+    });
+
+    if (session?.id) {
+      await Prisma.session.delete({
+        where: {
+          id: session.id,
+        },
+      });
     }
   } finally {
     // Clear cookies
-    clearRefreshTokenCookie(cookieStore);
+    clearRefreshTokenCookie(cookies);
   }
 };
 
 /**
  * Verifies the refresh token and issues new access and refresh tokens if valid.
  */
-export const rotateTokens = async (): Promise<false | {accessToken: string; user: SessionUser}> => {
-  const cookieStore = cookies();
-
-  const refreshTokenCookie = cookieStore.get(Config.refreshTokenCookieName);
-  if (!refreshTokenCookie) return false;
+export const rotateTokens = async (
+  cookies: Record<string, Cookie<unknown>>,
+): Promise<false | {accessToken: string; user: SessionUser}> => {
+  const refreshTokenCookie = cookies[Config.refreshTokenCookieName];
+  if (!refreshTokenCookie || typeof refreshTokenCookie.value !== 'string') return false;
 
   const refreshToken = await verify(refreshTokenCookie.value);
   if (!refreshToken.ok || !refreshToken.decoded.jti) return false;
@@ -183,7 +186,7 @@ export const rotateTokens = async (): Promise<false | {accessToken: string; user
 
   if (!existingSession) {
     // Session not found, possible invalid or expired session.
-    clearRefreshTokenCookie(cookieStore);
+    clearRefreshTokenCookie(cookies);
     return false;
   }
 
@@ -192,7 +195,7 @@ export const rotateTokens = async (): Promise<false | {accessToken: string; user
     try {
       await Prisma.session.delete({where: {id: existingSession.id}});
     } finally {
-      clearRefreshTokenCookie(cookieStore);
+      clearRefreshTokenCookie(cookies);
     }
     return false;
   }
@@ -209,7 +212,7 @@ export const rotateTokens = async (): Promise<false | {accessToken: string; user
       try {
         await Prisma.session.delete({where: {id: existingSession.id}});
       } finally {
-        clearRefreshTokenCookie(cookieStore);
+        clearRefreshTokenCookie(cookies);
       }
 
       return false;
@@ -239,7 +242,7 @@ export const rotateTokens = async (): Promise<false | {accessToken: string; user
     return false;
   }
 
-  setRefreshTokenCookie(cookieStore, newPair.refreshToken);
+  setRefreshTokenCookie(cookies, newPair.refreshToken);
 
   return {accessToken: newPair.accessToken, user: newPair.user};
 };

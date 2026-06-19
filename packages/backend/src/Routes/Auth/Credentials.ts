@@ -1,8 +1,7 @@
 import {ErrorCodes, HTTPStatus, Zod} from '@svej/common';
-import {JWTAuthElysia, Password} from '@svej/server-side';
+import {JWTAuth, Password, Prisma} from '@svej/server-side';
 import {Prisma as PrismaTypes} from '@svej/database';
 import {Elysia} from 'elysia';
-import {Prisma} from '@/Services';
 import {onlyAuthenticated} from '@/Plugins';
 
 export default new Elysia({prefix: '/credentials'})
@@ -18,12 +17,12 @@ export default new Elysia({prefix: '/credentials'})
         return status(HTTPStatus.NotFound, {code: ErrorCodes.UserNotFound});
       }
 
-      const passwordMatched = await Password.verify(body.password, user.password());
+      const passwordMatched = await Password.verify(body.password, user.password);
       if (!passwordMatched) {
         return status(HTTPStatus.Unauthorized, {code: ErrorCodes.WrongPassword});
       }
 
-      const result = await JWTAuthElysia.login(cookie, user.id);
+      const result = await JWTAuth.login(cookie, user.id);
       if (!result) {
         return status(HTTPStatus.InternalServerError, {code: ErrorCodes.UnknownError});
       }
@@ -47,7 +46,7 @@ export default new Elysia({prefix: '/credentials'})
           },
         });
 
-        const result = await JWTAuthElysia.login(cookie, user.id);
+        const result = await JWTAuth.login(cookie, user.id);
         if (!result) {
           return status(HTTPStatus.InternalServerError, {
             code: ErrorCodes.AccountCreatedButLoginFailed,
@@ -93,7 +92,7 @@ export default new Elysia({prefix: '/credentials'})
           return status(HTTPStatus.NotFound, {code: ErrorCodes.UserNotFound});
         }
 
-        const verified = await Password.verify(body.currentPassword, user.password());
+        const verified = await Password.verify(body.currentPassword, user.password);
         if (!verified) {
           return status(HTTPStatus.BadRequest, {code: ErrorCodes.WrongPassword});
         }
@@ -110,7 +109,7 @@ export default new Elysia({prefix: '/credentials'})
           }),
         ]);
 
-        const result = await JWTAuthElysia.login(cookie, session.user.id);
+        const result = await JWTAuth.login(cookie, session.user.id);
         if (!result) {
           return status(HTTPStatus.InternalServerError, {code: ErrorCodes.UnknownError});
         }
