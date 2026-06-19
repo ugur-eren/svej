@@ -5,23 +5,24 @@ import {MediasModule} from '@/Modules/Medias';
 import {createRangeHeaders, parseRange, ValidRange} from '@/Utils/RangeHeader';
 import {Config, HTTPStatus} from '@svej/common';
 
+type FileHeadNoServeResult = {
+  ok: false;
+  status: (typeof HTTPStatus)[keyof typeof HTTPStatus];
+  headers: Record<string, string | number>;
+};
+
+type FileHeadSuccessResult = {
+  ok: true;
+  status: (typeof HTTPStatus)['OK'] | (typeof HTTPStatus)['PartialContent'];
+  headers: Record<string, string | number>;
+  range: ValidRange | undefined;
+};
+
 const getFileHead = async (
   viewerId: string,
   fileKey: string,
   headers: Record<string, string | undefined>,
-): Promise<
-  | {
-      ok: false;
-      status: number;
-      headers: Record<string, string | number>;
-    }
-  | {
-      ok: true;
-      status: number;
-      headers: Record<string, string | number>;
-      range: ValidRange | undefined;
-    }
-> => {
+) => {
   const {
     mimeType,
     size,
@@ -55,7 +56,7 @@ const getFileHead = async (
       ok: false,
       status: HTTPStatus.NotModified,
       headers: commonHeaders,
-    };
+    } satisfies FileHeadNoServeResult;
   }
 
   const ifModifiedSince = headers['if-modified-since'];
@@ -67,7 +68,7 @@ const getFileHead = async (
         ok: false,
         status: HTTPStatus.NotModified,
         headers: commonHeaders,
-      };
+      } satisfies FileHeadNoServeResult;
     }
   }
 
@@ -80,7 +81,7 @@ const getFileHead = async (
         ...commonHeaders,
         'Content-Range': `bytes */${size}`,
       },
-    };
+    } satisfies FileHeadNoServeResult;
   }
 
   return {
@@ -91,7 +92,7 @@ const getFileHead = async (
       ...commonHeaders,
       ...createRangeHeaders(range, size),
     },
-  };
+  } satisfies FileHeadSuccessResult;
 };
 
 export default new Elysia()
@@ -103,13 +104,13 @@ export default new Elysia()
 
         Object.assign(set.headers, fileHead.headers);
 
-        return status(fileHead.status);
+        return status(fileHead.status, undefined);
       })
       .get('/', async ({set, status, session, headers, params: {fileKey}}) => {
         const fileHead = await getFileHead(session.user.id, fileKey, headers);
         if (!fileHead.ok) {
           Object.assign(set.headers, fileHead.headers);
-          return status(fileHead.status);
+          return status(fileHead.status, undefined);
         }
 
         const stream = await MediasModule.getFileStream(session.user.id, fileKey, fileHead.range);

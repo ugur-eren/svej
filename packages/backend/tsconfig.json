@@ -1,8 +1,11 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "composite": true,
+    "noEmit": false,
+    "strict": true,
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["../backend/src/*"]
     }
   },
   "include": ["./**/*"],

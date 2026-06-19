@@ -1,4 +1,13 @@
-import {PROBLEM_CODE} from 'apisauce';
+export const PROBLEM_CODE = {
+  TIMEOUT_ERROR: 'TIMEOUT_ERROR',
+  CONNECTION_ERROR: 'CONNECTION_ERROR',
+  NETWORK_ERROR: 'NETWORK_ERROR',
+  CANCEL_ERROR: 'CANCEL_ERROR',
+  CLIENT_ERROR: 'CLIENT_ERROR',
+  SERVER_ERROR: 'SERVER_ERROR',
+  UNKNOWN_ERROR: 'UNKNOWN_ERROR',
+} as const;
+export type PROBLEM_CODE = (typeof PROBLEM_CODE)[keyof typeof PROBLEM_CODE];
 
 export class ApiError extends Error {
   public message: string;

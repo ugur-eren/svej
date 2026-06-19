@@ -1822,6 +1822,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@elysia/eden@npm:^1.4.10":
+  version: 1.4.10
+  resolution: "@elysia/eden@npm:1.4.10"
+  peerDependencies:
+    elysia: ">=1.4.19"
+  checksum: 10c0/2ff62a1a0d71ec52369219ef6c0b85646776a232b1b75dcf84ff93af1474670d31f2cb0b0e7d6c7513111b353184b82739125fd0f724ddb0553d4adbb6d48dfa
+  languageName: node
+  linkType: hard
+
 "@elysia/node@npm:^1.4.6":
   version: 1.4.6
   resolution: "@elysia/node@npm:1.4.6"
@@ -4172,12 +4181,14 @@ __metadata:
   dependencies:
     "@babel/core": "npm:^7.29.0"
     "@babel/plugin-proposal-export-namespace-from": "npm:^7.16.7"
+    "@elysia/eden": "npm:^1.4.10"
     "@expo/vector-icons": "npm:^15.0.2"
     "@react-native-async-storage/async-storage": "npm:2.2.0"
     "@react-navigation/bottom-tabs": "npm:^7.17.2"
     "@react-navigation/native": "npm:^7.3.0"
     "@react-navigation/native-stack": "npm:^7.17.2"
     "@reduxjs/toolkit": "npm:^2.12.0"
+    "@svej/backend": "workspace:*"
     "@svej/chat": "workspace:*"
     "@svej/common": "workspace:*"
     "@svej/database": "workspace:*"
@@ -4191,6 +4202,7 @@ __metadata:
     cookie: "npm:^1.1.1"
     dotenv: "npm:^16.1.3"
     dotenv-cli: "npm:^7.2.1"
+    elysia: "npm:^1.4.28"
     eslint: "npm:9.39.3"
     eslint-import-resolver-typescript: "npm:^4.4.5"
     eslint-plugin-jsx-a11y: "npm:^6.10.2"
@@ -4232,7 +4244,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@svej/backend@workspace:packages/backend":
+"@svej/backend@workspace:*, @svej/backend@workspace:packages/backend":
   version: 0.0.0-use.local
   resolution: "@svej/backend@workspace:packages/backend"
   dependencies:

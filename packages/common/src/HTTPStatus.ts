@@ -25,4 +25,4 @@ export default {
   NotImplemented: 501,
   BadGateway: 502,
   ServiceUnavailable: 503,
-};
+} as const;

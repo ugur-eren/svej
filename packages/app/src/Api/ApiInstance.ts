@@ -1,92 +1,105 @@
 import {HTTPStatus} from '@svej/common';
+import type {App} from '@svej/backend';
+import {treaty, Treaty} from '@elysia/eden';
 import {AuthActions, store} from '@/Redux';
 import Storage from '@/Utils/Storage';
-import {createApiInstance} from './CreateApiInstance';
-import {refresh} from './Auth/Auth';
+import {refresh} from './Endpoints/Auth';
+import {DEFAULT_BASE_URL, DEFAULT_HEADERS, fetchWithAuth} from './Utils';
 
-const ApiInstance = createApiInstance();
+export const createApiInstance = (config?: Treaty.Config) => {
+  let isRefreshing = false;
+  let failedQueue: {
+    resolve: (value: unknown) => void;
+    reject: (reason?: unknown) => void;
+  }[] = [];
 
-//
-// Access Token Management
-//
+  const processQueue = (error: unknown) => {
+    failedQueue.forEach((prom) => {
+      if (error) {
+        prom.reject(error);
+      } else {
+        prom.resolve(null);
+      }
+    });
 
-// Auto refresh access token on 401 responses
-let isRefreshing = false;
-let failedQueue: {
-  resolve: (value: unknown) => void;
-  reject: (reason?: unknown) => void;
-}[] = [];
+    failedQueue = [];
+  };
 
-const processQueue = (error: unknown) => {
-  failedQueue.forEach((prom) => {
-    if (error) {
-      prom.reject(error);
-    } else {
-      prom.resolve(null);
-    }
-  });
+  const apiInstance = treaty<App>(DEFAULT_BASE_URL, {
+    ...config,
+    headers: {
+      ...DEFAULT_HEADERS,
+      ...config?.headers,
+    },
+    throwHttpError: false,
+    fetcher: async (input, init) => {
+      const response = await fetchWithAuth(input, init);
 
-  failedQueue = [];
-};
+      // Pass through successful responses
+      if (response.ok) return response;
 
-// Access Token Response interceptor
-ApiInstance.axiosInstance.interceptors.response.use(
-  (response) => response, // Pass through successful responses
-  async (error) => {
-    const originalRequest = error.config;
+      let url = '';
+      if (typeof input === 'string') url = input;
+      if (input instanceof Request) url = input.url;
+      if (input instanceof URL) url = input.toString();
 
-    if (
-      !originalRequest.url?.includes('/api/auth/session') &&
-      error.response?.status === HTTPStatus.Unauthorized &&
-      !originalRequest._retry
-    ) {
+      if (
+        url.includes(apiInstance.auth.refresh['~path']) ||
+        response.status !== HTTPStatus.Unauthorized
+      ) {
+        // Do not attempt to refresh the token
+        return response;
+      }
+
       if (isRefreshing) {
         // If already refreshing, queue this request
         return new Promise((resolve, reject) => {
           failedQueue.push({resolve, reject});
-        })
-          .then(() => {
-            return ApiInstance.any(originalRequest);
-          })
-          .catch((err) => {
-            return Promise.reject(err);
-          });
+        }).then(() => fetchWithAuth(input, init));
       }
 
-      originalRequest._retry = true;
       isRefreshing = true;
 
       try {
         const refreshToken = await Storage.get('refreshToken');
         if (!refreshToken) {
+          await Storage.remove('refreshToken');
+          store.dispatch(AuthActions.logout());
           throw new Error('No refresh token available');
         }
 
-        const response = await refresh(refreshToken);
-        if (!response.ok || !response.data) {
+        const refreshResponse = await refresh(refreshToken);
+        if (refreshResponse.error || !refreshResponse.data) {
+          await Storage.remove('refreshToken');
+          store.dispatch(AuthActions.logout());
           throw new Error('Failed to refresh access token');
         }
 
-        store.dispatch(AuthActions.setAuthenticated(true));
-        store.dispatch(AuthActions.setAccessToken(response.data.accessToken));
-        store.dispatch(AuthActions.setUser(response.data.user));
+        store.dispatch(
+          AuthActions.login({
+            accessToken: refreshResponse.data.accessToken,
+            user: refreshResponse.data.user,
+          }),
+        );
 
         processQueue(null);
-        isRefreshing = false;
 
         // Retry the original request
-        return ApiInstance.any(originalRequest);
+        return fetchWithAuth(input, init);
       } catch (refreshError) {
         processQueue(refreshError);
-        isRefreshing = false;
 
         // Refresh failed
-        return Promise.reject(refreshError);
+        throw refreshError;
+      } finally {
+        isRefreshing = false;
       }
-    }
+    },
+  });
 
-    return Promise.reject(error);
-  },
-);
+  return apiInstance;
+};
+
+const ApiInstance = createApiInstance();
 
 export default ApiInstance;

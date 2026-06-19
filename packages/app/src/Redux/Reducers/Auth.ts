@@ -18,6 +18,18 @@ export const AuthSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
+    login: (state, action: PayloadAction<{accessToken: string; user: SessionUser}>) => {
+      state.authenticated = true;
+      state.accessToken = action.payload.accessToken;
+      state.user = action.payload.user;
+    },
+
+    logout: (state) => {
+      state.authenticated = false;
+      state.accessToken = undefined;
+      state.user = undefined;
+    },
+
     setAuthenticated: (state, action: PayloadAction<boolean>) => {
       state.authenticated = action.payload;
     },

@@ -10,9 +10,14 @@
     "allowSyntheticDefaultImports": true,
     "jsx": "react-native",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["../app/src/*"]
     }
   },
+  "references": [
+    {
+      "path": "../backend"
+    }
+  ],
   "exclude": ["node_modules", "dist", "babel.config.js"],
   "include": ["**/*.js", "**/*.ts", "**/*.tsx"]
 }

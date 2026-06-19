@@ -10,3 +10,5 @@ if (Env.USE_CONFIG !== 'true') {
 
 // eslint-disable-next-line import/first
 import './src';
+
+export type {App} from './src';
