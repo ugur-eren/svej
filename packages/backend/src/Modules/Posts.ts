@@ -41,6 +41,16 @@ export const PostsModule = {
     return posts.map((post) => extendPost(post, viewerId));
   },
 
+  // TODO: pagination
+  async getExploreFeed(viewerId: string) {
+    const posts = await Prisma.post.findMany({
+      include: PrismaIncludes.Post(viewerId),
+      orderBy: {createdAt: 'desc'},
+    });
+
+    return posts.map((post) => extendPost(post, viewerId));
+  },
+
   async getReactionCounts(postId: string) {
     const postReactions = await Prisma.post.findUnique({
       where: {id: postId},

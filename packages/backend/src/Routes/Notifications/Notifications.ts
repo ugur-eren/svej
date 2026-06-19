@@ -9,7 +9,8 @@ export default new Elysia()
     return NotificationsModule.getAll(session.user.id);
   })
   .get('/count', async ({session}) => {
-    return NotificationsModule.getUnreadCount(session.user.id);
+    const count = await NotificationsModule.getUnreadCount(session.user.id);
+    return {count};
   })
   .get(
     '/:notificationId',

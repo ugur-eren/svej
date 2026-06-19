@@ -1,7 +1,8 @@
-export * as Auth from './Auth';
-export * as Chats from './Chats';
-export * as Comments from './Comments';
-export * as Medias from './Medias';
-export * as Notifications from './Notifications';
-export * as Posts from './Posts';
-export * as Users from './Users';
+export * as AuthApi from './Auth';
+export * as ChatsApi from './Chats';
+export * as CommentsApi from './Comments';
+export * as FeedApi from './Feed';
+export * as MediasApi from './Medias';
+export * as NotificationsApi from './Notifications';
+export * as PostsApi from './Posts';
+export * as UsersApi from './Users';

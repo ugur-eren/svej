@@ -14,7 +14,7 @@ export type UpdateViewerInput = {
 
 type Author = PrismaTypes.UserGetPayload<{include: ReturnType<typeof PrismaIncludes.Author>}>;
 
-const extendUser = (user: Author, userId: string) => {
+const extendUser = <T extends Author>(user: T, userId: string) => {
   return {
     ...user,
     isFollowing: user.followers.some((follower) => follower.id === userId),
