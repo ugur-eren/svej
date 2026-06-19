@@ -1,3 +1,4 @@
+import {ErrorCodesKeys} from '@svej/common';
 import {useCallback} from 'react';
 import {ApiError} from '@/Api';
 import {useLanguage} from './Language';
@@ -8,32 +9,42 @@ export const useShowApiError = () => {
   const showToast = useShowToast();
 
   const showError = useCallback(
-    (error: ApiError | Error) => {
-      if (error instanceof ApiError) {
-        if (error.code && error.code in language.api_errors) {
-          return showToast({
-            type: 'error',
-            title: language.errors.ERROR,
-            message: language.api_errors[error.code as keyof typeof language.api_errors],
-          });
-        }
+    (error: ApiError | Error | {code: ErrorCodesKeys}, defaultMessage?: string) => {
+      if ('code' in error && error.code && error.code in language.api_errors) {
+        return showToast({
+          type: 'error',
+          title: language.errors.ERROR,
+          message: language.api_errors[error.code as keyof typeof language.api_errors],
+        });
+      }
 
-        if (error.problemCode && error.problemCode in language.api_problems) {
-          const problemError =
-            language.api_problems[error.problemCode as keyof typeof language.api_problems];
+      if (
+        error instanceof ApiError &&
+        error.problemCode &&
+        error.problemCode in language.api_problems
+      ) {
+        const problemError =
+          language.api_problems[error.problemCode as keyof typeof language.api_problems];
 
-          return showToast({
-            type: 'error',
-            title: problemError.title,
-            message: problemError.message,
-          });
-        }
+        return showToast({
+          type: 'error',
+          title: problemError.title,
+          message: problemError.message,
+        });
+      }
+
+      if (error instanceof Error) {
+        return showToast({
+          type: 'error',
+          title: language.errors.ERROR,
+          message: error.message,
+        });
       }
 
       return showToast({
         type: 'error',
         title: language.errors.ERROR,
-        message: error.message,
+        message: defaultMessage || language.api_errors.UnknownError,
       });
     },
 

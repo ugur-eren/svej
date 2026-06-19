@@ -90,7 +90,7 @@ const ProfileHead: React.FC<ProfileHeadProps> = ({userId, username}) => {
       const result = await (
         type === 'profile' ? UsersApi.changeProfilePhoto : UsersApi.changeCoverPhoto
       )(media);
-      throwApiError(result as any);
+      throwApiError(result);
 
       queryClient.invalidateQueries({
         queryKey: ['user', username],

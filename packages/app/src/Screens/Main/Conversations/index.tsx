@@ -3,14 +3,14 @@ import {PageContainer} from '@/Containers';
 import {Header, Placeholders} from '@/Components';
 import {useLanguage, useQuery} from '@/Hooks';
 import {ChatsApi} from '@/Api';
-import {ChatsScreenProps} from '@/Types';
-import ChatCard from './ChatCard';
+import {ConversationsScreenProps} from '@/Types';
+import ConversationCard from './ConversationCard';
 
-const Chats: React.FC<ChatsScreenProps> = ({navigation}) => {
+const Conversations: React.FC<ConversationsScreenProps> = ({navigation}) => {
   const language = useLanguage();
 
   const chats = useQuery({
-    queryKey: ['chats'],
+    queryKey: ['conversations'],
     queryFn: ChatsApi.getAllConversations,
   });
 
@@ -25,13 +25,14 @@ const Chats: React.FC<ChatsScreenProps> = ({navigation}) => {
           data={chats.data}
           keyExtractor={(item) => item.id}
           renderItem={({item}) => (
-            <ChatCard
+            <ConversationCard
               username={item.participant.username}
               lastMessage={item.lastMessage}
               avatar={item.participant.profilePhoto}
               onPress={() => {
                 navigation.navigate('Chat', {
-                  userId: item.id,
+                  conversationId: item.id,
+                  userId: item.participant.id,
                   username: item.participant.username,
                   avatar: item.participant.profilePhoto,
                 });
@@ -44,4 +45,4 @@ const Chats: React.FC<ChatsScreenProps> = ({navigation}) => {
   );
 };
 
-export default Chats;
+export default Conversations;

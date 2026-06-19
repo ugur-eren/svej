@@ -79,7 +79,7 @@ const PostUploader = memo(
           medias: await Promise.all(medias.map(loadLocalFile)),
         });
 
-        throwApiError(result as any);
+        throwApiError(result);
 
         return true;
       } catch (error) {

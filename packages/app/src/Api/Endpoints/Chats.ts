@@ -9,7 +9,7 @@ export const getAllConversations = async () => {
 };
 
 export const getConversationByParticipant = async (participantId: string) => {
-  return ApiInstance.chats['by-participant']({participantId});
+  return ApiInstance.chats['by-participant']({participantId}).get();
 };
 
 export const getOrCreateConversationByParticipant = async (participantId: string) => {

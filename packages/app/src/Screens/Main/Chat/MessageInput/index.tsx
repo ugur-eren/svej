@@ -74,7 +74,7 @@ const MessageInput: React.FC<MessageInputProps> = (props) => {
       onChangeText={onChangeText}
       placeholder={language.chat.message_placeholder}
       onSubmitEditing={sendMessage}
-      blurOnSubmit={false}
+      submitBehavior="submit"
       left={
         undefined
         /* message.length < 1 ? <IconButton icon="image" /> : null */

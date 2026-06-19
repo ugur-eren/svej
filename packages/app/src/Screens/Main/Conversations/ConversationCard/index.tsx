@@ -1,10 +1,10 @@
 import {View, TouchableOpacity} from 'react-native';
 import {Avatar, Text, Timer} from '@/Components';
 import {useTheme} from '@/Hooks';
-import {ChatCardProps} from './props';
+import {ConversationCardProps} from './props';
 import getStyles from './styles';
 
-const ChatCard: React.FC<ChatCardProps> = (props) => {
+const ConversationCard: React.FC<ConversationCardProps> = (props) => {
   const {onPress, username, lastMessage, avatar} = props;
 
   const theme = useTheme();
@@ -31,4 +31,4 @@ const ChatCard: React.FC<ChatCardProps> = (props) => {
   );
 };
 
-export default ChatCard;
+export default ConversationCard;

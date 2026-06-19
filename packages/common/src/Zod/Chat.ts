@@ -11,6 +11,6 @@ export const Message = z
   });
 
 export const SendMessage = z.object({
-  toUserId: z.uuid(),
+  conversationId: z.uuid(),
   message: Message,
 });

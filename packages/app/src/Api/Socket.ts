@@ -5,7 +5,7 @@ import Env from '@/Utils/Env';
 
 export type SocketClient = Socket<ServerToClientEvents, ClientToServerEvents>;
 
-export const getSocket = async (): Promise<SocketClient> => {
+export const getSocket = (): SocketClient => {
   const token = store.getState().auth.accessToken;
 
   if (!token) {

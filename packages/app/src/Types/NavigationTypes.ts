@@ -53,8 +53,9 @@ export type MainStackParams = {
     username: string;
     type: 'followers' | 'follows';
   };
-  Chats: undefined;
+  Conversations: undefined;
   Chat: {
+    conversationId?: string;
     userId: string;
     username: string;
     avatar?: Media | null;
@@ -136,8 +137,8 @@ export type RelationsScreenProps = CompositeScreenProps<
   NativeStackScreenProps<MainStackParams, 'Relations'>,
   NativeStackScreenProps<RootStackParams>
 >;
-export type ChatsScreenProps = CompositeScreenProps<
-  NativeStackScreenProps<MainStackParams, 'Chats'>,
+export type ConversationsScreenProps = CompositeScreenProps<
+  NativeStackScreenProps<MainStackParams, 'Conversations'>,
   NativeStackScreenProps<RootStackParams>
 >;
 export type ChatScreenProps = CompositeScreenProps<

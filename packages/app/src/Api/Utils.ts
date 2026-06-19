@@ -35,17 +35,21 @@ export const fetchWithAuth: typeof fetch = async (input, init) => {
   });
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const throwApiError = (response: Treaty.TreatyResponse<any>) => {
-  if (!response.error) return;
+export function throwApiError<
+  TRes extends Record<number, unknown>,
+  TResParam = Treaty.TreatyResponse<TRes>,
+>(response: TResParam): asserts response is TResParam & {error: null} {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const res = response as any;
+  if (!res.error) return;
 
-  const errorCode = 'code' in response.error.value ? response.error.value.code : undefined;
+  const errorCode = 'code' in res.error.value ? res.error.value.code : undefined;
 
-  if (response.status >= 400 && response.status < 500) {
-    throw new ApiError('Client error', PROBLEM_CODE.CLIENT_ERROR, errorCode, response.error);
-  } else if (response.status >= 500 && response.status < 600) {
-    throw new ApiError('Server error', PROBLEM_CODE.SERVER_ERROR, errorCode, response.error);
+  if (res.status >= 400 && res.status < 500) {
+    throw new ApiError('Client error', PROBLEM_CODE.CLIENT_ERROR, errorCode, res.error);
+  } else if (res.status >= 500 && res.status < 600) {
+    throw new ApiError('Server error', PROBLEM_CODE.SERVER_ERROR, errorCode, res.error);
   }
 
-  throw new ApiError('Unknown error', PROBLEM_CODE.UNKNOWN_ERROR, errorCode, response.error);
-};
+  throw new ApiError('Unknown error', PROBLEM_CODE.UNKNOWN_ERROR, errorCode, res.error);
+}
