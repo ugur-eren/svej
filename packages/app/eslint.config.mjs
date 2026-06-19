@@ -137,13 +137,6 @@ export default defineConfig(baseConfig, [
       'react/no-this-in-sfc': 'error',
       'react/jsx-props-no-multi-spaces': 'error',
       'react/jsx-fragments': ['error', 'syntax'],
-      'react/jsx-curly-newline': [
-        'error',
-        {
-          multiline: 'consistent',
-          singleline: 'consistent',
-        },
-      ],
       'react/jsx-no-constructed-context-values': 'error',
       'react/no-unstable-nested-components': 'error',
       'react/no-namespace': 'error',
@@ -164,6 +157,7 @@ export default defineConfig(baseConfig, [
           extensions: ['.jsx', '.tsx'],
         },
       ],
+      'react/jsx-curly-newline': 'off',
       'react/display-name': 'off',
       'react/jsx-props-no-spreading': 'off',
       'react/require-default-props': 'off',

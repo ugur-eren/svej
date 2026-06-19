@@ -1,3 +1,4 @@
+import {ImagePickerAsset} from 'expo-image-picker';
 import {Platform, Dimensions, StatusBar} from 'react-native';
 
 export const IsIOS = Platform.OS === 'ios';
@@ -41,4 +42,15 @@ export const parseLanguageParts = (
 
     return current.replace(regexp, value);
   }, language);
+};
+
+export const loadLocalFile = async (asset: ImagePickerAsset): Promise<File> => {
+  const response = await fetch(asset.uri);
+  const blob = await response.blob();
+
+  const file = new File([blob], asset.fileName ?? 'upload.jpg', {
+    type: asset.mimeType ?? 'application/octet-stream',
+  });
+
+  return file;
 };

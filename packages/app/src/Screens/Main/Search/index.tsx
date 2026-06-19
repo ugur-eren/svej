@@ -6,7 +6,7 @@ import {useQueryClient} from '@tanstack/react-query';
 import {PageContainer} from '@/Containers';
 import {Divider, ProfileWidget} from '@/Components';
 import {useLanguage, useQuery, useTheme} from '@/Hooks';
-import {UserApi} from '@/Api';
+import {UsersApi} from '@/Api';
 import {SearchScreenProps} from '@/Types';
 import getStyles from './styles';
 
@@ -35,7 +35,8 @@ const Search: React.FC<SearchScreenProps> = (props) => {
 
   const users = useQuery({
     queryKey: ['search', searchText],
-    queryFn: () => UserApi.search(searchText),
+    // TODO: pagination
+    queryFn: () => UsersApi.search(searchText),
   });
 
   const invalidateSearch = useCallback(() => {

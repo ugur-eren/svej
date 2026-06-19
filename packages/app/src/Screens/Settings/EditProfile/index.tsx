@@ -6,7 +6,7 @@ import {useQueryClient} from '@tanstack/react-query';
 import {Button, Header, Input} from '@/Components';
 import {PageContainer} from '@/Containers';
 import {useLanguage, useMutation, useQuery, useShowToast, useTheme} from '@/Hooks';
-import {UserApi} from '@/Api';
+import {UsersApi} from '@/Api';
 import {AuthActions, useAppDispatch} from '@/Redux';
 import EmailValidator from '@/Utils/EmailValidator';
 import {parseLanguageParts} from '@/Utils/Helpers';
@@ -32,13 +32,13 @@ const EditProfile: React.FC<SettingsEditProfileScreenProps> = ({navigation}) => 
 
   const me = useQuery({
     queryKey: ['me'],
-    queryFn: UserApi.getMe,
+    queryFn: UsersApi.getMe,
     staleTime: 0,
     gcTime: 0,
   });
 
   const mutation = useMutation({
-    mutationFn: UserApi.edit,
+    mutationFn: UsersApi.updateMe,
   });
 
   const validateForm = (values: typeof initialValues) => {

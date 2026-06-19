@@ -1,7 +1,7 @@
-import {Author} from '@/Api/User/User.types';
+import {UsersApi} from '@/Api';
 
 export type UserInfoProps = {
-  user: Author;
+  user: UsersApi.Author;
 
   /**
    * Whether the user info should have small size.

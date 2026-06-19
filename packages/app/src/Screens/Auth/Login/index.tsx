@@ -44,11 +44,14 @@ const Login: React.FC<Props> = ({navigation}) => {
   const onFormSubmit = async (values: typeof initialValues) => {
     mutation.mutate(values, {
       onSuccess: async (data) => {
-        dispatch(AuthActions.setAuthenticated(true));
-        dispatch(AuthActions.setAccessToken(data.accessToken));
-        dispatch(AuthActions.setUser(data.user));
+        dispatch(
+          AuthActions.login({
+            accessToken: data.accessToken,
+            user: data.user,
+          }),
+        );
 
-        // Refresh token is handled at ApiInstance
+        // Refresh token is handled at AuthApiInstance
       },
     });
   };

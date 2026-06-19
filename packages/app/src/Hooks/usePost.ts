@@ -1,13 +1,12 @@
 import {useEffect} from 'react';
 import {PostsActions, Selectors, useAppDispatch, useAppSelector} from '@/Redux';
-import {PostApi} from '@/Api';
-import {Post} from '@/Api/Post/Post.types';
+import {PostsApi} from '@/Api';
 import {useQuery} from './useQuery';
 
-export const usePost = (postId: string): Post | null => {
+export const usePost = (postId: string): PostsApi.Post | null => {
   const post = useQuery({
     queryKey: ['post', postId],
-    queryFn: () => PostApi.getById(postId),
+    queryFn: () => PostsApi.getById(postId),
   });
 
   const fallbackPost = useAppSelector((state) => Selectors.Posts.PostById(state, postId));

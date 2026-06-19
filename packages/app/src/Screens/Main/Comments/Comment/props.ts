@@ -1,5 +1,5 @@
-import {Comment} from '@/Api/Comment/Comment.types';
+import {CommentsApi} from '@/Api';
 
 export type CommentProps = {
-  comment: Comment;
+  comment: CommentsApi.Comment;
 };

@@ -56,9 +56,12 @@ const Register: React.FC<Props> = ({navigation}) => {
     try {
       const registerResult = await registerMutation.mutateAsync(values);
 
-      dispatch(AuthActions.setAuthenticated(true));
-      dispatch(AuthActions.setAccessToken(registerResult.accessToken));
-      dispatch(AuthActions.setUser(registerResult.user));
+      dispatch(
+        AuthActions.login({
+          accessToken: registerResult.accessToken,
+          user: registerResult.user,
+        }),
+      );
     } catch (err) {
       if (err instanceof ApiError && err.code === ErrorCodes.AccountCreatedButLoginFailed) {
         navigation.navigate('Login');

@@ -4,7 +4,7 @@ import {useQueryClient} from '@tanstack/react-query';
 import {PageContainer} from '@/Containers';
 import {Header, Divider, Placeholders} from '@/Components';
 import {useLanguage, useMutation, useQuery, useShowToast} from '@/Hooks';
-import {CommentApi} from '@/Api';
+import {PostsApi} from '@/Api';
 import {GlobalStyles} from '@/Styles';
 import {CommentsScreenProps} from '@/Types';
 import Comment from './Comment';
@@ -20,12 +20,12 @@ const Comments: React.FC<CommentsScreenProps> = ({route}) => {
 
   const comments = useQuery({
     queryKey: ['comments', postId],
-    queryFn: () => CommentApi.getByPostId(postId),
+    queryFn: () => PostsApi.getComments(postId),
   });
 
   const sendComment = useMutation({
     mutationKey: ['comment-create', postId],
-    mutationFn: (comment: string) => CommentApi.create({postId, text: comment}),
+    mutationFn: (comment: string) => PostsApi.createComment(postId, {text: comment}),
   });
 
   const onCommentSend = async (comment: string) => {

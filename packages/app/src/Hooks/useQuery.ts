@@ -6,12 +6,12 @@ import {
   UseQueryResult,
   useQuery as useReactQuery,
 } from '@tanstack/react-query';
-import {ApiError} from '@/Api';
+import {ApiError, throwApiError} from '@/Api';
 import {useShowApiError} from './useShowApiError';
 
 export const useQuery = <
   TQueryFnData = unknown,
-  TData = TQueryFnData extends {ok: true; data?: infer U} ? U : never,
+  TData = TQueryFnData extends {error: null; data?: infer U} ? U : never,
   TQueryKey extends QueryKey = QueryKey,
 >(
   options: UseQueryOptions<TQueryFnData, ApiError, TData, TQueryKey>,
@@ -22,8 +22,11 @@ export const useQuery = <
     {
       ...options,
       queryFn: async (...args) => {
-        const result: any = await options.queryFn?.(...args);
-        return result?.data;
+        const response: any = await options.queryFn?.(...args);
+
+        throwApiError(response);
+
+        return response.data;
       },
     },
     queryClient,

@@ -1,10 +1,9 @@
+import {Zod} from '@svej/common';
 import {View} from 'react-native';
 import {useQueryClient} from '@tanstack/react-query';
 import {ActionButton, Text, UserInfo} from '@/Components';
 import {useMutation, useTheme} from '@/Hooks';
-import {CommentApi} from '@/Api';
-import {ReactionType} from '@/Api/Comment/Comment.types';
-import {Author} from '@/Api/User/User.types';
+import {CommentsApi, UsersApi} from '@/Api';
 import {CommentProps} from './props';
 import getStyles from './styles';
 
@@ -13,25 +12,38 @@ const Comment: React.FC<CommentProps> = ({comment}) => {
 
   const queryClient = useQueryClient();
 
-  const doReaction = useMutation({
-    mutationKey: ['reaction', comment.id],
-    mutationFn: (reaction: ReactionType) => CommentApi.doReaction(comment.id, reaction),
+  const react = useMutation({
+    mutationKey: ['react', comment.id],
+    mutationFn: (reaction: Zod.Reaction.TYPES) => CommentsApi.react(comment.id, reaction),
+  });
+
+  const removeReaction = useMutation({
+    mutationKey: ['removeReaction', comment.id],
+    mutationFn: () => CommentsApi.removeReaction(comment.id),
   });
 
   const styles = getStyles(theme);
 
-  const onReaction = async (reaction: ReactionType) => {
-    await doReaction.mutateAsync(reaction, {
-      onSuccess: () => {
-        queryClient.invalidateQueries({queryKey: ['comments', comment.postId]});
-      },
-    });
+  const onReaction = async (reaction: Zod.Reaction.ALL_TYPES) => {
+    if (reaction === Zod.Reaction.ALL_TYPES.NONE) {
+      await removeReaction.mutateAsync(undefined, {
+        onSuccess: () => {
+          queryClient.invalidateQueries({queryKey: ['comments', comment.postId]});
+        },
+      });
+    } else {
+      await react.mutateAsync(reaction, {
+        onSuccess: () => {
+          queryClient.invalidateQueries({queryKey: ['comments', comment.postId]});
+        },
+      });
+    }
   };
 
   return (
     <View style={styles.container}>
       <UserInfo
-        user={comment.author as Author}
+        user={comment.author as UsersApi.Author}
         timestamp={new Date(comment.createdAt).getTime()}
         small
       />
@@ -42,7 +54,9 @@ const Comment: React.FC<CommentProps> = ({comment}) => {
         <ActionButton
           type="like"
           active={comment.liked}
-          onPress={() => onReaction(comment.liked ? 'remove' : 'like')}
+          onPress={() =>
+            onReaction(comment.liked ? Zod.Reaction.ALL_TYPES.NONE : Zod.Reaction.ALL_TYPES.LIKE)
+          }
           count={comment._count.likes}
           containerStyle={styles.actionButton}
           small
@@ -51,7 +65,11 @@ const Comment: React.FC<CommentProps> = ({comment}) => {
         <ActionButton
           type="dislike"
           active={comment.disliked}
-          onPress={() => onReaction(comment.disliked ? 'remove' : 'dislike')}
+          onPress={() =>
+            onReaction(
+              comment.disliked ? Zod.Reaction.ALL_TYPES.NONE : Zod.Reaction.ALL_TYPES.DISLIKE,
+            )
+          }
           count={comment._count.dislikes}
           containerStyle={styles.actionButton}
           small

@@ -5,13 +5,13 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withRepeat,
-  withSequence,
   withTiming,
 } from 'react-native-reanimated';
 import Text from '@/Components/Text';
 import {useShowApiError} from '@/Hooks/useShowApiError';
 import {useTheme} from '@/Hooks/Theming';
-import {PostApi} from '@/Api';
+import {PostsApi, throwApiError} from '@/Api';
+import {loadLocalFile} from '@/Utils/Helpers';
 import {PostUploaderRef} from './props';
 import getStyles from './styles';
 
@@ -53,31 +53,34 @@ const PostUploader = memo(
       setStep('uploading');
 
       try {
-        const result = await PostApi.createPost(
-          {description, medias},
-          {
-            timeout: 0,
-            onUploadProgress: (progressEvent) => {
-              // TODO: onUploadProgress never gets triggered. Couldn't find a solution.
+        // TODO: Add progress tracking for uploads
+        /* {
+          timeout: 0,
+          onUploadProgress: (progressEvent) => {
+            const percentCompleted = Math.round(
+              (progressEvent.loaded * 100) / (progressEvent.total ?? 1),
+            );
+            progress.value = percentCompleted * 0.75;
 
-              const percentCompleted = Math.round(
-                (progressEvent.loaded * 100) / (progressEvent.total ?? 1),
+            if (percentCompleted === 100) {
+              setStep('processing');
+              progress.value = withSequence(
+                withTiming(85, {duration: 5_000}),
+                withTiming(90, {duration: 10_000}),
+                withTiming(95, {duration: 15_000}),
+                withTiming(100, {duration: 100_000}),
               );
-              progress.value = percentCompleted * 0.75;
-
-              if (percentCompleted === 100) {
-                setStep('processing');
-                progress.value = withSequence(
-                  withTiming(85, {duration: 5_000}),
-                  withTiming(90, {duration: 10_000}),
-                  withTiming(95, {duration: 15_000}),
-                  withTiming(100, {duration: 100_000}),
-                );
-              }
-            },
+            }
           },
-        );
-        if (!result.ok) throw result.data;
+        } */
+
+        const result = await PostsApi.create({
+          description,
+          medias: await Promise.all(medias.map(loadLocalFile)),
+        });
+
+        throwApiError(result as any);
+
         return true;
       } catch (error) {
         showApiError(error as Error);

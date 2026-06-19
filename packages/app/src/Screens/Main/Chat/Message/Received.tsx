@@ -2,11 +2,11 @@ import {View} from 'react-native';
 import type {Media} from '@svej/database';
 import {Avatar, Text} from '@/Components';
 import {useTheme} from '@/Hooks';
-import {ChatMessage} from '@/Api/Chat/Chat.types';
+import {ChatsApi} from '@/Api';
 import getStyles from './styles';
 
 export type MessageReceivedProps = {
-  message: ChatMessage;
+  message: ChatsApi.ChatMessage;
   avatar?: Media | null;
 };
 

@@ -40,7 +40,7 @@ const Notification: React.FC<NotificationProps> = (props) => {
     [NotificationType.WARNING]: '',
   }[notification.type];
 
-  const hasUser = notification.type !== NotificationType.WARNING && notification.user;
+  const hasUser = notification.type !== NotificationType.WARNING && !!notification.user;
 
   return (
     <Touchable style={styles.notification} onPress={onNotificationPress}>
@@ -49,11 +49,9 @@ const Notification: React.FC<NotificationProps> = (props) => {
       >
         {notification.type === NotificationType.WARNING ? (
           <Feather name="alert-circle" size={46} color={theme.colors.primary} />
-        ) : null}
-
-        {hasUser ? (
+        ) : (
           <Avatar image={notification.user.profilePhoto} style={styles.userPhoto} />
-        ) : null}
+        )}
       </TouchableOpacity>
 
       <View style={styles.inner}>

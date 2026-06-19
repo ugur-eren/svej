@@ -13,6 +13,7 @@ export const ChatsModule = {
 
     return conversations.map((conversation) => ({
       ...conversation,
+      lastMessage: conversation.messages.length ? conversation.messages[0] : null,
       participant: conversation.user1Id === viewerId ? conversation.user2 : conversation.user1,
     }));
   },

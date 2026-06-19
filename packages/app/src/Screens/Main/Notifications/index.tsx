@@ -3,7 +3,7 @@ import {FlatList, RefreshControl} from 'react-native';
 import {MainHeader, Divider, Placeholders} from '@/Components';
 import {PageContainer} from '@/Containers';
 import {useInfiniteQuery} from '@/Hooks';
-import {NotificationApi} from '@/Api';
+import {NotificationsApi} from '@/Api';
 import Notification from './Notification';
 
 const Notifications: React.FC = () => {
@@ -12,12 +12,14 @@ const Notifications: React.FC = () => {
   const notifications = useInfiniteQuery({
     initialPageParam: Date.now().toString(),
     queryKey: ['notifications'],
-    queryFn: async ({pageParam}) => NotificationApi.getAll(pageParam),
+    // TODO: pagination
+    queryFn: async ({pageParam}) => NotificationsApi.getAll(),
     getNextPageParam: (lastPage, allPages, lastPageParam) => {
-      if (!(lastPage as any)?.length) return undefined;
+      return undefined;
+      /* if (!(lastPage as any)?.length) return undefined;
       const pageParam = (lastPage as any)[(lastPage as any).length - 1].createdAt;
       if (!pageParam || pageParam === lastPageParam) return undefined;
-      return pageParam;
+      return pageParam; */
     },
   });
 

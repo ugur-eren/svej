@@ -1,4 +1,5 @@
 import ApiInstance from '../ApiInstance';
+import {DEFAULT_BASE_URL} from '../Utils';
 
 export const getById = (mediaId: string) => {
   return ApiInstance.medias({mediaId}).get();
@@ -22,4 +23,12 @@ export const downloadByFileKey = (fileKey: string, range?: {start: number; end: 
         }
       : undefined,
   });
+};
+
+export const getFileURL = (fileKey?: string): string => {
+  if (!fileKey) return '';
+
+  const path = ApiInstance.medias.files({fileKey})['~path'];
+
+  return `${DEFAULT_BASE_URL}${path}`;
 };

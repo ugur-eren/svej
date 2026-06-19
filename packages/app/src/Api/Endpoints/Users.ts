@@ -1,5 +1,13 @@
 import ApiInstance from '../ApiInstance';
 
+export type Author = (Awaited<ReturnType<typeof ApiInstance.users.get>> & {
+  error: null;
+})['data'][number];
+
+export type User = (Awaited<ReturnType<ReturnType<typeof ApiInstance.users>['get']>> & {
+  error: null;
+})['data'];
+
 export const search = async (query: string) => {
   return ApiInstance.users.get({query: {q: query}});
 };

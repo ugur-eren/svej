@@ -1,9 +1,9 @@
 import {createSlice} from '@reduxjs/toolkit';
 import type {PayloadAction} from '@reduxjs/toolkit';
-import {Post} from '@/Api/Post/Post.types';
+import type {PostsApi} from '@/Api';
 
 export type PostsState = {
-  posts: Record<string, Post>;
+  posts: Record<string, PostsApi.Post>;
 };
 
 const initialState: PostsState = {
@@ -18,14 +18,14 @@ export const PostsSlice = createSlice({
       state.posts = action.payload;
     },
 
-    addPosts: (state, action: PayloadAction<Post[]>) => {
+    addPosts: (state, action: PayloadAction<PostsApi.Post[]>) => {
       state.posts = {
         ...state.posts,
         ...Object.fromEntries(action.payload.map((post) => [post.id, post])),
       };
     },
 
-    setPost: (state, action: PayloadAction<Post>) => {
+    setPost: (state, action: PayloadAction<PostsApi.Post>) => {
       state.posts[action.payload.id] = action.payload;
     },
   },

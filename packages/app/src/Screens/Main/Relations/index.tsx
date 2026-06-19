@@ -2,7 +2,7 @@ import {FlatList, View} from 'react-native';
 import {PageContainer} from '@/Containers';
 import {Divider, Header, Placeholders, ProfileWidget} from '@/Components';
 import {useInfiniteQuery, useLanguage, useTheme} from '@/Hooks';
-import {UserApi} from '@/Api';
+import {UsersApi} from '@/Api';
 import {RelationsScreenProps} from '@/Types';
 import getStyles from './styles';
 
@@ -17,11 +17,14 @@ const Relations: React.FC<RelationsScreenProps> = ({route}) => {
   const relations = useInfiniteQuery({
     queryKey: ['relations', type, userId],
     initialPageParam: 1,
-    queryFn: ({pageParam}) => UserApi.getRelations(userId, type, pageParam),
+    // TODO: pagination
+    queryFn: ({pageParam}) =>
+      (type === 'followers' ? UsersApi.getFollowers : UsersApi.getFollowing)(userId),
     getNextPageParam: (lastPage, allPages, lastPageParam) => {
-      if (!(lastPage as any)?.length) return undefined;
+      return undefined;
+      /* if (!(lastPage as any)?.length) return undefined;
 
-      return lastPageParam + 1;
+      return lastPageParam + 1; */
     },
   });
 
@@ -38,7 +41,7 @@ const Relations: React.FC<RelationsScreenProps> = ({route}) => {
           ItemSeparatorComponent={Divider}
           renderItem={({item}) => (
             <View style={styles.item}>
-              <ProfileWidget user={item} />
+              <ProfileWidget user={item as UsersApi.Author} />
             </View>
           )}
         />

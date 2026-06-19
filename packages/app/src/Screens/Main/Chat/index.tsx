@@ -7,7 +7,7 @@ import {Avatar, Header, Placeholders} from '@/Components';
 import {PageContainer} from '@/Containers';
 import {useLanguage, useOnMount, useShowApiError, useShowToast, useSocketClient} from '@/Hooks';
 import {Selectors, useAppSelector} from '@/Redux';
-import {ChatApi} from '@/Api';
+import {ChatsApi} from '@/Api';
 import {ChatScreenProps} from '@/Types';
 import Message from './Message';
 import MessageInput from './MessageInput';
@@ -31,7 +31,8 @@ const Chat: React.FC<ChatScreenProps> = ({route}) => {
     setLoading(true);
 
     try {
-      const response = await ChatApi.getChatMessages(userId);
+      // TODO: conversation
+      const response = await ChatsApi.getConversationMessages();
       if (!response.ok || !response.data) return;
 
       setMessages(response.data);

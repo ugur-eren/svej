@@ -49,9 +49,12 @@ const ChangePassword: React.FC<SettingsChangePasswordScreenProps> = ({navigation
         newPassword: values.newPassword,
       });
 
-      dispatch(AuthActions.setAuthenticated(true));
-      dispatch(AuthActions.setAccessToken(response.accessToken));
-      dispatch(AuthActions.setUser(response.user));
+      dispatch(
+        AuthActions.login({
+          accessToken: response.accessToken,
+          user: response.user,
+        }),
+      );
 
       navigation.goBack();
 

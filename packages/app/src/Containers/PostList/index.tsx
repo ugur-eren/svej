@@ -4,7 +4,7 @@ import {useFocusEffect, useScrollToTop} from '@react-navigation/native';
 import {useQueryClient} from '@tanstack/react-query';
 import {Placeholders, Post} from '@/Components';
 import {VisibilityContext, useForwardedRef, useInfiniteQuery} from '@/Hooks';
-import {PostApi} from '@/Api';
+import {FeedApi, UsersApi} from '@/Api';
 import {PostsActions, useAppDispatch} from '@/Redux';
 import {IsAndroid} from '@/Utils/Helpers';
 import {PostListProps} from './props';
@@ -28,24 +28,26 @@ const PostList = forwardRef<FlatList, PostListProps>((props, ref) => {
     queryKey: ['posts', type, userId],
     queryFn: async ({pageParam}) => {
       if (type === 'explore') {
-        return PostApi.getExplore(pageParam);
+        // TODO: pagination
+        return FeedApi.getExplore();
       }
 
       if (type === 'profile') {
         if (!userId) return [];
 
-        return PostApi.getByUserId(userId, pageParam);
+        return UsersApi.getPosts(userId);
       }
 
       return [];
     },
     getNextPageParam: (lastPage: any, allPages, lastPageParam) => {
-      if (!lastPage?.length) return undefined;
+      return undefined;
+      /* if (!lastPage?.length) return undefined;
 
       const pageParam = lastPage[lastPage.length - 1].createdAt;
 
       if (!pageParam || pageParam === lastPageParam) return undefined;
-      return pageParam;
+      return pageParam; */
     },
   });
 

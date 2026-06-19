@@ -1,6 +1,6 @@
 import {memo} from 'react';
 import {Image} from 'expo-image';
-import {FileApi} from '@/Api';
+import {MediasApi} from '@/Api';
 import {AvatarProps} from './props';
 
 const Avatar: React.FC<AvatarProps> = (props) => {
@@ -10,7 +10,7 @@ const Avatar: React.FC<AvatarProps> = (props) => {
     const ratio = image.width / image.height;
     return (
       <Image
-        source={{uri: FileApi.getFileURL(image.fileKey)}}
+        source={{uri: MediasApi.getFileURL(image.fileKey)}}
         placeholder={{blurhash: image.blurhash ?? undefined, width: 32 * ratio, height: 32}}
         {...restProps}
       />
