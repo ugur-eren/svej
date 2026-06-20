@@ -1,5 +1,3 @@
-import Color from 'color';
-import {StyleSheet} from 'react-native';
 import {Spacing, ThemedStyleSheet} from '@/Styles';
 import {CalculateElevation} from '@/Utils/Elevation';
 
@@ -58,7 +56,8 @@ export default ThemedStyleSheet((theme) => ({
   },
 
   mediaAddButton: {
-    ...StyleSheet.absoluteFill,
+    width: '100%',
+    height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -75,30 +74,5 @@ export default ThemedStyleSheet((theme) => ({
   },
   submitIcon: {
     marginRight: Spacing.xsmall,
-  },
-
-  selectorContainer: {
-    position: 'absolute',
-    left: 0,
-    top: 0,
-    width: '100%',
-    height: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: Color(theme.colors.surface).alpha(0.5).toString(),
-  },
-  selectorInner: {
-    flexDirection: 'row',
-    gap: Spacing.xxsmall,
-  },
-  selectorOption: {
-    backgroundColor: theme.colors.elevated,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: Spacing.xxlarge,
-    aspectRatio: 1,
-  },
-  selectorOptionItem: {
-    marginTop: 10,
   },
 }));
