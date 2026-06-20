@@ -22,6 +22,8 @@ export const useQuery = <
     {
       ...options,
       queryFn: async (...args) => {
+        if (typeof options.queryFn !== 'function') return options.queryFn;
+
         const response: any = await options.queryFn?.(...args);
 
         throwApiError(response);

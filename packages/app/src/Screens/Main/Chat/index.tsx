@@ -3,7 +3,7 @@ import {useEffect, useState} from 'react';
 import {FlatList, View} from 'react-native';
 import uuid from 'react-native-uuid';
 import {ActivityIndicator} from 'react-native-paper';
-import {useQueryClient} from '@tanstack/react-query';
+import {skipToken, useQueryClient} from '@tanstack/react-query';
 import {Avatar, Header, Placeholders} from '@/Components';
 import {PageContainer} from '@/Containers';
 import {
@@ -41,8 +41,7 @@ const Chat: React.FC<ChatScreenProps> = ({route}) => {
     isFetching,
   } = useQuery({
     queryKey: ['chat', conversationId],
-    queryFn: () => ChatsApi.getConversationMessages(conversationId!),
-    enabled: !!conversationId,
+    queryFn: conversationId ? () => ChatsApi.getConversationMessages(conversationId) : skipToken,
   });
 
   const getConversationIdByParticipant = async (create: boolean) => {

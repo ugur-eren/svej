@@ -16,14 +16,7 @@ export const useInfiniteQuery = <
   TQueryKey extends QueryKey = QueryKey,
   TPageParam = unknown,
 >(
-  options: UseInfiniteQueryOptions<
-    TQueryFnData,
-    ApiError,
-    TData,
-    TQueryFnData,
-    TQueryKey,
-    TPageParam
-  >,
+  options: UseInfiniteQueryOptions<TQueryFnData, ApiError, TData, TQueryKey, TPageParam>,
   showErrorToast = true,
   queryClient: QueryClient | undefined = undefined,
 ): UseInfiniteQueryResult<TData, ApiError> => {
@@ -31,6 +24,8 @@ export const useInfiniteQuery = <
     {
       ...options,
       queryFn: async (...args) => {
+        if (typeof options.queryFn !== 'function') return options.queryFn;
+
         const response: any = await options.queryFn?.(...args);
 
         throwApiError(response);
