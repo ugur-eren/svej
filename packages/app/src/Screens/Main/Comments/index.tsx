@@ -85,7 +85,6 @@ const Comments: React.FC<CommentsScreenProps> = ({route}) => {
             keyExtractor={(item) => item.id}
             renderItem={({item}) => <Comment comment={item} />}
             style={GlobalStyles.flex1}
-            automaticallyAdjustKeyboardInsets
           />
 
           <CommentInput onCommentSend={onCommentSend} />

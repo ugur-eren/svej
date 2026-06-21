@@ -9,7 +9,6 @@ export {default as DoubleTapLike} from './DoubleTapLike';
 export {default as GradientOrView} from './GradientOrView';
 export {default as Header} from './Header';
 export {default as Input} from './Input';
-export {default as InputAccessoryView} from './InputAccessoryView';
 export {default as ListItem} from './ListItem';
 export {default as ListMenu} from './ListMenu';
 export {default as MainHeader} from './MainHeader';

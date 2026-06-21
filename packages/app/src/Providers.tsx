@@ -1,4 +1,5 @@
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import {KeyboardProvider} from 'react-native-keyboard-controller';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {Host as PortalizeProvider} from 'react-native-portalize';
 import {PaperProvider} from 'react-native-paper';
@@ -25,19 +26,21 @@ const queryClient = new QueryClient();
 const RootProviders: React.FC<{children: React.ReactNode}> = ({children}) => {
   return (
     <GestureHandlerRootView style={styles.gestureHandler}>
-      <SafeAreaProvider>
-        <ReduxProvider store={store}>
-          <PersistGate loading={null} persistor={persistor}>
-            <ThemeProvider>
-              <LanguageProvider>
-                <QueryClientProvider client={queryClient}>
-                  <Providers>{children}</Providers>
-                </QueryClientProvider>
-              </LanguageProvider>
-            </ThemeProvider>
-          </PersistGate>
-        </ReduxProvider>
-      </SafeAreaProvider>
+      <KeyboardProvider>
+        <SafeAreaProvider>
+          <ReduxProvider store={store}>
+            <PersistGate loading={null} persistor={persistor}>
+              <ThemeProvider>
+                <LanguageProvider>
+                  <QueryClientProvider client={queryClient}>
+                    <Providers>{children}</Providers>
+                  </QueryClientProvider>
+                </LanguageProvider>
+              </ThemeProvider>
+            </PersistGate>
+          </ReduxProvider>
+        </SafeAreaProvider>
+      </KeyboardProvider>
     </GestureHandlerRootView>
   );
 };

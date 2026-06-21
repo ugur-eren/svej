@@ -211,7 +211,6 @@ const Chat: React.FC<ChatScreenProps> = ({route}) => {
           keyboardDismissMode="on-drag"
           keyboardShouldPersistTaps="handled"
           removeClippedSubviews
-          automaticallyAdjustKeyboardInsets
         />
       )}
 

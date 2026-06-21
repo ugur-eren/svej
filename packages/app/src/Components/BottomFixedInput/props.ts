@@ -1,8 +1,7 @@
-import {TextInputProps} from 'react-native';
-import {SafeAreaViewProps} from 'react-native-safe-area-context';
+import {TextInputProps, ViewProps} from 'react-native';
 
 export type BottomFixedInputProps = TextInputProps & {
-  containerProps?: SafeAreaViewProps;
+  containerProps?: ViewProps;
   left?: React.ReactNode;
   right?: React.ReactNode;
 };
