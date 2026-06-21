@@ -1,11 +1,11 @@
 import ApiInstance from '../ApiInstance';
 
-export type Notification = (Awaited<ReturnType<typeof ApiInstance.notifications.get>> & {
+export type Notification = (Awaited<ReturnType<typeof getById>> & {
   error: null;
-})['data'][number];
+})['data'];
 
-export const getAll = async () => {
-  return ApiInstance.notifications.get();
+export const getAll = async (cursor?: string) => {
+  return ApiInstance.notifications.get({query: {cursor}});
 };
 
 export const getUnreadCount = async () => {

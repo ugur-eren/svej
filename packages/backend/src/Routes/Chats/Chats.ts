@@ -5,9 +5,17 @@ import {ChatsModule} from '@/Modules/Chats';
 
 export default new Elysia()
   .use(onlyAuthenticated)
-  .get('/', async ({session}) => {
-    return ChatsModule.getAllConversations(session.user.id);
-  })
+  .get(
+    '/',
+    async ({session, query}) => {
+      return ChatsModule.getAllConversations(session.user.id, query.cursor);
+    },
+    {
+      query: z.object({
+        cursor: z.string().optional(),
+      }),
+    },
+  )
   .post(
     '/',
     async ({session, body: {participantId}}) => {
@@ -24,9 +32,17 @@ export default new Elysia()
       .get('/', async ({session, params: {conversationId}}) => {
         return ChatsModule.getConversationById(session.user.id, conversationId);
       })
-      .get('/messages', async ({session, params: {conversationId}}) => {
-        return ChatsModule.getConversationMessages(session.user.id, conversationId);
-      }),
+      .get(
+        '/messages',
+        async ({session, query, params: {conversationId}}) => {
+          return ChatsModule.getConversationMessages(session.user.id, conversationId, query.cursor);
+        },
+        {
+          query: z.object({
+            cursor: z.string().optional(),
+          }),
+        },
+      ),
   )
   .get(
     '/by-participant/:participantId',

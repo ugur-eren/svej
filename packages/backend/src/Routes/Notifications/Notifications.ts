@@ -5,9 +5,17 @@ import {NotificationsModule} from '@/Modules/Notifications';
 
 export default new Elysia()
   .use(onlyAuthenticated)
-  .get('/', async ({session}) => {
-    return NotificationsModule.getAll(session.user.id);
-  })
+  .get(
+    '/',
+    async ({session, query}) => {
+      return NotificationsModule.getAll(session.user.id, query.cursor);
+    },
+    {
+      query: z.object({
+        cursor: z.string().optional(),
+      }),
+    },
+  )
   .get('/count', async ({session}) => {
     const count = await NotificationsModule.getUnreadCount(session.user.id);
     return {count};

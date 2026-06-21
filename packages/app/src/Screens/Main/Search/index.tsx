@@ -35,7 +35,6 @@ const Search: React.FC<SearchScreenProps> = (props) => {
 
   const users = useQuery({
     queryKey: ['search', searchText],
-    // TODO: pagination
     queryFn: () => UsersApi.search(searchText),
   });
 

@@ -1,11 +1,11 @@
 import ApiInstance from '../ApiInstance';
 
-export type ChatMessage = (Awaited<
-  ReturnType<ReturnType<typeof ApiInstance.chats>['messages']['get']>
-> & {error: null})['data'][number];
+export type ChatMessage = (Awaited<ReturnType<typeof getConversationMessages>> & {
+  error: null;
+})['data']['messages'][number];
 
-export const getAllConversations = async () => {
-  return ApiInstance.chats.get();
+export const getAllConversations = async (cursor?: string) => {
+  return ApiInstance.chats.get({query: {cursor}});
 };
 
 export const getConversationByParticipant = async (participantId: string) => {
@@ -20,6 +20,6 @@ export const getConversationById = async (conversationId: string) => {
   return ApiInstance.chats({conversationId}).get();
 };
 
-export const getConversationMessages = async (conversationId: string) => {
-  return ApiInstance.chats({conversationId}).messages.get();
+export const getConversationMessages = async (conversationId: string, cursor?: string) => {
+  return ApiInstance.chats({conversationId}).messages.get({query: {cursor}});
 };

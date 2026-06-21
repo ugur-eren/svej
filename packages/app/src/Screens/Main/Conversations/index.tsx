@@ -1,28 +1,51 @@
-import {FlatList} from 'react-native';
+import {useState} from 'react';
+import {FlatList, RefreshControl} from 'react-native';
 import {PageContainer} from '@/Containers';
 import {Header, Placeholders} from '@/Components';
-import {useLanguage, useQuery} from '@/Hooks';
+import {useInfiniteQuery, useLanguage} from '@/Hooks';
 import {ChatsApi} from '@/Api';
 import {ConversationsScreenProps} from '@/Types';
 import ConversationCard from './ConversationCard';
 
 const Conversations: React.FC<ConversationsScreenProps> = ({navigation}) => {
+  const [refreshing, setRefreshing] = useState(false);
+
   const language = useLanguage();
 
-  const chats = useQuery({
+  const conversations = useInfiniteQuery({
     queryKey: ['conversations'],
-    queryFn: ChatsApi.getAllConversations,
+    queryFn: async ({pageParam}) => ChatsApi.getAllConversations(pageParam),
+    select: (data) => data.pages.map((page) => page.conversations).flat(),
+    initialPageParam: undefined as string | undefined,
+    getNextPageParam: (lastPage, _, lastPageParam) => {
+      const nextPageParam = lastPage?.nextCursor;
+      if (nextPageParam && nextPageParam !== lastPageParam) {
+        return nextPageParam;
+      }
+      return undefined;
+    },
   });
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+
+    try {
+      await conversations.refetch();
+    } finally {
+      setRefreshing(false);
+    }
+  };
 
   return (
     <PageContainer>
       <Header title={language.chat.title} />
 
-      {chats.isLoading || !chats.data ? (
+      {conversations.isLoading || !conversations.data ? (
         <Placeholders.ProfileWidgetList />
       ) : (
         <FlatList
-          data={chats.data}
+          data={conversations.data}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
           keyExtractor={(item) => item.id}
           renderItem={({item}) => (
             <ConversationCard

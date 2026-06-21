@@ -16,15 +16,16 @@ const Relations: React.FC<RelationsScreenProps> = ({route}) => {
 
   const relations = useInfiniteQuery({
     queryKey: ['relations', type, userId],
-    initialPageParam: 1,
-    // TODO: pagination
     queryFn: ({pageParam}) =>
-      (type === 'followers' ? UsersApi.getFollowers : UsersApi.getFollowing)(userId),
-    getNextPageParam: (lastPage, allPages, lastPageParam) => {
+      (type === 'followers' ? UsersApi.getFollowers : UsersApi.getFollowing)(userId, pageParam),
+    select: (data) => data.pages.map((page) => page.users).flat(),
+    initialPageParam: undefined as string | undefined,
+    getNextPageParam: (lastPage, _, lastPageParam) => {
+      const nextPageParam = lastPage?.nextCursor;
+      if (nextPageParam && nextPageParam !== lastPageParam) {
+        return nextPageParam;
+      }
       return undefined;
-      /* if (!(lastPage as any)?.length) return undefined;
-
-      return lastPageParam + 1; */
     },
   });
 
@@ -36,7 +37,7 @@ const Relations: React.FC<RelationsScreenProps> = ({route}) => {
         <Placeholders.ProfileWidgetList />
       ) : (
         <FlatList
-          data={relations.data?.pages.flat()}
+          data={relations.data}
           keyExtractor={(item) => item.id}
           ItemSeparatorComponent={Divider}
           renderItem={({item}) => (

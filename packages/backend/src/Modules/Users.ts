@@ -1,4 +1,4 @@
-import {ErrorCodes} from '@svej/common';
+import {Config, ErrorCodes} from '@svej/common';
 import {NotificationType, Prisma as PrismaTypes} from '@svej/database';
 import {Prisma, PrismaIncludes} from '@svej/server-side';
 import {ModuleError} from '@/Utils/Error';
@@ -39,30 +39,34 @@ const getFollowUsers = async (
   viewerId: string,
   userId: string,
   relation: 'followers' | 'follows',
+  cursor?: string,
 ) => {
-  // TODO: pagination
   const user = await Prisma.user.findUnique({
     where: {id: userId},
     select: {
       [relation]: {
+        skip: cursor ? 1 : 0,
+        take: Config.relationsPerPage,
+        cursor: cursor ? {id: cursor} : undefined,
         include: PrismaIncludes.Author(viewerId),
-        orderBy: {
-          followers: {
-            _count: 'desc',
-          },
-        },
+        orderBy: [{followers: {_count: 'desc'}}, {id: 'desc'}],
       },
     },
   });
 
   assertUserExists(user);
 
-  return user[relation].map((rel) => extendUser(rel as Author, viewerId));
+  const lastRelation = user[relation][user[relation].length - 1];
+  const nextCursor = lastRelation ? lastRelation.id : undefined;
+
+  return {
+    users: user[relation].map((rel) => extendUser(rel as Author, viewerId)),
+    nextCursor,
+  };
 };
 
 export const UsersModule = {
   async search(viewerId: string, query: string) {
-    // TODO: pagination
     const users = await Prisma.user.findMany({
       where: {
         AND: [
@@ -160,12 +164,12 @@ export const UsersModule = {
     return changePhoto(viewerId, 'cover', file);
   },
 
-  async getFollowers(viewerId: string, userId: string) {
-    return getFollowUsers(viewerId, userId, 'followers');
+  async getFollowers(viewerId: string, userId: string, cursor?: string) {
+    return getFollowUsers(viewerId, userId, 'followers', cursor);
   },
 
-  async getFollowing(viewerId: string, userId: string) {
-    return getFollowUsers(viewerId, userId, 'follows');
+  async getFollowing(viewerId: string, userId: string, cursor?: string) {
+    return getFollowUsers(viewerId, userId, 'follows', cursor);
   },
 
   async follow(viewerId: string, userId: string) {

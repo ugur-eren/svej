@@ -24,7 +24,6 @@ export default {
 
   postDescriptionMaxLength: 1024,
   postDescriptionMaxLines: 10,
-  postsPerPage: 10,
 
   commentMaxLength: 512,
   commentMaxLines: 5,
@@ -34,8 +33,11 @@ export default {
   chatMessageRateLimitMax: 10,
   chatMessageRateLimitWindowMs: 10_000,
 
+  postsPerPage: 10,
+  commentsPerPage: 20,
+  conversationsPerPage: 20,
+  chatMessagesPerPage: 20,
   relationsPerPage: 20,
-
   notificationsPerPage: 20,
 
   // JWT Configurations

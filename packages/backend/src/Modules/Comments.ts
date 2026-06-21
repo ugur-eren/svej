@@ -1,4 +1,4 @@
-import {ErrorCodes, Zod} from '@svej/common';
+import {Config, ErrorCodes, Zod} from '@svej/common';
 import {NotificationType} from '@svej/database';
 import {Prisma, PrismaIncludes} from '@svej/server-side';
 import {ModuleError} from '@/Utils/Error';
@@ -31,8 +31,7 @@ export const CommentsModule = {
     return extendComment(comment, viewerId);
   },
 
-  // TODO: pagination
-  async getByPostId(viewerId: string, postId: string) {
+  async getByPostId(viewerId: string, postId: string, cursor?: string) {
     const post = await Prisma.post.findUnique({
       where: {id: postId},
       select: {id: true},
@@ -41,11 +40,21 @@ export const CommentsModule = {
     assertPostExists(post);
 
     const comments = await Prisma.comment.findMany({
+      skip: cursor ? 1 : 0,
+      take: Config.commentsPerPage,
+      cursor: cursor ? {id: cursor} : undefined,
       where: {post: {id: postId}},
       include: PrismaIncludes.Comment(viewerId),
+      orderBy: [{likes: {_count: 'desc'}}, {id: 'desc'}],
     });
 
-    return comments.map((comment) => extendComment(comment, viewerId));
+    const lastComment = comments[comments.length - 1];
+    const nextCursor = lastComment ? lastComment.id : undefined;
+
+    return {
+      comments: comments.map((comment) => extendComment(comment, viewerId)),
+      nextCursor,
+    };
   },
 
   async getReactionCounts(commentId: string) {

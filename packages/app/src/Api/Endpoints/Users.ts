@@ -1,10 +1,10 @@
 import ApiInstance from '../ApiInstance';
 
-export type Author = (Awaited<ReturnType<typeof ApiInstance.users.get>> & {
+export type Author = (Awaited<ReturnType<typeof search>> & {
   error: null;
 })['data'][number];
 
-export type User = (Awaited<ReturnType<ReturnType<typeof ApiInstance.users>['get']>> & {
+export type User = (Awaited<ReturnType<typeof getById>> & {
   error: null;
 })['data'];
 
@@ -20,8 +20,8 @@ export const getByUsername = async (username: string) => {
   return ApiInstance.users['by-username']({username}).get();
 };
 
-export const getPosts = async (userId: string) => {
-  return ApiInstance.users({userId}).posts.get();
+export const getPosts = async (userId: string, cursor?: string) => {
+  return ApiInstance.users({userId}).posts.get({query: {cursor}});
 };
 
 export const getMe = async () => {
@@ -54,12 +54,12 @@ export const changeCoverPhoto = async (media: File) => {
   );
 };
 
-export const getFollowers = async (userId: string) => {
-  return ApiInstance.users({userId}).followers.get();
+export const getFollowers = async (userId: string, cursor?: string) => {
+  return ApiInstance.users({userId}).followers.get({query: {cursor}});
 };
 
-export const getFollowing = async (userId: string) => {
-  return ApiInstance.users({userId}).following.get();
+export const getFollowing = async (userId: string, cursor?: string) => {
+  return ApiInstance.users({userId}).following.get({query: {cursor}});
 };
 
 export const follow = async (userId: string) => {

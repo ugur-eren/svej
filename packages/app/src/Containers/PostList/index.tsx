@@ -22,37 +22,38 @@ const PostList = forwardRef<FlatList, PostListProps>((props, ref) => {
 
   // eslint-disable-next-line @tanstack/query/exhaustive-deps
   const posts = useInfiniteQuery({
-    initialPageParam: Date.now().toString(),
-    queryKey: ['posts', type, userId],
+    queryKey: type === 'explore' ? ['posts', 'explore'] : ['posts', 'profile', userId],
     queryFn: async ({pageParam}) => {
       let data;
       if (type === 'explore') {
-        // TODO: pagination
-        data = await FeedApi.getExplore();
+        data = await FeedApi.getExplore(pageParam);
       }
 
-      if (type === 'profile') {
-        if (!userId) return [];
-
-        data = await UsersApi.getPosts(userId);
+      if (type === 'profile' && userId) {
+        data = await UsersApi.getPosts(userId, pageParam);
       }
 
-      if (data && Array.isArray(data.data)) {
-        for (const post of data.data) {
+      if (data?.data?.posts && Array.isArray(data.data.posts)) {
+        for (const post of data.data.posts) {
           queryClient.setQueryData(['post', post.id], post);
         }
       }
 
       return data;
     },
-    getNextPageParam: (lastPage: any, allPages, lastPageParam) => {
+    select: (data) => {
+      return data.pages
+        .map((page) => page?.posts)
+        .filter((page): page is NonNullable<typeof page> => !!page)
+        .flat();
+    },
+    initialPageParam: undefined as string | undefined,
+    getNextPageParam: (lastPage, _, lastPageParam) => {
+      const nextPageParam = lastPage?.nextCursor;
+      if (nextPageParam && nextPageParam !== lastPageParam) {
+        return nextPageParam;
+      }
       return undefined;
-      /* if (!lastPage?.length) return undefined;
-
-      const pageParam = lastPage[lastPage.length - 1].createdAt;
-
-      if (!pageParam || pageParam === lastPageParam) return undefined;
-      return pageParam; */
     },
   });
 
@@ -76,12 +77,11 @@ const PostList = forwardRef<FlatList, PostListProps>((props, ref) => {
     setRefreshing(true);
 
     try {
-      queryClient.invalidateQueries({queryKey: ['post']});
       await posts.refetch();
     } finally {
       setRefreshing(false);
     }
-  }, [posts, queryClient]);
+  }, [posts]);
 
   const viewabilityConfigPairs = useRef<FlatListProps<never>['viewabilityConfigCallbackPairs']>([
     {
@@ -117,7 +117,7 @@ const PostList = forwardRef<FlatList, PostListProps>((props, ref) => {
       onEndReachedThreshold={0.2}
       onEndReached={() => posts.fetchNextPage()}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-      data={posts.data.pages.flat() as any[]}
+      data={posts.data}
       keyExtractor={(item) => item.id}
       renderItem={({item, index}) => (
         <VisibilityContext.Provider value={visibleItem === index}>

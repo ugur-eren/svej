@@ -30,25 +30,41 @@ export const PostsModule = {
     return extendPost(post, viewerId);
   },
 
-  // TODO: pagination
-  async getByUserId(viewerId: string, userId: string) {
+  async getByUserId(viewerId: string, userId: string, cursor?: string) {
     const posts = await Prisma.post.findMany({
+      skip: cursor ? 1 : 0,
+      take: Config.postsPerPage,
+      cursor: cursor ? {id: cursor} : undefined,
       where: {authorId: userId},
       include: PrismaIncludes.Post(viewerId),
-      orderBy: {createdAt: 'desc'},
+      orderBy: [{createdAt: 'desc'}, {id: 'desc'}],
     });
 
-    return posts.map((post) => extendPost(post, viewerId));
+    const lastPost = posts[posts.length - 1];
+    const nextCursor = lastPost ? lastPost.id : undefined;
+
+    return {
+      posts: posts.map((post) => extendPost(post, viewerId)),
+      nextCursor,
+    };
   },
 
-  // TODO: pagination
-  async getExploreFeed(viewerId: string) {
+  async getExploreFeed(viewerId: string, cursor?: string) {
     const posts = await Prisma.post.findMany({
+      skip: cursor ? 1 : 0,
+      take: Config.postsPerPage,
+      cursor: cursor ? {id: cursor} : undefined,
       include: PrismaIncludes.Post(viewerId),
-      orderBy: {createdAt: 'desc'},
+      orderBy: [{createdAt: 'desc'}, {id: 'desc'}],
     });
 
-    return posts.map((post) => extendPost(post, viewerId));
+    const lastPost = posts[posts.length - 1];
+    const nextCursor = lastPost ? lastPost.id : undefined;
+
+    return {
+      posts: posts.map((post) => extendPost(post, viewerId)),
+      nextCursor,
+    };
   },
 
   async getReactionCounts(postId: string) {

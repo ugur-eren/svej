@@ -1,7 +1,7 @@
 import {Zod} from '@svej/common';
 import ApiInstance from '../ApiInstance';
 
-export type Post = (Awaited<ReturnType<ReturnType<typeof ApiInstance.posts>['get']>> & {
+export type Post = (Awaited<ReturnType<typeof getById>> & {
   error: null;
 })['data'];
 
@@ -25,8 +25,8 @@ export const removeReaction = async (postId: string) => {
   return ApiInstance.posts({postId}).reactions.delete();
 };
 
-export const getComments = async (postId: string) => {
-  return ApiInstance.posts({postId}).comments.get();
+export const getComments = async (postId: string, cursor?: string) => {
+  return ApiInstance.posts({postId}).comments.get({query: {cursor}});
 };
 
 export const createComment = async (

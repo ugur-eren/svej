@@ -1,11 +1,14 @@
 import {useEffect} from 'react';
 import {
   QueryClient,
+  QueryFunction,
   QueryKey,
+  SkipToken,
   UseQueryOptions,
   UseQueryResult,
   useQuery as useReactQuery,
 } from '@tanstack/react-query';
+import {Treaty} from '@elysia/eden';
 import {ApiError, throwApiError} from '@/Api';
 import {useShowApiError} from './useShowApiError';
 
@@ -14,7 +17,17 @@ export const useQuery = <
   TData = TQueryFnData extends {error: null; data?: infer U} ? U : never,
   TQueryKey extends QueryKey = QueryKey,
 >(
-  options: UseQueryOptions<TQueryFnData, ApiError, TData, TQueryKey>,
+  options: Omit<
+    UseQueryOptions<
+      TQueryFnData extends Treaty.TreatyResponse<Record<number, unknown>>
+        ? (TQueryFnData & {error: null})['data']
+        : TQueryFnData,
+      ApiError,
+      TData,
+      TQueryKey
+    >,
+    'queryFn'
+  > & {queryFn?: QueryFunction<TQueryFnData, TQueryKey> | SkipToken},
   showErrorToast = true,
   queryClient: QueryClient | undefined = undefined,
 ): UseQueryResult<TData, ApiError> => {

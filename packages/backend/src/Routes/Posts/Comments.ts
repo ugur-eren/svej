@@ -10,9 +10,17 @@ export default new Elysia().group(
   (app) =>
     app
       .use(onlyAuthenticated)
-      .get('/', async ({session, params: {postId}}) => {
-        return CommentsModule.getByPostId(session.user.id, postId);
-      })
+      .get(
+        '/',
+        async ({session, query, params: {postId}}) => {
+          return CommentsModule.getByPostId(session.user.id, postId, query.cursor);
+        },
+        {
+          query: z.object({
+            cursor: z.string().optional(),
+          }),
+        },
+      )
       .post(
         '/',
         async ({session, params: {postId}, body: {text}}) => {

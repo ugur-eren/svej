@@ -7,12 +7,28 @@ export default new Elysia()
   .group('/:userId', {params: z.object({userId: z.uuid()})}, (app) =>
     app
       .use(onlyAuthenticated)
-      .get('/followers', async ({session, params: {userId}}) => {
-        return UsersModule.getFollowers(session.user.id, userId);
-      })
-      .get('/following', async ({session, params: {userId}}) => {
-        return UsersModule.getFollowing(session.user.id, userId);
-      }),
+      .get(
+        '/followers',
+        async ({session, query, params: {userId}}) => {
+          return UsersModule.getFollowers(session.user.id, userId, query.cursor);
+        },
+        {
+          query: z.object({
+            cursor: z.string().optional(),
+          }),
+        },
+      )
+      .get(
+        '/following',
+        async ({session, query, params: {userId}}) => {
+          return UsersModule.getFollowing(session.user.id, userId, query.cursor);
+        },
+        {
+          query: z.object({
+            cursor: z.string().optional(),
+          }),
+        },
+      ),
   )
   .group('/me/following/:userId', {params: z.object({userId: z.uuid()})}, (app) =>
     app

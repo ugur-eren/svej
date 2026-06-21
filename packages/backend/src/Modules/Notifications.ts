@@ -1,3 +1,4 @@
+import {Config} from '@svej/common';
 import {Prisma, PrismaIncludes} from '@svej/server-side';
 import {assertNotificationExists} from './Internal/Assert';
 
@@ -13,14 +14,23 @@ export const NotificationsModule = {
     return notification;
   },
 
-  async getAll(viewerId: string) {
+  async getAll(viewerId: string, cursor?: string) {
     const notifications = await Prisma.notification.findMany({
+      skip: cursor ? 1 : 0,
+      take: Config.notificationsPerPage,
+      cursor: cursor ? {id: cursor} : undefined,
       include: PrismaIncludes.Notification(viewerId),
       where: {ownerId: viewerId},
-      orderBy: {createdAt: 'desc'},
+      orderBy: [{createdAt: 'desc'}, {id: 'desc'}],
     });
 
-    return notifications;
+    const lastNotification = notifications[notifications.length - 1];
+    const nextCursor = lastNotification ? lastNotification.id : undefined;
+
+    return {
+      notifications,
+      nextCursor,
+    };
   },
 
   async getUnreadCount(viewerId: string) {

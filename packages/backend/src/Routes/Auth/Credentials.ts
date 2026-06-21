@@ -1,6 +1,6 @@
 import {ErrorCodes, HTTPStatus, Zod} from '@svej/common';
 import {JWTAuth, Password, Prisma} from '@svej/server-side';
-import {Prisma as PrismaTypes} from '@svej/database';
+import {getUniqueConstraintViolationTargets, Prisma as PrismaTypes} from '@svej/database';
 import {Elysia} from 'elysia';
 import {onlyAuthenticated} from '@/Plugins';
 
@@ -55,15 +55,8 @@ export default new Elysia({prefix: '/credentials'})
 
         return {accessToken: result.accessToken, user: result.user};
       } catch (error) {
-        if (
-          !(error instanceof PrismaTypes.PrismaClientKnownRequestError) ||
-          error.code !== 'P2002'
-        ) {
-          throw error;
-        }
-
-        const target = error.meta?.target;
-        if (!Array.isArray(target) || target.length === 0) throw error;
+        const target = getUniqueConstraintViolationTargets(error);
+        if (!target) throw error;
 
         if (target.includes(PrismaTypes.UserScalarFieldEnum.email)) {
           return status(HTTPStatus.BadRequest, {code: ErrorCodes.EmailAlreadyExists});

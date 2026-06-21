@@ -1,15 +1,14 @@
-import type {ChatMessage} from '@svej/database';
 import {useEffect, useState} from 'react';
 import {FlatList, View} from 'react-native';
 import uuid from 'react-native-uuid';
 import {ActivityIndicator} from 'react-native-paper';
-import {skipToken, useQueryClient} from '@tanstack/react-query';
+import {InfiniteData, skipToken, useQueryClient} from '@tanstack/react-query';
 import {Avatar, Header, Placeholders} from '@/Components';
 import {PageContainer} from '@/Containers';
 import {
+  useInfiniteQuery,
   useLanguage,
   useOnMount,
-  useQuery,
   useShowApiError,
   useShowToast,
   useSocketClient,
@@ -33,15 +32,28 @@ const Chat: React.FC<ChatScreenProps> = ({route}) => {
   const language = useLanguage();
 
   const [conversationId, setConversationId] = useState<string | undefined>(conversationIdParam);
-  const [pendingMessages, setPendingMessages] = useState<(ChatMessage & {sending: true})[]>([]);
+  const [pendingMessages, setPendingMessages] = useState<
+    (ChatsApi.ChatMessage & {sending: true})[]
+  >([]);
 
   const {
     data: messages,
     isLoading,
     isFetching,
-  } = useQuery({
+  } = useInfiniteQuery({
     queryKey: ['chat', conversationId],
-    queryFn: conversationId ? () => ChatsApi.getConversationMessages(conversationId) : skipToken,
+    queryFn: conversationId
+      ? async ({pageParam}) => ChatsApi.getConversationMessages(conversationId, pageParam)
+      : skipToken,
+    select: (data) => data.pages.map((page) => page.messages).flat(),
+    initialPageParam: undefined as string | undefined,
+    getNextPageParam: (lastPage, _, lastPageParam) => {
+      const nextPageParam = lastPage?.nextCursor;
+      if (nextPageParam && nextPageParam !== lastPageParam) {
+        return nextPageParam;
+      }
+      return undefined;
+    },
   });
 
   const getConversationIdByParticipant = async (create: boolean) => {
@@ -70,16 +82,33 @@ const Chat: React.FC<ChatScreenProps> = ({route}) => {
     }
   });
 
+  const appendMessage = (message: ChatsApi.ChatMessage) => {
+    return queryClient.setQueryData(
+      ['chat', message.conversationId],
+      (old: InfiniteData<{messages: ChatsApi.ChatMessage[]}> | undefined) => {
+        if (!old) return old;
+
+        return {
+          ...old,
+          pages: [
+            {
+              ...old.pages[0],
+              messages: [message, ...old.pages[0].messages],
+            },
+            ...old.pages.slice(1),
+          ],
+        };
+      },
+    );
+  };
+
   useEffect(() => {
     if (!ioClient.current) return undefined;
 
     const client = ioClient.current;
 
-    const onMessage = (message: ChatMessage) => {
-      queryClient.setQueryData<ChatMessage[]>(
-        ['chat', message.conversationId],
-        (oldMessages = []) => [message, ...oldMessages],
-      );
+    const onMessage = (message: ChatsApi.ChatMessage) => {
+      appendMessage(message);
     };
 
     client.on('message', onMessage);
@@ -136,10 +165,7 @@ const Chat: React.FC<ChatScreenProps> = ({route}) => {
         return;
       }
 
-      queryClient.setQueryData<ChatMessage[]>(
-        ['chat', resolvedConversationId],
-        (oldMessages = []) => [ack.message, ...oldMessages],
-      );
+      appendMessage(ack.message);
 
       setPendingMessages((prev) => prev.filter((m) => m.id !== tempMessageId));
     } catch (e) {

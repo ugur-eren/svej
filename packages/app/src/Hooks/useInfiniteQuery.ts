@@ -2,11 +2,14 @@ import {useEffect} from 'react';
 import {
   InfiniteData,
   QueryClient,
+  QueryFunction,
   QueryKey,
+  SkipToken,
   UseInfiniteQueryOptions,
   UseInfiniteQueryResult,
   useInfiniteQuery as useReactInfiniteQuery,
 } from '@tanstack/react-query';
+import {Treaty} from '@elysia/eden';
 import {ApiError, throwApiError} from '@/Api';
 import {useShowApiError} from './useShowApiError';
 
@@ -16,7 +19,18 @@ export const useInfiniteQuery = <
   TQueryKey extends QueryKey = QueryKey,
   TPageParam = unknown,
 >(
-  options: UseInfiniteQueryOptions<TQueryFnData, ApiError, TData, TQueryKey, TPageParam>,
+  options: Omit<
+    UseInfiniteQueryOptions<
+      TQueryFnData extends Treaty.TreatyResponse<Record<number, unknown>>
+        ? (TQueryFnData & {error: null})['data']
+        : TQueryFnData,
+      ApiError,
+      TData,
+      TQueryKey,
+      TPageParam
+    >,
+    'queryFn'
+  > & {queryFn?: QueryFunction<TQueryFnData, TQueryKey, TPageParam> | SkipToken},
   showErrorToast = true,
   queryClient: QueryClient | undefined = undefined,
 ): UseInfiniteQueryResult<TData, ApiError> => {
