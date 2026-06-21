@@ -1,5 +1,9 @@
 import {Config, ErrorCodes} from '@svej/common';
-import {NotificationType, Prisma as PrismaTypes} from '@svej/database';
+import {
+  getUniqueConstraintViolationTargets,
+  NotificationType,
+  Prisma as PrismaTypes,
+} from '@svej/database';
 import {Prisma, PrismaIncludes} from '@svej/server-side';
 import {ModuleError} from '@/Utils/Error';
 import {ImageHandler} from '@/Utils/ImageHandler';
@@ -238,5 +242,33 @@ export const UsersModule = {
         },
       },
     });
+  },
+
+  async create(data: {username: string; email: string; password: string; fullname?: string}) {
+    try {
+      const user = await Prisma.user.create({
+        data: {
+          username: data.username,
+          email: data.email,
+          fullname: data.fullname,
+          password: data.password,
+        },
+      });
+
+      return user;
+    } catch (error) {
+      const target = getUniqueConstraintViolationTargets(error);
+      if (!target) throw error;
+
+      if (target.includes(PrismaTypes.UserScalarFieldEnum.email)) {
+        throw new ModuleError(ErrorCodes.EmailAlreadyExists);
+      }
+
+      if (target.includes(PrismaTypes.UserScalarFieldEnum.username)) {
+        throw new ModuleError(ErrorCodes.UsernameAlreadyExists);
+      }
+
+      throw error;
+    }
   },
 };
