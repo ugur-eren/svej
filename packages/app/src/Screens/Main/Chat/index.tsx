@@ -45,7 +45,12 @@ const Chat: React.FC<ChatScreenProps> = ({route}) => {
     queryFn: conversationId
       ? async ({pageParam}) => ChatsApi.getConversationMessages(conversationId, pageParam)
       : skipToken,
-    select: (data) => data.pages.map((page) => page.messages).flat(),
+    select: (data) => {
+      return data.pages
+        .map((page) => page.messages)
+        .filter((page): page is NonNullable<typeof page> => !!page)
+        .flat();
+    },
     initialPageParam: undefined as string | undefined,
     getNextPageParam: (lastPage, _, lastPageParam) => {
       const nextPageParam = lastPage?.nextCursor;
