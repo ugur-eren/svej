@@ -11,7 +11,7 @@ import Touchable from '@/Components/Touchable';
 import PostContent from '@/Components/PostContent';
 import ActionButton from '@/Components/ActionButton';
 import {Post as PostPlaceholder} from '@/Components/Placeholders/Post';
-import {useLanguage, useMutation, usePost, useTheme} from '@/Hooks';
+import {useLanguage, useMutation, useQuery, useTheme} from '@/Hooks';
 import {PostsApi, UsersApi, MediasApi} from '@/Api';
 import {MainNavigationProp} from '@/Types';
 import getStyles from './styles';
@@ -25,7 +25,11 @@ const Post: React.FC<PostProps> = ({postId}) => {
   const language = useLanguage();
   const navigation = useNavigation<MainNavigationProp>();
 
-  const post = usePost(postId);
+  const {data: post, isLoading} = useQuery({
+    queryKey: ['post', postId],
+    queryFn: () => PostsApi.getById(postId),
+    staleTime: 5 * 60 * 1_000,
+  });
 
   const queryClient = useQueryClient();
 
@@ -59,7 +63,7 @@ const Post: React.FC<PostProps> = ({postId}) => {
     }
   };
 
-  if (!post) return <PostPlaceholder />;
+  if (!post || isLoading) return <PostPlaceholder />;
 
   return (
     <View style={styles.container}>

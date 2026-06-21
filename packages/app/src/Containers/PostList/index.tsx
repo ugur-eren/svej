@@ -1,11 +1,10 @@
-import {forwardRef, useCallback, useEffect, useRef, useState} from 'react';
+import {forwardRef, useCallback, useRef, useState} from 'react';
 import {FlatList, FlatListProps, RefreshControl, View} from 'react-native';
 import {useFocusEffect, useScrollToTop} from '@react-navigation/native';
 import {useQueryClient} from '@tanstack/react-query';
 import {Placeholders, Post} from '@/Components';
 import {VisibilityContext, useForwardedRef, useInfiniteQuery} from '@/Hooks';
 import {FeedApi, UsersApi} from '@/Api';
-import {PostsActions, useAppDispatch} from '@/Redux';
 import {IsAndroid} from '@/Utils/Helpers';
 import {PostListProps} from './props';
 import styles from './styles';
@@ -19,26 +18,32 @@ const PostList = forwardRef<FlatList, PostListProps>((props, ref) => {
 
   useScrollToTop(forwardedRef);
 
-  const dispatch = useAppDispatch();
-
   const queryClient = useQueryClient();
 
+  // eslint-disable-next-line @tanstack/query/exhaustive-deps
   const posts = useInfiniteQuery({
     initialPageParam: Date.now().toString(),
     queryKey: ['posts', type, userId],
     queryFn: async ({pageParam}) => {
+      let data;
       if (type === 'explore') {
         // TODO: pagination
-        return FeedApi.getExplore();
+        data = await FeedApi.getExplore();
       }
 
       if (type === 'profile') {
         if (!userId) return [];
 
-        return UsersApi.getPosts(userId);
+        data = await UsersApi.getPosts(userId);
       }
 
-      return [];
+      if (data && Array.isArray(data.data)) {
+        for (const post of data.data) {
+          queryClient.setQueryData(['post', post.id], post);
+        }
+      }
+
+      return data;
     },
     getNextPageParam: (lastPage: any, allPages, lastPageParam) => {
       return undefined;
@@ -54,14 +59,6 @@ const PostList = forwardRef<FlatList, PostListProps>((props, ref) => {
   const lastViewedItem = useRef<number | null>(null);
   const [visibleItem, setVisibleItem] = useState<number | null>(null);
   const [refreshing, setRefreshing] = useState(false);
-
-  useEffect(() => {
-    if (posts.status === 'success' && posts.data && Array.isArray(posts.data)) {
-      dispatch(PostsActions.addPosts(posts.data));
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [posts.status === 'success']);
 
   useFocusEffect(
     useCallback(() => {
@@ -81,8 +78,6 @@ const PostList = forwardRef<FlatList, PostListProps>((props, ref) => {
     try {
       queryClient.invalidateQueries({queryKey: ['post']});
       await posts.refetch();
-    } catch (error) {
-      //
     } finally {
       setRefreshing(false);
     }
