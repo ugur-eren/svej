@@ -75,6 +75,22 @@ const Register: React.FC<Props> = ({navigation}) => {
     }
   };
 
+  const handleNavigate = () => {
+    if (navigation.canGoBack()) {
+      const navState = navigation.getState();
+
+      if (
+        navState.routes.length > 1 &&
+        navState.routes[navState.routes.length - 2].name === 'Login'
+      ) {
+        navigation.goBack();
+        return;
+      }
+    }
+
+    navigation.navigate('Login');
+  };
+
   return (
     <AuthPage.Container>
       <AuthPage.Header title={language.common.register} />
@@ -142,7 +158,7 @@ const Register: React.FC<Props> = ({navigation}) => {
               contentTitle={language.auth.alreadyHaveAccount}
               contentSubtitle={language.common.login}
               onButtonPress={handleSubmit}
-              onContentPress={() => navigation.navigate('Login')}
+              onContentPress={handleNavigate}
             />
           </>
         )}

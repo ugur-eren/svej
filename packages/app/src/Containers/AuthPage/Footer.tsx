@@ -43,7 +43,7 @@ const Footer: React.FC<AuthPageFooterProps> = (props) => {
 
         <TextButton align="center" onPress={onContentPress}>
           {contentTitle}
-          <Text color="primary" align="right" weight="semiBold">
+          <Text color="primary" align="center" weight="semiBold">
             {'\n\n'}
             {contentSubtitle}
           </Text>

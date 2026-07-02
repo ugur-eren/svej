@@ -33,7 +33,7 @@ const app = new Elysia({adapter: node()})
   .use(router);
 
 app.listen(Env.BACKEND_PORT, () => {
-  console.info(`Express server started listening on port ${Env.BACKEND_PORT}`);
+  console.info(`Elysia server started listening on port ${Env.BACKEND_PORT}`);
 });
 
 export type App = typeof app;
