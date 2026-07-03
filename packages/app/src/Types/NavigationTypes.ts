@@ -1,7 +1,7 @@
 import {ImageSourcePropType} from 'react-native';
-import type {Media} from '@svej/database';
 import {CompositeScreenProps, NavigatorScreenParams} from '@react-navigation/native';
 import {NativeStackScreenProps, NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {MediasApi} from '@/Api';
 
 export type RootStackParams = {
   AuthStack: NavigatorScreenParams<AuthStackParams>;
@@ -58,7 +58,7 @@ export type MainStackParams = {
     conversationId?: string;
     userId: string;
     username: string;
-    avatar?: Media | null;
+    avatar?: MediasApi.Avatar | null;
   };
 };
 

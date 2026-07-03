@@ -1,6 +1,12 @@
 import ApiInstance from '../ApiInstance';
 import {DEFAULT_BASE_URL} from '../Utils';
 
+export type Media = (Awaited<ReturnType<typeof getById>> & {
+  error: null;
+})['data'];
+
+export type Avatar = Media & {type: 'IMAGE'};
+
 export const getById = (mediaId: string) => {
   return ApiInstance.medias({mediaId}).get();
 };

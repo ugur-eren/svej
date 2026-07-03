@@ -1,9 +1,9 @@
-import type {ChatMessage, Media} from '@svej/database';
+import {ChatsApi, MediasApi} from '@/Api';
 
 export type ConversationCardProps = {
   username: string;
-  lastMessage?: ChatMessage | null;
-  avatar?: Media | null;
+  lastMessage?: ChatsApi.ChatMessage | null;
+  avatar?: MediasApi.Avatar | null;
 
   onPress?: () => void | Promise<void>;
 };
