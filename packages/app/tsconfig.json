@@ -18,6 +18,6 @@
       "path": "../backend"
     }
   ],
-  "exclude": ["node_modules", "dist", "babel.config.js"],
+  "exclude": ["node_modules", "dist"],
   "include": ["**/*.js", "**/*.ts", "**/*.tsx"]
 }

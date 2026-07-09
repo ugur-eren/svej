@@ -5,7 +5,7 @@ export type Media = (Awaited<ReturnType<typeof getById>> & {
   error: null;
 })['data'];
 
-export type Avatar = Media & {type: 'IMAGE'};
+export type Avatar = Media;
 
 export const getById = (mediaId: string) => {
   return ApiInstance.medias({mediaId}).get();

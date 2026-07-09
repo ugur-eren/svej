@@ -120,44 +120,54 @@ export const UsersModule = {
       omit: {
         email: false,
       },
-      include: PrismaIncludes.User(viewerId),
+      include: {
+        ...PrismaIncludes.User(viewerId),
+
+        // Send sensitive data only for the viewer's own profile
+        email: true,
+      },
     });
 
     assertUserExists(user);
 
     const extendedUser = extendUser(user, viewerId);
 
-    // Send sensitive data only for the viewer's own profile
-    return {...extendedUser, email: user.email};
+    return extendedUser;
   },
 
   async updateViewer(viewerId: string, data: UpdateViewerInput) {
-    if (data.username) {
-      const usernameExists = await Prisma.user.findUnique({where: {username: data.username}});
-      if (usernameExists && usernameExists.id !== viewerId) {
+    try {
+      const updatedUser = await Prisma.user.update({
+        where: {id: viewerId},
+        include: {
+          ...PrismaIncludes.User(viewerId),
+
+          // Send sensitive data only for the viewer's own profile
+          email: true,
+        },
+        data: {
+          username: data.username,
+          fullname: data.fullname || null,
+          email: data.email,
+          bio: data.bio || null,
+        },
+      });
+
+      return extendUser(updatedUser, viewerId);
+    } catch (error) {
+      const target = getUniqueConstraintViolationTargets(error);
+      if (!target) throw error;
+
+      if (target.includes(PrismaTypes.UserScalarFieldEnum.username)) {
         throw new ModuleError(ErrorCodes.UsernameAlreadyExists);
       }
-    }
 
-    if (data.email) {
-      const emailExists = await Prisma.user.findUnique({where: {email: data.email}});
-      if (emailExists && emailExists.id !== viewerId) {
+      if (target.includes(PrismaTypes.UserScalarFieldEnum.email)) {
         throw new ModuleError(ErrorCodes.EmailAlreadyExists);
       }
+
+      throw error;
     }
-
-    const updatedUser = await Prisma.user.update({
-      where: {id: viewerId},
-      include: PrismaIncludes.User(viewerId),
-      data: {
-        username: data.username,
-        fullname: data.fullname || null,
-        email: data.email,
-        bio: data.bio || null,
-      },
-    });
-
-    return extendUser(updatedUser, viewerId);
   },
 
   async changeViewerProfilePhoto(viewerId: string, file: File) {

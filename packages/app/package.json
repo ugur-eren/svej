@@ -15,7 +15,7 @@
     "lint": "eslint \"src/**/*.{ts,tsx}\"",
     "lint:fix": "yarn lint --fix",
     "format:check": "prettier -c \"src/**/*.{ts,tsx}\"",
-    "ts:check": "tsc --noEmit",
+    "ts:check": "tsc --build",
     "check": "yarn format && yarn format:check && yarn lint && yarn ts:check"
   },
   "dependencies": {
