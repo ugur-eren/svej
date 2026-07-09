@@ -120,12 +120,7 @@ export const UsersModule = {
       omit: {
         email: false,
       },
-      include: {
-        ...PrismaIncludes.User(viewerId),
-
-        // Send sensitive data only for the viewer's own profile
-        email: true,
-      },
+      include: PrismaIncludes.User(viewerId),
     });
 
     assertUserExists(user);
@@ -139,12 +134,10 @@ export const UsersModule = {
     try {
       const updatedUser = await Prisma.user.update({
         where: {id: viewerId},
-        include: {
-          ...PrismaIncludes.User(viewerId),
-
-          // Send sensitive data only for the viewer's own profile
-          email: true,
+        omit: {
+          email: false,
         },
+        include: PrismaIncludes.User(viewerId),
         data: {
           username: data.username,
           fullname: data.fullname || null,
@@ -257,6 +250,9 @@ export const UsersModule = {
   async create(data: {username: string; email: string; password: string; fullname?: string}) {
     try {
       const user = await Prisma.user.create({
+        omit: {
+          email: false,
+        },
         data: {
           username: data.username,
           email: data.email,
