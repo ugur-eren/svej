@@ -11,7 +11,7 @@ import {Avatar, Divider, Placeholders, Text, TextButton} from '@/Components';
 import {useLanguage, useMutation, useQuery, useShowApiError, useShowToast, useTheme} from '@/Hooks';
 import {UsersApi, MediasApi, throwApiError} from '@/Api';
 import {Selectors, useAppSelector} from '@/Redux';
-import {loadLocalFile} from '@/Utils/Helpers';
+import {loadPickerFile} from '@/Utils/Helpers';
 import {ProfileScreenProps} from '@/Types';
 import {GlobalStyles} from '@/Styles';
 import getStyles from './styles';
@@ -86,10 +86,9 @@ const ProfileHead: React.FC<ProfileHeadProps> = ({userId, username}) => {
     const file = pickerResult.assets[0];
 
     try {
-      const media = await loadLocalFile(file);
       const result = await (
         type === 'profile' ? UsersApi.changeProfilePhoto : UsersApi.changeCoverPhoto
-      )(media);
+      )(loadPickerFile(file));
       throwApiError(result);
 
       queryClient.invalidateQueries({

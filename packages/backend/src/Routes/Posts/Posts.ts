@@ -9,19 +9,24 @@ export default new Elysia()
   .post(
     '/',
     async ({session, body: {medias, description}}) => {
-      return PostsModule.create(session.user.id, medias, description);
+      return PostsModule.create(session.user.id, medias ?? [], description);
     },
     {
       body: Zod.Post.Create.extend({
-        medias: z
-          .array(
-            z
-              .file()
-              .max(Config.maxFileSize)
-              .refine((file) => fileType(file, ['image', 'video'])),
-          )
-          .min(0)
-          .max(Config.maxMediasPerPost),
+        medias: z.preprocess(
+          // eslint-disable-next-line no-nested-ternary
+          (val) => (!val ? val : Array.isArray(val) ? val : [val]),
+          z
+            .array(
+              z
+                .file()
+                .max(Config.maxFileSize)
+                .refine((file) => fileType(file, ['image', 'video'])),
+            )
+            .min(0)
+            .max(Config.maxMediasPerPost)
+            .optional(),
+        ),
       }),
     },
   )

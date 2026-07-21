@@ -6,8 +6,8 @@ import router from './router';
 import {ModuleError} from './Utils/Error';
 
 const app = new Elysia({adapter: node()})
-  .onBeforeHandle((req) => {
-    console.info(`${req.request.method} ${req.request.url}`);
+  .onBeforeHandle(({request}) => {
+    console.info(`${request.method} ${request.url}`);
   })
   .onError(({code, error, status}) => {
     if (code === 'VALIDATION') {

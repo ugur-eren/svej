@@ -1,63 +1,71 @@
 import {Config} from '@svej/common';
 import type {App} from '@svej/backend';
-import {treaty, Treaty} from '@elysia/eden';
+import {AxiosHeaders} from 'axios';
 import {parseSetCookie} from 'cookie';
+import {store} from '@/Redux';
 import Storage from '@/Utils/Storage';
-import {DEFAULT_BASE_URL, DEFAULT_HEADERS, fetchWithAuth} from './Utils';
+import {DEFAULT_BASE_URL, DEFAULT_HEADERS} from './Utils';
+import {createCustomClient} from './CustomClient';
 
-export const createAuthApiInstance = (config?: Treaty.Config) => {
-  const apiInstance = treaty<App>(DEFAULT_BASE_URL, {
-    ...config,
-    headers: {
-      ...DEFAULT_HEADERS,
-      ...config?.headers,
-    },
-    throwHttpError: false,
-    parseDate: false,
-    fetcher: async (input, init) => {
-      const response = await fetchWithAuth(input, init);
+const {instance, client} = createCustomClient<App>({
+  baseURL: DEFAULT_BASE_URL,
+  headers: DEFAULT_HEADERS,
+  timeout: 15_000,
+});
 
-      // Pass through unsuccessful responses
-      if (!response.ok) return response;
+// Attach access token to all requests
+instance.axiosInstance.interceptors.request.use(async (request) => {
+  const token = store.getState().auth.accessToken;
 
-      const cookieHeaders: string[] = [];
-      response.headers.forEach((value, key) => {
-        if (key.toLowerCase() === 'set-cookie') {
-          cookieHeaders.push(value);
-        }
-      });
+  if (token) {
+    request.headers.set('Authorization', `Bearer ${token}`);
+  }
 
-      const refreshTokenCookie = cookieHeaders.findLast(
-        (cookieStr) => parseSetCookie(cookieStr).name === Config.refreshTokenCookieName,
-      );
-      if (!refreshTokenCookie) return response;
+  return request;
+});
 
-      const cookie = parseSetCookie(refreshTokenCookie);
+// Handle refresh token cookie from server responses
+instance.axiosInstance.interceptors.response.use(async (response) => {
+  let cookieHeaders: string[] = [];
 
-      // Max-Age has precedence over Expires
-      let expiryDate: Date | null = null;
-      if (cookie.maxAge) {
-        expiryDate = new Date(cookie.maxAge === 0 ? 0 : Date.now() + cookie.maxAge * 1000);
-      } else if (cookie.expires) {
-        expiryDate = cookie.expires;
-      }
+  if (response.headers instanceof AxiosHeaders) {
+    cookieHeaders = response.headers.getSetCookie();
+  } else if (response.headers['set-cookie']) {
+    cookieHeaders = Array.isArray(response.headers['set-cookie'])
+      ? response.headers['set-cookie']
+      : [response.headers['set-cookie']];
+  }
 
-      const isExpired = expiryDate && expiryDate.getTime() <= Date.now();
+  if (!cookieHeaders.length) return response;
 
-      // No value or expiryDate is in the past, remove the token
-      if (!cookie.value || isExpired) {
-        await Storage.remove('refreshToken');
-        return response;
-      }
+  const refreshTokenCookie = cookieHeaders.findLast(
+    (cookieStr) => parseSetCookie(cookieStr).name === Config.refreshTokenCookieName,
+  );
+  if (!refreshTokenCookie) return response;
 
-      await Storage.set('refreshToken', cookie.value);
-      return response;
-    },
-  });
+  const cookie = parseSetCookie(refreshTokenCookie);
 
-  return apiInstance.auth;
-};
+  // Max-Age has precedence over Expires
+  let expiryDate: Date | null = null;
+  if (cookie.maxAge) {
+    expiryDate = new Date(cookie.maxAge === 0 ? 0 : Date.now() + cookie.maxAge * 1000);
+  } else if (cookie.expires) {
+    expiryDate = cookie.expires;
+  }
 
-const AuthApiInstance = createAuthApiInstance();
+  const isExpired = expiryDate && expiryDate.getTime() <= Date.now();
+
+  // No value or expiryDate is in the past, remove the token
+  if (!cookie.value || isExpired) {
+    await Storage.remove('refreshToken');
+    return response;
+  }
+
+  await Storage.set('refreshToken', cookie.value);
+
+  return response;
+});
+
+const AuthApiInstance = client.auth;
 
 export default AuthApiInstance;

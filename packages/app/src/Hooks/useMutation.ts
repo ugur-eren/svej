@@ -10,7 +10,7 @@ import {useShowApiError} from './useShowApiError';
 
 export const useMutation = <
   TFnData = unknown,
-  TData = TFnData extends {error: null; data?: infer U} ? U : never,
+  TData = TFnData extends {ok: true; data?: infer U} ? U : never,
   TVariables = void,
   TContext = unknown,
 >(

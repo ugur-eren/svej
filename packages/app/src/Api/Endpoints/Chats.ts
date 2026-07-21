@@ -1,7 +1,7 @@
 import ApiInstance from '../ApiInstance';
 
 export type ChatMessage = (Awaited<ReturnType<typeof getConversationMessages>> & {
-  error: null;
+  ok: true;
 })['data']['messages'][number];
 
 export const getAllConversations = async (cursor?: string) => {

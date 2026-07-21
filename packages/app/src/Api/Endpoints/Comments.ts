@@ -2,7 +2,7 @@ import {Zod} from '@svej/common';
 import ApiInstance from '../ApiInstance';
 
 export type Comment = (Awaited<ReturnType<typeof getById>> & {
-  error: null;
+  ok: true;
 })['data'];
 
 export const getById = async (commentId: string) => {

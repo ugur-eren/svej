@@ -1,7 +1,7 @@
 import ApiInstance from '../ApiInstance';
 
 export type Notification = (Awaited<ReturnType<typeof getById>> & {
-  error: null;
+  ok: true;
 })['data'];
 
 export const getAll = async (cursor?: string) => {

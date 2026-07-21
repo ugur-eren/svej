@@ -14,13 +14,13 @@ import {useShowApiError} from './useShowApiError';
 
 export const useQuery = <
   TQueryFnData = unknown,
-  TData = TQueryFnData extends {error: null; data?: infer U} ? U : never,
+  TData = TQueryFnData extends {ok: true; data?: infer U} ? U : never,
   TQueryKey extends QueryKey = QueryKey,
 >(
   options: Omit<
     UseQueryOptions<
       TQueryFnData extends Treaty.TreatyResponse<Record<number, unknown>>
-        ? (TQueryFnData & {error: null})['data']
+        ? (TQueryFnData & {ok: true})['data']
         : TQueryFnData,
       ApiError,
       TData,

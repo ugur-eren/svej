@@ -1,11 +1,12 @@
 import ApiInstance from '../ApiInstance';
+import {ApiFile} from '../CustomClient';
 
 export type Author = (Awaited<ReturnType<typeof search>> & {
-  error: null;
+  ok: true;
 })['data'][number];
 
 export type User = (Awaited<ReturnType<typeof getById>> & {
-  error: null;
+  ok: true;
 })['data'];
 
 export const search = async (query: string) => {
@@ -32,26 +33,12 @@ export const updateMe = async (data: Parameters<typeof ApiInstance.users.me.patc
   return ApiInstance.users.me.patch(data);
 };
 
-export const changeProfilePhoto = async (media: File) => {
-  return ApiInstance.users.me['profile-photo'].put(
-    {media},
-    {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    },
-  );
+export const changeProfilePhoto = async (media: ApiFile) => {
+  return ApiInstance.users.me['profile-photo'].put({media});
 };
 
-export const changeCoverPhoto = async (media: File) => {
-  return ApiInstance.users.me['cover-photo'].put(
-    {media},
-    {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    },
-  );
+export const changeCoverPhoto = async (media: ApiFile) => {
+  return ApiInstance.users.me['cover-photo'].put({media});
 };
 
 export const getFollowers = async (userId: string, cursor?: string) => {

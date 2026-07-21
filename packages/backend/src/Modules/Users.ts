@@ -33,7 +33,6 @@ const changePhoto = async (viewerId: string, type: 'profile' | 'cover', file: Fi
     data: {
       [type === 'profile' ? 'profilePhoto' : 'coverPhoto']: {
         create: media,
-        delete: true,
       },
     },
   });

@@ -1,20 +1,20 @@
 import {Zod} from '@svej/common';
+import {AxiosRequestConfig} from 'axios';
 import ApiInstance from '../ApiInstance';
 
 export type Post = (Awaited<ReturnType<typeof getById>> & {
-  error: null;
+  ok: true;
 })['data'];
 
 export const getById = async (postId: string) => {
   return ApiInstance.posts({postId}).get();
 };
 
-export const create = async (data: Parameters<typeof ApiInstance.posts.post>[0]) => {
-  return ApiInstance.posts.post(data, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
+export const create = async (
+  data: Parameters<typeof ApiInstance.posts.post>[0],
+  config?: AxiosRequestConfig,
+) => {
+  return ApiInstance.posts.post(data, config);
 };
 
 export const react = async (postId: string, type: Zod.Reaction.TYPES) => {

@@ -5,13 +5,14 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withRepeat,
+  withSequence,
   withTiming,
 } from 'react-native-reanimated';
 import Text from '@/Components/Text';
 import {useShowApiError} from '@/Hooks/useShowApiError';
 import {useTheme} from '@/Hooks/Theming';
 import {PostsApi, throwApiError} from '@/Api';
-import {loadLocalFile} from '@/Utils/Helpers';
+import {loadPickerFile} from '@/Utils/Helpers';
 import {PostUploaderRef} from './props';
 import getStyles from './styles';
 
@@ -53,31 +54,31 @@ const PostUploader = memo(
       setStep('uploading');
 
       try {
-        // TODO: Add progress tracking for uploads
-        /* {
-          timeout: 0,
-          onUploadProgress: (progressEvent) => {
-            const percentCompleted = Math.round(
-              (progressEvent.loaded * 100) / (progressEvent.total ?? 1),
-            );
-            progress.value = percentCompleted * 0.75;
-
-            if (percentCompleted === 100) {
-              setStep('processing');
-              progress.value = withSequence(
-                withTiming(85, {duration: 5_000}),
-                withTiming(90, {duration: 10_000}),
-                withTiming(95, {duration: 15_000}),
-                withTiming(100, {duration: 100_000}),
-              );
-            }
+        const result = await PostsApi.create(
+          {
+            description,
+            medias: medias.map(loadPickerFile),
           },
-        } */
+          {
+            timeout: 0,
+            onUploadProgress: (progressEvent) => {
+              const percentCompleted = Math.round(
+                (progressEvent.loaded * 100) / (progressEvent.total ?? 1),
+              );
+              progress.value = percentCompleted * 0.75;
 
-        const result = await PostsApi.create({
-          description,
-          medias: await Promise.all(medias.map(loadLocalFile)),
-        });
+              if (percentCompleted === 100) {
+                setStep('processing');
+                progress.value = withSequence(
+                  withTiming(85, {duration: 5_000}),
+                  withTiming(90, {duration: 10_000}),
+                  withTiming(95, {duration: 15_000}),
+                  withTiming(100, {duration: 100_000}),
+                );
+              }
+            },
+          },
+        );
 
         throwApiError(result);
 

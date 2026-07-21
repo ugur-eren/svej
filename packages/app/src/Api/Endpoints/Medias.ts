@@ -2,7 +2,7 @@ import ApiInstance from '../ApiInstance';
 import {DEFAULT_BASE_URL} from '../Utils';
 
 export type Media = (Awaited<ReturnType<typeof getById>> & {
-  error: null;
+  ok: true;
 })['data'];
 
 export type Avatar = Media;

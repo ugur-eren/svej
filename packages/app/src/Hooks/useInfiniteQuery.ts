@@ -15,14 +15,14 @@ import {useShowApiError} from './useShowApiError';
 
 export const useInfiniteQuery = <
   TQueryFnData = unknown,
-  TData = InfiniteData<TQueryFnData extends {error: null; data?: infer U} ? U : never>,
+  TData = InfiniteData<TQueryFnData extends {ok: true; data?: infer U} ? U : never>,
   TQueryKey extends QueryKey = QueryKey,
   TPageParam = unknown,
 >(
   options: Omit<
     UseInfiniteQueryOptions<
       TQueryFnData extends Treaty.TreatyResponse<Record<number, unknown>>
-        ? (TQueryFnData & {error: null})['data']
+        ? (TQueryFnData & {ok: true})['data']
         : TQueryFnData,
       ApiError,
       TData,
