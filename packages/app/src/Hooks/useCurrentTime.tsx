@@ -1,14 +1,14 @@
 import {useContext, createContext, useState, useEffect} from 'react';
 
-export const CurrentTimeContext = createContext<number | null>(null);
+export const CurrentTimeContext = createContext<number>(Date.now());
 
 export const CurrentTimeProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
-  const [currentTime, setCurrentTime] = useState(Date.now());
+  const [currentTime, setCurrentTime] = useState<number>(Date.now);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTime(Date.now());
-    }, 10000);
+    }, 30_000);
 
     return () => clearInterval(interval);
   }, []);

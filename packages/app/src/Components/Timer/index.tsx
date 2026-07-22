@@ -15,7 +15,7 @@ const Timer: React.FC<TimerProps> = (props) => {
   const currentTime = useCurrentTime();
 
   const time = useMemo(
-    () => getTimeStringFromTimestamp(language, timestamp, currentTime || Date.now(), variant),
+    () => getTimeStringFromTimestamp(language, timestamp, currentTime, variant),
     [language, timestamp, currentTime, variant],
   );
 
