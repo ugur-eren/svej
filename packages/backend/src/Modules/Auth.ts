@@ -18,6 +18,10 @@ export const AuthModule = {
 
     assertUserExists(user);
 
+    if (!user.active) {
+      throw new ModuleError(ErrorCodes.UserNotFound);
+    }
+
     const passwordMatched = await Password.verify(password, user.password);
     if (!passwordMatched) {
       throw new ModuleError(ErrorCodes.WrongPassword);
