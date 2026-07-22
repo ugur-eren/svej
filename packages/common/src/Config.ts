@@ -33,6 +33,9 @@ export default {
   chatMessageRateLimitMax: 10,
   chatMessageRateLimitWindowMs: 10_000,
 
+  searchQueryMinLength: 1,
+  searchQueryMaxLength: 64,
+
   postsPerPage: 10,
   commentsPerPage: 20,
   conversationsPerPage: 20,

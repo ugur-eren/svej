@@ -74,12 +74,16 @@ export const UsersModule = {
       where: {
         AND: [
           {
-            OR: [{username: {contains: query}}, {fullname: {contains: query}}],
-          },
-          {
             id: {
               not: viewerId,
             },
+          },
+          {
+            OR: [
+              {username: {contains: query, mode: 'insensitive'}},
+              {fullname: {contains: query, mode: 'insensitive'}},
+              {bio: {contains: query, mode: 'insensitive'}},
+            ],
           },
         ],
       },

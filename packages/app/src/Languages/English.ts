@@ -114,6 +114,8 @@ export default {
 
   search: {
     search_placeholder: 'Search...',
+    query_too_long_title: 'Query too long',
+    query_too_long_message: 'Your search query is too long. It must be at most %max% characters.',
   },
 
   share: {

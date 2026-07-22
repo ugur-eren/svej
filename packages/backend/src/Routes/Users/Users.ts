@@ -1,6 +1,6 @@
 import {Elysia} from 'elysia';
 import {z} from 'zod';
-import {Zod} from '@svej/common';
+import {Config, Zod} from '@svej/common';
 import {onlyAuthenticated} from '@/Plugins';
 import {UsersModule} from '@/Modules/Users';
 
@@ -14,8 +14,7 @@ export default new Elysia()
     },
     {
       query: z.object({
-        // TODO: hardcoded limits
-        q: z.string().trim().min(1).max(128),
+        q: z.string().trim().min(Config.searchQueryMinLength).max(Config.searchQueryMaxLength),
       }),
     },
   )
