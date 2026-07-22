@@ -71,3 +71,6 @@ uploads/**/*
 # Yarn Berry
 .yarn/*
 !.yarn/releases
+
+# TypeScript
+*.tsbuildinfo

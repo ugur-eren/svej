@@ -29,11 +29,13 @@ const ErrorCodesArray = [
 
   // Media
   'MediaNotFound',
+  'FileNotFound',
 
   // Notification
   'NotificationNotFound',
 
   // Chat
+  'ConversationNotFound',
   'ChatRateLimited',
 ] as const;
 

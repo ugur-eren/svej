@@ -1,7 +1,7 @@
 import {ImageSourcePropType} from 'react-native';
-import type {Media} from '@svej/database';
 import {CompositeScreenProps, NavigatorScreenParams} from '@react-navigation/native';
 import {NativeStackScreenProps, NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {MediasApi} from '@/Api';
 
 export type RootStackParams = {
   AuthStack: NavigatorScreenParams<AuthStackParams>;
@@ -53,11 +53,12 @@ export type MainStackParams = {
     username: string;
     type: 'followers' | 'follows';
   };
-  Chats: undefined;
+  Conversations: undefined;
   Chat: {
+    conversationId?: string;
     userId: string;
     username: string;
-    avatar?: Media | null;
+    avatar?: MediasApi.Avatar | null;
   };
 };
 
@@ -136,8 +137,8 @@ export type RelationsScreenProps = CompositeScreenProps<
   NativeStackScreenProps<MainStackParams, 'Relations'>,
   NativeStackScreenProps<RootStackParams>
 >;
-export type ChatsScreenProps = CompositeScreenProps<
-  NativeStackScreenProps<MainStackParams, 'Chats'>,
+export type ConversationsScreenProps = CompositeScreenProps<
+  NativeStackScreenProps<MainStackParams, 'Conversations'>,
   NativeStackScreenProps<RootStackParams>
 >;
 export type ChatScreenProps = CompositeScreenProps<

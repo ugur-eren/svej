@@ -1,27 +1,29 @@
-import {useCallback, useState} from 'react';
+import {useState} from 'react';
 import {FlatList, RefreshControl} from 'react-native';
 import {MainHeader, Divider, Placeholders} from '@/Components';
 import {PageContainer} from '@/Containers';
 import {useInfiniteQuery} from '@/Hooks';
-import {NotificationApi} from '@/Api';
+import {NotificationsApi} from '@/Api';
 import Notification from './Notification';
 
 const Notifications: React.FC = () => {
   const [refreshing, setRefreshing] = useState(false);
 
   const notifications = useInfiniteQuery({
-    initialPageParam: Date.now().toString(),
     queryKey: ['notifications'],
-    queryFn: async ({pageParam}) => NotificationApi.getAll(pageParam),
-    getNextPageParam: (lastPage, allPages, lastPageParam) => {
-      if (!(lastPage as any)?.length) return undefined;
-      const pageParam = (lastPage as any)[(lastPage as any).length - 1].createdAt;
-      if (!pageParam || pageParam === lastPageParam) return undefined;
-      return pageParam;
+    queryFn: async ({pageParam}) => NotificationsApi.getAll(pageParam),
+    select: (data) => data.pages.map((page) => page.notifications).flat(),
+    initialPageParam: undefined as string | undefined,
+    getNextPageParam: (lastPage, _, lastPageParam) => {
+      const nextPageParam = lastPage?.nextCursor;
+      if (nextPageParam && nextPageParam !== lastPageParam) {
+        return nextPageParam;
+      }
+      return undefined;
     },
   });
 
-  const onRefresh = useCallback(async () => {
+  const onRefresh = async () => {
     setRefreshing(true);
 
     try {
@@ -29,7 +31,7 @@ const Notifications: React.FC = () => {
     } finally {
       setRefreshing(false);
     }
-  }, [notifications]);
+  };
 
   return (
     <PageContainer>
@@ -39,10 +41,10 @@ const Notifications: React.FC = () => {
         <Placeholders.NotificationList />
       ) : (
         <FlatList
-          data={notifications.data?.pages.flat()}
+          data={notifications.data}
           ItemSeparatorComponent={Divider}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item) => item.id}
           renderItem={({item}) => <Notification notification={item} />}
         />
       )}

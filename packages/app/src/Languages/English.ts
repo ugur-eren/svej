@@ -1,6 +1,6 @@
 import {ErrorCodesKeys} from '@svej/common';
+import type {NotificationType} from '@svej/database/enums';
 import {PROBLEM_CODE} from 'apisauce';
-import type {NotificationType} from '@svej/database';
 
 export default {
   about_language: {
@@ -114,6 +114,8 @@ export default {
 
   search: {
     search_placeholder: 'Search...',
+    query_too_long_title: 'Query too long',
+    query_too_long_message: 'Your search query is too long. It must be at most %max% characters.',
   },
 
   share: {

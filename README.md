@@ -28,7 +28,7 @@ You can find the screenshots of the app in the `screenshots` folder.
 ### Backend
 
 - [TypeScript](https://www.typescriptlang.org/)
-- [Express](https://expressjs.com/)
+- [Elysia](https://elysiajs.com/)
 - [Socket.io](https://socket.io/)
 - [PostgreSQL](https://www.postgresql.org/)
 - [Prisma ORM](https://www.prisma.io/)

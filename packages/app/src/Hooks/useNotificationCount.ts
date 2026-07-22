@@ -1,10 +1,10 @@
-import {NotificationApi} from '@/Api';
+import {NotificationsApi} from '@/Api';
 import {useQuery} from './useQuery';
 
 export const useNotificationCount = () => {
   const query = useQuery({
     queryKey: ['notificationCount'],
-    queryFn: NotificationApi.getCount,
+    queryFn: NotificationsApi.getUnreadCount,
     placeholderData: {count: 0} as any,
   });
 

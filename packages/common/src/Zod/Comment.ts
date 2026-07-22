@@ -2,7 +2,6 @@ import {z} from 'zod';
 import Config from '../Config';
 
 export const Create = z.object({
-  postId: z.uuid(),
   text: z
     .string()
     .trim()

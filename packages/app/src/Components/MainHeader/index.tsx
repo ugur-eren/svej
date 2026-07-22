@@ -17,7 +17,7 @@ const MainHeader: React.FC<MainHeaderProps> = (props) => {
 
   const onSearchPress = () => navigation.navigate('Search');
 
-  const onChatPress = () => navigation.navigate('Chats');
+  const onChatPress = () => navigation.navigate('Conversations');
 
   return (
     <Appbar.Header elevated>

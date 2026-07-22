@@ -1,11 +1,10 @@
-import {forwardRef, useCallback, useEffect, useRef, useState} from 'react';
+import {forwardRef, useCallback, useRef, useState} from 'react';
 import {FlatList, FlatListProps, RefreshControl, View} from 'react-native';
 import {useFocusEffect, useScrollToTop} from '@react-navigation/native';
 import {useQueryClient} from '@tanstack/react-query';
 import {Placeholders, Post} from '@/Components';
 import {VisibilityContext, useForwardedRef, useInfiniteQuery} from '@/Hooks';
-import {PostApi} from '@/Api';
-import {PostsActions, useAppDispatch} from '@/Redux';
+import {FeedApi, throwApiError, UsersApi} from '@/Api';
 import {IsAndroid} from '@/Utils/Helpers';
 import {PostListProps} from './props';
 import styles from './styles';
@@ -19,47 +18,50 @@ const PostList = forwardRef<FlatList, PostListProps>((props, ref) => {
 
   useScrollToTop(forwardedRef);
 
-  const dispatch = useAppDispatch();
-
   const queryClient = useQueryClient();
 
+  // eslint-disable-next-line @tanstack/query/exhaustive-deps
   const posts = useInfiniteQuery({
-    initialPageParam: Date.now().toString(),
-    queryKey: ['posts', type, userId],
+    queryKey: type === 'explore' ? ['posts', 'explore'] : ['posts', 'profile', userId],
     queryFn: async ({pageParam}) => {
+      let res;
       if (type === 'explore') {
-        return PostApi.getExplore(pageParam);
+        res = await FeedApi.getExplore(pageParam);
       }
 
-      if (type === 'profile') {
-        if (!userId) return [];
-
-        return PostApi.getByUserId(userId, pageParam);
+      if (type === 'profile' && userId) {
+        res = await UsersApi.getPosts(userId, pageParam);
       }
 
-      return [];
+      throwApiError(res);
+
+      if (res?.data?.posts && Array.isArray(res.data.posts)) {
+        for (const post of res.data.posts) {
+          queryClient.setQueryData(['post', post.id], post);
+        }
+      }
+
+      return res;
     },
-    getNextPageParam: (lastPage: any, allPages, lastPageParam) => {
-      if (!lastPage?.length) return undefined;
-
-      const pageParam = lastPage[lastPage.length - 1].createdAt;
-
-      if (!pageParam || pageParam === lastPageParam) return undefined;
-      return pageParam;
+    select: (data) => {
+      return data.pages
+        .map((page) => page?.posts)
+        .filter((page): page is NonNullable<typeof page> => !!page)
+        .flat();
+    },
+    initialPageParam: undefined as string | undefined,
+    getNextPageParam: (lastPage, _, lastPageParam) => {
+      const nextPageParam = lastPage?.nextCursor;
+      if (nextPageParam && nextPageParam !== lastPageParam) {
+        return nextPageParam;
+      }
+      return undefined;
     },
   });
 
   const lastViewedItem = useRef<number | null>(null);
   const [visibleItem, setVisibleItem] = useState<number | null>(null);
   const [refreshing, setRefreshing] = useState(false);
-
-  useEffect(() => {
-    if (posts.status === 'success' && posts.data && Array.isArray(posts.data)) {
-      dispatch(PostsActions.addPosts(posts.data));
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [posts.status === 'success']);
 
   useFocusEffect(
     useCallback(() => {
@@ -77,14 +79,11 @@ const PostList = forwardRef<FlatList, PostListProps>((props, ref) => {
     setRefreshing(true);
 
     try {
-      queryClient.invalidateQueries({queryKey: ['post']});
       await posts.refetch();
-    } catch (error) {
-      //
     } finally {
       setRefreshing(false);
     }
-  }, [posts, queryClient]);
+  }, [posts]);
 
   const viewabilityConfigPairs = useRef<FlatListProps<never>['viewabilityConfigCallbackPairs']>([
     {
@@ -120,7 +119,7 @@ const PostList = forwardRef<FlatList, PostListProps>((props, ref) => {
       onEndReachedThreshold={0.2}
       onEndReached={() => posts.fetchNextPage()}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-      data={posts.data.pages.flat() as any[]}
+      data={posts.data}
       keyExtractor={(item) => item.id}
       renderItem={({item, index}) => (
         <VisibilityContext.Provider value={visibleItem === index}>

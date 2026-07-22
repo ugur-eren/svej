@@ -1,9 +1,9 @@
-import {Env} from '@svej/server-side';
+import {Env, Prisma} from '@svej/server-side';
 import {Config, ErrorCodes, Zod} from '@svej/common';
 import {Prisma as PrismaTypes} from '@svej/database';
 import {onlyAuthorized} from './Middlewares';
 import RateLimiter from './Utils/RateLimiter';
-import {WS, Prisma} from './Services';
+import {WS} from './Services';
 
 const sendMessageRateLimiter = new RateLimiter({
   maxAttempts: Config.chatMessageRateLimitMax,
@@ -24,7 +24,7 @@ WS.on('connection', (socket) => {
   // Join the user to their own room
   socket.join(`user:${user.id}`);
 
-  socket.on('sendMessage', async (toUserId, message, callback) => {
+  socket.on('sendMessage', async (conversationId, message, callback) => {
     if (typeof callback !== 'function') return;
 
     if (!sendMessageRateLimiter.consume(user.id)) {
@@ -32,7 +32,7 @@ WS.on('connection', (socket) => {
       return;
     }
 
-    const validation = Zod.Chat.SendMessage.safeParse({toUserId, message});
+    const validation = Zod.Chat.SendMessage.safeParse({conversationId, message});
     if (!validation.success) {
       callback({ok: false, code: ErrorCodes.FillAllFields, error: validation.error});
       return;
@@ -42,14 +42,22 @@ WS.on('connection', (socket) => {
     try {
       createdMessage = await Prisma.chatMessage.create({
         data: {
-          from: {connect: {id: user.id}},
-          to: {connect: {id: validation.data.toUserId}},
+          conversationId: validation.data.conversationId,
+          fromId: user.id,
           message: validation.data.message,
+        },
+        include: {
+          conversation: {
+            select: {
+              user1Id: true,
+              user2Id: true,
+            },
+          },
         },
       });
     } catch (error) {
       if (error instanceof PrismaTypes.PrismaClientKnownRequestError && error.code === 'P2003') {
-        callback({ok: false, code: ErrorCodes.UserNotFound});
+        callback({ok: false, code: ErrorCodes.ConversationNotFound});
         return;
       }
 
@@ -58,7 +66,10 @@ WS.on('connection', (socket) => {
       return;
     }
 
-    socket.to(`user:${validation.data.toUserId}`).emit('message', createdMessage);
+    const {conversation, ...messageData} = createdMessage;
+    const toUserId = conversation.user1Id === user.id ? conversation.user2Id : conversation.user1Id;
+
+    socket.to(`user:${toUserId}`).emit('message', messageData);
 
     callback({ok: true, message: createdMessage});
   });

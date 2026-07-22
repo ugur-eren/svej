@@ -1,4 +1,6 @@
+import {ImagePickerAsset} from 'expo-image-picker';
 import {Platform, Dimensions, StatusBar} from 'react-native';
+import {ApiFile} from '@/Api/CustomClient';
 
 export const IsIOS = Platform.OS === 'ios';
 export const IsAndroid = Platform.OS === 'android';
@@ -41,4 +43,12 @@ export const parseLanguageParts = (
 
     return current.replace(regexp, value);
   }, language);
+};
+
+export const loadPickerFile = (asset: ImagePickerAsset): ApiFile => {
+  return new ApiFile({
+    name: asset.fileName || `file-${Date.now()}`,
+    uri: asset.uri,
+    type: asset.mimeType || 'application/octet-stream',
+  });
 };

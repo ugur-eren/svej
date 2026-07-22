@@ -1,13 +1,12 @@
-import type {Media} from '@svej/database';
-import {ChatMessage} from '@/Api/Chat/Chat.types';
+import {ChatsApi, MediasApi} from '@/Api';
 import MessageReceived from './Received';
 import MessageSent from './Sent';
 
 export type MessageProps = {
   type: 'received' | 'sent';
-  message: ChatMessage;
+  message: ChatsApi.ChatMessage;
   sending?: boolean;
-  userAvatar?: Media | null;
+  userAvatar?: MediasApi.Avatar | null;
 };
 
 const Message: React.FC<MessageProps> = (props) => {

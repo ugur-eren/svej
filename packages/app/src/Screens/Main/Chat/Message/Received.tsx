@@ -1,13 +1,12 @@
 import {View} from 'react-native';
-import type {Media} from '@svej/database';
 import {Avatar, Text} from '@/Components';
 import {useTheme} from '@/Hooks';
-import {ChatMessage} from '@/Api/Chat/Chat.types';
+import {ChatsApi, MediasApi} from '@/Api';
 import getStyles from './styles';
 
 export type MessageReceivedProps = {
-  message: ChatMessage;
-  avatar?: Media | null;
+  message: ChatsApi.ChatMessage;
+  avatar?: MediasApi.Avatar | null;
 };
 
 const MessageReceived: React.FC<MessageReceivedProps> = (props) => {

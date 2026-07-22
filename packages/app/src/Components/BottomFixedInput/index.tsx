@@ -1,8 +1,9 @@
 import {memo} from 'react';
-import {TextInput, StyleSheet, View} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import {TextInput, StyleSheet} from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {useReanimatedKeyboardAnimation} from 'react-native-keyboard-controller';
+import Animated, {interpolate, useAnimatedStyle} from 'react-native-reanimated';
 import {Surface} from 'react-native-paper';
-import InputAccessoryView from '@/Components/InputAccessoryView';
 import {useTheme} from '@/Hooks';
 import {BottomFixedInputProps} from './props';
 import getStyles from './styles';
@@ -10,32 +11,37 @@ import getStyles from './styles';
 const BottomFixedInput: React.FC<BottomFixedInputProps> = (props) => {
   const {left, right, containerProps, style: styleProp, ...inputProps} = props;
 
+  const insets = useSafeAreaInsets();
+  const {height, progress} = useReanimatedKeyboardAnimation();
+
   const theme = useTheme();
 
   const styles = getStyles(theme);
 
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      paddingBottom:
+        Math.abs(height.value) + interpolate(progress.value, [0, 1], [insets.bottom, 0]),
+    };
+  }, [height, progress, insets.bottom]);
+
   return (
     <Surface elevation={2} mode="elevated">
-      <SafeAreaView
-        edges={['bottom']}
+      <Animated.View
         {...containerProps}
-        style={StyleSheet.compose(styles.container, containerProps?.style)}
+        style={[styles.container, containerProps?.style, animatedStyle]}
       >
-        <InputAccessoryView style={styles.container}>
-          <View style={styles.container}>
-            {left}
+        {left}
 
-            <TextInput
-              style={StyleSheet.compose(styles.input, styleProp)}
-              placeholderTextColor={theme.colors.textLight}
-              keyboardAppearance={theme.dark ? 'dark' : 'default'}
-              {...inputProps}
-            />
+        <TextInput
+          style={StyleSheet.compose(styles.input, styleProp)}
+          placeholderTextColor={theme.colors.textLight}
+          keyboardAppearance={theme.dark ? 'dark' : 'default'}
+          {...inputProps}
+        />
 
-            {right}
-          </View>
-        </InputAccessoryView>
-      </SafeAreaView>
+        {right}
+      </Animated.View>
     </Surface>
   );
 };

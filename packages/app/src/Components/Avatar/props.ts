@@ -1,6 +1,6 @@
-import type {Media} from '@svej/database';
 import {ImageProps} from 'expo-image';
+import {MediasApi} from '@/Api';
 
 export type AvatarProps = ImageProps & {
-  image?: Media | null;
+  image?: MediasApi.Avatar | null;
 };

@@ -1,5 +1,3 @@
-import type {OutgoingHttpHeaders} from 'node:http';
-
 export type InvalidRange = {
   invalid: true;
 };
@@ -75,7 +73,7 @@ export function parseRange(rangeHeader: string | undefined, fileSize: number): P
 export function createRangeHeaders(
   range: ValidRange | undefined,
   fileSize: number,
-): OutgoingHttpHeaders {
+): Record<string, string | number> {
   if (!range) {
     return {
       'Content-Length': fileSize,

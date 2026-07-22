@@ -44,13 +44,32 @@ const Login: React.FC<Props> = ({navigation}) => {
   const onFormSubmit = async (values: typeof initialValues) => {
     mutation.mutate(values, {
       onSuccess: async (data) => {
-        dispatch(AuthActions.setAuthenticated(true));
-        dispatch(AuthActions.setAccessToken(data.accessToken));
-        dispatch(AuthActions.setUser(data.user));
+        dispatch(
+          AuthActions.login({
+            accessToken: data.accessToken,
+            user: data.user,
+          }),
+        );
 
-        // Refresh token is handled at ApiInstance
+        // Refresh token is handled at AuthApiInstance
       },
     });
+  };
+
+  const handleNavigate = () => {
+    if (navigation.canGoBack()) {
+      const navState = navigation.getState();
+
+      if (
+        navState.routes.length > 1 &&
+        navState.routes[navState.routes.length - 2].name === 'Register'
+      ) {
+        navigation.goBack();
+        return;
+      }
+    }
+
+    navigation.navigate('Register');
   };
 
   return (
@@ -90,7 +109,7 @@ const Login: React.FC<Props> = ({navigation}) => {
               contentTitle={language.auth.dontHaveAnAccount}
               contentSubtitle={language.common.register}
               onButtonPress={handleSubmit}
-              onContentPress={() => navigation.navigate('Register')}
+              onContentPress={handleNavigate}
             />
           </>
         )}

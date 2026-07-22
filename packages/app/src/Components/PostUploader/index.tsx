@@ -11,7 +11,8 @@ import Animated, {
 import Text from '@/Components/Text';
 import {useShowApiError} from '@/Hooks/useShowApiError';
 import {useTheme} from '@/Hooks/Theming';
-import {PostApi} from '@/Api';
+import {PostsApi, throwApiError} from '@/Api';
+import {loadPickerFile} from '@/Utils/Helpers';
 import {PostUploaderRef} from './props';
 import getStyles from './styles';
 
@@ -53,13 +54,14 @@ const PostUploader = memo(
       setStep('uploading');
 
       try {
-        const result = await PostApi.createPost(
-          {description, medias},
+        const result = await PostsApi.create(
+          {
+            description,
+            medias: medias.map(loadPickerFile),
+          },
           {
             timeout: 0,
             onUploadProgress: (progressEvent) => {
-              // TODO: onUploadProgress never gets triggered. Couldn't find a solution.
-
               const percentCompleted = Math.round(
                 (progressEvent.loaded * 100) / (progressEvent.total ?? 1),
               );
@@ -77,7 +79,9 @@ const PostUploader = memo(
             },
           },
         );
-        if (!result.ok) throw result.data;
+
+        throwApiError(result);
+
         return true;
       } catch (error) {
         showApiError(error as Error);

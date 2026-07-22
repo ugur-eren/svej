@@ -1,23 +1,19 @@
-import express from 'express';
-
+import {Elysia} from 'elysia';
 import Auth from './Routes/Auth';
-import Post from './Routes/Post';
-import User from './Routes/User';
-import Comment from './Routes/Comment';
-import Media from './Routes/Media';
-import File from './Routes/File';
-import Notification from './Routes/Notification';
-import Chat from './Routes/Chat';
+import Chats from './Routes/Chats';
+import Comments from './Routes/Comments';
+import Feed from './Routes/Feed';
+import Medias from './Routes/Medias';
+import Notifications from './Routes/Notifications';
+import Posts from './Routes/Posts';
+import Users from './Routes/Users';
 
-const Router = express.Router();
-
-Router.use('/auth', Auth);
-Router.use('/post', Post);
-Router.use('/user', User);
-Router.use('/comment', Comment);
-Router.use('/media', Media);
-Router.use('/file', File);
-Router.use('/notification', Notification);
-Router.use('/chat', Chat);
-
-export default Router;
+export default new Elysia()
+  .use(Auth)
+  .use(Chats)
+  .use(Comments)
+  .use(Feed)
+  .use(Medias)
+  .use(Notifications)
+  .use(Posts)
+  .use(Users);

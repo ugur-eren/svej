@@ -38,7 +38,7 @@ import ImageViewer from './Screens/Main/ImageViewer';
 import Search from './Screens/Main/Search';
 import Notifications from './Screens/Main/Notifications';
 import Relations from './Screens/Main/Relations';
-import Chats from './Screens/Main/Chats';
+import Conversations from './Screens/Main/Conversations';
 import Chat from './Screens/Main/Chat';
 
 // Navigators
@@ -128,7 +128,7 @@ const MainStackNavigator = () => {
       <MainStack.Screen name="Search" component={Search} />
       <MainStack.Screen name="Notifications" component={Notifications} />
       <MainStack.Screen name="Relations" component={Relations} />
-      <MainStack.Screen name="Chats" component={Chats} />
+      <MainStack.Screen name="Conversations" component={Conversations} />
       <MainStack.Screen name="Chat" component={Chat} />
     </MainStack.Navigator>
   );

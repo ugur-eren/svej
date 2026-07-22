@@ -9,8 +9,9 @@ import {IconButton} from 'react-native-paper';
 import {useQueryClient} from '@tanstack/react-query';
 import {Avatar, Divider, Placeholders, Text, TextButton} from '@/Components';
 import {useLanguage, useMutation, useQuery, useShowApiError, useShowToast, useTheme} from '@/Hooks';
-import {UserApi, FileApi} from '@/Api';
+import {UsersApi, MediasApi, throwApiError} from '@/Api';
 import {Selectors, useAppSelector} from '@/Redux';
+import {loadPickerFile} from '@/Utils/Helpers';
 import {ProfileScreenProps} from '@/Types';
 import {GlobalStyles} from '@/Styles';
 import getStyles from './styles';
@@ -35,13 +36,14 @@ const ProfileHead: React.FC<ProfileHeadProps> = ({userId, username}) => {
   const queryClient = useQueryClient();
 
   const user = useQuery({
-    queryFn: () => UserApi.getByUsername(username),
+    queryFn: () => UsersApi.getByUsername(username),
     queryKey: ['user', username],
   });
 
   const relation = useMutation({
     mutationKey: ['relation', userId],
-    mutationFn: (type: 'follow' | 'unfollow') => UserApi.updateRelation(userId, type),
+    mutationFn: (type: 'follow' | 'unfollow') =>
+      type === 'follow' ? UsersApi.follow(userId) : UsersApi.unfollow(userId),
   });
 
   const styles = getStyles(theme);
@@ -49,14 +51,14 @@ const ProfileHead: React.FC<ProfileHeadProps> = ({userId, username}) => {
   const onPPPress = () => {
     navigation.navigate('ImageViewer', {
       title: username,
-      image: FileApi.getFileURL(user.data?.profilePhoto?.fileKey),
+      image: MediasApi.getFileURL(user.data?.profilePhoto?.fileKey),
     });
   };
 
   const onBGPress = () => {
     navigation.navigate('ImageViewer', {
       title: username,
-      image: FileApi.getFileURL(user.data?.coverPhoto?.fileKey),
+      image: MediasApi.getFileURL(user.data?.coverPhoto?.fileKey),
     });
   };
 
@@ -84,8 +86,10 @@ const ProfileHead: React.FC<ProfileHeadProps> = ({userId, username}) => {
     const file = pickerResult.assets[0];
 
     try {
-      const result = await UserApi.changePhoto(type, file, {timeout: 0});
-      if (!result.ok) throw result.data;
+      const result = await (
+        type === 'profile' ? UsersApi.changeProfilePhoto : UsersApi.changeCoverPhoto
+      )(loadPickerFile(file));
+      throwApiError(result);
 
       queryClient.invalidateQueries({
         queryKey: ['user', username],
@@ -150,7 +154,7 @@ const ProfileHead: React.FC<ProfileHeadProps> = ({userId, username}) => {
         >
           <View style={GlobalStyles.flex1}>
             <Image
-              source={{uri: FileApi.getFileURL(user.data.coverPhoto?.fileKey)}}
+              source={{uri: MediasApi.getFileURL(user.data.coverPhoto?.fileKey)}}
               contentFit="cover"
               style={GlobalStyles.flex1}
             />

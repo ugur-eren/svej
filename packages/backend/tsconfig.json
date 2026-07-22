@@ -1,5 +1,15 @@
 {
   "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "noEmit": false,
+    "strict": true,
+    "emitDeclarationOnly": true,
+    "paths": {
+      "@/*": ["../backend/src/*"]
+    },
+    "outDir": "./dist"
+  },
   "include": ["./**/*"],
   "exclude": ["tests", "dist"]
 }

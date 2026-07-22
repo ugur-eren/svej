@@ -30,6 +30,8 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
+      "expo-font",
+      "expo-image",
       [
         "expo-image-picker",
         {
@@ -51,6 +53,19 @@
             "image": "./assets/images/splash-icon.png",
             "imageWidth": 76
           }
+        }
+      ],
+      [
+        "expo-dev-client",
+        {
+          "launchMode": "most-recent",
+          "defaultLaunchURL": "http://localhost:8081",
+          "android": {
+            "defaultLaunchURL": "http://10.0.0.2:8081"
+          },
+          "toolsButton": true,
+          "skipOnboarding": true,
+          "showMenuAtLaunch": false
         }
       ]
     ]

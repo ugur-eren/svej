@@ -1,14 +1,27 @@
 import {HTTPStatus} from '@svej/common';
+import type {App} from '@svej/backend';
 import {AuthActions, store} from '@/Redux';
 import Storage from '@/Utils/Storage';
-import {createApiInstance} from './CreateApiInstance';
-import {refresh} from './Auth/Auth';
+import {refresh} from './Endpoints/Auth';
+import {DEFAULT_BASE_URL, DEFAULT_HEADERS} from './Utils';
+import {createCustomClient} from './CustomClient';
 
-const ApiInstance = createApiInstance();
+const {instance, client} = createCustomClient<App>({
+  baseURL: DEFAULT_BASE_URL,
+  headers: DEFAULT_HEADERS,
+  timeout: 15_000,
+});
 
-//
-// Access Token Management
-//
+// Attach access token to all requests
+instance.axiosInstance.interceptors.request.use(async (request) => {
+  const token = store.getState().auth.accessToken;
+
+  if (token) {
+    request.headers.set('Authorization', `Bearer ${token}`);
+  }
+
+  return request;
+});
 
 // Auto refresh access token on 401 responses
 let isRefreshing = false;
@@ -29,64 +42,68 @@ const processQueue = (error: unknown) => {
   failedQueue = [];
 };
 
-// Access Token Response interceptor
-ApiInstance.axiosInstance.interceptors.response.use(
+instance.axiosInstance.interceptors.response.use(
   (response) => response, // Pass through successful responses
   async (error) => {
     const originalRequest = error.config;
 
     if (
-      !originalRequest.url?.includes('/api/auth/session') &&
-      error.response?.status === HTTPStatus.Unauthorized &&
-      !originalRequest._retry
+      originalRequest.url?.includes(client.auth.refresh['~path']) ||
+      error.response?.status !== HTTPStatus.Unauthorized ||
+      originalRequest._retry
     ) {
-      if (isRefreshing) {
-        // If already refreshing, queue this request
-        return new Promise((resolve, reject) => {
-          failedQueue.push({resolve, reject});
-        })
-          .then(() => {
-            return ApiInstance.any(originalRequest);
-          })
-          .catch((err) => {
-            return Promise.reject(err);
-          });
-      }
-
-      originalRequest._retry = true;
-      isRefreshing = true;
-
-      try {
-        const refreshToken = await Storage.get('refreshToken');
-        if (!refreshToken) {
-          throw new Error('No refresh token available');
-        }
-
-        const response = await refresh(refreshToken);
-        if (!response.ok || !response.data) {
-          throw new Error('Failed to refresh access token');
-        }
-
-        store.dispatch(AuthActions.setAuthenticated(true));
-        store.dispatch(AuthActions.setAccessToken(response.data.accessToken));
-        store.dispatch(AuthActions.setUser(response.data.user));
-
-        processQueue(null);
-        isRefreshing = false;
-
-        // Retry the original request
-        return ApiInstance.any(originalRequest);
-      } catch (refreshError) {
-        processQueue(refreshError);
-        isRefreshing = false;
-
-        // Refresh failed
-        return Promise.reject(refreshError);
-      }
+      throw error;
     }
 
-    return Promise.reject(error);
+    if (isRefreshing) {
+      // If already refreshing, queue this request
+      return new Promise((resolve, reject) => {
+        failedQueue.push({resolve, reject});
+      }).then(() => {
+        return instance.any(originalRequest);
+      });
+    }
+
+    originalRequest._retry = true;
+    isRefreshing = true;
+
+    try {
+      const refreshToken = await Storage.get('refreshToken');
+      if (!refreshToken) {
+        await Storage.remove('refreshToken');
+        store.dispatch(AuthActions.logout());
+        throw new Error('No refresh token available');
+      }
+
+      const refreshResponse = await refresh(refreshToken);
+      if (!refreshResponse.ok || !refreshResponse.data) {
+        await Storage.remove('refreshToken');
+        store.dispatch(AuthActions.logout());
+        throw new Error('Failed to refresh access token');
+      }
+
+      store.dispatch(
+        AuthActions.login({
+          accessToken: refreshResponse.data.accessToken,
+          user: refreshResponse.data.user,
+        }),
+      );
+
+      processQueue(null);
+
+      // Retry the original request
+      return instance.any(originalRequest);
+    } catch (refreshError) {
+      processQueue(refreshError);
+
+      // Refresh failed
+      throw refreshError;
+    } finally {
+      isRefreshing = false;
+    }
   },
 );
+
+const ApiInstance = client;
 
 export default ApiInstance;

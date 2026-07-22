@@ -5,12 +5,15 @@ import {
   UseMutationResult,
   useMutation as useReactMutation,
 } from '@tanstack/react-query';
-import {ApiError} from '@/Api';
+import {ApiError, throwApiError} from '@/Api';
+import {ApiResponse} from '@/Api/CustomClient';
 import {useShowApiError} from './useShowApiError';
 
 export const useMutation = <
   TFnData = unknown,
-  TData = TFnData extends {ok: true; data?: infer U} ? U : never,
+  TData = TFnData extends ApiResponse<Record<number, unknown>>
+    ? (TFnData & {ok: true})['data']
+    : never,
   TVariables = void,
   TContext = unknown,
 >(
@@ -22,8 +25,11 @@ export const useMutation = <
     {
       ...options,
       mutationFn: async (...args) => {
-        const result: any = await options.mutationFn?.(...args);
-        return result?.data;
+        const response: any = await options.mutationFn?.(...args);
+
+        throwApiError(response);
+
+        return response.data;
       },
     },
     queryClient,

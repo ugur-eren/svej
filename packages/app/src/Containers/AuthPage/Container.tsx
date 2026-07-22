@@ -16,6 +16,7 @@ const Container: React.FC<AuthPageContainerProps> = ({children}) => {
       style={styles.container}
       keyboardDismissMode="none"
       keyboardShouldPersistTaps="handled"
+      automaticallyAdjustKeyboardInsets
     >
       {children}
     </ScrollView>

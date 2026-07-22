@@ -5,6 +5,7 @@ import {useShowToast} from './useToast';
 import {useLanguage} from './Language';
 import {useRotateToken} from './useRotateToken';
 
+// TODO: make it a context provider
 export const useSocketClient = () => {
   const ioClient = useRef<SocketClient>(undefined);
 
@@ -19,7 +20,7 @@ export const useSocketClient = () => {
       setConnecting(true);
 
       try {
-        ioClient.current = await getSocket();
+        ioClient.current = getSocket();
 
         await new Promise<void>((resolve, reject) => {
           const onConnect = () => {

@@ -56,9 +56,12 @@ const Register: React.FC<Props> = ({navigation}) => {
     try {
       const registerResult = await registerMutation.mutateAsync(values);
 
-      dispatch(AuthActions.setAuthenticated(true));
-      dispatch(AuthActions.setAccessToken(registerResult.accessToken));
-      dispatch(AuthActions.setUser(registerResult.user));
+      dispatch(
+        AuthActions.login({
+          accessToken: registerResult.accessToken,
+          user: registerResult.user,
+        }),
+      );
     } catch (err) {
       if (err instanceof ApiError && err.code === ErrorCodes.AccountCreatedButLoginFailed) {
         navigation.navigate('Login');
@@ -70,6 +73,22 @@ const Register: React.FC<Props> = ({navigation}) => {
         });
       }
     }
+  };
+
+  const handleNavigate = () => {
+    if (navigation.canGoBack()) {
+      const navState = navigation.getState();
+
+      if (
+        navState.routes.length > 1 &&
+        navState.routes[navState.routes.length - 2].name === 'Login'
+      ) {
+        navigation.goBack();
+        return;
+      }
+    }
+
+    navigation.navigate('Login');
   };
 
   return (
@@ -139,7 +158,7 @@ const Register: React.FC<Props> = ({navigation}) => {
               contentTitle={language.auth.alreadyHaveAccount}
               contentSubtitle={language.common.login}
               onButtonPress={handleSubmit}
-              onContentPress={() => navigation.navigate('Login')}
+              onContentPress={handleNavigate}
             />
           </>
         )}

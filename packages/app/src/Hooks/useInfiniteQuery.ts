@@ -2,28 +2,39 @@ import {useEffect} from 'react';
 import {
   InfiniteData,
   QueryClient,
+  QueryFunction,
   QueryKey,
+  SkipToken,
   UseInfiniteQueryOptions,
   UseInfiniteQueryResult,
   useInfiniteQuery as useReactInfiniteQuery,
 } from '@tanstack/react-query';
-import {ApiError} from '@/Api';
+import {ApiError, throwApiError} from '@/Api';
+import {ApiResponse} from '@/Api/CustomClient';
 import {useShowApiError} from './useShowApiError';
 
 export const useInfiniteQuery = <
   TQueryFnData = unknown,
-  TData = InfiniteData<TQueryFnData extends {ok: true; data?: infer U} ? U : never>,
+  TData = InfiniteData<
+    TQueryFnData extends ApiResponse<Record<number, unknown>>
+      ? (TQueryFnData & {ok: true})['data']
+      : never
+  >,
   TQueryKey extends QueryKey = QueryKey,
   TPageParam = unknown,
 >(
-  options: UseInfiniteQueryOptions<
-    TQueryFnData,
-    ApiError,
-    TData,
-    TQueryFnData,
-    TQueryKey,
-    TPageParam
-  >,
+  options: Omit<
+    UseInfiniteQueryOptions<
+      TQueryFnData extends ApiResponse<Record<number, unknown>>
+        ? (TQueryFnData & {ok: true})['data']
+        : TQueryFnData,
+      ApiError,
+      TData,
+      TQueryKey,
+      TPageParam
+    >,
+    'queryFn'
+  > & {queryFn?: QueryFunction<TQueryFnData, TQueryKey, TPageParam> | SkipToken},
   showErrorToast = true,
   queryClient: QueryClient | undefined = undefined,
 ): UseInfiniteQueryResult<TData, ApiError> => {
@@ -31,8 +42,13 @@ export const useInfiniteQuery = <
     {
       ...options,
       queryFn: async (...args) => {
-        const result: any = await options.queryFn?.(...args);
-        return result?.data;
+        if (typeof options.queryFn !== 'function') return options.queryFn;
+
+        const response: any = await options.queryFn?.(...args);
+
+        throwApiError(response);
+
+        return response.data;
       },
     },
     queryClient,

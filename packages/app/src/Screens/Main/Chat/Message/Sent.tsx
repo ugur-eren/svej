@@ -2,11 +2,11 @@ import {View} from 'react-native';
 import {Feather} from '@expo/vector-icons';
 import {Text} from '@/Components';
 import {useTheme} from '@/Hooks';
-import {ChatMessage} from '@/Api/Chat/Chat.types';
+import {ChatsApi} from '@/Api';
 import getStyles from './styles';
 
 export type MessageSentProps = {
-  message: ChatMessage;
+  message: ChatsApi.ChatMessage;
   sending?: boolean;
 };
 

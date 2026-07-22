@@ -27,15 +27,11 @@ export const useRotateToken = () => {
       }
 
       if (!user || !accessToken) {
-        dispatch(AuthActions.setAuthenticated(false));
-        dispatch(AuthActions.setAccessToken());
-        dispatch(AuthActions.setUser());
+        dispatch(AuthActions.logout());
         return;
       }
 
-      dispatch(AuthActions.setAuthenticated(true));
-      dispatch(AuthActions.setAccessToken(accessToken));
-      dispatch(AuthActions.setUser(user));
+      dispatch(AuthActions.login({accessToken, user}));
     }
   }, [dispatch]);
 

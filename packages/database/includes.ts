@@ -100,5 +100,23 @@ export const Notification = (userId: string) =>
 export const ChatMessage = (userId: string) =>
   ({
     from: {include: Author(userId)},
-    to: {include: Author(userId)},
   }) satisfies Prisma.ChatMessageInclude;
+
+export const Conversation = (userId: string) =>
+  ({
+    user1: {
+      include: Author(userId),
+    },
+    user2: {
+      include: Author(userId),
+    },
+    messages: {
+      take: 1,
+      include: {
+        from: {
+          include: Author(userId),
+        },
+      },
+      orderBy: {createdAt: 'desc'},
+    },
+  }) satisfies Prisma.ConversationInclude;

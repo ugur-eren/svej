@@ -9,6 +9,14 @@ const adapter = new PrismaPg({
 
 export const prisma = new PrismaClient({
   adapter,
+  omit: {
+    user: {
+      createdAt: true,
+      updatedAt: true,
+      email: true,
+      password: true,
+    },
+  },
   log: process.env.NODE_ENV === 'development' ? ['query', 'info', 'warn', 'error'] : ['error'],
 });
 
@@ -17,3 +25,5 @@ export * from './prisma/generated/prisma/client';
 export type {Prisma as PrismaTypes} from './prisma/generated/prisma/client';
 
 export * as PrismaIncludes from './includes';
+
+export * from './helpers';

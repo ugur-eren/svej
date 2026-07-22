@@ -65,3 +65,7 @@ yarn-error.log
 .vercel
 
 %ProgramData%
+
+# expo dev client prebuilds
+ios
+android

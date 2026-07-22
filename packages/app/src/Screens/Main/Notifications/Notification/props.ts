@@ -1,5 +1,5 @@
-import {Notification} from '@/Api/Notification/Notification.types';
+import {NotificationsApi} from '@/Api';
 
 export type NotificationProps = {
-  notification: Notification;
+  notification: NotificationsApi.Notification;
 };

@@ -34,8 +34,9 @@ model User {
   commentDislikes      Comment[]      @relation("CommentDislikes")
   relatedNotifications Notification[] @relation("NotificationUser")
   ownedNotifications   Notification[] @relation("NotificationOwner")
-  chatMessageSent      ChatMessage[]  @relation("ChatMessageFrom")
-  chatMessageReceived  ChatMessage[]  @relation("ChatMessageTo")
+  chatMessageSent      ChatMessage[]  @relation("ChatMessagesSent")
+  conversationUser1    Conversation[] @relation("ConversationUser1")
+  conversationUser2    Conversation[] @relation("ConversationUser2")
   sessions             Session[]      @relation("UserSessions")
 }
 
@@ -129,6 +130,25 @@ model Notification {
   warningId String?
 }
 
+model Conversation {
+  id            String   @id @default(uuid())
+  lastMessageAt DateTime @default(now())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  messages ChatMessage[] @relation("ConversationMessages")
+  user1    User          @relation("ConversationUser1", fields: [user1Id], references: [id])
+  user1Id  String
+  user2    User          @relation("ConversationUser2", fields: [user2Id], references: [id])
+  user2Id  String
+
+  @@unique([user1Id, user2Id])
+  @@index([lastMessageAt])
+  @@index([user1Id])
+  @@index([user2Id])
+}
+
 model ChatMessage {
   id        String   @id @default(uuid())
   message   String
@@ -136,10 +156,12 @@ model ChatMessage {
   updatedAt DateTime @updatedAt
 
   // Relations
-  from   User   @relation("ChatMessageFrom", fields: [fromId], references: [id])
-  fromId String
-  to     User   @relation("ChatMessageTo", fields: [toId], references: [id])
-  toId   String
+  conversation   Conversation @relation("ConversationMessages", fields: [conversationId], references: [id])
+  conversationId String
+  from           User         @relation("ChatMessagesSent", fields: [fromId], references: [id])
+  fromId         String
+
+  @@index([conversationId, createdAt])
 }
 
 model Session {

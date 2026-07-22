@@ -1,5 +1,5 @@
-import {Author} from '@/Api/User/User.types';
+import {UsersApi} from '@/Api';
 
 export type ProfileWidgetProps = {
-  user: Author;
+  user: UsersApi.Author;
 };
