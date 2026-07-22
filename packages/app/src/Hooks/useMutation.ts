@@ -6,11 +6,14 @@ import {
   useMutation as useReactMutation,
 } from '@tanstack/react-query';
 import {ApiError, throwApiError} from '@/Api';
+import {ApiResponse} from '@/Api/CustomClient';
 import {useShowApiError} from './useShowApiError';
 
 export const useMutation = <
   TFnData = unknown,
-  TData = TFnData extends {ok: true; data?: infer U} ? U : never,
+  TData = TFnData extends ApiResponse<Record<number, unknown>>
+    ? (TFnData & {ok: true})['data']
+    : never,
   TVariables = void,
   TContext = unknown,
 >(

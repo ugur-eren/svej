@@ -17,7 +17,7 @@ export const useRotateToken = () => {
       try {
         const refreshResult = await AuthApi.refresh(refreshToken);
 
-        if (!refreshResult.error && refreshResult.data) {
+        if (refreshResult.ok && refreshResult.data) {
           accessToken = refreshResult.data.accessToken;
           user = refreshResult.data.user;
         }

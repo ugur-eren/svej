@@ -1,20 +1,3 @@
-import type {ParsedQs} from 'qs';
-
-export const GetPostgresTimestamp = (date: Date = new Date()): string => {
-  /**
-   * Date.prototype.toISOString returns: 2022-01-22T13:59:11.983Z
-   * Postgres wants: 2022-01-22 13:59:11
-   *
-   * Replace T with ` ` (space)
-   * Split by . (dot) to remove ms
-   */
-  return date.toISOString().replace('T', ' ').split('.')[0];
-};
-
-export const throwError = (message: string, options?: ErrorOptions): never => {
-  throw new Error(message, options);
-};
-
 /**
  * Clamps the dimensions of an image to a maximum dimension while maintaining the aspect ratio
  * @param width Width of the image
@@ -75,14 +58,4 @@ export const getCropArea = (
   }
 
   return {x, y, width: cropWidth, height: cropHeight};
-};
-
-export const getBeforeDate = (beforeDate: ParsedQs[string]): Date => {
-  if (beforeDate && typeof beforeDate === 'string') {
-    const date = new Date(beforeDate);
-
-    if (!Number.isNaN(date.getTime())) return date;
-  }
-
-  return new Date();
 };

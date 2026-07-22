@@ -22,56 +22,45 @@ export class ApiFile {
 
 type MapFileType<T> = T extends File[] ? ApiFile[] : T extends File ? ApiFile : T;
 
-type Digits = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
-type Status2xx = `2${Digits}${Digits}`;
+type SuccessCodes = 200 | 201 | 202 | 203 | 204 | 205 | 206 | 207 | 208 | 226;
 
 export type HEADERS = {[key: string]: string};
 
-export interface ApiErrorResponse<T, S extends number = number> {
-  ok: false;
-  problem: PROBLEM_CODE;
-  originalError: AxiosError<T>;
-
-  data: T;
-  status?: S;
-  headers?: HEADERS;
-  config?: AxiosRequestConfig;
-  duration?: number;
-}
-
-export interface ApiOkResponse<T, S extends number = number> {
-  ok: true;
-  problem: null;
-  originalError: null;
-
-  data: T;
-  status?: S;
-  headers?: HEADERS;
-  config?: AxiosRequestConfig;
-  duration?: number;
-}
-
-type GetResponseBody<TBody> = TBody extends {
-  [ELYSIA_FORM_DATA]: infer TData;
-}
-  ? TData
-  : TBody;
-
-type GetSuccessResponses<TRes extends Record<number, unknown>> = {
-  [TStatus in keyof TRes as `${TStatus & number}` extends Status2xx
-    ? TStatus
-    : never]: ApiOkResponse<GetResponseBody<TRes[TStatus]>, TStatus & number>;
-};
-
-type GetErrorResponses<TRes extends Record<number, unknown>> = {
-  [TStatus in keyof TRes as `${TStatus & number}` extends Status2xx
-    ? never
-    : TStatus]: ApiErrorResponse<GetResponseBody<TRes[TStatus]>, TStatus & number>;
-};
-
 export type ApiResponse<TRes extends Record<number, unknown>> =
-  | GetSuccessResponses<TRes>[keyof GetSuccessResponses<TRes>]
-  | GetErrorResponses<TRes>[keyof GetErrorResponses<TRes>];
+  | {
+      ok: true;
+      problem: null;
+      originalError: null;
+
+      data: TRes[Extract<keyof TRes, SuccessCodes>] extends {
+        [ELYSIA_FORM_DATA]: infer Data;
+      }
+        ? Data
+        : TRes[Extract<keyof TRes, SuccessCodes>];
+      status: number;
+      headers?: HEADERS;
+      config?: AxiosRequestConfig;
+      duration?: number;
+    }
+  | {
+      ok: false;
+      problem: PROBLEM_CODE;
+      originalError: AxiosError<null>;
+
+      data: Exclude<keyof TRes, SuccessCodes> extends never
+        ? never
+        : {
+            [Status in keyof TRes]: TRes[Status] extends {
+              [ELYSIA_FORM_DATA]: infer Data;
+            }
+              ? Data
+              : TRes[Status];
+          }[Exclude<keyof TRes, SuccessCodes>];
+      status: number;
+      headers?: HEADERS;
+      config?: AxiosRequestConfig;
+      duration?: number;
+    };
 
 export type RequestConfig<TQuery = Record<string, unknown>> = AxiosRequestConfig & {
   query?: TQuery;

@@ -14,7 +14,7 @@ import {
   useSocketClient,
 } from '@/Hooks';
 import {Selectors, useAppSelector} from '@/Redux';
-import {ChatsApi} from '@/Api';
+import {ChatsApi, throwApiError} from '@/Api';
 import {ChatScreenProps} from '@/Types';
 import Message from './Message';
 import MessageInput from './MessageInput';
@@ -68,6 +68,8 @@ const Chat: React.FC<ChatScreenProps> = ({route}) => {
           ? ChatsApi.getOrCreateConversationByParticipant
           : ChatsApi.getConversationByParticipant
       )(userId);
+
+      throwApiError(response);
 
       if (response.data?.id) {
         setConversationId(response.data.id);

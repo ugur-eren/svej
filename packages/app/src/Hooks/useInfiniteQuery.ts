@@ -9,19 +9,23 @@ import {
   UseInfiniteQueryResult,
   useInfiniteQuery as useReactInfiniteQuery,
 } from '@tanstack/react-query';
-import {Treaty} from '@elysia/eden';
 import {ApiError, throwApiError} from '@/Api';
+import {ApiResponse} from '@/Api/CustomClient';
 import {useShowApiError} from './useShowApiError';
 
 export const useInfiniteQuery = <
   TQueryFnData = unknown,
-  TData = InfiniteData<TQueryFnData extends {ok: true; data?: infer U} ? U : never>,
+  TData = InfiniteData<
+    TQueryFnData extends ApiResponse<Record<number, unknown>>
+      ? (TQueryFnData & {ok: true})['data']
+      : never
+  >,
   TQueryKey extends QueryKey = QueryKey,
   TPageParam = unknown,
 >(
   options: Omit<
     UseInfiniteQueryOptions<
-      TQueryFnData extends Treaty.TreatyResponse<Record<number, unknown>>
+      TQueryFnData extends ApiResponse<Record<number, unknown>>
         ? (TQueryFnData & {ok: true})['data']
         : TQueryFnData,
       ApiError,

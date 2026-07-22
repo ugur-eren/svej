@@ -4,7 +4,7 @@ import {useFocusEffect, useScrollToTop} from '@react-navigation/native';
 import {useQueryClient} from '@tanstack/react-query';
 import {Placeholders, Post} from '@/Components';
 import {VisibilityContext, useForwardedRef, useInfiniteQuery} from '@/Hooks';
-import {FeedApi, UsersApi} from '@/Api';
+import {FeedApi, throwApiError, UsersApi} from '@/Api';
 import {IsAndroid} from '@/Utils/Helpers';
 import {PostListProps} from './props';
 import styles from './styles';
@@ -24,22 +24,24 @@ const PostList = forwardRef<FlatList, PostListProps>((props, ref) => {
   const posts = useInfiniteQuery({
     queryKey: type === 'explore' ? ['posts', 'explore'] : ['posts', 'profile', userId],
     queryFn: async ({pageParam}) => {
-      let data;
+      let res;
       if (type === 'explore') {
-        data = await FeedApi.getExplore(pageParam);
+        res = await FeedApi.getExplore(pageParam);
       }
 
       if (type === 'profile' && userId) {
-        data = await UsersApi.getPosts(userId, pageParam);
+        res = await UsersApi.getPosts(userId, pageParam);
       }
 
-      if (data?.data?.posts && Array.isArray(data.data.posts)) {
-        for (const post of data.data.posts) {
+      throwApiError(res);
+
+      if (res?.data?.posts && Array.isArray(res.data.posts)) {
+        for (const post of res.data.posts) {
           queryClient.setQueryData(['post', post.id], post);
         }
       }
 
-      return data;
+      return res;
     },
     select: (data) => {
       return data.pages

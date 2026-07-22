@@ -8,18 +8,20 @@ import {
   UseQueryResult,
   useQuery as useReactQuery,
 } from '@tanstack/react-query';
-import {Treaty} from '@elysia/eden';
 import {ApiError, throwApiError} from '@/Api';
+import {ApiResponse} from '@/Api/CustomClient';
 import {useShowApiError} from './useShowApiError';
 
 export const useQuery = <
   TQueryFnData = unknown,
-  TData = TQueryFnData extends {ok: true; data?: infer U} ? U : never,
+  TData = TQueryFnData extends ApiResponse<Record<number, unknown>>
+    ? (TQueryFnData & {ok: true})['data']
+    : never,
   TQueryKey extends QueryKey = QueryKey,
 >(
   options: Omit<
     UseQueryOptions<
-      TQueryFnData extends Treaty.TreatyResponse<Record<number, unknown>>
+      TQueryFnData extends ApiResponse<Record<number, unknown>>
         ? (TQueryFnData & {ok: true})['data']
         : TQueryFnData,
       ApiError,
