@@ -250,6 +250,126 @@ export const UsersModule = {
     });
   },
 
+  async getBlockedUsers(viewerId: string, cursor?: string) {
+    const blockedUsers = await Prisma.blocked.findMany({
+      where: {blockerId: viewerId},
+      skip: cursor ? 1 : 0,
+      take: Config.relationsPerPage,
+      cursor: cursor ? {id: cursor} : undefined,
+      orderBy: [{createdAt: 'desc'}, {id: 'desc'}],
+      omit: {
+        blockerId: true,
+      },
+      include: {
+        blocked: {
+          include: PrismaIncludes.Author(viewerId),
+        },
+      },
+    });
+
+    const lastBlocked = blockedUsers[blockedUsers.length - 1];
+    const nextCursor = lastBlocked ? lastBlocked.id : undefined;
+
+    return {
+      users: blockedUsers.map((blocked) => ({
+        ...blocked,
+        blocked: extendUser(blocked.blocked as Author, viewerId),
+      })),
+      nextCursor,
+    };
+  },
+
+  async block(viewerId: string, userId: string) {
+    if (viewerId === userId) {
+      throw new ModuleError(ErrorCodes.CannotBlockYourself);
+    }
+
+    const user = await Prisma.user.findUnique({
+      where: {id: userId},
+      select: {id: true},
+    });
+
+    assertUserExists(user);
+
+    const blockedUser = await Prisma.blocked.findUnique({
+      where: {
+        blockerId_blockedId: {
+          blockerId: viewerId,
+          blockedId: userId,
+        },
+      },
+    });
+
+    if (blockedUser?.id) {
+      throw new ModuleError(ErrorCodes.AlreadyBlocked);
+    }
+
+    await Prisma.$transaction([
+      Prisma.blocked.create({
+        data: {
+          blockerId: viewerId,
+          blockedId: userId,
+        },
+      }),
+
+      Prisma.user.update({
+        where: {
+          id: viewerId,
+        },
+        data: {
+          followers: {
+            disconnect: {
+              id: userId,
+            },
+          },
+          follows: {
+            disconnect: {
+              id: userId,
+            },
+          },
+        },
+      }),
+
+      Prisma.notification.deleteMany({
+        where: {
+          OR: [
+            {ownerId: viewerId, userId},
+            {ownerId: userId, userId: viewerId},
+          ],
+        },
+      }),
+    ]);
+    // TODO: check that blocked user exists
+  },
+
+  async unblock(viewerId: string, userId: string) {
+    if (viewerId === userId) {
+      throw new ModuleError(ErrorCodes.CannotBlockYourself);
+    }
+
+    const blockedUser = await Prisma.blocked.findUnique({
+      where: {
+        blockerId_blockedId: {
+          blockerId: viewerId,
+          blockedId: userId,
+        },
+      },
+    });
+
+    if (!blockedUser?.id) {
+      throw new ModuleError(ErrorCodes.NotBlocked);
+    }
+
+    await Prisma.blocked.delete({
+      where: {
+        blockerId_blockedId: {
+          blockerId: viewerId,
+          blockedId: userId,
+        },
+      },
+    });
+  },
+
   async create(data: {username: string; email: string; password: string; fullname?: string}) {
     try {
       const user = await Prisma.user.create({

@@ -16,6 +16,9 @@ const ErrorCodesArray = [
   'CannotFollowYourself',
   'AlreadyFollowing',
   'NotFollowing',
+  'CannotBlockYourself',
+  'AlreadyBlocked',
+  'NotBlocked',
 
   // Post
   'PostNotFound',
