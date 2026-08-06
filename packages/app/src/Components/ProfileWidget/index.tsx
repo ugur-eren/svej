@@ -8,7 +8,7 @@ import {MainNavigationProp} from '@/Types';
 import {ProfileWidgetProps} from './props';
 import styles from './styles';
 
-const ProfileWidget: React.FC<ProfileWidgetProps> = ({user}) => {
+const ProfileWidget: React.FC<ProfileWidgetProps> = ({user, right}) => {
   const navigation = useNavigation<MainNavigationProp>();
   const language = useLanguage();
 
@@ -30,11 +30,13 @@ const ProfileWidget: React.FC<ProfileWidgetProps> = ({user}) => {
         </View>
       </TouchableOpacity>
 
-      {!user.isFollowing ? (
+      {!right && !user.isFollowing ? (
         <TextButton showLoading color="primary">
           {language.common.follow}
         </TextButton>
       ) : null}
+
+      {right}
     </View>
   );
 };

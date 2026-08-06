@@ -110,13 +110,17 @@ export default {
     profile_photo_changed_message: 'Your profile photo changed successfuly',
     cover_photo_changed_title: 'Success',
     cover_photo_changed_message: 'Your cover photo changed successfuly',
+
     block: 'Block',
-    blocking: 'Blocking...',
     block_dialog_title: 'Block %username%',
     block_dialog_message:
       'Are you sure you want to block this user? You can no longer interact with them and see any posts or comments related to this user until you unblock them.',
     block_success_title: 'User Blocked',
     block_success_message: 'You have successfully blocked this user.',
+
+    unblock: 'Unblock',
+    unblock_success_title: 'User Unblocked',
+    unblock_success_message: 'You have successfully unblocked this user.',
   },
 
   search: {
