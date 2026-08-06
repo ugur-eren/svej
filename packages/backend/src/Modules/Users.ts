@@ -339,7 +339,6 @@ export const UsersModule = {
         },
       }),
     ]);
-    // TODO: check that blocked user exists
   },
 
   async unblock(viewerId: string, userId: string) {

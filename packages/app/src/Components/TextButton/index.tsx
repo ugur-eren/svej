@@ -20,8 +20,11 @@ const TextButton: React.FC<TextButtonProps> = (props) => {
 
         if (result instanceof Promise) {
           setLoading(true);
-          await result;
-          setLoading(false);
+          try {
+            await result;
+          } finally {
+            setLoading(false);
+          }
         }
       }
     } else {

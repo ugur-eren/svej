@@ -56,3 +56,15 @@ export const follow = async (userId: string) => {
 export const unfollow = async (userId: string) => {
   return ApiInstance.users.me.following({userId}).delete();
 };
+
+export const getBlocked = async (cursor?: string) => {
+  return ApiInstance.users.me.blocks.get({query: {cursor}});
+};
+
+export const block = async (userId: string) => {
+  return ApiInstance.users.me.blocks({userId}).post();
+};
+
+export const unblock = async (userId: string) => {
+  return ApiInstance.users.me.blocks({userId}).delete();
+};

@@ -1,13 +1,25 @@
+import {useRef} from 'react';
+import {List} from 'react-native-paper';
+import {UsersApi} from '@/Api';
 import {PageContainer, PostList} from '@/Containers';
-import {TransparentHeader} from '@/Components';
+import {ListItem, Modalize, TransparentHeader} from '@/Components';
+import {useLanguage, useMutation, useShowDialog, useShowToast} from '@/Hooks';
 import {Selectors, useAppSelector} from '@/Redux';
 import {GlobalStyles} from '@/Styles';
+import {parseLanguageParts} from '@/Utils/Helpers';
 import {BottomProfileScreenProps, ProfileScreenProps} from '@/Types';
 import ProfileHead from './ProfileHead';
 
 const Profile: React.FC<ProfileScreenProps & BottomProfileScreenProps> = ({navigation, route}) => {
   const {hideBack} = route.params;
   let {userId, username} = route.params;
+
+  const language = useLanguage();
+
+  const modalizeRef = useRef<Modalize>(null);
+
+  const showToast = useShowToast();
+  const showDialog = useShowDialog();
 
   /**
    * If userId and username are not provided, use the current user's id and username
@@ -23,7 +35,46 @@ const Profile: React.FC<ProfileScreenProps & BottomProfileScreenProps> = ({navig
   const onSettingsPress = () => navigation.navigate('SettingsStack', {screen: 'Settings'});
 
   const onMorePress = () => {
-    // TODO: more press
+    modalizeRef.current?.open();
+  };
+
+  const block = useMutation({
+    mutationKey: ['block', userId],
+    mutationFn: UsersApi.block,
+  });
+
+  const showBlockDialog = () => {
+    showDialog({
+      title: parseLanguageParts(language.profile.block_dialog_title, {username}),
+      message: language.profile.block_dialog_message,
+      actions: [
+        {
+          label: language.profile.block,
+          type: 'destructive',
+          hideOnPress: true,
+          onPress: async () => {
+            await block.mutateAsync(userId, {
+              onSuccess: () => {
+                // TODO: refresh the profile screen to reflect the block action (e.g., hide posts, comments, etc.)
+
+                modalizeRef.current?.close();
+
+                showToast({
+                  title: language.profile.block_success_title,
+                  message: language.profile.block_success_message,
+                  type: 'success',
+                });
+              },
+            });
+          },
+        },
+        {
+          label: language.common.cancel,
+          hideOnPress: true,
+          type: 'cancel',
+        },
+      ],
+    });
   };
 
   return (
@@ -41,6 +92,14 @@ const Profile: React.FC<ProfileScreenProps & BottomProfileScreenProps> = ({navig
         onMorePress={isSelf ? undefined : onMorePress}
         hideBack={hideBack}
       />
+
+      <Modalize ref={modalizeRef}>
+        <List.Section>
+          <ListItem title={language.profile.block} onPress={showBlockDialog} icon="slash" />
+
+          <ListItem title="Report" onPress={() => {}} icon="alert-circle" />
+        </List.Section>
+      </Modalize>
     </PageContainer>
   );
 };
