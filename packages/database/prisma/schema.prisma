@@ -26,8 +26,8 @@ model User {
   tags                 UserTag[]      @relation("UserTags")
   followers            User[]         @relation("UserFollows")
   follows              User[]         @relation("UserFollows")
-  blocker              Blocked[]      @relation("UserBlocker")
-  blocked              Blocked[]      @relation("UserBlocked")
+  blocker              Block[]        @relation("UserBlocker")
+  blocked              Block[]        @relation("UserBlocked")
   posts                Post[]         @relation("UserPosts")
   postLikes            Post[]         @relation("PostLikes")
   postDislikes         Post[]         @relation("PostDislikes")
@@ -181,7 +181,7 @@ model Session {
   userId String
 }
 
-model Blocked {
+model Block {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

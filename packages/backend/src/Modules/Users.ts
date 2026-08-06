@@ -251,7 +251,7 @@ export const UsersModule = {
   },
 
   async getBlockedUsers(viewerId: string, cursor?: string) {
-    const blockedUsers = await Prisma.blocked.findMany({
+    const blockedUsers = await Prisma.block.findMany({
       where: {blockerId: viewerId},
       skip: cursor ? 1 : 0,
       take: Config.relationsPerPage,
@@ -291,7 +291,7 @@ export const UsersModule = {
 
     assertUserExists(user);
 
-    const blockedUser = await Prisma.blocked.findUnique({
+    const blockedUser = await Prisma.block.findUnique({
       where: {
         blockerId_blockedId: {
           blockerId: viewerId,
@@ -305,7 +305,7 @@ export const UsersModule = {
     }
 
     await Prisma.$transaction([
-      Prisma.blocked.create({
+      Prisma.block.create({
         data: {
           blockerId: viewerId,
           blockedId: userId,
@@ -346,7 +346,7 @@ export const UsersModule = {
       throw new ModuleError(ErrorCodes.CannotBlockYourself);
     }
 
-    const blockedUser = await Prisma.blocked.findUnique({
+    const blockedUser = await Prisma.block.findUnique({
       where: {
         blockerId_blockedId: {
           blockerId: viewerId,
@@ -359,7 +359,7 @@ export const UsersModule = {
       throw new ModuleError(ErrorCodes.NotBlocked);
     }
 
-    await Prisma.blocked.delete({
+    await Prisma.block.delete({
       where: {
         blockerId_blockedId: {
           blockerId: viewerId,
