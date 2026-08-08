@@ -199,6 +199,8 @@ export default {
     NoAuthToken: 'You are not authorized to do this action.',
     InvalidAuthToken: 'You are not authorized to do this action.',
     WrongPassword: 'Wrong password.',
+    AccountCreatedButLoginFailed:
+      'Your account has been created, but we could not log you in. Please try logging in manually.',
 
     UsernameAlreadyExists: 'Username is already in use.',
     EmailAlreadyExists: 'Email is already in use.',
@@ -206,8 +208,9 @@ export default {
     CannotFollowYourself: 'You cannot follow yourself.',
     AlreadyFollowing: 'You are already following this user.',
     NotFollowing: 'You are not following this user.',
-    AccountCreatedButLoginFailed:
-      'Your account has been created, but we could not log you in. Please try logging in manually.',
+    CannotBlockYourself: 'You cannot block yourself.',
+    AlreadyBlocked: 'You have already blocked this user.',
+    NotBlocked: 'You have not blocked this user.',
 
     PostNotFound: 'Post not found.',
     PostDoesntHaveMediaOrDescription: 'Post must have a media or description.',
@@ -217,10 +220,13 @@ export default {
     CommentNotFound: 'Comment not found.',
 
     MediaNotFound: 'Media not found.',
+    FileNotFound: 'File not found.',
 
     NotificationNotFound: 'Notification not found.',
 
+    ConversationNotFound: 'Conversation not found.',
     ChatRateLimited: 'You are sending messages too quickly. Please wait a moment.',
+    CannotMessageYourself: 'You cannot message yourself.',
   } satisfies Partial<Record<ErrorCodesKeys, string>>,
 
   api_problems: {
