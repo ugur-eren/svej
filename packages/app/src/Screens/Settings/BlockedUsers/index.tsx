@@ -1,4 +1,5 @@
-import {FlatList, View} from 'react-native';
+import {useState} from 'react';
+import {FlatList, RefreshControl, View} from 'react-native';
 import {UsersApi} from '@/Api';
 import {Divider, Header, Placeholders, ProfileWidget, TextButton} from '@/Components';
 import {PageContainer} from '@/Containers';
@@ -14,7 +15,9 @@ const BlockedUsers: React.FC<SettingsBlockedUsersScreenProps> = () => {
 
   const showToast = useShowToast();
 
-  const relations = useInfiniteQuery({
+  const [refreshing, setRefreshing] = useState(false);
+
+  const blockedUsers = useInfiniteQuery({
     queryKey: ['blockedUsers'],
     queryFn: ({pageParam}) => UsersApi.getBlocked(pageParam),
     select: (data) => data.pages.map((page) => page.users).flat(),
@@ -33,18 +36,29 @@ const BlockedUsers: React.FC<SettingsBlockedUsersScreenProps> = () => {
     mutationFn: UsersApi.unblock,
   });
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+
+    try {
+      await blockedUsers.refetch();
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
   return (
     <PageContainer>
       <Header title={language.settings.blocked_users} />
 
-      {relations.isLoading || !relations.data ? (
+      {blockedUsers.isLoading || !blockedUsers.data ? (
         <Placeholders.ProfileWidgetList />
       ) : (
         <FlatList
-          data={relations.data}
-          contentContainerStyle={styles.flatList}
+          data={blockedUsers.data}
+          onEndReachedThreshold={0.2}
+          onEndReached={() => blockedUsers.fetchNextPage()}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
           keyExtractor={(item) => item.id}
-          ItemSeparatorComponent={Divider}
           renderItem={({item}) => (
             <View style={styles.item}>
               <ProfileWidget
@@ -62,7 +76,7 @@ const BlockedUsers: React.FC<SettingsBlockedUsersScreenProps> = () => {
                             type: 'success',
                           });
 
-                          relations.refetch();
+                          blockedUsers.refetch();
                         },
                       });
                     }}
@@ -73,6 +87,8 @@ const BlockedUsers: React.FC<SettingsBlockedUsersScreenProps> = () => {
               />
             </View>
           )}
+          ItemSeparatorComponent={Divider}
+          contentContainerStyle={styles.flatList}
         />
       )}
     </PageContainer>

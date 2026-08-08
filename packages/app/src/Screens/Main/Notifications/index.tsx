@@ -42,10 +42,12 @@ const Notifications: React.FC = () => {
       ) : (
         <FlatList
           data={notifications.data}
-          ItemSeparatorComponent={Divider}
+          onEndReachedThreshold={0.2}
+          onEndReached={() => notifications.fetchNextPage()}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
           keyExtractor={(item) => item.id}
           renderItem={({item}) => <Notification notification={item} />}
+          ItemSeparatorComponent={Divider}
         />
       )}
     </PageContainer>

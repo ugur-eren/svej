@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {FlatList, View} from 'react-native';
+import {FlatList, RefreshControl, View} from 'react-native';
 import uuid from 'react-native-uuid';
 import {ActivityIndicator} from 'react-native-paper';
 import {InfiniteData, skipToken, useQueryClient} from '@tanstack/react-query';
@@ -35,12 +35,9 @@ const Chat: React.FC<ChatScreenProps> = ({route}) => {
   const [pendingMessages, setPendingMessages] = useState<
     (ChatsApi.ChatMessage & {sending: true})[]
   >([]);
+  const [refreshing, setRefreshing] = useState(false);
 
-  const {
-    data: messages,
-    isLoading,
-    isFetching,
-  } = useInfiniteQuery({
+  const messages = useInfiniteQuery({
     queryKey: ['chat', conversationId],
     queryFn: conversationId
       ? async ({pageParam}) => ChatsApi.getConversationMessages(conversationId, pageParam)
@@ -180,6 +177,16 @@ const Chat: React.FC<ChatScreenProps> = ({route}) => {
     }
   };
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+
+    try {
+      await messages.refetch();
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
   return (
     <PageContainer>
       <Header
@@ -188,12 +195,15 @@ const Chat: React.FC<ChatScreenProps> = ({route}) => {
         left={<Avatar image={avatar} style={styles.headerAvatar} />}
       />
 
-      {isLoading || socketConnecting ? (
+      {messages.isLoading || socketConnecting ? (
         <Placeholders.ChatList />
       ) : (
         <FlatList
           inverted
-          data={[...pendingMessages, ...(messages ?? [])] as typeof pendingMessages}
+          data={[...pendingMessages, ...(messages.data ?? [])] as typeof pendingMessages}
+          onEndReachedThreshold={0.2}
+          onEndReached={() => messages.fetchNextPage()}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
           keyExtractor={(item) => item.id}
           renderItem={({item}) => (
             <Message
@@ -204,7 +214,7 @@ const Chat: React.FC<ChatScreenProps> = ({route}) => {
             />
           )}
           ListFooterComponent={
-            isFetching ? (
+            messages.isFetching ? (
               <View style={styles.loader}>
                 <ActivityIndicator size="large" />
               </View>

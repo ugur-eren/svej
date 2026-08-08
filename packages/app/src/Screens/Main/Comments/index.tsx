@@ -80,10 +80,12 @@ const Comments: React.FC<CommentsScreenProps> = ({route}) => {
         <>
           <FlatList
             data={comments.data}
-            ItemSeparatorComponent={Divider}
+            onEndReachedThreshold={0.2}
+            onEndReached={() => comments.fetchNextPage()}
             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
             keyExtractor={(item) => item.id}
             renderItem={({item}) => <Comment comment={item} />}
+            ItemSeparatorComponent={Divider}
             style={GlobalStyles.flex1}
           />
 

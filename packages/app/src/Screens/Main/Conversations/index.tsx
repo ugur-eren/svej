@@ -45,6 +45,8 @@ const Conversations: React.FC<ConversationsScreenProps> = ({navigation}) => {
       ) : (
         <FlatList
           data={conversations.data}
+          onEndReachedThreshold={0.2}
+          onEndReached={() => conversations.fetchNextPage()}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
           keyExtractor={(item) => item.id}
           renderItem={({item}) => (
