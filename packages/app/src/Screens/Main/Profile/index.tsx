@@ -1,5 +1,6 @@
 import {useRef} from 'react';
 import {List} from 'react-native-paper';
+import {useQueryClient} from '@tanstack/react-query';
 import {UsersApi} from '@/Api';
 import {PageContainer, PostList} from '@/Containers';
 import {ListItem, Modalize, TransparentHeader} from '@/Components';
@@ -38,8 +39,10 @@ const Profile: React.FC<ProfileScreenProps & BottomProfileScreenProps> = ({navig
     modalizeRef.current?.open();
   };
 
+  const queryClient = useQueryClient();
+
   const block = useMutation({
-    mutationKey: ['block', userId],
+    mutationKey: ['block'],
     mutationFn: UsersApi.block,
   });
 
@@ -55,14 +58,19 @@ const Profile: React.FC<ProfileScreenProps & BottomProfileScreenProps> = ({navig
           onPress: async () => {
             await block.mutateAsync(userId, {
               onSuccess: () => {
-                // TODO: refresh the profile screen to reflect the block action (e.g., hide posts, comments, etc.)
-
                 modalizeRef.current?.close();
 
                 showToast({
                   title: language.profile.block_success_title,
                   message: language.profile.block_success_message,
                   type: 'success',
+                });
+
+                queryClient.invalidateQueries({
+                  queryKey: ['user', username],
+                });
+                queryClient.invalidateQueries({
+                  queryKey: ['posts', 'profile', userId],
                 });
               },
             });
