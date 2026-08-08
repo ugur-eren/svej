@@ -156,6 +156,9 @@ const ProfileHead: React.FC<ProfileHeadProps> = ({userId, username}) => {
           queryClient.invalidateQueries({
             queryKey: ['posts', 'profile', user.data.id],
           });
+          queryClient.invalidateQueries({
+            queryKey: ['blockedUsers'],
+          });
         },
       });
     } catch {

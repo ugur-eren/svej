@@ -72,6 +72,9 @@ const Profile: React.FC<ProfileScreenProps & BottomProfileScreenProps> = ({navig
                 queryClient.invalidateQueries({
                   queryKey: ['posts', 'profile', userId],
                 });
+                queryClient.invalidateQueries({
+                  queryKey: ['blockedUsers'],
+                });
               },
             });
           },

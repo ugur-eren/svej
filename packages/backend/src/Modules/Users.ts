@@ -7,7 +7,7 @@ import {
 import {Prisma, PrismaIncludes} from '@svej/server-side';
 import {ModuleError} from '@/Utils/Error';
 import {ImageHandler} from '@/Utils/ImageHandler';
-import {getBlocksList, getBlocksListByCategory, isBlocked} from '@/Utils/Query';
+import {getBlocksList, getBlockStatus, isBlocked} from '@/Utils/Query';
 import {assertUserExists} from './Internal/Assert';
 
 export type UpdateViewerInput = {
@@ -112,15 +112,15 @@ export const UsersModule = {
 
     assertUserExists(user);
 
-    const blocksList = await getBlocksListByCategory(viewerId);
+    const blockStatus = await getBlockStatus(viewerId, user.id);
 
-    if (blocksList.blockedBy.includes(user.id)) {
+    if (blockStatus.blockedBy) {
       assertUserExists(null);
     }
 
     return {
       ...extendUser(user),
-      isBlocked: blocksList.blocked.includes(user.id) ? true : undefined,
+      isBlocked: blockStatus.blocked ? true : undefined,
     };
   },
 
@@ -132,15 +132,15 @@ export const UsersModule = {
 
     assertUserExists(user);
 
-    const blocksList = await getBlocksListByCategory(viewerId);
+    const blockStatus = await getBlockStatus(viewerId, user.id);
 
-    if (blocksList.blockedBy.includes(user.id)) {
+    if (blockStatus.blockedBy) {
       assertUserExists(null);
     }
 
     return {
       ...extendUser(user),
-      isBlocked: blocksList.blocked.includes(user.id) ? true : undefined,
+      isBlocked: blockStatus.blocked ? true : undefined,
     };
   },
 

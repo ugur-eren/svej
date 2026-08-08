@@ -194,6 +194,7 @@ model Block {
 
   @@unique([blockerId, blockedId])
   @@index([blockerId])
+  @@index([blockedId])
 }
 
 enum NotificationType {

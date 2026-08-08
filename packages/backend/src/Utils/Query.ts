@@ -9,29 +9,6 @@ export const getBlocksList = async (userId: string) => {
   return blocks.map((b) => (b.blockerId === userId ? b.blockedId : b.blockerId));
 };
 
-export const getBlocksListByCategory = async (userId: string) => {
-  const blocks = await Prisma.block.findMany({
-    where: {OR: [{blockerId: userId}, {blockedId: userId}]},
-    select: {blockerId: true, blockedId: true},
-  });
-
-  const blockedUserIds: string[] = [];
-  const blockedByUserIds: string[] = [];
-
-  blocks.forEach((block) => {
-    if (block.blockerId === userId) {
-      blockedUserIds.push(block.blockedId);
-    } else {
-      blockedByUserIds.push(block.blockerId);
-    }
-  });
-
-  return {
-    blocked: blockedUserIds,
-    blockedBy: blockedByUserIds,
-  };
-};
-
 export const isBlocked = async (userAId: string, userBId: string) => {
   if (userAId === userBId) return false;
 
@@ -48,6 +25,33 @@ export const isBlocked = async (userAId: string, userBId: string) => {
   });
 
   return !!block;
+};
+
+export const getBlockStatus = async (userAId: string, userBId: string) => {
+  if (userAId === userBId) {
+    return {
+      blocked: false,
+      blockedBy: false,
+    };
+  }
+
+  const blocks = await Prisma.block.findMany({
+    where: {
+      OR: [
+        {blockerId: userAId, blockedId: userBId},
+        {blockerId: userBId, blockedId: userAId},
+      ],
+    },
+    select: {
+      blockerId: true,
+      blockedId: true,
+    },
+  });
+
+  return {
+    blocked: blocks.some((b) => b.blockerId === userAId && b.blockedId === userBId),
+    blockedBy: blocks.some((b) => b.blockerId === userBId && b.blockedId === userAId),
+  };
 };
 
 export const getBlocksWhereClause = (userId: string) => ({
