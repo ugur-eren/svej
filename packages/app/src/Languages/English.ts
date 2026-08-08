@@ -110,6 +110,17 @@ export default {
     profile_photo_changed_message: 'Your profile photo changed successfuly',
     cover_photo_changed_title: 'Success',
     cover_photo_changed_message: 'Your cover photo changed successfuly',
+
+    block: 'Block',
+    block_dialog_title: 'Block %username%',
+    block_dialog_message:
+      'Are you sure you want to block this user? You can no longer interact with them and see any posts or comments related to this user until you unblock them.',
+    block_success_title: 'User Blocked',
+    block_success_message: 'You have successfully blocked this user.',
+
+    unblock: 'Unblock',
+    unblock_success_title: 'User Unblocked',
+    unblock_success_message: 'You have successfully unblocked this user.',
   },
 
   search: {
@@ -188,6 +199,8 @@ export default {
     NoAuthToken: 'You are not authorized to do this action.',
     InvalidAuthToken: 'You are not authorized to do this action.',
     WrongPassword: 'Wrong password.',
+    AccountCreatedButLoginFailed:
+      'Your account has been created, but we could not log you in. Please try logging in manually.',
 
     UsernameAlreadyExists: 'Username is already in use.',
     EmailAlreadyExists: 'Email is already in use.',
@@ -195,8 +208,9 @@ export default {
     CannotFollowYourself: 'You cannot follow yourself.',
     AlreadyFollowing: 'You are already following this user.',
     NotFollowing: 'You are not following this user.',
-    AccountCreatedButLoginFailed:
-      'Your account has been created, but we could not log you in. Please try logging in manually.',
+    CannotBlockYourself: 'You cannot block yourself.',
+    AlreadyBlocked: 'You have already blocked this user.',
+    NotBlocked: 'You have not blocked this user.',
 
     PostNotFound: 'Post not found.',
     PostDoesntHaveMediaOrDescription: 'Post must have a media or description.',
@@ -206,10 +220,13 @@ export default {
     CommentNotFound: 'Comment not found.',
 
     MediaNotFound: 'Media not found.',
+    FileNotFound: 'File not found.',
 
     NotificationNotFound: 'Notification not found.',
 
+    ConversationNotFound: 'Conversation not found.',
     ChatRateLimited: 'You are sending messages too quickly. Please wait a moment.',
+    CannotMessageYourself: 'You cannot message yourself.',
   } satisfies Partial<Record<ErrorCodesKeys, string>>,
 
   api_problems: {

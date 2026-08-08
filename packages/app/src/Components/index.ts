@@ -12,6 +12,7 @@ export {default as Input} from './Input';
 export {default as ListItem} from './ListItem';
 export {default as ListMenu} from './ListMenu';
 export {default as MainHeader} from './MainHeader';
+export {default as Modalize} from './Modalize';
 export {default as Pagination} from './Pagination';
 export {default as Post} from './Post';
 export {default as PostContent} from './PostContent';

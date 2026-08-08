@@ -7,6 +7,7 @@ import {
 import {Prisma, PrismaIncludes} from '@svej/server-side';
 import {ModuleError} from '@/Utils/Error';
 import {ImageHandler} from '@/Utils/ImageHandler';
+import {getBlocksList, getBlockStatus, isBlocked} from '@/Utils/Query';
 import {assertUserExists} from './Internal/Assert';
 
 export type UpdateViewerInput = {
@@ -18,10 +19,12 @@ export type UpdateViewerInput = {
 
 type Author = PrismaTypes.UserGetPayload<{include: ReturnType<typeof PrismaIncludes.Author>}>;
 
-const extendUser = <T extends {followers: {id: string}[]}>(user: T, userId: string) => {
+const extendUser = <T extends {followers: {id: string}[]}>(user: T) => {
+  const {followers, ...rest} = user;
+
   return {
-    ...user,
-    isFollowing: user.followers.some((follower) => follower.id === userId),
+    ...rest,
+    isFollowing: followers.length > 0,
   };
 };
 
@@ -44,10 +47,17 @@ const getFollowUsers = async (
   relation: 'followers' | 'follows',
   cursor?: string,
 ) => {
+  const excludedUserIds = await getBlocksList(viewerId);
+
+  if (viewerId !== userId && excludedUserIds.includes(userId)) {
+    assertUserExists(null);
+  }
+
   const user = await Prisma.user.findUnique({
     where: {id: userId},
     select: {
       [relation]: {
+        where: {id: {notIn: excludedUserIds}},
         skip: cursor ? 1 : 0,
         take: Config.relationsPerPage,
         cursor: cursor ? {id: cursor} : undefined,
@@ -63,21 +73,20 @@ const getFollowUsers = async (
   const nextCursor = lastRelation ? lastRelation.id : undefined;
 
   return {
-    users: user[relation].map((rel) => extendUser(rel as Author, viewerId)),
+    users: user[relation].map((rel) => extendUser(rel as Author)),
     nextCursor,
   };
 };
 
 export const UsersModule = {
   async search(viewerId: string, query: string) {
+    const excludedUserIds = await getBlocksList(viewerId);
+
+    // TODO: Proper search implementation
     const users = await Prisma.user.findMany({
       where: {
         AND: [
-          {
-            id: {
-              not: viewerId,
-            },
-          },
+          {id: {notIn: [...excludedUserIds, viewerId]}},
           {
             OR: [
               {username: {contains: query, mode: 'insensitive'}},
@@ -92,7 +101,7 @@ export const UsersModule = {
       include: PrismaIncludes.Author(viewerId),
     });
 
-    return users.map((user) => extendUser(user, viewerId));
+    return users.map((user) => extendUser(user));
   },
 
   async getById(viewerId: string, userId: string) {
@@ -103,7 +112,16 @@ export const UsersModule = {
 
     assertUserExists(user);
 
-    return extendUser(user, viewerId);
+    const blockStatus = await getBlockStatus(viewerId, user.id);
+
+    if (blockStatus.blockedBy) {
+      assertUserExists(null);
+    }
+
+    return {
+      ...extendUser(user),
+      isBlocked: blockStatus.blocked ? true : undefined,
+    };
   },
 
   async getByUsername(viewerId: string, username: string) {
@@ -114,7 +132,16 @@ export const UsersModule = {
 
     assertUserExists(user);
 
-    return extendUser(user, viewerId);
+    const blockStatus = await getBlockStatus(viewerId, user.id);
+
+    if (blockStatus.blockedBy) {
+      assertUserExists(null);
+    }
+
+    return {
+      ...extendUser(user),
+      isBlocked: blockStatus.blocked ? true : undefined,
+    };
   },
 
   async getViewer(viewerId: string) {
@@ -128,7 +155,7 @@ export const UsersModule = {
 
     assertUserExists(user);
 
-    const extendedUser = extendUser(user, viewerId);
+    const extendedUser = extendUser(user);
 
     return extendedUser;
   },
@@ -149,7 +176,7 @@ export const UsersModule = {
         },
       });
 
-      return extendUser(updatedUser, viewerId);
+      return extendUser(updatedUser);
     } catch (error) {
       const target = getUniqueConstraintViolationTargets(error);
       if (!target) throw error;
@@ -193,6 +220,10 @@ export const UsersModule = {
     });
 
     assertUserExists(user);
+
+    if (await isBlocked(viewerId, userId)) {
+      assertUserExists(null);
+    }
 
     if (user.followers.length > 0) {
       throw new ModuleError(ErrorCodes.AlreadyFollowing);
@@ -245,6 +276,125 @@ export const UsersModule = {
             type: NotificationType.FOLLOW,
             ownerId: userId,
           },
+        },
+      },
+    });
+  },
+
+  async getBlockedUsers(viewerId: string, cursor?: string) {
+    const blockedUsers = await Prisma.block.findMany({
+      where: {blockerId: viewerId},
+      skip: cursor ? 1 : 0,
+      take: Config.relationsPerPage,
+      cursor: cursor ? {id: cursor} : undefined,
+      orderBy: [{createdAt: 'desc'}, {id: 'desc'}],
+      omit: {
+        blockerId: true,
+      },
+      include: {
+        blocked: {
+          include: PrismaIncludes.Author(viewerId),
+        },
+      },
+    });
+
+    const lastBlocked = blockedUsers[blockedUsers.length - 1];
+    const nextCursor = lastBlocked ? lastBlocked.id : undefined;
+
+    return {
+      users: blockedUsers.map((blocked) => ({
+        ...blocked,
+        blocked: extendUser(blocked.blocked as Author),
+      })),
+      nextCursor,
+    };
+  },
+
+  async block(viewerId: string, userId: string) {
+    if (viewerId === userId) {
+      throw new ModuleError(ErrorCodes.CannotBlockYourself);
+    }
+
+    const user = await Prisma.user.findUnique({
+      where: {id: userId},
+      select: {id: true},
+    });
+
+    assertUserExists(user);
+
+    const blockedUser = await Prisma.block.findUnique({
+      where: {
+        blockerId_blockedId: {
+          blockerId: viewerId,
+          blockedId: userId,
+        },
+      },
+    });
+
+    if (blockedUser?.id) {
+      throw new ModuleError(ErrorCodes.AlreadyBlocked);
+    }
+
+    await Prisma.$transaction([
+      Prisma.block.create({
+        data: {
+          blockerId: viewerId,
+          blockedId: userId,
+        },
+      }),
+
+      Prisma.user.update({
+        where: {
+          id: viewerId,
+        },
+        data: {
+          followers: {
+            disconnect: {
+              id: userId,
+            },
+          },
+          follows: {
+            disconnect: {
+              id: userId,
+            },
+          },
+        },
+      }),
+
+      Prisma.notification.deleteMany({
+        where: {
+          OR: [
+            {ownerId: viewerId, userId},
+            {ownerId: userId, userId: viewerId},
+          ],
+        },
+      }),
+    ]);
+  },
+
+  async unblock(viewerId: string, userId: string) {
+    if (viewerId === userId) {
+      throw new ModuleError(ErrorCodes.CannotBlockYourself);
+    }
+
+    const blockedUser = await Prisma.block.findUnique({
+      where: {
+        blockerId_blockedId: {
+          blockerId: viewerId,
+          blockedId: userId,
+        },
+      },
+    });
+
+    if (!blockedUser?.id) {
+      throw new ModuleError(ErrorCodes.NotBlocked);
+    }
+
+    await Prisma.block.delete({
+      where: {
+        blockerId_blockedId: {
+          blockerId: viewerId,
+          blockedId: userId,
         },
       },
     });

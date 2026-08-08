@@ -4,38 +4,46 @@ import {Prisma, PrismaIncludes} from '@svej/server-side';
 import {ModuleError} from '@/Utils/Error';
 import {ImageHandler} from '@/Utils/ImageHandler';
 import {VideoHandler} from '@/Utils/VideoHandler';
+import {getBlocksList, getBlocksWhereClause, isBlocked} from '@/Utils/Query';
 import {assertPostExists} from './Internal/Assert';
 
 const extendPost = <T extends {likes: {id: string}[]; dislikes: {id: string}[]; authorId: string}>(
   post: T,
-  userId: string,
 ) => {
+  const {likes, dislikes, ...rest} = post;
+
   return {
-    ...post,
-    liked: post.likes.length > 0,
-    disliked: post.dislikes.length > 0,
-    mine: post.authorId === userId,
+    ...rest,
+    liked: likes.length > 0,
+    disliked: dislikes.length > 0,
   };
 };
 
 export const PostsModule = {
   async getById(viewerId: string, postId: string) {
     const post = await Prisma.post.findUnique({
-      where: {id: postId},
+      where: {
+        id: postId,
+        author: getBlocksWhereClause(viewerId),
+      },
       include: PrismaIncludes.Post(viewerId),
     });
 
     assertPostExists(post);
 
-    return extendPost(post, viewerId);
+    return extendPost(post);
   },
 
   async getByUserId(viewerId: string, userId: string, cursor?: string) {
+    if (await isBlocked(viewerId, userId)) {
+      return {posts: [], nextCursor: undefined};
+    }
+
     const posts = await Prisma.post.findMany({
+      where: {authorId: userId},
       skip: cursor ? 1 : 0,
       take: Config.postsPerPage,
       cursor: cursor ? {id: cursor} : undefined,
-      where: {authorId: userId},
       include: PrismaIncludes.Post(viewerId),
       orderBy: [{createdAt: 'desc'}, {id: 'desc'}],
     });
@@ -44,13 +52,16 @@ export const PostsModule = {
     const nextCursor = lastPost ? lastPost.id : undefined;
 
     return {
-      posts: posts.map((post) => extendPost(post, viewerId)),
+      posts: posts.map((post) => extendPost(post)),
       nextCursor,
     };
   },
 
   async getExploreFeed(viewerId: string, cursor?: string) {
+    const excludedUserIds = await getBlocksList(viewerId);
+
     const posts = await Prisma.post.findMany({
+      where: {authorId: {notIn: excludedUserIds}},
       skip: cursor ? 1 : 0,
       take: Config.postsPerPage,
       cursor: cursor ? {id: cursor} : undefined,
@@ -62,7 +73,7 @@ export const PostsModule = {
     const nextCursor = lastPost ? lastPost.id : undefined;
 
     return {
-      posts: posts.map((post) => extendPost(post, viewerId)),
+      posts: posts.map((post) => extendPost(post)),
       nextCursor,
     };
   },
@@ -88,7 +99,10 @@ export const PostsModule = {
 
   async setReaction(viewerId: string, postId: string, type: Zod.Reaction.ALL_TYPES) {
     const post = await Prisma.post.findUnique({
-      where: {id: postId},
+      where: {
+        id: postId,
+        author: getBlocksWhereClause(viewerId),
+      },
       select: {id: true, authorId: true},
     });
 

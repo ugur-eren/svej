@@ -26,6 +26,8 @@ model User {
   tags                 UserTag[]      @relation("UserTags")
   followers            User[]         @relation("UserFollows")
   follows              User[]         @relation("UserFollows")
+  blocker              Block[]        @relation("UserBlocker")
+  blocked              Block[]        @relation("UserBlocked")
   posts                Post[]         @relation("UserPosts")
   postLikes            Post[]         @relation("PostLikes")
   postDislikes         Post[]         @relation("PostDislikes")
@@ -177,6 +179,22 @@ model Session {
   // Relations
   user   User   @relation("UserSessions", fields: [userId], references: [id])
   userId String
+}
+
+model Block {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  blocker   User   @relation("UserBlocker", fields: [blockerId], references: [id])
+  blockerId String
+  blocked   User   @relation("UserBlocked", fields: [blockedId], references: [id])
+  blockedId String
+
+  @@unique([blockerId, blockedId])
+  @@index([blockerId])
+  @@index([blockedId])
 }
 
 enum NotificationType {

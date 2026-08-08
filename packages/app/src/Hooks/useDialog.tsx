@@ -80,6 +80,7 @@ export const DialogProvider: React.FC<{children: React.ReactNode}> = ({children}
                 {dialog.actions.map((action) => (
                   <TextButton
                     key={action.label}
+                    showLoading
                     weight="medium"
                     color={
                       (
@@ -95,8 +96,12 @@ export const DialogProvider: React.FC<{children: React.ReactNode}> = ({children}
                       action.type === 'cancel'
                         ? hideDialog
                         : async () => {
-                            if (action.onPress) action.onPress();
-                            if (action.hideOnPress) hideDialog();
+                            try {
+                              if (action.onPress) await action.onPress();
+                              if (action.hideOnPress) hideDialog();
+                            } catch {
+                              hideDialog();
+                            }
                           }
                     }
                     {...action.props}

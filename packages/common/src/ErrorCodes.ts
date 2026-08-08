@@ -16,6 +16,9 @@ const ErrorCodesArray = [
   'CannotFollowYourself',
   'AlreadyFollowing',
   'NotFollowing',
+  'CannotBlockYourself',
+  'AlreadyBlocked',
+  'NotBlocked',
 
   // Post
   'PostNotFound',
@@ -37,6 +40,7 @@ const ErrorCodesArray = [
   // Chat
   'ConversationNotFound',
   'ChatRateLimited',
+  'CannotMessageYourself',
 ] as const;
 
 export type ErrorCodesKeys = (typeof ErrorCodesArray)[number];

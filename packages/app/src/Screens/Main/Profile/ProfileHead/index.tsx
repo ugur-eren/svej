@@ -46,6 +46,11 @@ const ProfileHead: React.FC<ProfileHeadProps> = ({userId, username}) => {
       type === 'follow' ? UsersApi.follow(userId) : UsersApi.unfollow(userId),
   });
 
+  const unblock = useMutation({
+    mutationKey: ['unblock'],
+    mutationFn: UsersApi.unblock,
+  });
+
   const styles = getStyles(theme);
 
   const onPPPress = () => {
@@ -134,7 +139,29 @@ const ProfileHead: React.FC<ProfileHeadProps> = ({userId, username}) => {
           });
         },
       });
-    } catch (error) {
+    } catch {
+      //
+    }
+  };
+
+  const onUnblockPress = async () => {
+    if (!user.data) return;
+
+    try {
+      await unblock.mutateAsync(user.data.id, {
+        onSuccess: () => {
+          queryClient.invalidateQueries({
+            queryKey: ['user', username],
+          });
+          queryClient.invalidateQueries({
+            queryKey: ['posts', 'profile', user.data.id],
+          });
+          queryClient.invalidateQueries({
+            queryKey: ['blockedUsers'],
+          });
+        },
+      });
+    } catch {
       //
     }
   };
@@ -199,13 +226,21 @@ const ProfileHead: React.FC<ProfileHeadProps> = ({userId, username}) => {
 
         {!isSelf ? (
           <View style={styles.userActions}>
-            <TextButton color="primary" showLoading onPress={onUpdateRelationPress}>
-              {user.data.isFollowing ? language.common.unfollow : language.common.follow}
-            </TextButton>
+            {user.data.isBlocked ? (
+              <TextButton color="primary" showLoading onPress={onUnblockPress}>
+                {language.profile.unblock}
+              </TextButton>
+            ) : (
+              <>
+                <TextButton color="primary" showLoading onPress={onUpdateRelationPress}>
+                  {user.data.isFollowing ? language.common.unfollow : language.common.follow}
+                </TextButton>
 
-            <TextButton color="primary" onPress={onSendMessagePress}>
-              {language.common.send_message}
-            </TextButton>
+                <TextButton color="primary" onPress={onSendMessagePress}>
+                  {language.common.send_message}
+                </TextButton>
+              </>
+            )}
           </View>
         ) : null}
       </View>
