@@ -37,9 +37,10 @@ WS.on('connection', (socket) => {
       return;
     }
 
-    const conversation = await Prisma.conversation.findUnique({
+    const conversation = await Prisma.conversation.findFirst({
       where: {
         id: validation.data.conversationId,
+        OR: [{user1Id: user.id}, {user2Id: user.id}],
         user1: {
           blocker: {none: {blockedId: user.id}},
           blocked: {none: {blockerId: user.id}},

@@ -87,9 +87,10 @@ export const ChatsModule = {
   },
 
   async getConversationById(viewerId: string, conversationId: string) {
-    const conversation = await Prisma.conversation.findUnique({
+    const conversation = await Prisma.conversation.findFirst({
       where: {
         id: conversationId,
+        OR: [{user1Id: viewerId}, {user2Id: viewerId}],
         user1: getBlocksWhereClause(viewerId),
         user2: getBlocksWhereClause(viewerId),
       },
@@ -111,6 +112,7 @@ export const ChatsModule = {
       where: {
         conversation: {
           id: conversationId,
+          OR: [{user1Id: viewerId}, {user2Id: viewerId}],
           user1Id: {notIn: excludedUserIds},
           user2Id: {notIn: excludedUserIds},
         },
