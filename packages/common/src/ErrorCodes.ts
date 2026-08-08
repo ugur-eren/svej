@@ -40,6 +40,7 @@ const ErrorCodesArray = [
   // Chat
   'ConversationNotFound',
   'ChatRateLimited',
+  'CannotMessageYourself',
 ] as const;
 
 export type ErrorCodesKeys = (typeof ErrorCodesArray)[number];

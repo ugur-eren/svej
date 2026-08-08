@@ -11,6 +11,7 @@ export default new Elysia().group(
     app
       .use(onlyAuthenticated)
       .get('/', async ({params: {postId}}) => {
+        // TODO: unused endpoint
         return PostsModule.getReactionCounts(postId);
       })
       .put(

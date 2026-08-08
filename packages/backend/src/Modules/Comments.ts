@@ -2,6 +2,7 @@ import {Config, ErrorCodes, Zod} from '@svej/common';
 import {NotificationType} from '@svej/database';
 import {Prisma, PrismaIncludes} from '@svej/server-side';
 import {ModuleError} from '@/Utils/Error';
+import {getBlocksList, getBlocksWhereClause} from '@/Utils/Query';
 import {assertCommentExists, assertPostExists} from './Internal/Assert';
 import {safeUpdate} from './Internal/Query';
 
@@ -9,41 +10,52 @@ const extendComment = <
   T extends {likes: {id: string}[]; dislikes: {id: string}[]; authorId: string},
 >(
   comment: T,
-  userId: string,
 ) => {
+  const {likes, dislikes, ...rest} = comment;
+
   return {
-    ...comment,
-    liked: comment.likes.length > 0,
-    disliked: comment.dislikes.length > 0,
-    mine: comment.authorId === userId,
+    ...rest,
+    liked: likes.length > 0,
+    disliked: dislikes.length > 0,
   };
 };
 
 export const CommentsModule = {
   async getById(viewerId: string, commentId: string) {
     const comment = await Prisma.comment.findUnique({
-      where: {id: commentId},
+      where: {
+        id: commentId,
+        author: getBlocksWhereClause(viewerId),
+      },
       include: PrismaIncludes.Comment(viewerId),
     });
 
     assertCommentExists(comment);
 
-    return extendComment(comment, viewerId);
+    return extendComment(comment);
   },
 
   async getByPostId(viewerId: string, postId: string, cursor?: string) {
     const post = await Prisma.post.findUnique({
-      where: {id: postId},
+      where: {
+        id: postId,
+        author: getBlocksWhereClause(viewerId),
+      },
       select: {id: true},
     });
 
     assertPostExists(post);
 
+    const excludedUserIds = await getBlocksList(viewerId);
+
     const comments = await Prisma.comment.findMany({
+      where: {
+        postId,
+        authorId: {notIn: excludedUserIds},
+      },
       skip: cursor ? 1 : 0,
       take: Config.commentsPerPage,
       cursor: cursor ? {id: cursor} : undefined,
-      where: {post: {id: postId}},
       include: PrismaIncludes.Comment(viewerId),
       orderBy: [{likes: {_count: 'desc'}}, {id: 'desc'}],
     });
@@ -52,7 +64,7 @@ export const CommentsModule = {
     const nextCursor = lastComment ? lastComment.id : undefined;
 
     return {
-      comments: comments.map((comment) => extendComment(comment, viewerId)),
+      comments: comments.map((comment) => extendComment(comment)),
       nextCursor,
     };
   },
@@ -80,6 +92,7 @@ export const CommentsModule = {
       return Prisma.comment.update({
         where: {
           id: commentId,
+          author: getBlocksWhereClause(viewerId),
         },
         data: {
           likes:
@@ -100,7 +113,10 @@ export const CommentsModule = {
 
   async create(viewerId: string, postId: string, content: string) {
     const post = await Prisma.post.findUnique({
-      where: {id: postId},
+      where: {
+        id: postId,
+        author: getBlocksWhereClause(viewerId),
+      },
       select: {id: true, authorId: true},
     });
 

@@ -1,6 +1,5 @@
 import {Env, Prisma} from '@svej/server-side';
 import {Config, ErrorCodes, Zod} from '@svej/common';
-import {Prisma as PrismaTypes} from '@svej/database';
 import {onlyAuthorized} from './Middlewares';
 import RateLimiter from './Utils/RateLimiter';
 import {WS} from './Services';
@@ -38,6 +37,29 @@ WS.on('connection', (socket) => {
       return;
     }
 
+    const conversation = await Prisma.conversation.findUnique({
+      where: {
+        id: validation.data.conversationId,
+        user1: {
+          blocker: {none: {blockedId: user.id}},
+          blocked: {none: {blockerId: user.id}},
+        },
+        user2: {
+          blocker: {none: {blockedId: user.id}},
+          blocked: {none: {blockerId: user.id}},
+        },
+      },
+      select: {
+        user1Id: true,
+        user2Id: true,
+      },
+    });
+
+    if (!conversation) {
+      callback({ok: false, code: ErrorCodes.ConversationNotFound});
+      return;
+    }
+
     let createdMessage;
     try {
       createdMessage = await Prisma.chatMessage.create({
@@ -46,30 +68,16 @@ WS.on('connection', (socket) => {
           fromId: user.id,
           message: validation.data.message,
         },
-        include: {
-          conversation: {
-            select: {
-              user1Id: true,
-              user2Id: true,
-            },
-          },
-        },
       });
     } catch (error) {
-      if (error instanceof PrismaTypes.PrismaClientKnownRequestError && error.code === 'P2003') {
-        callback({ok: false, code: ErrorCodes.ConversationNotFound});
-        return;
-      }
-
       callback({ok: false, code: ErrorCodes.UnknownError});
       console.error(error);
       return;
     }
 
-    const {conversation, ...messageData} = createdMessage;
     const toUserId = conversation.user1Id === user.id ? conversation.user2Id : conversation.user1Id;
 
-    socket.to(`user:${toUserId}`).emit('message', messageData);
+    socket.to(`user:${toUserId}`).emit('message', createdMessage);
 
     callback({ok: true, message: createdMessage});
   });

@@ -1,16 +1,24 @@
 import {Prisma, PrismaIncludes} from '@svej/server-side';
-import {Config} from '@svej/common';
+import {Config, ErrorCodes} from '@svej/common';
+import {getBlocksList, getBlocksWhereClause, isBlocked} from '@/Utils/Query';
+import {ModuleError} from '@/Utils/Error';
 import {assertConversationExists} from './Internal/Assert';
 
 export const ChatsModule = {
   async getAllConversations(viewerId: string, cursor?: string) {
+    const excludedUserIds = await getBlocksList(viewerId);
+
     const conversations = await Prisma.conversation.findMany({
+      where: {
+        AND: [
+          {OR: [{user1Id: viewerId}, {user2Id: viewerId}]},
+          {user1Id: {notIn: excludedUserIds}},
+          {user2Id: {notIn: excludedUserIds}},
+        ],
+      },
       skip: cursor ? 1 : 0,
       take: Config.conversationsPerPage,
       cursor: cursor ? {id: cursor} : undefined,
-      where: {
-        OR: [{user1Id: viewerId}, {user2Id: viewerId}],
-      },
       include: PrismaIncludes.Conversation(viewerId),
       orderBy: [{lastMessageAt: 'desc'}, {id: 'desc'}],
     });
@@ -29,6 +37,14 @@ export const ChatsModule = {
   },
 
   async getConversationByParticipant(viewerId: string, participantId: string) {
+    if (viewerId === participantId) {
+      throw new ModuleError(ErrorCodes.CannotMessageYourself);
+    }
+
+    if (await isBlocked(viewerId, participantId)) {
+      return null;
+    }
+
     const [user1Id, user2Id] = [viewerId, participantId].sort();
 
     const conversation = await Prisma.conversation.findUnique({
@@ -45,6 +61,14 @@ export const ChatsModule = {
   },
 
   async getOrCreateConversationByParticipant(viewerId: string, participantId: string) {
+    if (viewerId === participantId) {
+      throw new ModuleError(ErrorCodes.CannotMessageYourself);
+    }
+
+    if (await isBlocked(viewerId, participantId)) {
+      assertConversationExists(null);
+    }
+
     const [user1Id, user2Id] = [viewerId, participantId].sort();
 
     let conversation;
@@ -66,6 +90,8 @@ export const ChatsModule = {
     const conversation = await Prisma.conversation.findUnique({
       where: {
         id: conversationId,
+        user1: getBlocksWhereClause(viewerId),
+        user2: getBlocksWhereClause(viewerId),
       },
       include: PrismaIncludes.Conversation(viewerId),
     });
@@ -76,12 +102,18 @@ export const ChatsModule = {
   },
 
   async getConversationMessages(viewerId: string, conversationId: string, cursor?: string) {
+    const excludedUserIds = await getBlocksList(viewerId);
+
     const messages = await Prisma.chatMessage.findMany({
       skip: cursor ? 1 : 0,
       take: Config.chatMessagesPerPage,
       cursor: cursor ? {id: cursor} : undefined,
       where: {
-        conversationId,
+        conversation: {
+          id: conversationId,
+          user1Id: {notIn: excludedUserIds},
+          user2Id: {notIn: excludedUserIds},
+        },
       },
       orderBy: [{createdAt: 'desc'}, {id: 'desc'}],
     });
