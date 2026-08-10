@@ -63,7 +63,7 @@ const Share: React.FC<BottomShareScreenProps> = ({navigation}) => {
       return;
     }
 
-    const messageValidation = Zod.Post.Create.safeParse({description: message});
+    const messageValidation = Zod.Post.Metadata.safeParse({description: message});
     if (!messageValidation.success) {
       showToast({
         title: language.share.message_too_long_title,

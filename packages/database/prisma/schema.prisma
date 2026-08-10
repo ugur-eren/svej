@@ -57,6 +57,8 @@ model Post {
   dislikes      User[]         @relation("PostDislikes")
   comments      Comment[]      @relation("PostComments")
   notifications Notification[] @relation("NotificationPost")
+
+  @@index([active])
 }
 
 model Comment {
@@ -74,6 +76,8 @@ model Comment {
   likes         User[]         @relation("CommentLikes")
   dislikes      User[]         @relation("CommentDislikes")
   notifications Notification[] @relation("NotificationComment")
+
+  @@index([active])
 }
 
 model UserTag {

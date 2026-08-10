@@ -195,6 +195,8 @@ export default {
   api_errors: {
     UnknownError: 'An unknown error has occurred. Please try again later.',
     FillAllFields: 'Please fill all fields.',
+    Forbidden: 'You are not authorized to do this action.',
+
     Unauthorized: 'You are not authorized to do this action.',
     NoAuthToken: 'You are not authorized to do this action.',
     InvalidAuthToken: 'You are not authorized to do this action.',

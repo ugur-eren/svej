@@ -12,7 +12,7 @@ export default new Elysia()
       return PostsModule.create(session.user.id, medias ?? [], description);
     },
     {
-      body: Zod.Post.Create.extend({
+      body: Zod.Post.Metadata.extend({
         medias: z.preprocess(
           // eslint-disable-next-line no-nested-ternary
           (val) => (!val ? val : Array.isArray(val) ? val : [val]),
@@ -35,12 +35,17 @@ export default new Elysia()
       .get('/', async ({session, params: {postId}}) => {
         return PostsModule.getById(session.user.id, postId);
       })
-      .patch('/', async ({status}) => {
-        // TODO: post editing
-        return status(501, 'Not Implemented');
-      })
-      .delete('/', async ({status}) => {
-        // TODO: post deletion
-        return status(501, 'Not Implemented');
+      .patch(
+        '/',
+        async ({session, params: {postId}, body: {description}}) => {
+          return PostsModule.update(session.user.id, postId, description);
+        },
+        {
+          body: Zod.Post.Metadata,
+        },
+      )
+      .delete('/', async ({status, session, params: {postId}}) => {
+        await PostsModule.delete(session.user.id, postId);
+        return status(204, {});
       }),
   );

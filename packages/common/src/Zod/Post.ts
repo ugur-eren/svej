@@ -1,7 +1,7 @@
 import {z} from 'zod';
 import Config from '../Config';
 
-export const Create = z.object({
+export const Metadata = z.object({
   description: z
     .string()
     .trim()
