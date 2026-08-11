@@ -15,6 +15,7 @@ import {ThemeProvider} from './Hooks/Theming';
 import {ToastProvider} from './Hooks/useToast';
 import {DialogProvider} from './Hooks/useDialog';
 import {PostUploaderProvider} from './Hooks/useUploadPost';
+import {ModalProvider} from './Containers/Modals/ModalProvider';
 import {PaperIconProp} from './Utils/CommonComponents';
 
 const queryClient = new QueryClient();
@@ -63,7 +64,9 @@ const Providers: React.FC<{children: React.ReactNode}> = ({children}) => {
         <ToastProvider>
           <ToastContainer>
             <DialogProvider>
-              <CurrentTimeProvider>{children}</CurrentTimeProvider>
+              <ModalProvider>
+                <CurrentTimeProvider>{children}</CurrentTimeProvider>
+              </ModalProvider>
             </DialogProvider>
           </ToastContainer>
         </ToastProvider>
