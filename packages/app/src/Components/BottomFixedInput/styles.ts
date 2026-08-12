@@ -1,10 +1,12 @@
 import {Spacing, Typography, ThemedStyleSheet} from '@/Styles';
 
 export default ThemedStyleSheet((theme) => ({
+  surface: {
+    backgroundColor: theme.colors.surface,
+  },
   container: {
     width: '100%',
     flexDirection: 'row',
-    backgroundColor: theme.colors.surface,
   },
   input: {
     flex: 1,

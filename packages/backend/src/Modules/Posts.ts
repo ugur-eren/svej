@@ -6,25 +6,15 @@ import {ImageHandler} from '@/Utils/ImageHandler';
 import {VideoHandler} from '@/Utils/VideoHandler';
 import {getBlocksList, getBlocksWhereClause, isBlocked} from '@/Utils/Query';
 import {assertPostExists} from './Internal/Assert';
-
-const extendPost = <T extends {likes: {id: string}[]; dislikes: {id: string}[]; authorId: string}>(
-  post: T,
-) => {
-  const {likes, dislikes, ...rest} = post;
-
-  return {
-    ...rest,
-    liked: likes.length > 0,
-    disliked: dislikes.length > 0,
-  };
-};
+import {extendPost} from './Internal/Query';
 
 export const PostsModule = {
   async getById(viewerId: string, postId: string) {
-    const post = await Prisma.post.findUnique({
+    const post = await Prisma.post.findFirst({
       where: {
         id: postId,
         author: getBlocksWhereClause(viewerId),
+        active: true,
       },
       include: PrismaIncludes.Post(viewerId),
     });
@@ -40,7 +30,10 @@ export const PostsModule = {
     }
 
     const posts = await Prisma.post.findMany({
-      where: {authorId: userId},
+      where: {
+        authorId: userId,
+        active: true,
+      },
       skip: cursor ? 1 : 0,
       take: Config.postsPerPage,
       cursor: cursor ? {id: cursor} : undefined,
@@ -61,7 +54,10 @@ export const PostsModule = {
     const excludedUserIds = await getBlocksList(viewerId);
 
     const posts = await Prisma.post.findMany({
-      where: {authorId: {notIn: excludedUserIds}},
+      where: {
+        authorId: {notIn: excludedUserIds},
+        active: true,
+      },
       skip: cursor ? 1 : 0,
       take: Config.postsPerPage,
       cursor: cursor ? {id: cursor} : undefined,
@@ -79,8 +75,11 @@ export const PostsModule = {
   },
 
   async getReactionCounts(postId: string) {
-    const postReactions = await Prisma.post.findUnique({
-      where: {id: postId},
+    const postReactions = await Prisma.post.findFirst({
+      where: {
+        id: postId,
+        active: true,
+      },
       select: {
         _count: {
           select: {
@@ -98,9 +97,10 @@ export const PostsModule = {
   },
 
   async setReaction(viewerId: string, postId: string, type: Zod.Reaction.ALL_TYPES) {
-    const post = await Prisma.post.findUnique({
+    const post = await Prisma.post.findFirst({
       where: {
         id: postId,
+        active: true,
         author: getBlocksWhereClause(viewerId),
       },
       select: {id: true, authorId: true},
@@ -182,5 +182,64 @@ export const PostsModule = {
     });
 
     return post;
+  },
+
+  async update(viewerId: string, postId: string, description?: string) {
+    const post = await Prisma.post.findFirst({
+      where: {
+        id: postId,
+        active: true,
+      },
+      select: {
+        id: true,
+        authorId: true,
+        _count: {
+          select: {
+            medias: true,
+          },
+        },
+      },
+    });
+
+    assertPostExists(post);
+
+    if (post.authorId !== viewerId) {
+      throw new ModuleError(ErrorCodes.Forbidden);
+    }
+
+    if (!description && post._count.medias === 0) {
+      throw new ModuleError(ErrorCodes.PostDoesntHaveMediaOrDescription);
+    }
+
+    const updatedPost = await Prisma.post.update({
+      where: {id: post.id},
+      data: {description},
+      include: PrismaIncludes.Post(viewerId),
+    });
+
+    return extendPost(updatedPost);
+  },
+
+  async delete(viewerId: string, postId: string) {
+    const post = await Prisma.post.findFirst({
+      where: {
+        id: postId,
+        active: true,
+      },
+      select: {id: true, authorId: true},
+    });
+
+    assertPostExists(post);
+
+    if (post.authorId !== viewerId) {
+      throw new ModuleError(ErrorCodes.Forbidden);
+    }
+
+    await Prisma.post.update({
+      where: {id: post.id},
+      data: {active: false},
+    });
+
+    return {};
   },
 };

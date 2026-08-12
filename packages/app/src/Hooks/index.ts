@@ -20,3 +20,4 @@ export {useNotificationCount} from './useNotificationCount';
 export {useSocketClient} from './useSocketClient';
 export {useDimensions} from './useDimensions';
 export {useDebounce} from './useDebounce';
+export {useOpenModal} from './useModal';

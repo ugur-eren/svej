@@ -9,7 +9,7 @@ import {BottomFixedInputProps} from './props';
 import getStyles from './styles';
 
 const BottomFixedInput: React.FC<BottomFixedInputProps> = (props) => {
-  const {left, right, containerProps, style: styleProp, ...inputProps} = props;
+  const {left, right, top, bottom, containerProps, style: styleProp, ...inputProps} = props;
 
   const insets = useSafeAreaInsets();
   const {height, progress} = useReanimatedKeyboardAnimation();
@@ -26,7 +26,9 @@ const BottomFixedInput: React.FC<BottomFixedInputProps> = (props) => {
   }, [height, progress, insets.bottom]);
 
   return (
-    <Surface elevation={2} mode="elevated">
+    <Surface elevation={2} mode="elevated" style={styles.surface}>
+      {top}
+
       <Animated.View
         {...containerProps}
         style={[styles.container, containerProps?.style, animatedStyle]}
@@ -42,6 +44,8 @@ const BottomFixedInput: React.FC<BottomFixedInputProps> = (props) => {
 
         {right}
       </Animated.View>
+
+      {bottom}
     </Surface>
   );
 };

@@ -9,6 +9,7 @@ import {ModuleError} from '@/Utils/Error';
 import {ImageHandler} from '@/Utils/ImageHandler';
 import {getBlocksList, getBlockStatus, isBlocked} from '@/Utils/Query';
 import {assertUserExists} from './Internal/Assert';
+import {extendAuthor} from './Internal/Query';
 
 export type UpdateViewerInput = {
   username?: string;
@@ -18,15 +19,6 @@ export type UpdateViewerInput = {
 };
 
 type Author = PrismaTypes.UserGetPayload<{include: ReturnType<typeof PrismaIncludes.Author>}>;
-
-const extendUser = <T extends {followers: {id: string}[]}>(user: T) => {
-  const {followers, ...rest} = user;
-
-  return {
-    ...rest,
-    isFollowing: followers.length > 0,
-  };
-};
 
 const changePhoto = async (viewerId: string, type: 'profile' | 'cover', file: File) => {
   const media = await ImageHandler(file, type);
@@ -73,7 +65,7 @@ const getFollowUsers = async (
   const nextCursor = lastRelation ? lastRelation.id : undefined;
 
   return {
-    users: user[relation].map((rel) => extendUser(rel as Author)),
+    users: user[relation].map((rel) => extendAuthor(rel)),
     nextCursor,
   };
 };
@@ -101,7 +93,7 @@ export const UsersModule = {
       include: PrismaIncludes.Author(viewerId),
     });
 
-    return users.map((user) => extendUser(user));
+    return users.map((user) => extendAuthor(user));
   },
 
   async getById(viewerId: string, userId: string) {
@@ -119,7 +111,7 @@ export const UsersModule = {
     }
 
     return {
-      ...extendUser(user),
+      ...extendAuthor(user),
       isBlocked: blockStatus.blocked ? true : undefined,
     };
   },
@@ -139,7 +131,7 @@ export const UsersModule = {
     }
 
     return {
-      ...extendUser(user),
+      ...extendAuthor(user),
       isBlocked: blockStatus.blocked ? true : undefined,
     };
   },
@@ -155,7 +147,7 @@ export const UsersModule = {
 
     assertUserExists(user);
 
-    const extendedUser = extendUser(user);
+    const extendedUser = extendAuthor(user);
 
     return extendedUser;
   },
@@ -176,7 +168,7 @@ export const UsersModule = {
         },
       });
 
-      return extendUser(updatedUser);
+      return extendAuthor(updatedUser);
     } catch (error) {
       const target = getUniqueConstraintViolationTargets(error);
       if (!target) throw error;
@@ -304,7 +296,7 @@ export const UsersModule = {
     return {
       users: blockedUsers.map((blocked) => ({
         ...blocked,
-        blocked: extendUser(blocked.blocked as Author),
+        blocked: extendAuthor(blocked.blocked as Author),
       })),
       nextCursor,
     };

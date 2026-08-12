@@ -1,6 +1,7 @@
 import {Config} from '@svej/common';
 import {Prisma, PrismaIncludes} from '@svej/server-side';
 import {assertNotificationExists} from './Internal/Assert';
+import {extendNotification} from './Internal/Query';
 
 export const NotificationsModule = {
   async getById(viewerId: string, notificationId: string) {
@@ -11,7 +12,7 @@ export const NotificationsModule = {
 
     assertNotificationExists(notification);
 
-    return notification;
+    return extendNotification(notification);
   },
 
   async getAll(viewerId: string, cursor?: string) {
@@ -28,7 +29,7 @@ export const NotificationsModule = {
     const nextCursor = lastNotification ? lastNotification.id : undefined;
 
     return {
-      notifications,
+      notifications: notifications.map((notification) => extendNotification(notification)),
       nextCursor,
     };
   },

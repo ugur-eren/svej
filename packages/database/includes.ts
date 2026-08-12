@@ -11,7 +11,11 @@ export const User = (userId: string) =>
   ({
     _count: {
       select: {
-        posts: true,
+        posts: {
+          where: {
+            active: true,
+          },
+        },
         follows: true,
         followers: true,
       },
@@ -25,7 +29,17 @@ export const User = (userId: string) =>
 
 export const Post = (userId: string) =>
   ({
-    _count: true,
+    _count: {
+      select: {
+        comments: {
+          where: {
+            active: true,
+          },
+        },
+        likes: true,
+        dislikes: true,
+      },
+    },
 
     medias: true,
     author: {include: Author(userId)},
@@ -48,8 +62,18 @@ export const Post = (userId: string) =>
     },
 
     comments: {
+      where: {
+        active: true,
+      },
       include: {
-        author: {include: Author(userId)},
+        author: {
+          select: {
+            id: true,
+            username: true,
+            profilePhoto: true,
+            profilePhotoId: true,
+          },
+        },
       },
       take: 2,
       orderBy: {
@@ -91,16 +115,23 @@ export const Comment = (userId: string) =>
 
 export const Notification = (userId: string) =>
   ({
-    user: {include: Author(userId)},
-    post: {include: Post(userId)},
-    comment: {include: Comment(userId)},
+    user: {
+      include: Author(userId),
+    },
+    post: {
+      where: {
+        active: true,
+      },
+      include: Post(userId),
+    },
+    comment: {
+      where: {
+        active: true,
+      },
+      include: Comment(userId),
+    },
     warning: true,
   }) satisfies Prisma.NotificationInclude;
-
-export const ChatMessage = (userId: string) =>
-  ({
-    from: {include: Author(userId)},
-  }) satisfies Prisma.ChatMessageInclude;
 
 export const Conversation = (userId: string) =>
   ({
@@ -114,7 +145,12 @@ export const Conversation = (userId: string) =>
       take: 1,
       include: {
         from: {
-          include: Author(userId),
+          select: {
+            id: true,
+            username: true,
+            profilePhoto: true,
+            profilePhotoId: true,
+          },
         },
       },
       orderBy: {createdAt: 'desc'},

@@ -13,6 +13,14 @@ export const getReactionCounts = async (commentId: string) => {
   return ApiInstance.comments({commentId}).reactions.get();
 };
 
+export const deleteComment = async (commentId: string) => {
+  return ApiInstance.comments({commentId}).delete();
+};
+
+export const editComment = async (commentId: string, text: string) => {
+  return ApiInstance.comments({commentId}).patch({text});
+};
+
 export const react = async (commentId: string, type: Zod.Reaction.TYPES) => {
   return ApiInstance.comments({commentId}).reactions.put({type});
 };

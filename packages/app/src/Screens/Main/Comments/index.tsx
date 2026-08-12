@@ -1,11 +1,11 @@
 import {Zod} from '@svej/common';
-import {useState} from 'react';
+import {useRef, useState} from 'react';
 import {FlatList, RefreshControl} from 'react-native';
 import {useQueryClient} from '@tanstack/react-query';
 import {PageContainer} from '@/Containers';
 import {Header, Divider, Placeholders} from '@/Components';
 import {useInfiniteQuery, useLanguage, useMutation, useShowToast} from '@/Hooks';
-import {PostsApi} from '@/Api';
+import {CommentsApi, PostsApi} from '@/Api';
 import {GlobalStyles} from '@/Styles';
 import {CommentsScreenProps} from '@/Types';
 import Comment from './Comment';
@@ -15,6 +15,9 @@ const Comments: React.FC<CommentsScreenProps> = ({route}) => {
   const {postId} = route.params;
 
   const [refreshing, setRefreshing] = useState(false);
+  const [editingComment, setEditingComment] = useState<CommentsApi.Comment | null>(null);
+
+  const commentInputRef = useRef<CommentInput>(null);
 
   const language = useLanguage();
   const showToast = useShowToast();
@@ -36,28 +39,84 @@ const Comments: React.FC<CommentsScreenProps> = ({route}) => {
   });
 
   const sendComment = useMutation({
-    mutationKey: ['comment-create', postId],
+    mutationKey: ['comment', 'create', postId],
     mutationFn: (comment: string) => PostsApi.createComment(postId, {text: comment}),
+  });
+
+  const editComment = useMutation({
+    mutationKey: ['comment', 'edit'],
+    mutationFn: (variables: {commentId: string; comment: string}) =>
+      CommentsApi.editComment(variables.commentId, variables.comment),
   });
 
   const onCommentSend = async (comment: string) => {
     if (!comment || !comment.trim()) return;
 
-    const parsed = Zod.Comment.Create.safeParse({postId, text: comment});
-    if (!parsed.success) {
+    if (sendComment.isPending || editComment.isPending) {
       showToast({
-        title: language.errors.ERROR,
-        message: language.errors.COMMENT_INVALID,
+        title: language.common.warning,
+        message: language.comments.comment_pending,
         type: 'warning',
       });
+
+      commentInputRef.current?.setComment(comment);
       return;
     }
 
-    await sendComment.mutateAsync(comment, {
-      onSuccess: () => {
-        queryClient.invalidateQueries({queryKey: ['comments', postId]});
-      },
-    });
+    const parsed = Zod.Comment.Content.safeParse({postId, text: comment});
+    if (!parsed.success) {
+      showToast({
+        title: language.errors.ERROR,
+        // TODO: proper error handling for comment validation errors
+        message: language.errors.COMMENT_INVALID,
+        type: 'warning',
+      });
+
+      commentInputRef.current?.setComment(comment);
+      return;
+    }
+
+    if (editingComment) {
+      await editComment.mutateAsync(
+        {comment, commentId: editingComment.id},
+        {
+          onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ['comments', postId]});
+            queryClient.invalidateQueries({queryKey: ['post', postId]});
+
+            showToast({
+              type: 'success',
+              title: language.comments.comment_edited_title,
+              message: language.comments.comment_edited_message,
+            });
+
+            setEditingComment(null);
+
+            comments.refetch();
+          },
+          onError: () => {
+            commentInputRef.current?.setComment(comment);
+          },
+        },
+      );
+    } else {
+      await sendComment.mutateAsync(comment, {
+        onSuccess: () => {
+          queryClient.invalidateQueries({queryKey: ['comments', postId]});
+
+          showToast({
+            type: 'success',
+            title: language.comments.comment_created_title,
+            message: language.comments.comment_created_message,
+          });
+
+          comments.refetch();
+        },
+        onError: () => {
+          commentInputRef.current?.setComment(comment);
+        },
+      });
+    }
   };
 
   const onRefresh = async () => {
@@ -68,6 +127,10 @@ const Comments: React.FC<CommentsScreenProps> = ({route}) => {
     } finally {
       setRefreshing(false);
     }
+  };
+
+  const cancelEditing = () => {
+    setEditingComment(null);
   };
 
   return (
@@ -84,12 +147,25 @@ const Comments: React.FC<CommentsScreenProps> = ({route}) => {
             onEndReached={() => comments.fetchNextPage()}
             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
             keyExtractor={(item) => item.id}
-            renderItem={({item}) => <Comment comment={item} />}
+            renderItem={({item}) => (
+              <Comment
+                comment={item}
+                onEditPress={() => {
+                  setEditingComment(item);
+                  commentInputRef.current?.setComment(item.text);
+                }}
+              />
+            )}
             ItemSeparatorComponent={Divider}
             style={GlobalStyles.flex1}
           />
 
-          <CommentInput onCommentSend={onCommentSend} />
+          <CommentInput
+            ref={commentInputRef}
+            onCommentSend={onCommentSend}
+            editing={editingComment !== null}
+            cancelEditing={cancelEditing}
+          />
         </>
       )}
     </PageContainer>

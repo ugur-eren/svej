@@ -1,6 +1,7 @@
 const ErrorCodesArray = [
   'UnknownError',
   'FillAllFields',
+  'Forbidden',
 
   // Auth
   'Unauthorized',

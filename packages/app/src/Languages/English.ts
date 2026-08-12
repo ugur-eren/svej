@@ -29,6 +29,7 @@ export default {
     logout: 'Logout',
     warning: 'Warning',
     loading: 'Loading...',
+    share: 'Share',
   },
 
   auth: {
@@ -89,6 +90,21 @@ export default {
   comments: {
     title: 'Comments',
     comment_placeholder: 'Your comment...',
+
+    editing_comment: 'Editing comment',
+    comment_pending: 'You have a pending comment. Please wait until it is sent.',
+
+    comment_created_title: 'Comment Created',
+    comment_created_message: 'Your comment has been created successfully.',
+
+    comment_edited_title: 'Comment Edited',
+    comment_edited_message: 'Your comment has been edited successfully.',
+
+    delete_dialog_title: 'Delete Comment',
+    delete_dialog_message:
+      'Are you sure you want to delete this comment? You cannot undo this action and the comment will be permanently deleted.',
+    delete_success_title: 'Comment Deleted',
+    delete_success_message: 'You have successfully deleted this comment.',
   },
 
   notifications: {
@@ -175,6 +191,17 @@ export default {
 
   post: {
     no_comments: 'There are no comments. Be the first one!',
+
+    delete_dialog_title: 'Delete Post',
+    delete_dialog_message:
+      'Are you sure you want to delete this post? You cannot undo this action and the post will be permanently deleted.',
+    delete_success_title: 'Post Deleted',
+    delete_success_message: 'You have successfully deleted this post.',
+
+    edit_dialog_title: 'Edit Post',
+    edit_dialog_message: 'Are you sure you want to edit this post?',
+    edit_success_title: 'Post Edited',
+    edit_success_message: 'You have successfully edited this post.',
   },
 
   errors: {
@@ -195,6 +222,8 @@ export default {
   api_errors: {
     UnknownError: 'An unknown error has occurred. Please try again later.',
     FillAllFields: 'Please fill all fields.',
+    Forbidden: 'You are not authorized to do this action.',
+
     Unauthorized: 'You are not authorized to do this action.',
     NoAuthToken: 'You are not authorized to do this action.',
     InvalidAuthToken: 'You are not authorized to do this action.',
