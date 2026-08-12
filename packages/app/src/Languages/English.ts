@@ -90,6 +90,18 @@ export default {
   comments: {
     title: 'Comments',
     comment_placeholder: 'Your comment...',
+
+    comment_created_title: 'Comment Created',
+    comment_created_message: 'Your comment has been created successfully.',
+
+    comment_edited_title: 'Comment Edited',
+    comment_edited_message: 'Your comment has been edited successfully.',
+
+    delete_dialog_title: 'Delete Comment',
+    delete_dialog_message:
+      'Are you sure you want to delete this comment? You cannot undo this action and the comment will be permanently deleted.',
+    delete_success_title: 'Comment Deleted',
+    delete_success_message: 'You have successfully deleted this comment.',
   },
 
   notifications: {

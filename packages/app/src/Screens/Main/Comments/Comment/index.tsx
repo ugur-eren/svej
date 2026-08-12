@@ -2,13 +2,15 @@ import {Zod} from '@svej/common';
 import {View} from 'react-native';
 import {useQueryClient} from '@tanstack/react-query';
 import {ActionButton, Text, UserInfo} from '@/Components';
-import {useMutation, useTheme} from '@/Hooks';
+import {useMutation, useOpenModal, useTheme} from '@/Hooks';
 import {CommentsApi, UsersApi} from '@/Api';
 import {CommentProps} from './props';
 import getStyles from './styles';
 
-const Comment: React.FC<CommentProps> = ({comment}) => {
+const Comment: React.FC<CommentProps> = ({comment, onEditPress}) => {
   const theme = useTheme();
+
+  const openModal = useOpenModal();
 
   const queryClient = useQueryClient();
 
@@ -46,6 +48,7 @@ const Comment: React.FC<CommentProps> = ({comment}) => {
         user={comment.author as UsersApi.Author}
         timestamp={new Date(comment.createdAt).getTime()}
         small
+        onActionsPress={() => openModal('commentActions', {comment, onEditPress})}
       />
 
       <Text style={styles.content}>{comment.text}</Text>
