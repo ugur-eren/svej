@@ -44,15 +44,9 @@ export const Modal = createModal<{user: {id: string; username: string}}>(({user,
                   type: 'success',
                 });
 
-                queryClient.invalidateQueries({
-                  queryKey: ['user', user.username],
-                });
-                queryClient.invalidateQueries({
-                  queryKey: ['posts', 'profile', user.id],
-                });
-                queryClient.invalidateQueries({
-                  queryKey: ['blockedUsers'],
-                });
+                queryClient.invalidateQueries({queryKey: ['user', user.username]});
+                queryClient.invalidateQueries({queryKey: ['posts', 'profile', user.id]});
+                queryClient.invalidateQueries({queryKey: ['blockedUsers']});
               },
             });
           },

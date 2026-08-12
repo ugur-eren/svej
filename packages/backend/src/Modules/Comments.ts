@@ -23,18 +23,18 @@ export const CommentsModule = {
   },
 
   async getByPostId(viewerId: string, postId: string, cursor?: string) {
+    const excludedUserIds = await getBlocksList(viewerId);
+
     const post = await Prisma.post.findFirst({
       where: {
         id: postId,
-        author: getBlocksWhereClause(viewerId),
+        authorId: {notIn: excludedUserIds},
         active: true,
       },
       select: {id: true},
     });
 
     assertPostExists(post);
-
-    const excludedUserIds = await getBlocksList(viewerId);
 
     const comments = await Prisma.comment.findMany({
       where: {

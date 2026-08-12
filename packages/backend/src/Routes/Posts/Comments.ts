@@ -27,7 +27,7 @@ export default new Elysia().group(
           return CommentsModule.create(session.user.id, postId, text);
         },
         {
-          body: Zod.Comment.Create,
+          body: Zod.Comment.Content,
         },
       ),
 );

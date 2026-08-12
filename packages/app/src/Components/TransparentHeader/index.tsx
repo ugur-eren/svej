@@ -8,7 +8,7 @@ import {TransparentHeaderProps} from './props';
 import getStyles from './styles';
 
 const TransparentHeader: React.FC<TransparentHeaderProps> = (props) => {
-  const {title, hideBack, onSettingsPress, onMorePress} = props;
+  const {title, hideBack, onSettingsPress, onActionsPress} = props;
 
   const theme = useTheme();
   const navigation = useNavigation();
@@ -48,12 +48,12 @@ const TransparentHeader: React.FC<TransparentHeaderProps> = (props) => {
             />
           ) : null}
 
-          {onMorePress ? (
+          {onActionsPress ? (
             <Appbar.Action
               size={22}
               icon={IsIOS ? 'more-horizontal' : 'more-vertical'}
               color={theme.colors.text}
-              onPress={onMorePress}
+              onPress={onActionsPress}
             />
           ) : null}
         </SafeAreaView>

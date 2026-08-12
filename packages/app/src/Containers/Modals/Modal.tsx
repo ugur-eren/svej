@@ -1,8 +1,7 @@
 import {createElement, forwardRef, useImperativeHandle, useRef, useState} from 'react';
 import {Modalize} from '@/Components';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type DefaultModalData = Record<PropertyKey, any>;
+type DefaultModalData = Record<string, unknown>;
 
 export type ModalRef<TData extends DefaultModalData = DefaultModalData> = {
   modalRef: React.RefObject<Modalize | null>;
@@ -10,6 +9,15 @@ export type ModalRef<TData extends DefaultModalData = DefaultModalData> = {
   close: () => void;
 };
 
+/**
+ * Creates a modal component that can be opened and closed programmatically with its ref.
+ * The modal component will receive the data passed to the `open` method as props,
+ * also a `modalizeRef` prop that can be used to access the underlying Modalize component.
+ *
+ * @template TData - The type of data that the modal will receive as props when opened.
+ * @param render - A React functional component that renders the modal content. It receives the data passed to the `open` method as props, along with a `modalizeRef` prop.
+ * @returns A React functional component that can be used as a modal.
+ */
 export const createModal = <TData extends DefaultModalData = DefaultModalData>(
   render: React.FC<TData & {modalizeRef: React.RefObject<Modalize | null>}>,
 ) => {

@@ -19,7 +19,11 @@ const app = new Elysia({adapter: node()})
     }
 
     if (error instanceof ModuleError) {
-      return status(error.code.includes('NotFound') ? HTTPStatus.NotFound : HTTPStatus.BadRequest, {
+      let statusCode: number = HTTPStatus.BadRequest;
+      if (error.code.includes('NotFound')) statusCode = HTTPStatus.NotFound;
+      if (error.code === ErrorCodes.Forbidden) statusCode = HTTPStatus.Forbidden;
+
+      return status(statusCode, {
         code: error.code,
         message: error.message,
       });

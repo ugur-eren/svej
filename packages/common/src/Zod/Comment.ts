@@ -1,7 +1,7 @@
 import {z} from 'zod';
 import Config from '../Config';
 
-export const Create = z.object({
+export const Content = z.object({
   text: z
     .string()
     .trim()

@@ -49,9 +49,7 @@ export const Modal = createModal<{comment: CommentsApi.Comment; onEditPress: () 
                     type: 'success',
                   });
 
-                  queryClient.invalidateQueries({
-                    queryKey: ['comments', comment.postId],
-                  });
+                  queryClient.invalidateQueries({queryKey: ['comments', comment.postId]});
                 },
               });
             },

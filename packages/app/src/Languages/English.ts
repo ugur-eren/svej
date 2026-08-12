@@ -91,6 +91,9 @@ export default {
     title: 'Comments',
     comment_placeholder: 'Your comment...',
 
+    editing_comment: 'Editing comment',
+    comment_pending: 'You have a pending comment. Please wait until it is sent.',
+
     comment_created_title: 'Comment Created',
     comment_created_message: 'Your comment has been created successfully.',
 

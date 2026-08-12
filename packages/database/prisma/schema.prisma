@@ -58,7 +58,7 @@ model Post {
   comments      Comment[]      @relation("PostComments")
   notifications Notification[] @relation("NotificationPost")
 
-  @@index([active])
+  @@index([authorId, active])
 }
 
 model Comment {
@@ -77,7 +77,8 @@ model Comment {
   dislikes      User[]         @relation("CommentDislikes")
   notifications Notification[] @relation("NotificationComment")
 
-  @@index([active])
+  @@index([postId, active])
+  @@index([authorId, active])
 }
 
 model UserTag {

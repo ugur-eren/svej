@@ -41,7 +41,7 @@ const CommentInput = forwardRef<CommentInputRef, CommentInputProps>(
         top={
           editing ? (
             <View style={styles.editingContainer}>
-              <Text>Editing comment</Text>
+              <Text>{language.comments.editing_comment}</Text>
               <IconButton icon="x" size={21} onPress={onCancelEditingPress} />
             </View>
           ) : undefined

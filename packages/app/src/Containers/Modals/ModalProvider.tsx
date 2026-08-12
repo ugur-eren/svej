@@ -4,6 +4,9 @@ import {UnionToIntersection} from '@/Types';
 import AllModals from '.';
 import type {ModalRef} from './Modal';
 
+// For each modal export, get the `Modal` component's ref prop
+// and extract the type of the data using infer.
+// This will create a mapping of modal keys to their respective data types.
 type ModalKeyToDataMap = {
   [K in keyof typeof AllModals]: NonNullable<
     React.ComponentPropsWithRef<(typeof AllModals)[K]['Modal']>['ref']
@@ -12,10 +15,15 @@ type ModalKeyToDataMap = {
     : never;
 };
 
+// Create a union type of all modal data types,
+// and define a function type that takes a modal key and its corresponding data type
+// returning a function that closes the modal.
 type ModalHandlerUnion = {
   [K in keyof ModalKeyToDataMap]: (type: K, data: ModalKeyToDataMap[K]) => () => void;
 }[keyof ModalKeyToDataMap];
 
+// Convert the union type to an intersection type, resulting in a single function type
+// that can handle all modal types and their respective data.
 export type ModalHandlers = UnionToIntersection<ModalHandlerUnion>;
 
 export const ModalProvider: React.FC<{children: React.ReactNode}> = ({children}) => {

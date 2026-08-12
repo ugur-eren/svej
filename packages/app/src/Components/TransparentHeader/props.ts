@@ -10,5 +10,5 @@ export type TransparentHeaderProps = {
   hideBack?: boolean;
 
   onSettingsPress?: () => void | Promise<void>;
-  onMorePress?: () => void | Promise<void>;
+  onActionsPress?: () => void | Promise<void>;
 };

@@ -45,20 +45,34 @@ const Comments: React.FC<CommentsScreenProps> = ({route}) => {
 
   const editComment = useMutation({
     mutationKey: ['comment', 'edit'],
-    mutationFn: (variables: {comment: string; commentId: string}) =>
+    mutationFn: (variables: {commentId: string; comment: string}) =>
       CommentsApi.editComment(variables.commentId, variables.comment),
   });
 
   const onCommentSend = async (comment: string) => {
     if (!comment || !comment.trim()) return;
 
-    const parsed = Zod.Comment.Create.safeParse({postId, text: comment});
+    if (sendComment.isPending || editComment.isPending) {
+      showToast({
+        title: language.common.warning,
+        message: language.comments.comment_pending,
+        type: 'warning',
+      });
+
+      commentInputRef.current?.setComment(comment);
+      return;
+    }
+
+    const parsed = Zod.Comment.Content.safeParse({postId, text: comment});
     if (!parsed.success) {
       showToast({
         title: language.errors.ERROR,
+        // TODO: proper error handling for comment validation errors
         message: language.errors.COMMENT_INVALID,
         type: 'warning',
       });
+
+      commentInputRef.current?.setComment(comment);
       return;
     }
 
@@ -68,6 +82,7 @@ const Comments: React.FC<CommentsScreenProps> = ({route}) => {
         {
           onSuccess: () => {
             queryClient.invalidateQueries({queryKey: ['comments', postId]});
+            queryClient.invalidateQueries({queryKey: ['post', postId]});
 
             showToast({
               type: 'success',
@@ -78,6 +93,9 @@ const Comments: React.FC<CommentsScreenProps> = ({route}) => {
             setEditingComment(null);
 
             comments.refetch();
+          },
+          onError: () => {
+            commentInputRef.current?.setComment(comment);
           },
         },
       );
@@ -93,6 +111,9 @@ const Comments: React.FC<CommentsScreenProps> = ({route}) => {
           });
 
           comments.refetch();
+        },
+        onError: () => {
+          commentInputRef.current?.setComment(comment);
         },
       });
     }

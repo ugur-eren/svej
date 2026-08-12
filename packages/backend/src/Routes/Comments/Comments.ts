@@ -16,11 +16,11 @@ export default new Elysia().group('/:commentId', {params: z.object({commentId: z
         return CommentsModule.update(session.user.id, commentId, text);
       },
       {
-        body: Zod.Comment.Create,
+        body: Zod.Comment.Content,
       },
     )
     .delete('/', async ({status, session, params: {commentId}}) => {
       await CommentsModule.delete(session.user.id, commentId);
-      return status(204, {});
+      return status(204, undefined);
     }),
 );

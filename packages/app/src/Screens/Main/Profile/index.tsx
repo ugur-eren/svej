@@ -25,7 +25,7 @@ const Profile: React.FC<ProfileScreenProps & BottomProfileScreenProps> = ({navig
 
   const onSettingsPress = () => navigation.navigate('SettingsStack', {screen: 'Settings'});
 
-  const onMorePress = () => {
+  const onActionsPress = () => {
     openModal('profileActions', {user: {id: userId, username}});
   };
 
@@ -41,7 +41,7 @@ const Profile: React.FC<ProfileScreenProps & BottomProfileScreenProps> = ({navig
       <TransparentHeader
         title={username}
         onSettingsPress={isSelf ? onSettingsPress : undefined}
-        onMorePress={isSelf ? undefined : onMorePress}
+        onActionsPress={isSelf ? undefined : onActionsPress}
         hideBack={hideBack}
       />
     </PageContainer>

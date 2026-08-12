@@ -58,7 +58,7 @@ export const Modal = createModal<{post: PostsApi.Post}>(({post, modalizeRef}) =>
       actions: [
         {
           label: language.common.edit,
-          type: 'destructive',
+          type: 'default',
           hideOnPress: true,
           onPress: async () => {
             await editPost.mutateAsync(newDescription, {
@@ -71,15 +71,9 @@ export const Modal = createModal<{post: PostsApi.Post}>(({post, modalizeRef}) =>
                   type: 'success',
                 });
 
-                queryClient.invalidateQueries({
-                  queryKey: ['post', post.id],
-                });
-                queryClient.invalidateQueries({
-                  queryKey: ['posts', 'profile', post.author.id],
-                });
-                queryClient.invalidateQueries({
-                  queryKey: ['posts', 'explore'],
-                });
+                queryClient.invalidateQueries({queryKey: ['post', post.id]});
+                queryClient.invalidateQueries({queryKey: ['posts', 'profile', post.author.id]});
+                queryClient.invalidateQueries({queryKey: ['posts', 'explore']});
               },
             });
           },

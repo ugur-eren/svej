@@ -96,9 +96,7 @@ const ProfileHead: React.FC<ProfileHeadProps> = ({userId, username}) => {
       )(loadPickerFile(file));
       throwApiError(result);
 
-      queryClient.invalidateQueries({
-        queryKey: ['user', username],
-      });
+      queryClient.invalidateQueries({queryKey: ['user', username]});
 
       showToast({
         type: 'success',
@@ -134,9 +132,7 @@ const ProfileHead: React.FC<ProfileHeadProps> = ({userId, username}) => {
     try {
       await relation.mutateAsync(user.data.isFollowing ? 'unfollow' : 'follow', {
         onSuccess: () => {
-          queryClient.invalidateQueries({
-            queryKey: ['user', username],
-          });
+          queryClient.invalidateQueries({queryKey: ['user', username]});
         },
       });
     } catch {
@@ -150,15 +146,9 @@ const ProfileHead: React.FC<ProfileHeadProps> = ({userId, username}) => {
     try {
       await unblock.mutateAsync(user.data.id, {
         onSuccess: () => {
-          queryClient.invalidateQueries({
-            queryKey: ['user', username],
-          });
-          queryClient.invalidateQueries({
-            queryKey: ['posts', 'profile', user.data.id],
-          });
-          queryClient.invalidateQueries({
-            queryKey: ['blockedUsers'],
-          });
+          queryClient.invalidateQueries({queryKey: ['user', username]});
+          queryClient.invalidateQueries({queryKey: ['posts', 'profile', user.data.id]});
+          queryClient.invalidateQueries({queryKey: ['blockedUsers']});
         },
       });
     } catch {

@@ -46,6 +46,6 @@ export default new Elysia()
       )
       .delete('/', async ({status, session, params: {postId}}) => {
         await PostsModule.delete(session.user.id, postId);
-        return status(204, {});
+        return status(204, undefined);
       }),
   );
