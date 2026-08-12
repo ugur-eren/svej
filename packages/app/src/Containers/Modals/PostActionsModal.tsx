@@ -72,6 +72,7 @@ export const Modal = createModal<{post: PostsApi.Post}>(({post, modalizeRef}) =>
 
   const showEditModal = () => {
     openModal('editPost', {post});
+    modalizeRef.current?.close();
   };
 
   return (
