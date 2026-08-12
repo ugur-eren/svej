@@ -201,13 +201,25 @@ export const PostsModule = {
         id: postId,
         active: true,
       },
-      select: {id: true, authorId: true},
+      select: {
+        id: true,
+        authorId: true,
+        _count: {
+          select: {
+            medias: true,
+          },
+        },
+      },
     });
 
     assertPostExists(post);
 
     if (post.authorId !== viewerId) {
       throw new ModuleError(ErrorCodes.Forbidden);
+    }
+
+    if (!description && post._count.medias === 0) {
+      throw new ModuleError(ErrorCodes.PostDoesntHaveMediaOrDescription);
     }
 
     const updatedPost = await Prisma.post.update({
