@@ -11,7 +11,7 @@ import Touchable from '@/Components/Touchable';
 import PostContent from '@/Components/PostContent';
 import ActionButton from '@/Components/ActionButton';
 import {Post as PostPlaceholder} from '@/Components/Placeholders/Post';
-import {useLanguage, useMutation, useQuery, useTheme} from '@/Hooks';
+import {useLanguage, useMutation, useOpenModal, useQuery, useTheme} from '@/Hooks';
 import {PostsApi, UsersApi, MediasApi} from '@/Api';
 import {MainNavigationProp} from '@/Types';
 import getStyles from './styles';
@@ -24,6 +24,8 @@ const Post: React.FC<PostProps> = ({postId}) => {
   const theme = useTheme();
   const language = useLanguage();
   const navigation = useNavigation<MainNavigationProp>();
+
+  const openModal = useOpenModal();
 
   const {data: post, isLoading} = useQuery({
     queryKey: ['post', postId],
@@ -70,6 +72,7 @@ const Post: React.FC<PostProps> = ({postId}) => {
       <UserInfo
         user={post.author as UsersApi.Author}
         timestamp={new Date(post.createdAt).getTime()}
+        onActionsPress={() => openModal('postActions', {post})}
       />
 
       {post.description ? <Text style={styles.description}>{post.description}</Text> : null}

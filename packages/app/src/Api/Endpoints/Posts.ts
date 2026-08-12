@@ -17,6 +17,14 @@ export const create = async (
   return ApiInstance.posts.post(data, config);
 };
 
+export const deletePost = async (postId: string) => {
+  return ApiInstance.posts({postId}).delete();
+};
+
+export const editPost = async (postId: string, description?: string) => {
+  return ApiInstance.posts({postId}).patch({description});
+};
+
 export const react = async (postId: string, type: Zod.Reaction.TYPES) => {
   return ApiInstance.posts({postId}).reactions.put({type});
 };

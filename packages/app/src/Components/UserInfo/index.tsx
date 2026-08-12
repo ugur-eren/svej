@@ -2,17 +2,19 @@ import {memo} from 'react';
 import {View, TouchableOpacity} from 'react-native';
 import {Feather} from '@expo/vector-icons';
 import {useNavigation} from '@react-navigation/native';
+import {IconButton} from 'react-native-paper';
 import Avatar from '@/Components/Avatar';
 import Text from '@/Components/Text';
 import Timer from '@/Components/Timer';
 import {useTheme} from '@/Hooks';
 import {Selectors, useAppSelector} from '@/Redux';
+import {IsIOS} from '@/Utils/Helpers';
 import {MainNavigationProp} from '@/Types';
 import {UserInfoProps} from './props';
 import getStyles from './styles';
 
 const UserInfo: React.FC<UserInfoProps> = (props) => {
-  const {user, small, timestamp} = props;
+  const {user, small, timestamp, onActionsPress} = props;
 
   const theme = useTheme();
   const navigation = useNavigation<MainNavigationProp>();
@@ -47,6 +49,14 @@ const UserInfo: React.FC<UserInfoProps> = (props) => {
           {timestamp ? <Timer timestamp={timestamp} style={styles.timer} /> : null}
         </TouchableOpacity>
       </View>
+
+      {onActionsPress ? (
+        <IconButton
+          icon={IsIOS ? 'more-horizontal' : 'more-vertical'}
+          size={21}
+          onPress={onActionsPress}
+        />
+      ) : null}
     </View>
   );
 };

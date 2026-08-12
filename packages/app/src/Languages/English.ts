@@ -29,6 +29,7 @@ export default {
     logout: 'Logout',
     warning: 'Warning',
     loading: 'Loading...',
+    share: 'Share',
   },
 
   auth: {
@@ -175,6 +176,17 @@ export default {
 
   post: {
     no_comments: 'There are no comments. Be the first one!',
+
+    delete_dialog_title: 'Delete Post',
+    delete_dialog_message:
+      'Are you sure you want to delete this post? You cannot undo this action and the post will be permanently deleted.',
+    delete_success_title: 'Post Deleted',
+    delete_success_message: 'You have successfully deleted this post.',
+
+    edit_dialog_title: 'Edit Post',
+    edit_dialog_message: 'Are you sure you want to edit this post?',
+    edit_success_title: 'Post Edited',
+    edit_success_message: 'You have successfully edited this post.',
   },
 
   errors: {
