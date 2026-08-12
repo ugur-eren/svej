@@ -3,6 +3,7 @@ import {Config, ErrorCodes} from '@svej/common';
 import {getBlocksList, getBlocksWhereClause, isBlocked} from '@/Utils/Query';
 import {ModuleError} from '@/Utils/Error';
 import {assertConversationExists} from './Internal/Assert';
+import {extendConversation} from './Internal/Query';
 
 export const ChatsModule = {
   async getAllConversations(viewerId: string, cursor?: string) {
@@ -27,11 +28,9 @@ export const ChatsModule = {
     const nextCursor = lastConversation ? lastConversation.id : undefined;
 
     return {
-      conversations: conversations.map((conversation) => ({
-        ...conversation,
-        lastMessage: conversation.messages.length ? conversation.messages[0] : null,
-        participant: conversation.user1Id === viewerId ? conversation.user2 : conversation.user1,
-      })),
+      conversations: conversations.map((conversation) =>
+        extendConversation(conversation, viewerId),
+      ),
       nextCursor,
     };
   },
@@ -57,7 +56,7 @@ export const ChatsModule = {
       include: PrismaIncludes.Conversation(viewerId),
     });
 
-    return conversation;
+    return conversation ? extendConversation(conversation, viewerId) : null;
   },
 
   async getOrCreateConversationByParticipant(viewerId: string, participantId: string) {
@@ -77,6 +76,8 @@ export const ChatsModule = {
         data: {user1Id, user2Id},
         include: PrismaIncludes.Conversation(viewerId),
       });
+
+      conversation = extendConversation(conversation, viewerId);
     } catch {
       conversation = await this.getConversationByParticipant(viewerId, participantId);
     }
@@ -99,7 +100,7 @@ export const ChatsModule = {
 
     assertConversationExists(conversation);
 
-    return conversation;
+    return extendConversation(conversation, viewerId);
   },
 
   async getConversationMessages(viewerId: string, conversationId: string, cursor?: string) {

@@ -6,18 +6,7 @@ import {ImageHandler} from '@/Utils/ImageHandler';
 import {VideoHandler} from '@/Utils/VideoHandler';
 import {getBlocksList, getBlocksWhereClause, isBlocked} from '@/Utils/Query';
 import {assertPostExists} from './Internal/Assert';
-
-const extendPost = <T extends {likes: {id: string}[]; dislikes: {id: string}[]; authorId: string}>(
-  post: T,
-) => {
-  const {likes, dislikes, ...rest} = post;
-
-  return {
-    ...rest,
-    liked: likes.length > 0,
-    disliked: dislikes.length > 0,
-  };
-};
+import {extendPost} from './Internal/Query';
 
 export const PostsModule = {
   async getById(viewerId: string, postId: string) {

@@ -4,21 +4,7 @@ import {Prisma, PrismaIncludes} from '@svej/server-side';
 import {ModuleError} from '@/Utils/Error';
 import {getBlocksList, getBlocksWhereClause} from '@/Utils/Query';
 import {assertCommentExists, assertPostExists} from './Internal/Assert';
-import {safeUpdate} from './Internal/Query';
-
-const extendComment = <
-  T extends {likes: {id: string}[]; dislikes: {id: string}[]; authorId: string},
->(
-  comment: T,
-) => {
-  const {likes, dislikes, ...rest} = comment;
-
-  return {
-    ...rest,
-    liked: likes.length > 0,
-    disliked: dislikes.length > 0,
-  };
-};
+import {extendComment, safeUpdate} from './Internal/Query';
 
 export const CommentsModule = {
   async getById(viewerId: string, commentId: string) {

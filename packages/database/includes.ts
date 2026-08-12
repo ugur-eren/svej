@@ -66,7 +66,14 @@ export const Post = (userId: string) =>
         active: true,
       },
       include: {
-        author: {include: Author(userId)},
+        author: {
+          select: {
+            id: true,
+            username: true,
+            profilePhoto: true,
+            profilePhotoId: true,
+          },
+        },
       },
       take: 2,
       orderBy: {
@@ -126,11 +133,6 @@ export const Notification = (userId: string) =>
     warning: true,
   }) satisfies Prisma.NotificationInclude;
 
-export const ChatMessage = (userId: string) =>
-  ({
-    from: {include: Author(userId)},
-  }) satisfies Prisma.ChatMessageInclude;
-
 export const Conversation = (userId: string) =>
   ({
     user1: {
@@ -143,7 +145,12 @@ export const Conversation = (userId: string) =>
       take: 1,
       include: {
         from: {
-          include: Author(userId),
+          select: {
+            id: true,
+            username: true,
+            profilePhoto: true,
+            profilePhotoId: true,
+          },
         },
       },
       orderBy: {createdAt: 'desc'},

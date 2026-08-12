@@ -3,7 +3,7 @@ import {View} from 'react-native';
 import {useQueryClient} from '@tanstack/react-query';
 import {ActionButton, Text, UserInfo} from '@/Components';
 import {useMutation, useOpenModal, useTheme} from '@/Hooks';
-import {CommentsApi, UsersApi} from '@/Api';
+import {CommentsApi} from '@/Api';
 import {CommentProps} from './props';
 import getStyles from './styles';
 
@@ -45,7 +45,7 @@ const Comment: React.FC<CommentProps> = ({comment, onEditPress}) => {
   return (
     <View style={styles.container}>
       <UserInfo
-        user={comment.author as UsersApi.Author}
+        user={comment.author}
         timestamp={new Date(comment.createdAt).getTime()}
         small
         onActionsPress={() => openModal('commentActions', {comment, onEditPress})}
